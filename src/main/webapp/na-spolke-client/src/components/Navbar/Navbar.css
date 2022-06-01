@@ -1,0 +1,24 @@
+#navbar {
+    overflow: hidden;
+    background-color: #61dafb;
+    width: 100%;
+}
+
+#navbar a {
+    display: block;
+    text-align: center;
+}
+
+.sticky-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.left-element {
+    float: left;
+}
+
+.right-element {
+    float: right;
+}
