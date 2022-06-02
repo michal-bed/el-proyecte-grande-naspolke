@@ -1,9 +1,17 @@
-import KrsUserForm from "./KrsUserForm";
+import KrsUserInput from "./krsInput/KrsUserInput";
+import CompanyForm from "./companyForm/CompanyForm";
+import {useState} from "react";
 
 const AddCompany = ()=>{
+    const [companyDataForm, setCompanyDataForm] = useState(<div/>);
+    
+    const addCompanyForm = (data) => {
+          setCompanyDataForm(<CompanyForm companyData={data}/>);
+      }
 
     return <div>
-        <KrsUserForm/>
+        <KrsUserInput addCompanyData={addCompanyForm}/>
+        {companyDataForm}
     </div>
 }
 

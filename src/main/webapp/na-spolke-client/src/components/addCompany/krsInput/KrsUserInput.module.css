@@ -1,0 +1,14 @@
+input[type="text"] incorrect {
+    border: 3px solid red;
+}
+input[type="text"] correct {
+    border: 3px solid green;
+}
+
+.krs-input-container {
+    width: 50vw;
+    height: 10vh;
+    background-color: darkgray;
+    margin: auto;
+    margin-bottom: 5vh;
+}
