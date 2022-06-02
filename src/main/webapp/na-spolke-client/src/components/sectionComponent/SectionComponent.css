@@ -2,8 +2,7 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-
-    margin: 3em 18em 2em;
+    margin: 3em 18em ;
 }
 
 .title{

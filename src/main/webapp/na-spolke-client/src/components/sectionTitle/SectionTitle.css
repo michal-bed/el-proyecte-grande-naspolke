@@ -1,6 +1,8 @@
 .title{
+    margin-top: 3em;
     background-color: gray;
     padding: 0.2em;
+    scroll-margin-top: 70px;
 }
 
 .aloneTitle{

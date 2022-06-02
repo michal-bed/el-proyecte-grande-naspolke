@@ -6,7 +6,7 @@ import BasicTextBox from "../basicTextBox/BasicTextBox";
 
 function SectionComponent(props){
     return<div className='section'>
-        <SectionTitle className='title' title={props.title} />
+        <SectionTitle id={props.id} className='title' title={props.title} />
         <BasicTextBox text={props.text} position={props.position}/>
         <BasicImgBox imagePath={props.imagePath} position={props.position}/>
     </div>
