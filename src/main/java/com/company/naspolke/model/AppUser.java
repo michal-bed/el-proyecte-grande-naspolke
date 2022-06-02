@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.*;
@@ -39,35 +40,17 @@ public class AppUser {
     private String email;
     @Column
     private String password;
-//    @Enumerated(EnumType.STRING)
-//    @Column
-//    UserRole role;
-    @ManyToMany
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(
-                    name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"))
-    @ToString.Exclude
-    private Collection<Role> roles;
     @Column
     private String nip;
     @Column
     private String companyName;
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "user_company_role",
-            joinColumns = { @JoinColumn(name = "app_user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "associated_company_role_id") }
-    )
-    @ToString.Exclude
-    private Set<AssociatedCompanyRole> associatedCompaniesRoles = new HashSet<>();
 
     @Column
     private boolean enabled;
     @Column
     private boolean tokenExpired;
+    @ElementCollection
+    private Set<GrantedAuthority> roles;
 
     @Override
     public boolean equals(Object o) {
@@ -80,5 +63,8 @@ public class AppUser {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void setRoles(Collection<? extends GrantedAuthority> roles) {
     }
 }

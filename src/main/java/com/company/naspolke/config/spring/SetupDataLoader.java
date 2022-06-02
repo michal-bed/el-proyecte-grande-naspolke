@@ -1,19 +1,16 @@
 package com.company.naspolke.config.spring;
 
 import com.company.naspolke.model.AppUser;
-import com.company.naspolke.model.Privilege;
-import com.company.naspolke.model.Role;
-import com.company.naspolke.repository.PrivilegeRepository;
-import com.company.naspolke.repository.RoleRepository;
 import com.company.naspolke.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,12 +24,6 @@ public class SetupDataLoader implements
     private UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PrivilegeRepository privilegeRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -41,47 +32,13 @@ public class SetupDataLoader implements
 
         if (alreadySetup)
             return;
-        Privilege readPrivilege
-                = createPrivilegeIfNotFound("READ_PRIVILEGE");
-        Privilege writePrivilege
-                = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
-
-        List<Privilege> adminPrivileges = Arrays.asList(
-                readPrivilege, writePrivilege);
-        createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-        createRoleIfNotFound("ROLE_USER", List.of(readPrivilege));
-
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-        createUserIfNotFound("test@test.com", adminRole);
+        createUserIfNotFound("test@test.com", List.of(new SimpleGrantedAuthority("ROLE_USER")));
 
         alreadySetup = true;
     }
 
     @Transactional
-    Privilege createPrivilegeIfNotFound(String name) {
-
-        Privilege privilege = privilegeRepository.findByName(name);
-        if (privilege == null) {
-            privilege = new Privilege(name);
-            privilegeRepository.save(privilege);
-        }
-        return privilege;
-    }
-
-    @Transactional
-    void createRoleIfNotFound(
-            String name, Collection<Privilege> privileges) {
-
-        Role role = roleRepository.findByName(name);
-        if (role == null) {
-            role = new Role(name);
-            role.setPrivileges(privileges);
-            roleRepository.save(role);
-        }
-    }
-
-    @Transactional
-    void createUserIfNotFound(String email, Role adminRole) {
+    void createUserIfNotFound(String email, Collection<? extends GrantedAuthority> roles) {
         AppUser foundUser = userRepository.findByEmail(email);
         if(foundUser == null)
         {
@@ -90,8 +47,8 @@ public class SetupDataLoader implements
             user.setFirstName("Test");
             user.setLastName("Test");
             user.setPassword(passwordEncoder.encode("test"));
+            user.setRoles(roles);
             user.setEmail(email);
-            user.setRoles(List.of(adminRole));
             user.setEnabled(true);
             userRepository.save(user);
         }

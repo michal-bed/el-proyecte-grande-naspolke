@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 class HomeController {
@@ -77,7 +78,7 @@ class HomeController {
         headers.add("Set-Cookie",String.format("jwt=%s;", refreshToken)  + " Max-Age=86400; Secure; HttpOnly; SameSite=None");
 
         return ResponseEntity.ok().headers(headers)
-                .body(new AuthenticationResponse(accessToken, user.getRoles()));
+                .body(new AuthenticationResponse(accessToken, List.of("ROLE_USER")));
     }
 
 }

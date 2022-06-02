@@ -49,9 +49,6 @@ public class SecurityConfiguration {
         .authorizeRequests()
                 .mvcMatchers("/").permitAll()
                 .mvcMatchers("/auth").permitAll()
-                .mvcMatchers("/admin/**").hasRole("ADMIN")
-                .mvcMatchers("/hello").hasRole("ADMIN")
-                .mvcMatchers("/db/**").hasAnyRole("ADMIN", "DBA")
                 //.anyRequest().denyAll()
                 .anyRequest().permitAll();
         http.exceptionHandling().and().sessionManagement()

@@ -9,12 +9,14 @@ import com.company.naspolke.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -47,13 +49,13 @@ public class RefreshTokenController {
                 var userDetails = new org.springframework.security.core.userdetails.User(
                         jwtUtil.extractUsername(jwt), foundUser.getPassword(), foundUser.isEnabled(), true, true,
                         true,
-                        MyUserDetailsService.getAuthorities(foundUser.getRoles()));
+                        List.of(new SimpleGrantedAuthority("ROLE_USER")));
                 var isTokenValid = jwtUtil.validateToken(jwt, userDetails);
                 if (isTokenValid &&
                         (Objects.equals(foundUser.getEmail(), jwtUtil.extractUsername(jwt)) || Objects.equals(foundUser.getLogin(), jwtUtil.extractUsername(jwt))))
                 {
                     final String accessToken = jwtUtil.generateToken(userDetails, 1000 * 60 * 15);
-                    return ResponseEntity.ok().body(new AuthenticationResponse(accessToken, foundUser.getRoles()));
+                    return ResponseEntity.ok().body(new AuthenticationResponse(accessToken, List.of("ROLE_USER")));
                 }
                 else
                 {
