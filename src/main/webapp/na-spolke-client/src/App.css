@@ -1,5 +1,11 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .App {
-  text-align: center;
+    width: 100vw;
+    height: 100vh;
 }
 
 .App-logo {
@@ -28,6 +34,7 @@
   color: #61dafb;
 }
 
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -35,4 +42,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.section:target {
+  scroll-margin-top: 70px;
 }

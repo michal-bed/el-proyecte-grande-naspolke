@@ -16,6 +16,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
     <div>
+        <Navbar />
+        <App />
         <div className={style.aloneTitle}>
             <SectionTitle title= 'Jedna aplikacja do zarządzania
                           dokumentacją w Twojej spółce' />
@@ -29,5 +31,4 @@ root.render(
                       title='O nas'
                       position='positionL'
                       imagePath="./images/index_photo2.jpg" />
-    </div>
-);
+    </div>)
