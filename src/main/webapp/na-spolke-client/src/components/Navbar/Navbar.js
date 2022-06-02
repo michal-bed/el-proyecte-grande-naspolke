@@ -1,9 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {NavbarItemsLeft, NavbarItemsRight} from './NavbarItems/NavbarItems.js';
+import Logo from './Logo/Logo.js';
 import styles from './Navbar.module.css';
 
 
-export default function Navbar() {
+export default function Navbar () {
 
     const [height, setHeight] = useState(0);
     const ref = useRef(null);
@@ -35,13 +36,9 @@ export default function Navbar() {
 
     return(
         <header>
-            <div>
-                <p>logo</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
 
-            </div>
+            <Logo />
+
             <div id={'nav-wrapper'} style={{minHeight: height}}>
                 <div ref={ref} id={styles["navbar"]} className={stickyClass}>
                     <NavbarItemsLeft />

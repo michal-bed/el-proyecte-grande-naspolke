@@ -14,11 +14,11 @@ const itemsRight = [
     ['Logowanie', '#link_do_logowania'],
 ]
 
-export function NavbarItemsLeft() {
+export function NavbarItemsLeft () {
     return NavbarBox(itemsLeft, `${styles["left-element"]}`);
 }
 
-export function NavbarItemsRight() {
+export function NavbarItemsRight () {
     return NavbarBox(itemsRight, `${styles["right-element"]}`);
 }
 
