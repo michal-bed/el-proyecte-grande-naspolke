@@ -1,0 +1,11 @@
+.title{
+    background-color: gray;
+    padding: 0.2em;
+}
+
+.aloneTitle{
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    position: center;
+}
