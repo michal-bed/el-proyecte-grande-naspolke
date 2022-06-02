@@ -5,3 +5,16 @@
     margin: auto;
     font-size: x-large;
 }
+
+.progressbar {
+    width: 400px;
+    height: 10px;
+    background-color: white;
+    margin: 15px auto;
+}
+
+.progressbar div {
+    width: 20%;
+    height: 100%;
+    background-color: rgb(98, 0, 255);
+}
