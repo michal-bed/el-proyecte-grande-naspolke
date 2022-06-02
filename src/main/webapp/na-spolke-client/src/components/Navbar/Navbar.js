@@ -9,12 +9,19 @@ export default function Navbar() {
     const ref = useRef(null);
 
     const [stickyClass, setStickyClass] = useState('');
+
     useEffect(() => {
         setHeight(ref.current.clientHeight);
 
+        setStickyNavbar();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    function setStickyNavbar () {
+        stickyNavbar()
         window.addEventListener('scroll', stickyNavbar);
         return () => window.removeEventListener('scroll', stickyNavbar)
-    }, [])
+    }
 
     const stickyNavbar = () => {
         if (window !== undefined) {
