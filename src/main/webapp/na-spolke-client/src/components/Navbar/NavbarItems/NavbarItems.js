@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from '../Navbar.module.css';
+import {Link} from "react-router-dom";
 
 const itemsLeft = [
     ['Cennik', '#cennik'],
@@ -9,24 +11,24 @@ const itemsLeft = [
 ]
 
 const itemsRight = [
-    ['Rejestracja', '#link_do_rejestracji'],
-    ['Logowanie', '#link_do_logowania'],
+    ['Rejestracja', 'register'],
+    ['Logowanie', 'login'],
 ]
 
-export function NavbarItemsLeft() {
-    return NavbarBox(itemsLeft, 'left-element');
+export function NavbarItemsLeft () {
+    return NavbarBox(itemsLeft, `${styles["left-element"]}`);
 }
 
-export function NavbarItemsRight() {
-    return NavbarBox(itemsRight, 'right-element');
+export function NavbarItemsRight () {
+    return NavbarBox(itemsRight, `${styles["right-element"]}`);
 }
 
 function NavbarBox (itemsArray, className) {
     return (
-        <div className={'flex-display ' + className}>
+        <div className={`${styles["flex-display"]} ${className}`}>
             <NavbarItems itemsArray={itemsArray} />
         </div>
-    );
+    )
 }
 
 const NavbarItems = ({itemsArray}) => {
@@ -34,11 +36,11 @@ const NavbarItems = ({itemsArray}) => {
     for (let i = 0; i < itemsArray.length; i++) {
         if (i === itemsArray.length-1) {
             items.push(
-                <a key={itemsArray[i][0]} className={'nav-button nav-animation'} href={itemsArray[i][1]}>{itemsArray[i][0]}</a>
+                <Link key={itemsArray[i][0]} className={`${styles["nav-button"]} ${styles["nav-animation"]}`} to={ itemsArray[i][1]}>{itemsArray[i][0]}</Link>
             )
         } else {
             items.push(
-                <a key={itemsArray[i][0]} className={'nav-button nav-animation right-border'} href={itemsArray[i][1]}>{itemsArray[i][0]}</a>
+                <Link key={itemsArray[i][0]} className={`${styles["nav-button"]} ${styles["nav-animation"]} ${styles["right-border"]}`} to={itemsArray[i][1]}>{itemsArray[i][0]}</Link>
             )
         }
     }
