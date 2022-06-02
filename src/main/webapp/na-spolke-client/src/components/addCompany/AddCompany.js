@@ -6,7 +6,8 @@ const AddCompany = ()=>{
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
     
     const addCompanyForm = (data) => {
-          setCompanyDataForm(<CompanyForm companyData={data}/>);
+          if (data)
+              setCompanyDataForm(<CompanyForm companyData={data}/>);
       }
 
     return <div>
