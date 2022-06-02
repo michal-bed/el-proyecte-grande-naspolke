@@ -14,21 +14,33 @@ const itemsRight = [
 ]
 
 export function NavbarItemsLeft() {
-    let items = [];
-    for (let i = 0; i < itemsLeft.length; i++) {
-        items.push(
-            <a className={'button left-element'} href={itemsLeft[i][1]}>{itemsLeft[i][0]}</a>
-        )
-    }
-    return items;
+    return NavbarBox(itemsLeft, 'left-element');
 }
 
 export function NavbarItemsRight() {
+    return NavbarBox(itemsRight, 'right-element');
+}
+
+function NavbarBox (itemsArray, className) {
+    return (
+        <div className={'flex-display ' + className}>
+            <NavbarItems itemsArray={itemsArray} />
+        </div>
+    );
+}
+
+const NavbarItems = ({itemsArray}) => {
     let items = [];
-    for (let i = 0; i < itemsRight.length; i++) {
-        items.push(
-            <a className={'button right-element'} href={itemsRight[i][1]}>{itemsRight[i][0]}</a>
-        )
+    for (let i = 0; i < itemsArray.length; i++) {
+        if (i === itemsArray.length-1) {
+            items.push(
+                <a className={'nav-button'} href={itemsArray[i][1]}>{itemsArray[i][0]}</a>
+            )
+        } else {
+            items.push(
+                <a className={'nav-button right-border'} href={itemsArray[i][1]}>{itemsArray[i][0]}</a>
+            )
+        }
     }
     return items;
 }
