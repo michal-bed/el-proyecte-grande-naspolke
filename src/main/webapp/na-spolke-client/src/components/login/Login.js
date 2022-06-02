@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Formik, Field } from "formik";
 import style from "./Login.module.css"
@@ -20,7 +20,7 @@ import {
 import * as Yup from 'yup'
 import { ChakraProvider } from '@chakra-ui/react';
 
-import axios from '../api/axios';
+import axios from '../../api/axios';
 const LOGIN_URL = '/auth';
 
 const Login = () => {
