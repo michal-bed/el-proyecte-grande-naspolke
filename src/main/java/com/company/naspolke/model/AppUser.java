@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.*;
@@ -50,7 +51,7 @@ public class AppUser {
     @Column
     private boolean tokenExpired;
     @ElementCollection
-    private Set<GrantedAuthority> roles;
+    private Set<SimpleGrantedAuthority> roles = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -65,6 +66,4 @@ public class AppUser {
         return getClass().hashCode();
     }
 
-    public void setRoles(Collection<? extends GrantedAuthority> roles) {
-    }
 }
