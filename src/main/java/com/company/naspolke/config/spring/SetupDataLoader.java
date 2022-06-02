@@ -18,12 +18,6 @@ import java.util.*;
 public class SetupDataLoader implements
         ApplicationListener<ContextRefreshedEvent> {
 
-//    @PersistenceContext // or even @Autowired
-//    private EntityManager em;
-
-//    @PersistenceUnit
-//    private EntityManagerFactory entityManagerFactory;
-
     boolean alreadySetup = false;
 
     @Autowired
@@ -55,16 +49,8 @@ public class SetupDataLoader implements
             user.setPassword(passwordEncoder.encode("test"));
             user.setEmail(email);
             user.setEnabled(true);
-            userRepository.save(user);
-//            EntityManager em = entityManagerFactory.createEntityManager();
-//            em.getTransaction().begin();
-//
-//            AppUser a = em.find(AppUser.class, user.getId());
             user.getRoles().addAll(roles);
-
-//            em.getTransaction().commit();
-//            em.close();
-            // userRepository.updateRolesByUserId(roles, user.getId());
+            userRepository.save(user);
         }
 
     }
