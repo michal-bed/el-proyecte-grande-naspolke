@@ -2,11 +2,11 @@ import React from 'react';
 import styles from '../Navbar.module.css';
 
 const itemsLeft = [
-    ['Cennik', '#cennik'],
-    ['Usługi', '#uslugi'],
-    ['O nas', '#o_nas'],
-    ['Kontakt', '#kontakt'],
-    ['Pomoc', '#pomoc'],
+    ['Cennik', 'cennik'],
+    ['Usługi', 'uslugi'],
+    ['O nas', 'o_nas'],
+    ['Kontakt', 'kontakt'],
+    ['Pomoc', 'pomoc'],
 ]
 
 const itemsRight = [
@@ -35,11 +35,11 @@ const NavbarItems = ({itemsArray}) => {
     for (let i = 0; i < itemsArray.length; i++) {
         if (i === itemsArray.length-1) {
             items.push(
-                <a key={itemsArray[i][0]} className={`${styles["nav-button"]} ${styles["nav-animation"]}`} href={itemsArray[i][1]}>{itemsArray[i][0]}</a>
+                <a key={itemsArray[i][0]} className={`${styles["nav-button"]} ${styles["nav-animation"]}`} href={'#' + itemsArray[i][1]}>{itemsArray[i][0]}</a>
             )
         } else {
             items.push(
-                <a key={itemsArray[i][0]} className={`${styles["nav-button"]} ${styles["nav-animation"]} ${styles["right-border"]}`} href={itemsArray[i][1]}>{itemsArray[i][0]}</a>
+                <a key={itemsArray[i][0]} className={`${styles["nav-button"]} ${styles["nav-animation"]} ${styles["right-border"]}`} href={'#' + itemsArray[i][1]}>{itemsArray[i][0]}</a>
             )
         }
     }
