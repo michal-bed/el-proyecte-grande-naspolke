@@ -1,9 +1,10 @@
 import './App.css';
+import AddCompany from "./components/addCompany/AddCompany";
 
 function App() {
   return (
     <div className="App">
-        Hello Client
+        <AddCompany/>
     </div>
   );
 }
