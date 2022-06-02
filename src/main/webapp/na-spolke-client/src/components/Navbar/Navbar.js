@@ -12,8 +12,8 @@ export default function Navbar() {
 
     const stickyNavbar = () => {
         if (window !== undefined) {
-            window.scrollY > document.getElementById('navbar').offsetTop
-                ? setStickyClass('sticky-nav') : setStickyClass('');
+            window.scrollY > document.getElementById('navbar').offsetTop ?
+                setStickyClass('sticky-nav') : setStickyClass('');
         }
     }
 
