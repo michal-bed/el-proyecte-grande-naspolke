@@ -14,7 +14,7 @@ export default function Navbar() {
         setHeight(ref.current.clientHeight);
 
         setStickyNavbar();
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     function setStickyNavbar () {
