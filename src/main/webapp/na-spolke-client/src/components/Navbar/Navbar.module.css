@@ -50,7 +50,3 @@ html {
 .flex-display {
     display: flex;
 }
-
-.section:target {
-    scroll-margin-top: 70px;
-}

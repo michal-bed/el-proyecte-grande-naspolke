@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '../Navbar.module.css';
 
 const itemsLeft = [
     ['Cennik', '#cennik'],
@@ -14,19 +15,19 @@ const itemsRight = [
 ]
 
 export function NavbarItemsLeft() {
-    return NavbarBox(itemsLeft, 'left-element');
+    return NavbarBox(itemsLeft, `${styles["left-element"]}`);
 }
 
 export function NavbarItemsRight() {
-    return NavbarBox(itemsRight, 'right-element');
+    return NavbarBox(itemsRight, `${styles["right-element"]}`);
 }
 
 function NavbarBox (itemsArray, className) {
     return (
-        <div className={'flex-display ' + className}>
+        <div className={`${styles["flex-display"]} ${className}`}>
             <NavbarItems itemsArray={itemsArray} />
         </div>
-    );
+    )
 }
 
 const NavbarItems = ({itemsArray}) => {
@@ -34,11 +35,11 @@ const NavbarItems = ({itemsArray}) => {
     for (let i = 0; i < itemsArray.length; i++) {
         if (i === itemsArray.length-1) {
             items.push(
-                <a key={itemsArray[i][0]} className={'nav-button nav-animation'} href={itemsArray[i][1]}>{itemsArray[i][0]}</a>
+                <a key={itemsArray[i][0]} className={`${styles["nav-button"]} ${styles["nav-animation"]}`} href={itemsArray[i][1]}>{itemsArray[i][0]}</a>
             )
         } else {
             items.push(
-                <a key={itemsArray[i][0]} className={'nav-button nav-animation right-border'} href={itemsArray[i][1]}>{itemsArray[i][0]}</a>
+                <a key={itemsArray[i][0]} className={`${styles["nav-button"]} ${styles["nav-animation"]} ${styles["right-border"]}`} href={itemsArray[i][1]}>{itemsArray[i][0]}</a>
             )
         }
     }

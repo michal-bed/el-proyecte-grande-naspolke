@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {NavbarItemsLeft, NavbarItemsRight} from './NavbarItems/NavbarItems.js';
-import './Navbar.css';
+import styles from './Navbar.module.css';
 
 
 export default function Navbar() {
@@ -14,7 +14,7 @@ export default function Navbar() {
         setHeight(ref.current.clientHeight);
 
         setStickyNavbar();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [])
 
     function setStickyNavbar () {
@@ -29,7 +29,7 @@ export default function Navbar() {
             const sticky = navbar.offsetTop;
 
             window.scrollY > sticky ?
-                setStickyClass('sticky-nav') : setStickyClass('');
+                setStickyClass(styles["sticky-nav"]) : setStickyClass('');
         }
     }
 
@@ -42,8 +42,8 @@ export default function Navbar() {
                 <p>test</p>
 
             </div>
-            <div ref={ref} id={'nav-wrapper'} style={{minHeight: height}}>
-                <div id={'navbar'} className={stickyClass}>
+            <div id={'nav-wrapper'} style={{minHeight: height}}>
+                <div ref={ref} id={styles["navbar"]} className={stickyClass}>
                     <NavbarItemsLeft />
                     <NavbarItemsRight />
                 </div>
