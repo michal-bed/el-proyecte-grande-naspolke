@@ -1,0 +1,13 @@
+.img{
+    width: 18em;
+    border-radius: 1em;
+}
+
+.imgBoxL{
+    order: 1;
+}
+
+.imgBoxR{
+
+    order: 0;
+}
