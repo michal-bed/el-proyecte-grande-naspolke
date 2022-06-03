@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Formik, Field } from "formik";
+import Navbar from '../Navbar/Navbar';
 import style from "./Login.module.css"
 import {
     Box,
@@ -96,110 +97,109 @@ const Login = () => {
         // email.setAttribute('focus', "true");
     }
 
-    return (
+    return (<>
+    {/*<Navbar />*/}
     <ChakraProvider>
-        {/*<section>*/}
-                <Flex bg="gray.100" align="center" justify="center" h="100vh">
-                    <Box bg="white" p={6} rounded="md" w={80}>
-                        <p ref={errRef} className={errMsg ? style.errmsg : style.offscreen} aria-live="assertive">{errMsg}</p>
-                        <Heading style={{marginBottom: "0.5rem"}}>Logowanie</Heading>
-                        <Formik
-                            initialValues={ {
-                                email: '',
-                                password: '',
-                                trustDevice: false
-                            }}
-                            onSubmit={(values, actions) => {
-                                customHandleSubmit(values).then(() =>  {
-                                    // actions.resetForm({values: ''})
-                                    actions.setSubmitting(false);
-                                }).catch(console.log);
-                            }}
-                            validationSchema={Yup.object({
-                                email: Yup.string().required('Wymagane pole'),
-                                password: Yup.string().required("Wymagane pole")
-                            })}
-                            validateOnChange={false}
-                            validateOnBlur={false}
-                        >
-                        {({handleSubmit, handleChange, values, touched, errors, validateForm}) => (
-                        <form onSubmit={handleSubmit}>
-                            <VStack spacing={4} align="flex-start">
-                                <FormControl isRequired isInvalid={!!errors.email}>
-                                    <FormLabel htmlFor="email">E-mail</FormLabel>
-                                    <Field
-                                        as={Input}
-                                        id="email"
-                                        name="email"
-                                        autoFocus
-                                        autoComplete={"off"}
-                                        value={values.email}
-                                        onChange={(e) => { setErrMsg(''); handleChange(e) }}
-                                        onClick={toggleFocus}
-                                        type="email"
-                                        variant="filled"
-                                        required={false}
-                                        // ariaRequired={true}
-                                    />
-                                    <FormErrorMessage>{errors.email}</FormErrorMessage>
-                                </FormControl>
-                                <FormControl isRequired isInvalid={!!errors.password}>
-                                    <FormLabel htmlFor="password">Hasło</FormLabel>
-                                    <InputGroup size='md'>
-                                    <Field
-                                        as={Input}
-                                        id="password"
-                                        name="password"
-                                        type={show ? 'text' : 'password'}
-                                        value={values.password}
-                                        onChange={(e) => { setErrMsg(''); handleChange(e) }}
-                                        variant="filled"
-                                        required={false}
-                                        // ariaRequired={true}
-                                        // validate={(value) => {
-                                        //     let error;
-                                        //
-                                        //     if (value.length < 5) {
-                                        //         error = "Password must contain at least 6 characters";
-                                        //     }
-                                        //
-                                        //     return error;
-                                        // }}
-                                    />
-                                    <InputRightElement width='4.5rem'>
-                                        <Button h='1.75rem' size='sm' onClick={handleClick}>
-                                            {show ? 'Ukryj' : 'Pokaż'}
-                                        </Button>
-                                    </InputRightElement>
-                                    </InputGroup>
-                                    <FormErrorMessage>{errors.password}</FormErrorMessage>
-                                </FormControl>
-                                <Field
-                                    as={Checkbox}
-                                    id="trustDevice"
-                                    name="trustDevice"
-                                    value={persist}
-                                    onChange = {(val) => {handleChange(val); togglePersist()}}
-                                    colorScheme="teal"
-                                >
-                                    Zapamiętaj mnie
-                                </Field>
-                                <p>
-                                    Nie masz jeszcze konta?<br />
-                                    <span className={style.line}>
-                                        <Link to="/register">Zarejestruj się</Link>
-                                    </span>
-                                </p>
-                                <Button onClick={(e) => { validateForm()} } type="submit" colorScheme="teal" width="full">
-                                    Zaloguj się
+        <Flex bg="gray.100" align="center" justify="center" h="100vh">
+            <Box bg="white" p={6} rounded="md" w={80}>
+                <p ref={errRef} className={errMsg ? style.errmsg : style.offscreen} aria-live="assertive">{errMsg}</p>
+                <Heading style={{marginBottom: "0.5rem"}}>Logowanie</Heading>
+                <Formik
+                    initialValues={ {
+                        email: '',
+                        password: '',
+                        trustDevice: false
+                    }}
+                    onSubmit={(values, actions) => {
+                        customHandleSubmit(values).then(() =>  {
+                            // actions.resetForm({values: ''})
+                            actions.setSubmitting(false);
+                        }).catch(console.log);
+                    }}
+                    validationSchema={Yup.object({
+                        email: Yup.string().required('Wymagane pole'),
+                        password: Yup.string().required("Wymagane pole")
+                    })}
+                    validateOnChange={false}
+                    validateOnBlur={false}
+                >
+                {({handleSubmit, handleChange, values, touched, errors, validateForm}) => (
+                <form onSubmit={handleSubmit}>
+                    <VStack spacing={4} align="flex-start">
+                        <FormControl isRequired isInvalid={!!errors.email}>
+                            <FormLabel htmlFor="email">E-mail</FormLabel>
+                            <Field
+                                as={Input}
+                                id="email"
+                                name="email"
+                                autoFocus
+                                autoComplete={"off"}
+                                value={values.email}
+                                onChange={(e) => { setErrMsg(''); handleChange(e) }}
+                                onClick={toggleFocus}
+                                type="email"
+                                variant="filled"
+                                required={false}
+                                // ariaRequired={true}
+                            />
+                            <FormErrorMessage>{errors.email}</FormErrorMessage>
+                        </FormControl>
+                        <FormControl isRequired isInvalid={!!errors.password}>
+                            <FormLabel htmlFor="password">Hasło</FormLabel>
+                            <InputGroup size='md'>
+                            <Field
+                                as={Input}
+                                id="password"
+                                name="password"
+                                type={show ? 'text' : 'password'}
+                                value={values.password}
+                                onChange={(e) => { setErrMsg(''); handleChange(e) }}
+                                variant="filled"
+                                required={false}
+                                // ariaRequired={true}
+                                // validate={(value) => {
+                                //     let error;
+                                //
+                                //     if (value.length < 5) {
+                                //         error = "Password must contain at least 6 characters";
+                                //     }
+                                //
+                                //     return error;
+                                // }}
+                            />
+                            <InputRightElement width='4.5rem'>
+                                <Button h='1.75rem' size='sm' onClick={handleClick}>
+                                    {show ? 'Ukryj' : 'Pokaż'}
                                 </Button>
-                            </VStack>
-                            </form>)}
-                        </Formik>
-                    </Box>
-                </Flex>
-        {/*</section>*/}
-    </ChakraProvider>
+                            </InputRightElement>
+                            </InputGroup>
+                            <FormErrorMessage>{errors.password}</FormErrorMessage>
+                        </FormControl>
+                        <Field
+                            as={Checkbox}
+                            id="trustDevice"
+                            name="trustDevice"
+                            value={persist}
+                            onChange = {(val) => {handleChange(val); togglePersist()}}
+                            colorScheme="teal"
+                        >
+                            Zapamiętaj mnie
+                        </Field>
+                        <p>
+                            Nie masz jeszcze konta?<br />
+                            <span className={style.line}>
+                                <Link to="/register">Zarejestruj się</Link>
+                            </span>
+                        </p>
+                        <Button onClick={(e) => { validateForm()} } type="submit" colorScheme="teal" width="full">
+                            Zaloguj się
+                        </Button>
+                    </VStack>
+                    </form>)}
+                </Formik>
+            </Box>
+        </Flex>
+    </ChakraProvider></>
     )
 }
 

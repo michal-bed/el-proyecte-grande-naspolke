@@ -30,6 +30,20 @@ a, a:visited {
     margin: 0;
 }
 
+
+.logo-container {
+    width: 100%;
+    text-align: center;
+}
+
+#logo {
+    text-align: center;
+    margin-left: auto;
+}
+
+img {
+    display: inline !important;
+}
 /*::-ms-reveal {*/
 /*    display: inline !important;*/
 /*}*/
