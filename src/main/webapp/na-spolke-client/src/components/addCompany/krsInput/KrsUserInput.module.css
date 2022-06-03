@@ -11,4 +11,5 @@ input[type="text"] correct {
     background-color: darkgray;
     margin: auto auto 5vh;
     align-self: auto;
+    display: flex;
 }

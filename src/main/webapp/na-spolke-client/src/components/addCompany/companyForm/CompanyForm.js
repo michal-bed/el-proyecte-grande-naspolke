@@ -1,7 +1,7 @@
 import styles from "./CompanyForm.module.css";
 import {useState} from "react";
 import BaseInfo from "./BaseInfo";
-import Adress from "./Adress";
+import Address from "./Adress";
 import MembersCompanyBodies from "./MembersCompanyBodies";
 import Partners from "./Partners";
 import {Company} from "../../../classes/company/company";
@@ -17,7 +17,7 @@ const CompanyForm = (props)=>{
     const PageDisplay = ()=> {
         switch (page){
             case 0: return <BaseInfo company={company}/>;
-            case 1: return <Adress adress={company.Address}/>;
+            case 1: return <Address adress={company.Address}/>;
             case 2: return <MembersCompanyBodies boardMembers={company.BoardMembers} />;
             case 3: return <MembersCompanyBodies boardMembers={company.BoardOfDirectors}/>;
             case 4: return <Partners partners={company.Partners}/>;
@@ -34,12 +34,20 @@ const CompanyForm = (props)=>{
             </div>
             <div className={styles["body"]}>{PageDisplay()}</div>
             <div className={styles["footer"]}></div>
-            <button
-                disabled={page === 0}
-                onClick={()=>{setPage((currPage) => currPage-1)}}> Prev </button>
-            <button
-                disabled={page === FormTitles.length-1}
-                onClick={()=>{setPage((currPage) => currPage+1)}}> Next </button>
+            <div className={styles["form-nav-bar"]}>
+                <button
+                    disabled={page === 0}
+                    onClick={() => {
+                        setPage((currPage) => currPage - 1)
+                    }}> Prev
+                </button>
+                <button
+                    disabled={page === FormTitles.length - 1}
+                    onClick={() => {
+                        setPage((currPage) => currPage + 1)
+                    }}> Next
+                </button>
+            </div>
         </div>
     </div>
 }

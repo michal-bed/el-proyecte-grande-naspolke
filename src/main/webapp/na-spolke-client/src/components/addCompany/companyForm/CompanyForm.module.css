@@ -18,3 +18,11 @@
     height: 100%;
     background-color: rgb(98, 0, 255);
 }
+
+.form {
+    display: flex;
+}
+
+.form-nav-bar {
+    align-self: flex-end;
+}
