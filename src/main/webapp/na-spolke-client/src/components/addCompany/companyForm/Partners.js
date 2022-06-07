@@ -40,7 +40,6 @@ const Partners = (props) => {
                 <input defaultValue={partner.Name}/>
             </div>
         }
-
     }
 
     return <div>
