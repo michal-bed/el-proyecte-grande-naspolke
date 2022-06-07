@@ -1,9 +1,9 @@
 package com.company.naspolke.model.company;
 
 
-import com.company.naspolke.model.company.bodyOrgans.BoardMember;
-import com.company.naspolke.model.company.bodyOrgans.BoardOfDirector;
-import com.company.naspolke.model.company.bodyOrgans.Partner;
+import com.company.naspolke.model.company.companyBodies.BoardMember;
+import com.company.naspolke.model.company.companyBodies.BoardOfDirector;
+import com.company.naspolke.model.company.companyBodies.Partner;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 

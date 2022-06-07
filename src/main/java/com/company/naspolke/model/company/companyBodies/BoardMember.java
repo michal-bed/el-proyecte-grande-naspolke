@@ -1,4 +1,4 @@
-package com.company.naspolke.model.company.bodyOrgans;
+package com.company.naspolke.model.company.companyBodies;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

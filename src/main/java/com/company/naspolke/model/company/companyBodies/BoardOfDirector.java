@@ -1,4 +1,4 @@
-package com.company.naspolke.model.company.bodyOrgans;
+package com.company.naspolke.model.company.companyBodies;
 
 
 import lombok.Data;
@@ -8,9 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
 @Data
-public class Partner {
+@Entity
+public class BoardOfDirector {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,6 +19,4 @@ public class Partner {
     private String secondName;
     private String lastNameI;
     private String lastNameII;
-    private Integer shareCount;
-    private Integer shareValue;
 }

@@ -1,6 +1,4 @@
-package com.company.naspolke.model.company.bodyOrgans;
-
-import org.springframework.stereotype.Component;
+package com.company.naspolke.model.company.companyBodies;
 
 public enum BoardMemberFunction {
     President ("Prezes"),
