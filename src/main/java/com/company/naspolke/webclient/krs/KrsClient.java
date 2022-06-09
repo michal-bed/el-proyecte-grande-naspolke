@@ -23,6 +23,9 @@ public class KrsClient {
 
         WebClient.RequestHeadersSpec<?> requestHeadersSpec = webClient.get().uri("/OdpisAktualny/"+krsNumber+"?rejestr=p&format=json");
         return requestHeadersSpec.retrieve().bodyToMono(String.class);
+
+
+
 //        mono
 //                .doOnNext(body-> System.out.println(body))
 //                .subscribe();

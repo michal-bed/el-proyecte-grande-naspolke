@@ -40,5 +40,4 @@ public class Company {
     @OneToMany
     private Set<PartnerCompany> partnerCompanies = new HashSet<>();
 
-
 }

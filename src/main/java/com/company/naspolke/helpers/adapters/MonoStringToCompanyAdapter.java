@@ -5,6 +5,8 @@ import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.companyBodies.Partner;
 import com.company.naspolke.model.company.companyBodies.PartnerCompany;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -308,32 +310,39 @@ public class MonoStringToCompanyAdapter {
             "        }\n" +
             "    }\n" +
             "}";
-    private final List<String> nipAndRegonPath = Arrays.asList("odpis","dane", "dzial1", "danePodmiotu", "identyfikatory");
-    private final List<String> addressPath = Arrays.asList("odpis","dane", "dzial1", "siedzibaIAdres", "adres");
-    private final List<String> partnersPath = Arrays.asList("odpis","dane", "dzial1");
+    private final List<String> nipAndRegonPath = Arrays.asList("odpis", "dane", "dzial1", "danePodmiotu", "identyfikatory");
+    private final List<String> addressPath = Arrays.asList("odpis", "dane", "dzial1", "siedzibaIAdres", "adres");
+    private final List<String> partnersPath = Arrays.asList("odpis", "dane", "dzial1");
     private final String partnersDetailsKey = "wspolnicySpzoo";
-    private final List<String> shareCapitalPath = Arrays.asList("odpis","dane", "dzial1", "kapital", "wysokoscKapitaluZakladowego");
-    private final List<String> boardCompanyPath = Arrays.asList("odpis","dane", "dzial2", "reprezentacja", "sklad");
+    private final List<String> shareCapitalPath = Arrays.asList("odpis", "dane", "dzial1", "kapital", "wysokoscKapitaluZakladowego");
+    private final List<String> boardCompanyPath = Arrays.asList("odpis", "dane", "dzial2", "reprezentacja", "sklad");
 
-    public Company getCompany(Mono<String> APIResponse) throws JsonProcessingException {
-        String data = APIResponse.block();
-        var parser = new JSONParser();
-        JSONObject json;
+    public Company getCompany(Mono<String> apiResponse) {
+        String data = apiResponse.block();
         Company company = new Company();
-        try {
-            json = (JSONObject) parser.parse(data);
-            setCompanyNipAndRegonFromApi(json, company);
-            setCompanyAddressFromApi(json, company);
-            setCompanyPartnersFromApi(json, company);
-            setShareCapitalFromApi(json,company);
+        Object document = Configuration.defaultConfiguration().jsonProvider().parse(data);
+        String nip = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.nip");
+        String regon = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.regon");
 
 
-            return null;
-        } catch (ParseException e) {
-            e.printStackTrace();
-            json = null;
-        }
         return null;
+//        var parser = new JSONParser();
+//        JSONObject json;
+//        try {
+//            json = (JSONObject) parser.parse(data);
+
+//            setCompanyNipAndRegonFromApi(json, company);
+//            setCompanyAddressFromApi(json, company);
+//            setCompanyPartnersFromApi(json, company);
+//            setShareCapitalFromApi(json,company);
+
+
+//            return null;
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            json = null;
+//        }
+//        return null;
     }
 
     private void setShareCapitalFromApi(JSONObject json, Company company) {
@@ -463,3 +472,4 @@ public class MonoStringToCompanyAdapter {
         return result;
     }
 }
+//JSON path
