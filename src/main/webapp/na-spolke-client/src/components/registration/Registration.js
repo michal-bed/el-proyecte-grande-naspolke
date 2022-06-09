@@ -35,7 +35,7 @@ const Registration = () => {
         e.preventDefault();
         if (userPassword !== userPasswordChecker) {
             setIsOpenForPassword(true);
-            setTimeout(backToPreviousPasswordState, 3000);
+            setTimeout(backToPreviousPasswordState, 4000);
             userPasswordSet("");
             userPasswordCheckerSet("");
         } else {
@@ -51,7 +51,7 @@ const Registration = () => {
                 return response.blob();
             } else {
                 setIsOpenForUser(true);
-                setTimeout(backToPreviousUserState, 5000);
+                setTimeout(backToPreviousUserState, 4000);
                 throw new Error('User already exist');
             }
             }).catch(() => {
