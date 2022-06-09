@@ -1,3 +1,4 @@
+import React from "react";
 import KrsUserInput from "./krsInput/KrsUserInput";
 import CompanyForm from "./companyForm/CompanyForm";
 import {useState} from "react";

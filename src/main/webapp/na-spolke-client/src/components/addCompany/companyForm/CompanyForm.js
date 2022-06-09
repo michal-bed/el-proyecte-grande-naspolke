@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "./CompanyForm.module.css";
 import {useState} from "react";
 import BaseInfo from "./BaseInfo";

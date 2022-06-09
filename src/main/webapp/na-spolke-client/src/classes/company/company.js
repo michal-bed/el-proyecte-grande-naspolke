@@ -1,3 +1,4 @@
+import React from "react";
 import {Address} from "./Address";
 import {BoardMember} from "../persons/BoardMember";
 import {BoardOfDirector} from "../persons/BoardOfDirector";

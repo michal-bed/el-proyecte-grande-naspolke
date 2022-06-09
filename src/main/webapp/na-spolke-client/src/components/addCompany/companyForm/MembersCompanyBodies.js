@@ -1,3 +1,4 @@
+import React from "react";
 import {forEach} from "react-bootstrap/ElementChildren";
 import {BoardMember} from "../../../classes/persons/BoardMember";
 

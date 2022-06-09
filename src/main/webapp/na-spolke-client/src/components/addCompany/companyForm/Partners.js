@@ -1,3 +1,4 @@
+import React from "react";
 import {PartnerCompany, PartnerPerson} from "../../../classes/persons/Partner";
 import styles from "./Partners.module.css";
 const Partners = (props) => {
