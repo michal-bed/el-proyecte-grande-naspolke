@@ -14,7 +14,7 @@ public class StartController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String start() {
-        companyService.getCompanyData("0000413516");
+        companyService.getCompanyData("0000405063");
         return "hello world";
     }
 }

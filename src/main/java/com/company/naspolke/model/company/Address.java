@@ -21,8 +21,8 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String StreetName;
-    private Integer StreetNumber;
-    private Integer LocalNumber;
+    private String StreetNumber;
+    private String LocalNumber;
     private String City;
     private String ZipCode;
     private String PostOffice;

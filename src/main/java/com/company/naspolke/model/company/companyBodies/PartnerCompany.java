@@ -1,6 +1,5 @@
 package com.company.naspolke.model.company.companyBodies;
 
-
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -9,17 +8,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 
-@Entity
 @Data
-public class Partner {
+@Entity
+public class PartnerCompany {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String firstName;
-    private String secondName;
-    private String lastNameI;
-    private String lastNameII;
-    private Integer sharesCount;
+    private String Name;
+    private int sharesCount;
     private BigDecimal sharesValue;
+
 }
