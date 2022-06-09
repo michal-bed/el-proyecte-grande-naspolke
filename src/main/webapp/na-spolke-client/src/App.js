@@ -1,3 +1,4 @@
+import React from 'react'
 import './App.css';
 import Registration from "./components/registration/Registration";
 import AddCompany from "./components/addCompany/AddCompany";
@@ -6,6 +7,7 @@ import Nav from 'react-bootstrap/Nav'
 import {useState} from "react";
 
 function App() {
+
     const [active, setActive] = useState("MainPage")
 
     const getMainPage = ()=> {

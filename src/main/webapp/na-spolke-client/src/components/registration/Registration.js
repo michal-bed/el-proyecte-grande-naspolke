@@ -1,15 +1,28 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import ModalTop from "../modal/ModalTop";
 import "./Registration.model.css"
 
 const Registration = () => {
 
-    const info = {
+    const wrongPassword = {
         title: "Nieprawidłowe hasło",
-        body: "Twoje hasła różnią się od siebie. Wprowadź poprawnie oba hasła."
+        text: "Twoje hasła różnią się od siebie. Wprowadź poprawnie oba hasła."
     }
-    const [isOpen, setIsOpen] = useState(false);
+    const userExist = {
+        title: "Adres e-mail istnieje",
+        text: "Użytkownik o podanym adresie e-mail istnieje w naszej bazie."
+    }
+    const userCreated = {
+        title: "Witamy w naszym gronie!",
+        text: "Udało Ci się pomyślnie zalogować. Teraz możesz poznać pełnie naszych możliwości."
+    }
+
+    const [isOpenForPassword, setIsOpenForPassword] = useState(false);
+    const [isOpenForUser, setIsOpenForUser] = useState(false);
+    const [isOpenForCreatedUser, setIsOpenForCreatedUser] = useState(false);
+    const backToPreviousPasswordState = () => setIsOpenForPassword(false);
+    const backToPreviousUserState = () => setIsOpenForUser(false);
 
     const [userName, userNameSet] = useState("");
     const [userSurname, userSurnameSet] = useState("");
@@ -21,24 +34,30 @@ const Registration = () => {
     const onSubmit = (e) => {
         e.preventDefault();
         if (userPassword !== userPasswordChecker) {
-            setIsOpen(true);
+            setIsOpenForPassword(true);
+            setTimeout(backToPreviousPasswordState, 4000);
             userPasswordSet("");
             userPasswordCheckerSet("");
         } else {
-            console.log(userPassword);
-            console.log(userPasswordChecker);
-
             const userData = {userName, userSurname, userEmail, userPassword, statute};
 
-            console.log(userData);
-            // fetch("http://localhost:8080/register", {
-            //     method: "POST",
-            //     headers: {"Content-Type": "application/json"},
-            //     body: JSON.stringify(userData)
-            // }).then(() => {
-            //         console.log("user added");
-            //     }
-            // )
+            fetch("http://localhost:8080/registration/", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(userData)
+            }).then(response => {
+            if (response.status === 200) {
+                setIsOpenForCreatedUser(true);
+                return response.blob();
+            } else {
+                setIsOpenForUser(true);
+                setTimeout(backToPreviousUserState, 4000);
+                throw new Error('User already exist');
+            }
+            }).catch(() => {
+                userNameSet(""); userSurnameSet(""); userEmailSet("");
+                userPasswordSet(""); userPasswordCheckerSet(""); setStatute(false);
+            });
         }
     }
 
@@ -48,7 +67,7 @@ const Registration = () => {
                 <h1 className="registration-header">Rejestracja</h1>
             </Container><br/>
             <Container className="registration-form-body"><br/>
-                <form className="form-control" onSubmit={onSubmit}><br></br>
+                <form className="form-control" onSubmit={onSubmit}><br/>
                     <Row>
                         <Form.Label column="lg" lg={3} className="form-label">Imię:</Form.Label>
                         <Col>
@@ -92,7 +111,9 @@ const Registration = () => {
                         </Col>
                     </Row>
                         <Button variant="primary" size="lg" className="btn btn-block" type="submit">Załóż konto</Button><br/>
-                        {isOpen && <ModalTop info={info} isOpen={isOpen} />}<br/>
+                        {isOpenForPassword && <ModalTop info={wrongPassword} />}
+                        {isOpenForUser && <ModalTop info={userExist} />}
+                        {isOpenForCreatedUser && <ModalTop info={userCreated} />}
                 </form><br/>
             </Container>
         </div>
