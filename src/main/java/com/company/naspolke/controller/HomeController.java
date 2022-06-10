@@ -8,11 +8,13 @@ import com.company.naspolke.model.auth.AuthenticationRequest;
 import com.company.naspolke.model.auth.AuthenticationResponse;
 import com.company.naspolke.repository.RefreshTokenRepository;
 import com.company.naspolke.repository.UserRepository;
+import com.company.naspolke.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,16 +32,14 @@ class HomeController {
     private JwtUtil jwtTokenUtil;
 
     @Autowired
-    private MyUserDetailsService userDetailsService;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    AuthenticationService authenticationService;
+
 
     @RequestMapping({ "/hello" })
     public String helloPage() {
@@ -49,18 +49,8 @@ class HomeController {
 
     @Transactional
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) {
-//        System.out.println(authenticationManager.getClass());
-        var userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        if (userDetails.getUsername().equals(authenticationRequest.getUsername())
-                && passwordEncoder.matches(authenticationRequest.getPassword(), userDetails.getPassword()))
-        {
-            System.out.println("Authenticate user");
-        }
-        else {
-            System.out.println("Incorrect username or password");
-            throw new BadCredentialsException("Incorrect username or password");
-        }
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
+        UserDetails userDetails = authenticationService.authenticateAndGetUserDetails(authenticationRequest);
         AppUser user = userRepository.findByEmail(authenticationRequest.getUsername());
         if (user == null)
             user = userRepository.findByLogin(authenticationRequest.getUsername());
