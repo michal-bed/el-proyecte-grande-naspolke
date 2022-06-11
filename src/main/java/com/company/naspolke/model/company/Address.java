@@ -1,19 +1,17 @@
 package com.company.naspolke.model.company;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.aspectj.apache.bcel.classfile.Code;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity(name = "address")
 public class Address {
 
@@ -26,4 +24,14 @@ public class Address {
     private String City;
     private String ZipCode;
     private String PostOffice;
+
+    @Builder
+    public Address(String streetName, String streetNumber, String localNumber, String city, String zipCode, String postOffice) {
+        StreetName = streetName;
+        StreetNumber = streetNumber;
+        LocalNumber = localNumber;
+        City = city;
+        ZipCode = zipCode;
+        PostOffice = postOffice;
+    }
 }

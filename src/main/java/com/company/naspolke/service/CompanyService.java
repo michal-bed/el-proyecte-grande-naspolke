@@ -19,11 +19,7 @@ public class CompanyService {
 
     public CompanyService getCompanyData(String krsNumber){
         Mono<String> result = krsClient.webClient(krsNumber);
-        try {
-            monoStringToCompanyAdapter.getCompany(result);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        monoStringToCompanyAdapter.getCompany(result);
         return null;
     }
 

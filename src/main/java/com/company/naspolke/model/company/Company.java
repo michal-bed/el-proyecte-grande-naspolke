@@ -1,11 +1,9 @@
 package com.company.naspolke.model.company;
 
 
-import com.company.naspolke.model.company.companyBodies.BoardMember;
-import com.company.naspolke.model.company.companyBodies.BoardOfDirector;
-import com.company.naspolke.model.company.companyBodies.Partner;
-import com.company.naspolke.model.company.companyBodies.PartnerCompany;
-import lombok.Data;
+import com.company.naspolke.model.company.companyBodies.*;
+import com.sun.istack.NotNull;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -14,18 +12,21 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+
 @Data
+@NoArgsConstructor
 @Entity
 public class Company {
 
     @Id
+    @NotNull
     @Type(type = "uuid-char")
     private UUID uuid = UUID.randomUUID();
     private String name;
     private Integer KRSNumber;
     @ManyToOne
     @JoinColumn(name = "address_id")
-    private Address adress;
+    private Address address;
     private String NIP;
     private String REGON;
     private BigDecimal shareCapital;
@@ -35,9 +36,23 @@ public class Company {
     private Set<BoardMember> boardMembers = new HashSet<>();
     @OneToMany
     private Set<BoardOfDirector> boardOfDirectors = new HashSet<>();
-    @OneToMany
-    private Set<Partner> partners = new HashSet<>();
-    @OneToMany
-    private Set<PartnerCompany> partnerCompanies = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "partners_id")
+    private Partners partners;
 
+
+    @Builder
+    public Company(String name, Integer KRSNumber, Address address, String NIP, String REGON, BigDecimal shareCapital, BigDecimal shareValue, Integer shareCount, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners) {
+        this.name = name;
+        this.KRSNumber = KRSNumber;
+        this.address = address;
+        this.NIP = NIP;
+        this.REGON = REGON;
+        this.shareCapital = shareCapital;
+        this.shareValue = shareValue;
+        this.shareCount = shareCount;
+        this.boardMembers = boardMembers;
+        this.boardOfDirectors = boardOfDirectors;
+        this.partners = partners;
+    }
 }
