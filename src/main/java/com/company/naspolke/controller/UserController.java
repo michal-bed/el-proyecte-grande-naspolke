@@ -1,6 +1,6 @@
 package com.company.naspolke.controller;
 
-import com.company.naspolke.service.model.User;
+import com.company.naspolke.model.User;
 import com.company.naspolke.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,7 +23,7 @@ public class UserController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public void registerNewUser(@RequestBody User user) {
-        Optional<User> usernameEntry = userService.findUserByUserEmail(user);
+        Optional<User> usernameEntry = userService.findUserByUserEmail(user.getUserEmail());
         if (usernameEntry.isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists!");
         } else {
