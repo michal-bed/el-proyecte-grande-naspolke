@@ -1,6 +1,6 @@
 package com.company.naspolke.service;
 
-import com.company.naspolke.model.User;
+import com.company.naspolke.service.model.User;
 import com.company.naspolke.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

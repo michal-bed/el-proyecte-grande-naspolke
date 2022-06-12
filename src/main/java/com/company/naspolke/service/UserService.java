@@ -1,6 +1,6 @@
 package com.company.naspolke.service;
 
-import com.company.naspolke.model.User;
+import com.company.naspolke.service.model.User;
 
 import java.util.Optional;
 

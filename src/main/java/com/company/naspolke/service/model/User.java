@@ -1,4 +1,4 @@
-package com.company.naspolke.model;
+package com.company.naspolke.service.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

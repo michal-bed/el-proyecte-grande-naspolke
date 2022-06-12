@@ -1,6 +1,6 @@
 package com.company.naspolke.controller;
 
-import com.company.naspolke.model.User;
+import com.company.naspolke.service.model.User;
 import com.company.naspolke.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
