@@ -16,7 +16,7 @@ public class JuridicalPerson {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String Name;
+    private String name;
     @OneToOne
     private SharePackage shares;
     @ManyToOne
@@ -25,7 +25,7 @@ public class JuridicalPerson {
 
     @Builder
     public JuridicalPerson(String name, SharePackage shares, Address address) {
-        Name = name;
+        this.name = name;
         this.shares = shares;
         this.address = address;
     }

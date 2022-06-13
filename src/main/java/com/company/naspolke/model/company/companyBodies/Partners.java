@@ -16,13 +16,13 @@ public class Partners {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @OneToMany
-    private Set<NaturalPerson> partners = new HashSet<>();
+    private Set<NaturalPerson> individualPartners = new HashSet<>();
     @OneToMany
     private Set<JuridicalPerson> partnerCompanies = new HashSet<>();
 
     @Builder
-    public Partners(Set<NaturalPerson> partners, Set<JuridicalPerson> partnerCompanies) {
-        this.partners = partners;
+    public Partners(Set<NaturalPerson> individualPartners, Set<JuridicalPerson> partnerCompanies) {
+        this.individualPartners = individualPartners;
         this.partnerCompanies = partnerCompanies;
     }
 }

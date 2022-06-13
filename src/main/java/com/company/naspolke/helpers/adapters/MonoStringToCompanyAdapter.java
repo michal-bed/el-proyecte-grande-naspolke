@@ -2,8 +2,10 @@ package com.company.naspolke.helpers.adapters;
 
 import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
+import com.company.naspolke.model.company.SharePackage;
 import com.company.naspolke.model.company.companyBodies.NaturalPerson;
 import com.company.naspolke.model.company.companyBodies.JuridicalPerson;
+import com.company.naspolke.model.company.companyBodies.Partners;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
@@ -17,7 +19,7 @@ import java.util.*;
 
 @Component
 public class MonoStringToCompanyAdapter {
-    private String MockKRS = "{\n" +
+    private final String MockKRS = "{\n" +
             "    \"odpis\": {\n" +
             "        \"rodzaj\": \"Aktualny\",\n" +
             "        \"naglowekA\": {\n" +
@@ -314,150 +316,106 @@ public class MonoStringToCompanyAdapter {
 
     public Company getCompany(Mono<String> apiResponse) {
         String data = apiResponse.block();
+        Configuration conf = Configuration.defaultConfiguration()
+                .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(data);
         String nip = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.nip");
         String regon = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.regon");
-        Configuration conf = Configuration.defaultConfiguration()
-                .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
-        net.minidev.json.JSONArray partners = JsonPath.read(document, "$.odpis.dane.dzial1.wspolnicySpzoo");
+        BigDecimal shareCapital = getShareCapitalFromApi(document);
+        Partners partners = createCompanyPartners(document);
+        Address address = getCompanyAddressFromApi(document);
+        return null;
+    }
 
+    private Partners createCompanyPartners(Object document) {
+        net.minidev.json.JSONArray partners = JsonPath.read(document, "$.odpis.dane.dzial1.wspolnicySpzoo");
+        Set<NaturalPerson> naturalPersonSet = new HashSet<>();
+        Set<JuridicalPerson> juridicalPersonSet = new HashSet<>();
         for (int i = 0; i < partners.size(); i++) {
             LinkedHashMap<Object, String> partner = (LinkedHashMap<Object, String>) partners.get(i);
             if (partner.containsKey("nazwisko")) {
-                String lastNameI = JsonPath.read(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].nazwisko.nazwiskoICzlon", i));
-                String lastNameII = JsonPath.using(conf).parse(data).read(String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].nazwisko.nazwiskoIICzlon", i));
-                String nameI = JsonPath.read(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].imiona.imie", i));
-                String nameII = JsonPath.using(conf).parse(data).read(String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].imiona.imieDrugie", i));
-                NaturalPerson individual = new NaturalPerson().builder()
-                        .firstName(nameI)
-                        .secondName(nameII)
-                        .lastNameI(lastNameI)
-                        .lastNameII(lastNameII)
-                        .build();
-
-            }
-        }
-
-
-        return null;
-//        var parser = new JSONParser();
-//        JSONObject json;
-//        try {
-//            json = (JSONObject) parser.parse(data);
-
-//            setCompanyNipAndRegonFromApi(json, company);
-//            setCompanyAddressFromApi(json, company);
-//            setCompanyPartnersFromApi(json, company);
-//            setShareCapitalFromApi(json,company);
-
-
-//            return null;
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//            json = null;
-//        }
-//        return null;
-    }
-
-    private void setShareCapitalFromApi(JSONObject json, Company company) {
-        JSONObject shareCapital = getDataToBuildClass(json, shareCapitalPath);
-        String companyCapital = (String) shareCapital.get("wartosc");
-        BigDecimal convertedCapital = BigDecimal.valueOf(Double.parseDouble(companyCapital.replaceAll("[,]",".")));
-        company.setShareCapital(convertedCapital);
-    }
-
-    private void setCompanyPartnersFromApi(JSONObject json, Company company) {
-        JSONObject companyPartners = getDataToBuildClass(json, partnersPath);
-        JSONArray companyPartnersList = getcompanyPartnersListFromAPIData(companyPartners,partnersDetailsKey);
-        getCompanyPartnersList(companyPartnersList, company);
-
-    }
-
-    private void getCompanyPartnersList(JSONArray companyPartnersList, Company company) {
-        Set<NaturalPerson> individualList = new HashSet<>();
-        Set<JuridicalPerson> legalEntitiesList = new HashSet<>();
-        for (int i = 0; i < companyPartnersList.size(); i++) {
-            JSONObject partner = (JSONObject) companyPartnersList.get(i);
-            if(partner.containsKey("nazwisko")){
-                NaturalPerson individual = new NaturalPerson().builder().build();
-
-                JSONObject nazwisko = (JSONObject) partner.get("nazwisko");
-                individual.setLastNameI((String) nazwisko.get("nazwiskoICzlon"));
-                checkForSecondLastName(individual, nazwisko);
-
-                JSONObject imiona = (JSONObject) partner.get("imiona");
-                individual.setFirstName((String) imiona.get("imie"));
-                checkForSecondName(individual, imiona);
-
-                String sharesInfo = (String) partner.get("posiadaneUdzialy");
-                getIndividualShareInfo(individual, sharesInfo);
-                individualList.add(individual);
+                NaturalPerson naturalPerson = getNaturalPersonPartner(document, i);
+                naturalPersonSet.add(naturalPerson);
             } else {
-                JuridicalPerson partnerCompany = new JuridicalPerson();
-
-                String partnerCompanyName = (String) partner.get("nazwa");
-                partnerCompany.setName(partnerCompanyName);
-
-                String sharesInfo = (String) partner.get("posiadaneUdzialy");
-                getCompanyShareInfo(partnerCompany, sharesInfo);
-                legalEntitiesList.add(partnerCompany);
+                JuridicalPerson juridicalPerson = getJuridicalPartner(document, i);
+                juridicalPersonSet.add(juridicalPerson);
             }
         }
-            company.setPartners(individualList);
-            company.setPartnerCompanies(legalEntitiesList);
+        return  Partners.builder()
+                .partnerCompanies(juridicalPersonSet)
+                .individualPartners(naturalPersonSet)
+                .build();
     }
 
-    private void getCompanyShareInfo(JuridicalPerson partnerCompany, String sharesInfo) {
-        String[] shares = sharesInfo.split("UDZIAŁÓW O ŁĄCZNEJ WARTOŚCI");
-        Integer shareCount = Integer.parseInt(shares[0].trim());
-        String sharesValueString = shares[1].replaceAll("[^\\d,]","").replaceAll("\\s+","");
-        sharesValueString = sharesValueString.substring(0, sharesValueString.length()-2);
-        BigDecimal sharesValueBigDecimal = BigDecimal.valueOf(Double.parseDouble(sharesValueString.replaceAll("[^\\d]", ".")));
-//          partnerCompany.setSharesCount(shareCount);
-    //      partnerCompany.setSharesValue(sharesValueBigDecimal);
-
+    private JuridicalPerson getJuridicalPartner(Object document, int i) {
+        String companyName = JsonPath.read(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].nazwa", i));
+        SharePackage sharePackage = getShareInfo(document, i);
+        return JuridicalPerson.builder()
+                .name(companyName)
+                .shares(sharePackage)
+                .build();
     }
 
-    private void getIndividualShareInfo(NaturalPerson individual, String sharesInfo) {
+    private NaturalPerson getNaturalPersonPartner(Object document, String path) {
+        String lastNameI = JsonPath.read(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].nazwisko.nazwiskoICzlon", i));
+        String lastNameII = checkForOptionalData("nazwiskoIICzlon",String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].nazwisko", i), document);
+        String nameI = JsonPath.read(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].imiona.imie", i));
+        String nameII = checkForOptionalData("imieDrugie",String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].imiona", i), document);
+        SharePackage sharePackage = getShareInfo(document, i);
+        return new NaturalPerson().builder()
+                .firstName(nameI)
+                .secondName(nameII)
+                .lastNameI(lastNameI)
+                .lastNameII(lastNameII)
+                .shares(sharePackage)
+                .build();
+    }
+
+    private String checkForOptionalData(String key, String path, Object document){
+        LinkedHashMap <Object, String> objectToCheck = JsonPath.read(document, path);
+        if(objectToCheck.containsKey(key)){
+            return objectToCheck.get(key);
+        }
+        return null;
+    }
+
+    private BigDecimal getShareCapitalFromApi(Object document) {
+        String shareCapitalsFromAPI = JsonPath.read(document, "$.odpis.dane.dzial1.kapital.wysokoscKapitaluZakladowego.wartosc");
+        return BigDecimal.valueOf(Double.parseDouble(shareCapitalsFromAPI.replaceAll("[,]",".")));
+    }
+
+
+    private SharePackage getShareInfo(Object document, int index) {
+        String sharesInfo = JsonPath.read(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].posiadaneUdzialy", index));
         String[] shares = sharesInfo.split("UDZIAŁÓW O ŁĄCZNEJ WARTOŚCI");
         Integer shareCount = Integer.valueOf(shares[0].trim());
         String sharesValueString = shares[1].replaceAll("[^\\d,]","").replaceAll("\\s+","");
         sharesValueString = sharesValueString.substring(0, sharesValueString.length()-2);
         BigDecimal sharesValueBigDecimal = BigDecimal.valueOf(Double.parseDouble(sharesValueString.replaceAll("[^\\d]", ".")));
-//        individual.setSharesCount(shareCount);
-//        individual.setSharesValue(sharesValueBigDecimal);
+        return new SharePackage().builder()
+                .shareCount(shareCount)
+                .shareValue(sharesValueBigDecimal)
+                .build();
     }
 
-    private void checkForSecondName(NaturalPerson individual, JSONObject imiona) {
-        if (imiona.containsKey("imieDrugie")) {
-            individual.setSecondName((String) imiona.get("imieDrugie"));
-        } else {
-            individual.setSecondName(null);
-        }
-    }
 
-    private void checkForSecondLastName(NaturalPerson individual, JSONObject nazwisko) {
-        if (nazwisko.containsKey("nazwiskoIICzlon")) {
-            individual.setLastNameII((String) nazwisko.get("nazwiskoIICzlon"));
-        } else {
-            individual.setLastNameII(null);
-        }
-    }
+    private Address getCompanyAddressFromApi(Object document) {
+        String addressPath = "$.odpis.dane.dzial1.siedzibaIAdres.adres";
 
-    private JSONArray getcompanyPartnersListFromAPIData(JSONObject companyPartners, String partnersDetailsKey) {
-        return (JSONArray) companyPartners.get(partnersDetailsKey);
-    }
-
-    private void setCompanyAddressFromApi(JSONObject json, Company company) {
-        JSONObject companyAddress = getDataToBuildClass(json, addressPath);
-        Address address = new Address();
-        address.setCity((String) companyAddress.get("miejscowosc"));
-        address.setZipCode((String) companyAddress.get("kodPocztowy"));
-        address.setPostOffice((String) companyAddress.get("poczta"));
-        address.setStreetName((String) companyAddress.get("ulica"));
-        address.setStreetNumber((String) companyAddress.get("nrDomu"));
-        checkForCompanyLocalNumber(companyAddress, address);
-//        company.setAdress(address);
+        String city = JsonPath.read(document, addressPath+".miejscowosc");
+        String zipCode = JsonPath.read(document, addressPath+".kodPocztowy");
+        String postOffice = JsonPath.read(document, addressPath+".poczta");
+        String streetName = JsonPath.read(document, addressPath+".ulica");
+        String streetNumber = JsonPath.read(document, addressPath+".nrDomu");
+        String localNumber = checkForOptionalData("nrLokalu", addressPath, document);
+        return Address.builder()
+                .streetName(streetName)
+                .streetNumber(streetNumber)
+                .localNumber(localNumber)
+                .zipCode(zipCode)
+                .city(city)
+                .postOffice(postOffice)
+                .build();
     }
 
     private void checkForCompanyLocalNumber(JSONObject companyAddress, Address address) {
@@ -468,22 +426,5 @@ public class MonoStringToCompanyAdapter {
         }
     }
 
-    private void setCompanyNipAndRegonFromApi(JSONObject json, Company company) {
-        JSONObject nipAndRegon = getDataToBuildClass(json, nipAndRegonPath);
-        company.setNIP((String) nipAndRegon.get("nip"));
-        company.setREGON((String) nipAndRegon.get("regon"));
-    }
-
-    private JSONObject getDataToBuildClass(JSONObject jObj, List<String> keys){
-        JSONObject result = jObj;
-        for (String key : keys) {
-            if (result.get(key)!=null){
-                result = (JSONObject) result.get(key);
-            } else {
-                break;
-            }
-        }
-        return result;
-    }
 }
 //JSON path
