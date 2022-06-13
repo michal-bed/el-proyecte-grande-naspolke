@@ -23,7 +23,7 @@ public class Company {
     @Type(type = "uuid-char")
     private UUID uuid = UUID.randomUUID();
     private String name;
-    private Integer KRSNumber;
+    private String KRSNumber;
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
@@ -42,7 +42,7 @@ public class Company {
 
 
     @Builder
-    public Company(String name, Integer KRSNumber, Address address, String NIP, String REGON, BigDecimal shareCapital, BigDecimal shareValue, Integer shareCount, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners) {
+    public Company(String name, String KRSNumber, Address address, String NIP, String REGON, BigDecimal shareCapital, BigDecimal shareValue, Integer shareCount, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners) {
         this.name = name;
         this.KRSNumber = KRSNumber;
         this.address = address;

@@ -3,13 +3,14 @@ package com.company.naspolke.helpers.adapters;
 import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.SharePackage;
-import com.company.naspolke.model.company.companyBodies.NaturalPerson;
-import com.company.naspolke.model.company.companyBodies.JuridicalPerson;
-import com.company.naspolke.model.company.companyBodies.Partners;
+import com.company.naspolke.model.company.companyBodies.*;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
-import org.json.simple.JSONArray;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -307,7 +308,6 @@ public class MonoStringToCompanyAdapter {
             "        }\n" +
             "    }\n" +
             "}";
-    private final List<String> nipAndRegonPath = Arrays.asList("odpis", "dane", "dzial1", "danePodmiotu", "identyfikatory");
     private final List<String> addressPath = Arrays.asList("odpis", "dane", "dzial1", "siedzibaIAdres", "adres");
     private final List<String> partnersPath = Arrays.asList("odpis", "dane", "dzial1");
     private final String partnersDetailsKey = "wspolnicySpzoo";
@@ -315,16 +315,64 @@ public class MonoStringToCompanyAdapter {
     private final List<String> boardCompanyPath = Arrays.asList("odpis", "dane", "dzial2", "reprezentacja", "sklad");
 
     public Company getCompany(Mono<String> apiResponse) {
-        String data = apiResponse.block();
+//        String data = apiResponse.block();
+        String data = MockKRS;
+
         Configuration conf = Configuration.defaultConfiguration()
                 .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(data);
         String nip = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.nip");
         String regon = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.regon");
+        String krsNumber = JsonPath.read(document, "$.odpis.naglowekA.numerKRS");
+        String companyName = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
         BigDecimal shareCapital = getShareCapitalFromApi(document);
         Partners partners = createCompanyPartners(document);
         Address address = getCompanyAddressFromApi(document);
+        Set<BoardMember> boardMembers = getBoardMembersFromApi(document, conf);
+        Set<BoardOfDirector> boardOfDirectors = getBoardOfDirectorsFromApi(document, conf);
         return null;
+    }
+
+    private Set<BoardOfDirector> getBoardOfDirectorsFromApi(Object document, Configuration conf) {
+        String path = "$.odpis.dane.dzial2.organNadzoru";
+        net.minidev.json.JSONArray boardOfDirectors = JsonPath.using(conf).parse(document).read(path);
+        Set<BoardOfDirector> boardOfDirectorSet = new HashSet<>();
+        if(boardOfDirectors != null){
+            net.minidev.json.JSONArray boardOfDirectorsList = JsonPath.using(conf).parse(document).read(path+"[0].sklad");
+            for (int i = 0; i < boardOfDirectorsList.size(); i++) {
+                PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path + "[0].sklad[%s]", i));
+                BoardOfDirector boardOfDirector = BoardOfDirector.builder()
+                        .firstName(personNameAndSurname.getFirstName())
+                        .secondName(personNameAndSurname.getSecondName())
+                        .lastNameI(personNameAndSurname.getLastNameI())
+                        .lastNameII(personNameAndSurname.getLastNameII())
+                        .build();
+                boardOfDirectorSet.add(boardOfDirector);
+            }
+        }
+        return boardOfDirectorSet;
+    }
+
+    private Set<BoardMember> getBoardMembersFromApi(Object document, Configuration conf){
+        String path = "$.odpis.dane.dzial2.reprezentacja.sklad";
+
+        net.minidev.json.JSONArray boardMembers = JsonPath.using(conf).parse(document).read(path);
+        Set<BoardMember> boardMemberSet = new HashSet<>();
+        if(boardMembers != null) {
+            for (int i = 0; i < boardMembers.size(); i++) {
+                PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path + "[%s]", i));
+                String function = JsonPath.read(document, String.format(path + "[%s].funkcjaWOrganie", i));
+                BoardMember boardMember = BoardMember.builder()
+                        .firstName(personNameAndSurname.getFirstName())
+                        .secondName(personNameAndSurname.getSecondName())
+                        .lastNameI(personNameAndSurname.getLastNameI())
+                        .lastNameII(personNameAndSurname.getLastNameII())
+                        .function(function)
+                        .build();
+                boardMemberSet.add(boardMember);
+            }
+        }
+        return boardMemberSet;
     }
 
     private Partners createCompanyPartners(Object document) {
@@ -334,10 +382,10 @@ public class MonoStringToCompanyAdapter {
         for (int i = 0; i < partners.size(); i++) {
             LinkedHashMap<Object, String> partner = (LinkedHashMap<Object, String>) partners.get(i);
             if (partner.containsKey("nazwisko")) {
-                NaturalPerson naturalPerson = getNaturalPersonPartner(document, i);
+                NaturalPerson naturalPerson = getNaturalPersonPartner(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s]", i));
                 naturalPersonSet.add(naturalPerson);
             } else {
-                JuridicalPerson juridicalPerson = getJuridicalPartner(document, i);
+                JuridicalPerson juridicalPerson = getJuridicalPartner(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s]", i));
                 juridicalPersonSet.add(juridicalPerson);
             }
         }
@@ -347,9 +395,9 @@ public class MonoStringToCompanyAdapter {
                 .build();
     }
 
-    private JuridicalPerson getJuridicalPartner(Object document, int i) {
-        String companyName = JsonPath.read(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].nazwa", i));
-        SharePackage sharePackage = getShareInfo(document, i);
+    private JuridicalPerson getJuridicalPartner(Object document, String path) {
+        String companyName = JsonPath.read(document, path+".nazwa");
+        SharePackage sharePackage = getShareInfo(document, path);
         return JuridicalPerson.builder()
                 .name(companyName)
                 .shares(sharePackage)
@@ -357,17 +405,26 @@ public class MonoStringToCompanyAdapter {
     }
 
     private NaturalPerson getNaturalPersonPartner(Object document, String path) {
-        String lastNameI = JsonPath.read(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].nazwisko.nazwiskoICzlon", i));
-        String lastNameII = checkForOptionalData("nazwiskoIICzlon",String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].nazwisko", i), document);
-        String nameI = JsonPath.read(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].imiona.imie", i));
-        String nameII = checkForOptionalData("imieDrugie",String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].imiona", i), document);
-        SharePackage sharePackage = getShareInfo(document, i);
+        PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, path);
+        SharePackage sharePackage = getShareInfo(document, path);
         return new NaturalPerson().builder()
-                .firstName(nameI)
-                .secondName(nameII)
+                .firstName(personNameAndSurname.getFirstName())
+                .secondName(personNameAndSurname.getSecondName())
+                .lastNameI(personNameAndSurname.getLastNameI())
+                .lastNameII(personNameAndSurname.getLastNameII())
+                .shares(sharePackage)
+                .build();
+    }
+    private PersonNameAndSurname getBasicPersonalInfo(Object document, String path){
+        String lastNameI = JsonPath.read(document, path+".nazwisko.nazwiskoICzlon");
+        String lastNameII = checkForOptionalData("nazwiskoIICzlon",path+".nazwisko", document);
+        String nameI = JsonPath.read(document, path + ".imiona.imie");
+        String nameII = checkForOptionalData("imieDrugie",path + ".imiona", document);
+        return PersonNameAndSurname.builder()
                 .lastNameI(lastNameI)
                 .lastNameII(lastNameII)
-                .shares(sharePackage)
+                .firstName(nameI)
+                .secondName(nameII)
                 .build();
     }
 
@@ -385,8 +442,8 @@ public class MonoStringToCompanyAdapter {
     }
 
 
-    private SharePackage getShareInfo(Object document, int index) {
-        String sharesInfo = JsonPath.read(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s].posiadaneUdzialy", index));
+    private SharePackage getShareInfo(Object document, String path) {
+        String sharesInfo = JsonPath.read(document, path + ".posiadaneUdzialy");
         String[] shares = sharesInfo.split("UDZIAŁÓW O ŁĄCZNEJ WARTOŚCI");
         Integer shareCount = Integer.valueOf(shares[0].trim());
         String sharesValueString = shares[1].replaceAll("[^\\d,]","").replaceAll("\\s+","");
@@ -427,4 +484,15 @@ public class MonoStringToCompanyAdapter {
     }
 
 }
-//JSON path
+
+@Component
+@NoArgsConstructor
+@Data
+@Builder
+@AllArgsConstructor
+class PersonNameAndSurname {
+    private String firstName;
+    private String secondName;
+    private String lastNameI;
+    private String lastNameII;
+}

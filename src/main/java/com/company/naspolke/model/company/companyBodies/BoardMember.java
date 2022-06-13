@@ -1,12 +1,15 @@
 package com.company.naspolke.model.company.companyBodies;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
-@Data
+
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -19,7 +22,16 @@ public class BoardMember {
     private String secondName;
     private String lastNameI;
     private String lastNameII;
-    private BoardMemberFunction function;
+    private String function;
+    private LocalDate appointmentDate;
 
 
+    public BoardMember(String firstName, String secondName, String lastNameI, String lastNameII, String function, LocalDate appointmentDate) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastNameI = lastNameI;
+        this.lastNameII = lastNameII;
+        this.function = function;
+        this.appointmentDate = appointmentDate;
+    }
 }
