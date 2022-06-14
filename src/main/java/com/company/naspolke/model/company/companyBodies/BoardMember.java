@@ -17,7 +17,7 @@ public class BoardMember {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long boardMemberId;
     private String firstName;
     private String secondName;
     private String lastNameI;

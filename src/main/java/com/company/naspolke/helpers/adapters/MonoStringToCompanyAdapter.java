@@ -2,15 +2,14 @@ package com.company.naspolke.helpers.adapters;
 
 import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
-import com.company.naspolke.model.company.SharePackage;
 import com.company.naspolke.model.company.companyBodies.*;
+import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson;
+import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
+import com.company.naspolke.model.company.companyBodies.Partners.Partners;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -317,7 +316,7 @@ public class MonoStringToCompanyAdapter {
     public Company getCompany(Mono<String> apiResponse) {
 //        String data = apiResponse.block();
         String data = MockKRS;
-
+        String largerSharesInfo = "WIĘKSZĄ LICZBĘ UDZIAŁÓW";
         Configuration conf = Configuration.defaultConfiguration()
                 .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(data);
@@ -330,8 +329,22 @@ public class MonoStringToCompanyAdapter {
         Address address = getCompanyAddressFromApi(document);
         Set<BoardMember> boardMembers = getBoardMembersFromApi(document, conf);
         Set<BoardOfDirector> boardOfDirectors = getBoardOfDirectorsFromApi(document, conf);
-        return null;
+        boolean largerAmountOfSharesAllowed = JsonPath.read(document, "$.odpis.dane.dzial1.pozostaleInformacje.informacjaOLiczbieUdzialow").equals(largerSharesInfo);
+
+        return Company.builder()
+                .name(companyName)
+                .KRSNumber(krsNumber)
+                .nip(nip)
+                .regon(regon)
+                .shareCapital(shareCapital)
+                .address(address)
+                .partners(partners)
+                .boardMembers(boardMembers)
+                .boardOfDirectors(boardOfDirectors)
+                .manySharesAllowed(largerAmountOfSharesAllowed)
+                .build();
     }
+
 
     private Set<BoardOfDirector> getBoardOfDirectorsFromApi(Object document, Configuration conf) {
         String path = "$.odpis.dane.dzial2.organNadzoru";
@@ -400,7 +413,8 @@ public class MonoStringToCompanyAdapter {
         SharePackage sharePackage = getShareInfo(document, path);
         return JuridicalPerson.builder()
                 .name(companyName)
-                .shares(sharePackage)
+                .sharesCount(sharePackage.getShareCount())
+                .sharesValue(sharePackage.getShareValue())
                 .build();
     }
 
@@ -412,9 +426,11 @@ public class MonoStringToCompanyAdapter {
                 .secondName(personNameAndSurname.getSecondName())
                 .lastNameI(personNameAndSurname.getLastNameI())
                 .lastNameII(personNameAndSurname.getLastNameII())
-                .shares(sharePackage)
+                .sharesCount(sharePackage.getShareCount())
+                .sharesValue(sharePackage.getShareValue())
                 .build();
     }
+
     private PersonNameAndSurname getBasicPersonalInfo(Object document, String path){
         String lastNameI = JsonPath.read(document, path+".nazwisko.nazwiskoICzlon");
         String lastNameII = checkForOptionalData("nazwiskoIICzlon",path+".nazwisko", document);
@@ -495,4 +511,15 @@ class PersonNameAndSurname {
     private String secondName;
     private String lastNameI;
     private String lastNameII;
+}
+
+@Builder
+@Component
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+class SharePackage {
+    private BigDecimal shareValue;
+    private Integer shareCount;
+
 }

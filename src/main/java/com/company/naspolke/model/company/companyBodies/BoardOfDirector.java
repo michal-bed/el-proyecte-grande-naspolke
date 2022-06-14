@@ -17,7 +17,7 @@ public class BoardOfDirector {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long boardOfDirectorId;
     private String firstName;
     private String secondName;
     private String lastNameI;

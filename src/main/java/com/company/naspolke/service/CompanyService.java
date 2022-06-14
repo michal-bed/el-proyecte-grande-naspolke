@@ -1,6 +1,7 @@
 package com.company.naspolke.service;
 
 import com.company.naspolke.helpers.adapters.MonoStringToCompanyAdapter;
+import com.company.naspolke.model.company.Company;
 import com.company.naspolke.webclient.krs.KrsClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class CompanyService {
 
     public CompanyService getCompanyData(String krsNumber){
         Mono<String> result = krsClient.webClient(krsNumber);
-        monoStringToCompanyAdapter.getCompany(result);
+        Company company = monoStringToCompanyAdapter.getCompany(result);
         return null;
     }
 

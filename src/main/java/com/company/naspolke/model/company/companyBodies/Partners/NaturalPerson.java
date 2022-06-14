@@ -1,18 +1,18 @@
-package com.company.naspolke.model.company.companyBodies;
+package com.company.naspolke.model.company.companyBodies.Partners;
 
 
 import com.company.naspolke.model.company.Address;
-import com.company.naspolke.model.company.SharePackage;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class NaturalPerson {
+public class NaturalPerson implements Shareholder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,16 +24,18 @@ public class NaturalPerson {
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
-    @OneToOne
-    private SharePackage shares;
+    private BigDecimal sharesValue;
+    private Integer sharesCount;
+
 
     @Builder
-    public NaturalPerson(String firstName, String secondName, String lastNameI, String lastNameII, Address address, SharePackage shares) {
+    public NaturalPerson(String firstName, String secondName, String lastNameI, String lastNameII, Address address, BigDecimal sharesValue, Integer sharesCount) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastNameI = lastNameI;
         this.lastNameII = lastNameII;
         this.address = address;
-        this.shares = shares;
+        this.sharesValue = sharesValue;
+        this.sharesCount = sharesCount;
     }
 }
