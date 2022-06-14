@@ -2,8 +2,13 @@ import React, { useState } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import ModalTop from "../modal/ModalTop";
 import "./Registration.model.css"
+import {useLocation, useNavigate} from "react-router-dom";
 
 const Registration = () => {
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
 
     const wrongPassword = {
         title: "Nieprawidłowe hasło",
@@ -48,6 +53,7 @@ const Registration = () => {
             }).then(response => {
             if (response.status === 200) {
                 setIsOpenForCreatedUser(true);
+                navigate(from, { replace: true });
                 return response.blob();
             } else {
                 setIsOpenForUser(true);

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("userDetailsService")
 @Transactional
@@ -26,17 +27,17 @@ public class MyUserDetailsServiceImplementation implements MyUserDetailService, 
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         String login = "";
-        User user = userRepository.findByUserEmail(userEmail);
+        Optional<User> user = Optional.ofNullable(userRepository.findByUserEmail(userEmail));
 
-        if (user == null) {
+        if (user.isEmpty()) {
             throw new UsernameNotFoundException("Could not find user");
         } else {
-             login = user.getUserEmail();
+             login = user.get().getUserEmail();
         }
 
         return new org.springframework.security.core.userdetails.User(
-                login != null ? login : user.getUserEmail(), user.getUserPassword(),
-                user.isEnabled(), true, true, true,
+                login != null ? login : user.get().getUserEmail(), user.get().getUserPassword(),
+                user.get().isEnabled(), true, true, true,
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
     }
 }

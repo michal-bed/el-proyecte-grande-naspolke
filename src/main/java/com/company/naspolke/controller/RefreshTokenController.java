@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "refresh")
+@RequestMapping
 public class RefreshTokenController {
 
     private RefreshTokenService refreshTokenService;
@@ -35,7 +35,7 @@ public class RefreshTokenController {
         this.jwtUtil = jwtUtil;
     }
 
-    @GetMapping
+    @GetMapping(value = "/refresh")
     public ResponseEntity<?> createAuthenticationToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         Optional<Cookie> foundCookie = Optional.empty();

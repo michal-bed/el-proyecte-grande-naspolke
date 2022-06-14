@@ -10,11 +10,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JwtRequestFilterCreator {
 
-    @Autowired
     private MyUserDetailsServiceImplementation userDetailsService;
+    private JwtUtil jwtUtil;
+
+    public JwtRequestFilterCreator(MyUserDetailsServiceImplementation userDetailsService, JwtUtil jwtUtil) {
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+    }
 
     @Autowired
-    private JwtUtil jwtUtil;
+    public JwtRequestFilterCreator() {}
 
     @Bean
     public JwtRequestFilter createJwtRequestFilter() {

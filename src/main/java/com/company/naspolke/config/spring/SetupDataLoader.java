@@ -10,7 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -45,7 +47,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setUserPassword(passwordEncoder.encode("test"));
             user.setUserEmail(email);
             user.setEnabled(true);
-            user.getRoles().addAll(roles);
+            user.getApplicationRoles().addAll(roles);
+//            user.setCompanyRoles(Set.of());
             userRepository.save(user);
         }
     }

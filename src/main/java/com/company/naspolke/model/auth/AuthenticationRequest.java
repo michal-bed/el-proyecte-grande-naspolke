@@ -7,10 +7,14 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationRequest implements Serializable {
 
-    private String userEmail;
+    private String username;
     private String password;
+
+    public AuthenticationRequest(String username, String password) {
+        this.setUsername(username);
+        this.setPassword(password);
+    }
 }

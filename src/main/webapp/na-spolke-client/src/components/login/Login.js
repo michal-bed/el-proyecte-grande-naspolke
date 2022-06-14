@@ -19,7 +19,6 @@ import {
 } from "@chakra-ui/react";
 import * as Yup from 'yup'
 import { ChakraProvider } from '@chakra-ui/react';
-
 import axios from '../../api/axios';
 const LOGIN_URL = '/auth';
 
@@ -58,6 +57,7 @@ const Login = () => {
             // console.log(from)
             navigate(from, { replace: true });
         } catch (err) {
+            console.log(err);
             if (!err?.response) {
                 setErrMsg('Brak odpowiedzi serwera');
             } else if (err.response?.status === 400) {
@@ -78,6 +78,7 @@ const Login = () => {
 
     useEffect(() => {
         localStorage.setItem("persist", persist);
+        console.log("persist", persist);
     }, [persist])
 
     let password;

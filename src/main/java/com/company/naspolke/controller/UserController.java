@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("http://localhost:3000")
 public class UserController {
 
     private UserService userService;
@@ -21,7 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    @PostMapping(value = "/registration")
     public void registerNewUser(@RequestBody User user) {
         Optional<User> usernameEntry = userService.findUserByUserEmail(user.getUserEmail());
         if (usernameEntry.isPresent()) {

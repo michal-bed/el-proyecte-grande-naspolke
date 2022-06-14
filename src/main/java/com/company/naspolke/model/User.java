@@ -1,5 +1,6 @@
 package com.company.naspolke.model;
 
+import com.company.naspolke.model.aggregate.CompanyUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "user_table", uniqueConstraints = { @UniqueConstraint(columnNames = {"user_email"}) })
+@Table(name = "User_Table", uniqueConstraints = { @UniqueConstraint(columnNames = {"user_email"}) })
 public class User {
 
     @Id
@@ -40,7 +41,17 @@ public class User {
     @Column(name = "token_expired")
     private boolean tokenExpired;
     @ElementCollection
-    private Set<SimpleGrantedAuthority> roles = new HashSet<>();
+    @Column(name = "application_roles")
+    private Set<SimpleGrantedAuthority> applicationRoles = new HashSet<>();
+    @OneToMany(mappedBy = "primaryKey.user", cascade = CascadeType.ALL)
+    @Column(name = "company_user_role")
+    private Set<CompanyUserRole> companyUserRole = new HashSet<>();
+
+//    @ManyToMany
+//    @JoinTable(name = "user_table_to_role_table",
+//            joinColumns = { @JoinColumn(name = "user_id") },
+//            inverseJoinColumns = { @JoinColumn(name = "role_id") })
+//    private Set<Role> companyRoles = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
