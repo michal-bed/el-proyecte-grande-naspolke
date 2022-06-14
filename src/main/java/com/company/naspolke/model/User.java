@@ -1,6 +1,5 @@
 package com.company.naspolke.model;
 
-import com.company.naspolke.model.aggregate.CompanyUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,9 +42,12 @@ public class User {
     @ElementCollection
     @Column(name = "application_roles")
     private Set<SimpleGrantedAuthority> applicationRoles = new HashSet<>();
-    @OneToMany(mappedBy = "primaryKey.user", cascade = CascadeType.ALL)
-    @Column(name = "company_user_role")
-    private Set<CompanyUserRole> companyUserRole = new HashSet<>();
+
+    public <T, E> User(UUID randomUUID, String userName, String userSurname, String userEmail, String userPassword, boolean b, boolean b1, Set<T> role_user, Set<E> of) {
+    }
+//    @OneToMany(mappedBy = "primaryKey.user", cascade = CascadeType.ALL)
+//    @Column(name = "company_user_role")
+//    private Set<CompanyUserRole> companyUserRole = new HashSet<>();
 
 //    @ManyToMany
 //    @JoinTable(name = "user_table_to_role_table",
