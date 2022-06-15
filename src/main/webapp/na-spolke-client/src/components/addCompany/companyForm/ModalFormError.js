@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 export function ModalErrorMessage(props) {
-    const [show, setShow] = useState(true);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = () => {
+        props.hide();
+    };
 
     return (
         <>
-
             <Modal
-                show={show}
+                show={true}
                 onHide={handleClose}
                 backdrop="static"
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Nie znaleziono</Modal.Title>
+                    <Modal.Title>Modal title</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {props.message}
+                    I will not close if you click outside me. Don't even try to press
+                    escape key.
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
