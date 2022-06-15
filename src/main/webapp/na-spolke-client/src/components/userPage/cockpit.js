@@ -76,7 +76,7 @@ function Cockpit ({classes}) {
                     <div style={{overflow: 'auto', height: '100%', width: '100%'}}>
 
                         <Routes>
-                            {/*<Route path="/" element={<MainPage title={"MainPage"} />} />*/}
+                            {/* jeśli route ma routy pod nim, trzeba dodać "/*" */}
                             <Route path="/" element={<MainCockpitPage />} />
                             <Route path="/test" element={<TestPage />} />
                         </Routes>
