@@ -43,12 +43,6 @@ public class User {
     @Column(name = "application_roles")
     private Set<SimpleGrantedAuthority> applicationRoles = new HashSet<>();
 
-//    @ManyToMany
-//    @JoinTable(name = "user_table_to_role_table",
-//            joinColumns = { @JoinColumn(name = "user_id") },
-//            inverseJoinColumns = { @JoinColumn(name = "role_id") })
-//    private Set<Role> companyRoles = new HashSet<>();
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
