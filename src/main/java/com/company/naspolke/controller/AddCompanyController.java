@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
-@RequestMapping(value = "/addcompany")
+@RequestMapping(value = "/add-company")
 public class AddCompanyController {
 
     private final CompanyService companyService;
 
     @GetMapping(value = "/{krsNumber}")
     public ResponseEntity<Company> getCompanyDtoFromKrsApi(@PathVariable("krsNumber") String krsNumber) {
-        Company company = companyService.getCompanyData(krsNumber);
-        HttpHeaders headers = new HttpHeaders();
-        ResponseEntity<Company> entity = new ResponseEntity<>(company, headers, HttpStatus.OK);
-        return entity;
+//        Company company = companyService.getCompanyData(krsNumber);
+//        HttpHeaders headers = new HttpHeaders();
+//        ResponseEntity<Company> entity = new ResponseEntity<>(company, headers, HttpStatus.OK);
+        return companyService.getCompanyData(krsNumber);
     }
 }
 // zwraca mi status w kluczu i body Map

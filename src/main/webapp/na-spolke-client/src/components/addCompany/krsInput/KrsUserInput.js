@@ -26,11 +26,13 @@ const KrsUserInput = (props)=>{
     }
 
     const getDataFromKrsAPI = () => {
-        Axios.get(`http://localhost:8080/addcompany/${krsNumber}`)
+        Axios.get(`http://localhost:8080/add-company/${krsNumber}`)
             .then((response)=> {
-            props.addCompanyData(response.data);
+                console.debug(response)
+            props.addCompanyData(response);
         }).catch(error=>{
-            console.log(error.message)
+            console.log(error.response.status)
+            props.addCompanyData(error.response.status);
         });
     }
 

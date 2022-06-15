@@ -309,8 +309,8 @@ public class MonoStringToCompanyAdapter {
             "}";
 
     public Company getCompany(String apiResponse) {
-//        String data = new String(apiResponse);
-        String data = MockKRS;
+        String data = new String(apiResponse);
+//        String data = MockKRS;
         String largerSharesInfo = "WIĘKSZĄ LICZBĘ UDZIAŁÓW";
         Configuration conf = Configuration.defaultConfiguration()
                 .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);

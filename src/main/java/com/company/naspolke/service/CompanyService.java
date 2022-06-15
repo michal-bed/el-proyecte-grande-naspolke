@@ -7,10 +7,15 @@ import com.company.naspolke.webclient.krs.KrsClient;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.function.ServerRequest;
 import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 @Service
@@ -23,14 +28,21 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
 
 
-    public Company getCompanyData(String krsNumber){
+    public ResponseEntity<Company> getCompanyData(String krsNumber){
 //        String result = krsClient.webClient(krsNumber);
-//        if(Objects.equals(result, "404")){
-//            return null;
-//        }
-        krsNumber ="";
-        return monoStringToCompanyAdapter.getCompany(krsNumber);
-//tutaj mapa string + company
+        String result = "404";
+        HttpStatus httpStatus = HttpStatus.OK;
+        Company company = null;
+        HttpHeaders headers = new HttpHeaders();
+        String resultApi;
+        if(result.length()==3){
+            resultApi = result;
+        } else {
+            company = monoStringToCompanyAdapter.getCompany(krsNumber);
+            resultApi = "200";
+        }
+        headers.add("apiStatus", resultApi);
+        return new ResponseEntity<>(company, headers, HttpStatus.NOT_FOUND);
     }
 
     public void saveCompany(Company company){
