@@ -16,9 +16,9 @@ public class Partners {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<NaturalPerson> individualPartners = new HashSet<>();
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<JuridicalPerson> partnerCompanies = new HashSet<>();
 
     @Builder
@@ -26,32 +26,15 @@ public class Partners {
         this.individualPartners = individualPartners;
         this.partnerCompanies = partnerCompanies;
     }
-//TODO zastanowić się nad setem ShareHoldersów
 
     public BigDecimal getAllSharesValue() {
         BigDecimal sumSharesValue = BigDecimal.ZERO;
-        sumSharesValue = individualSharesValue(sumSharesValue);
-        sumSharesValue = companySharesValue(sumSharesValue);
-        return sumSharesValue;
-    }
-
-    private BigDecimal companySharesValue(BigDecimal sumSharesValue) {
-        if (partnerCompanies!=null) {
-            for (JuridicalPerson juridicalPerson : partnerCompanies) {
-                sumSharesValue = sumSharesValue.add(juridicalPerson.getSharesValue());
-            }
+        Set<SharePossesing> sharesPossesing = new HashSet<>();
+        sharesPossesing.addAll(individualPartners);
+        sharesPossesing.addAll(partnerCompanies);
+        for (SharePossesing partner : sharesPossesing) {
+            sumSharesValue = sumSharesValue.add(partner.getSharesValue());
         }
         return sumSharesValue;
     }
-
-    private BigDecimal individualSharesValue(BigDecimal sumSharesValue) {
-        if (individualPartners!=null) {
-            for (NaturalPerson person : individualPartners) {
-                sumSharesValue = sumSharesValue.add(person.getSharesValue());
-            }
-        }
-        return sumSharesValue;
-    }
-
-
 }

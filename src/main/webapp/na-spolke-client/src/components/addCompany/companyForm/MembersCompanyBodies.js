@@ -12,7 +12,7 @@ const MembersCompanyBodies = (props) => {
         if (member instanceof BoardMember) {
             return <div>
                 <label>Funkcja:</label>
-                <input defaultValue={member.MemberFunction}/>
+                <input defaultValue={member.function}/>
             </div>
         }
     }
@@ -39,14 +39,14 @@ const MembersCompanyBodies = (props) => {
     return <div>
         {props.boardMembers.map(member => (
             <div key={counter++}><label>Nazwisko pierwszy człon</label>
-                <input defaultValue={member.LastNameI}/>
+                <input defaultValue={member.lastNameI}/>
 
-                {checkForSecondSurname(member.LastNameII)}
+                {checkForSecondSurname(member.lastNameII)}
 
                 <label>Pierwsze Imię:</label>
-                <input defaultValue={member.FirstName}/>
+                <input defaultValue={member.firstName}/>
 
-                {checkForSecondName(member.SecondName)}
+                {checkForSecondName(member.secondName)}
 
                 {displayMemberFunction(member)}
             </div>

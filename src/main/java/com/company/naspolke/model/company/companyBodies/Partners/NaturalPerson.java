@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Entity
 @Data
 @NoArgsConstructor
-public class NaturalPerson implements Shareholder {
+public class NaturalPerson implements SharePossesing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +21,7 @@ public class NaturalPerson implements Shareholder {
     private String secondName;
     private String lastNameI;
     private String lastNameII;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
     private BigDecimal sharesValue;

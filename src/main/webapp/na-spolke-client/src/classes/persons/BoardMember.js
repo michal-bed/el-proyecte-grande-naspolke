@@ -1,9 +1,16 @@
 import {Person} from "./Person";
 
-export class BoardMember extends Person{
-    MemberFunction;
+export class BoardMember{
+    firstName;
+    secondName;
+    lastNameI;
+    lastNameII;
+    function;
     constructor(memberData) {
-        super(memberData);
-        this.MemberFunction = memberData.funkcjaWOrganie;
+        this.firstName = memberData.firstName;
+        this.secondName = memberData.secondName;
+        this.lastNameI = memberData.lastNameI;
+        this.lastNameII = memberData.lastNameII;
+        this.function = memberData.function;
     }
 }

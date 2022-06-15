@@ -5,7 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Data
 @Component
@@ -14,7 +14,7 @@ public class KrsClient {
     private WebClient webClient;
     private String KRS_URL = "https://api-krs.ms.gov.pl/api/krs";
 
-    public Mono<String> webClient(String krsNumber){
+    public String webClient(String krsNumber){
         WebClient webClient = WebClient
                 .builder()
                 .baseUrl(KRS_URL)
@@ -22,14 +22,21 @@ public class KrsClient {
                 .build();
 
         WebClient.RequestHeadersSpec<?> requestHeadersSpec = webClient.get().uri("/OdpisAktualny/"+krsNumber+"?rejestr=p&format=json");
-        return requestHeadersSpec.retrieve().bodyToMono(String.class);
+        String response = null;
+        try {
+            response = requestHeadersSpec.retrieve().bodyToMono(String.class).block();
+        } catch (WebClientResponseException e) {
+            return String.valueOf(e.getRawStatusCode());
+        }
+        return response;
+    }
+}
 
 
 
 //        mono
 //                .doOnNext(body-> System.out.println(body))
 //                .subscribe();
-    }
 
 //
 //    private RestTemplate restTemplate = new RestTemplate();
@@ -41,7 +48,6 @@ public class KrsClient {
 //                CompanyDto.class,
 //                "OdpisAktualny", krsNumber, "p");
 //    }
-}
 
 
 //<html>

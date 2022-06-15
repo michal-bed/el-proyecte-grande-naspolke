@@ -1,5 +1,6 @@
 package com.company.naspolke.model.company.companyBodies;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,15 +8,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
-
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Entity
+@NoArgsConstructor
 public class BoardMember {
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long boardMemberId;
     private String firstName;
@@ -23,15 +22,13 @@ public class BoardMember {
     private String lastNameI;
     private String lastNameII;
     private String function;
-    private LocalDate appointmentDate;
 
-
-    public BoardMember(String firstName, String secondName, String lastNameI, String lastNameII, String function, LocalDate appointmentDate) {
+    @Builder
+    public BoardMember(String firstName, String secondName, String lastNameI, String lastNameII, String function) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastNameI = lastNameI;
         this.lastNameII = lastNameII;
         this.function = function;
-        this.appointmentDate = appointmentDate;
     }
 }

@@ -2,19 +2,14 @@ package com.company.naspolke.model.company.companyBodies;
 
 import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
-import com.company.naspolke.model.company.companyBodies.Partners.Shareholder;
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
-import net.minidev.json.JSONArray;
+import com.company.naspolke.model.company.companyBodies.Partners.SharePossesing;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 public class test {
 
     public static void main(String[] args) {
-        Set<Shareholder> partners = new HashSet<>();
+        Set<SharePossesing> partners = new HashSet<>();
         NaturalPerson naturalPerson = NaturalPerson.builder().build();
         JuridicalPerson juridicalPerson = JuridicalPerson.builder().build();
         partners.add(naturalPerson);

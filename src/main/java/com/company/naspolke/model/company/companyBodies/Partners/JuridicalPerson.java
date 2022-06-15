@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Data
 @Entity
 @NoArgsConstructor
-public class JuridicalPerson implements Shareholder {
+public class JuridicalPerson implements SharePossesing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +19,7 @@ public class JuridicalPerson implements Shareholder {
     private String name;
     private BigDecimal sharesValue;
     private Integer sharesCount;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 

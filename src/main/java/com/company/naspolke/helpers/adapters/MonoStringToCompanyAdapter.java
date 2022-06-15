@@ -307,14 +307,9 @@ public class MonoStringToCompanyAdapter {
             "        }\n" +
             "    }\n" +
             "}";
-    private final List<String> addressPath = Arrays.asList("odpis", "dane", "dzial1", "siedzibaIAdres", "adres");
-    private final List<String> partnersPath = Arrays.asList("odpis", "dane", "dzial1");
-    private final String partnersDetailsKey = "wspolnicySpzoo";
-    private final List<String> shareCapitalPath = Arrays.asList("odpis", "dane", "dzial1", "kapital", "wysokoscKapitaluZakladowego");
-    private final List<String> boardCompanyPath = Arrays.asList("odpis", "dane", "dzial2", "reprezentacja", "sklad");
 
-    public Company getCompany(Mono<String> apiResponse) {
-//        String data = apiResponse.block();
+    public Company getCompany(String apiResponse) {
+//        String data = new String(apiResponse);
         String data = MockKRS;
         String largerSharesInfo = "WIĘKSZĄ LICZBĘ UDZIAŁÓW";
         Configuration conf = Configuration.defaultConfiguration()
@@ -322,7 +317,7 @@ public class MonoStringToCompanyAdapter {
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(data);
         String nip = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.nip");
         String regon = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.regon");
-        String krsNumber = JsonPath.read(document, "$.odpis.naglowekA.numerKRS");
+        Long krsNumber = Long.valueOf(JsonPath.read(document, "$.odpis.naglowekA.numerKRS"));
         String companyName = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
         BigDecimal shareCapital = getShareCapitalFromApi(document);
         Partners partners = createCompanyPartners(document);
@@ -333,7 +328,7 @@ public class MonoStringToCompanyAdapter {
 
         return Company.builder()
                 .name(companyName)
-                .KRSNumber(krsNumber)
+                .krsNumber(krsNumber)
                 .nip(nip)
                 .regon(regon)
                 .shareCapital(shareCapital)
@@ -374,9 +369,10 @@ public class MonoStringToCompanyAdapter {
         if(boardMembers != null) {
             for (int i = 0; i < boardMembers.size(); i++) {
                 PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path + "[%s]", i));
+                String abs = personNameAndSurname.getFirstName();
                 String function = JsonPath.read(document, String.format(path + "[%s].funkcjaWOrganie", i));
                 BoardMember boardMember = BoardMember.builder()
-                        .firstName(personNameAndSurname.getFirstName())
+                        .firstName(abs)
                         .secondName(personNameAndSurname.getSecondName())
                         .lastNameI(personNameAndSurname.getLastNameI())
                         .lastNameII(personNameAndSurname.getLastNameII())
@@ -489,14 +485,6 @@ public class MonoStringToCompanyAdapter {
                 .city(city)
                 .postOffice(postOffice)
                 .build();
-    }
-
-    private void checkForCompanyLocalNumber(JSONObject companyAddress, Address address) {
-        if (companyAddress.containsKey("nrLokalu")) {
-            address.setLocalNumber((String) companyAddress.get("nrLokalu"));
-        } else {
-            address.setLocalNumber(null);
-        }
     }
 
 }

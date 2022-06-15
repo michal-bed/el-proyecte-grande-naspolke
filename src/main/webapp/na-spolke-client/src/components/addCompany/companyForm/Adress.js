@@ -5,30 +5,30 @@ const Adress = (props) => {
         if(localNumber){
             return<div>
                 <label>numer lokalu:</label>
-                <input defaultValue={props.adress.LocalNumber} size={1}/>
+                <input defaultValue={props.adress.localNumber} size={1}/>
             </div>
         }
     }
 
     return <div>
         <div><label>ulica</label>
-            <input defaultValue={props.adress.StreetName}/>
+            <input defaultValue={props.adress.streetName}/>
             <label>numer domu:</label>
-            <input defaultValue={props.adress.StreetNumber} size={1}/>
-            {checkForLocalNumber(props.adress.LocalNumber)}
+            <input defaultValue={props.adress.streetNumber} size={1}/>
+            {checkForLocalNumber(props.adress.localNumber)}
         </div>
         <div>
             <label>miejscowość:</label>
         </div>
-        <input defaultValue={props.adress.City}/>
+        <input defaultValue={props.adress.city}/>
         <div>
             <label>kod pocztowy:</label>
         </div>
-        <input defaultValue={props.adress.ZipCode} size={5}/>
+        <input defaultValue={props.adress.zipCode} size={5}/>
         <div>
             <label>poczta:</label>
         </div>
-        <input defaultValue={props.adress.PostOffice}/>
+        <input defaultValue={props.adress.postOffice}/>
     </div>
 }
 

@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 
 @Component
-public interface Shareholder {
+public interface SharePossesing {
     BigDecimal getSharesValue();
     Integer getSharesCount();
 }

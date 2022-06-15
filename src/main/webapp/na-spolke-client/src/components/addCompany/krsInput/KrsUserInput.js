@@ -26,9 +26,9 @@ const KrsUserInput = (props)=>{
     }
 
     const getDataFromKrsAPI = () => {
-        Axios.get(`https://api-krs.ms.gov.pl/api/krs/OdpisAktualny/${krsNumber}?rejestr=p&format=json`)
+        Axios.get(`http://localhost:8080/addcompany/${krsNumber}`)
             .then((response)=> {
-            props.addCompanyData(response);
+            props.addCompanyData(response.data);
         }).catch(error=>{
             console.log(error.message)
         });

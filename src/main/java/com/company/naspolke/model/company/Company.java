@@ -10,7 +10,6 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashSet;
@@ -28,8 +27,8 @@ public class Company {
     @Type(type = "uuid-char")
     private UUID companyUuid = UUID.randomUUID();
     private String name;
-    private String KRSNumber;
-    @ManyToOne
+    private Long krsNumber;
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "address_id")
     private Address address;
     private String nip;
@@ -37,11 +36,11 @@ public class Company {
     private BigDecimal shareCapital;
     private BigDecimal shareValue;
     private Integer shareCount;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<BoardMember> boardMembers = new HashSet<>();
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<BoardOfDirector> boardOfDirectors = new HashSet<>();
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "partners_id")
     private Partners partners;
     private boolean partnersRevealed;
@@ -49,9 +48,9 @@ public class Company {
 
 
     @Builder
-    public Company(String name, String KRSNumber, Address address, String nip, String regon, BigDecimal shareCapital, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners, boolean manySharesAllowed) {
+    public Company(String name, Long krsNumber, Address address, String nip, String regon, BigDecimal shareCapital, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners, boolean manySharesAllowed) {
         this.name = name;
-        this.KRSNumber = KRSNumber;
+        this.krsNumber = krsNumber;
         this.address = address;
         this.nip = nip;
         this.regon = regon;

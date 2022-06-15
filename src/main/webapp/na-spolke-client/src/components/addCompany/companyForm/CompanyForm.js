@@ -4,13 +4,13 @@ import BaseInfo from "./BaseInfo";
 import Address from "./Adress";
 import MembersCompanyBodies from "./MembersCompanyBodies";
 import Partners from "./Partners";
-import {Company} from "../../../classes/company/company";
+import {Company} from "../../../classes/company/Company";
 
 
 const CompanyForm = (props)=>{
     const [page, setPage] = useState(0)
     const FormTitles = ["Dane Podstawowe", "Adres", "Zarząd", "Rada Nadzorcza", "Wspólnicy"]
-
+    console.log(props.companyData)
     const company = new Company(props.companyData)
     // const dataFromKRS = props.companyData.data.odpis.dane;
 

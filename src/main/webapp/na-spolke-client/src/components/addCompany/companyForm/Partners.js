@@ -1,4 +1,4 @@
-import {PartnerCompany, PartnerPerson} from "../../../classes/persons/Partner";
+import {IndividualPartner, PartnerCompany,} from "../../../classes/persons/Partners";
 import styles from "./Partners.module.css";
 const Partners = (props) => {
 
@@ -23,21 +23,21 @@ const Partners = (props) => {
     }
 
     function checkForPartnerType(partner) {
-        if (partner instanceof PartnerPerson) {
+        if (partner instanceof IndividualPartner) {
             return <div><label>Nazwisko pierwszy człon</label>
-                <input defaultValue={partner.LastNameI}/>
-                {checkForSecondSurname(partner.LastNameII)}
+                <input defaultValue={partner.lastNameI}/>
+                {checkForSecondSurname(partner.lastNameII)}
 
 
                 <label>Pierwsze Imię:</label>
-                <input defaultValue={partner.FirstName}/>
-                {checkForSecondName(partner.SecondName)}
+                <input defaultValue={partner.firstName}/>
+                {checkForSecondName(partner.secondName)}
 
             </div>
         } else if (partner instanceof PartnerCompany) {
             return <div>
                 <label> Nazwa wspólnika:</label>
-                <input defaultValue={partner.Name}/>
+                <input defaultValue={partner.name}/>
             </div>
         }
     }
