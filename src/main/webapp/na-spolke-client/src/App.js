@@ -5,6 +5,7 @@ import MainPage from "./components/mainPage/mainPage";
 import Nav from 'react-bootstrap/Nav'
 import {useState} from "react";
 import Cockpit from './components/userPage/cockpit';
+import { Routes, Route, Link } from 'react-router-dom';
 
 function App() {
     const [active, setActive] = useState("MainPage")
@@ -39,8 +40,10 @@ function App() {
         {/*{active === "MainPage" && <MainPage title={"MainPage"}/>}*/}
         {/*{active === "Registration" && <Registration title={"Registration"}/>}*/}
         {/*{active === "addCompany" && <AddCompany title={"addCompany"}/>}*/}
-
-        <Cockpit />
+        <Routes>
+            <Route path="/" element={<MainPage title={"MainPage"} />} />
+            <Route path="/userpanel/*" element={<Cockpit />} />
+        </Routes>
 
     </div>
   );
