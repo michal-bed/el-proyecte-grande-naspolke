@@ -21,7 +21,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "User_Table", uniqueConstraints = { @UniqueConstraint(columnNames = {"user_email"}) })
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -43,26 +43,24 @@ public class User {
     @ElementCollection
     @Column(name = "application_roles")
     private Set<SimpleGrantedAuthority> applicationRoles = new HashSet<>();
-    @OneToMany(mappedBy = "primaryKey.user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "primaryKey.appUser", cascade = CascadeType.ALL)
     @Column(name = "company_user_role")
     private Set<CompanyUserRole> companyUserRole = new HashSet<>();
-
-//    @ManyToMany
-//    @JoinTable(name = "user_table_to_role_table",
-//            joinColumns = { @JoinColumn(name = "user_id") },
-//            inverseJoinColumns = { @JoinColumn(name = "role_id") })
-//    private Set<Role> companyRoles = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
-        return userId != null && Objects.equals(userId, user.userId);
+        AppUser appUser = (AppUser) o;
+        return userId != null && Objects.equals(userId, appUser.userId);
     }
 
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void addCompanyUserRole(CompanyUserRole companyUserRole) {
+        this.companyUserRole.add(companyUserRole);
     }
 }
