@@ -56,8 +56,6 @@ public class HomeController {
 
         UserDetails userDetails = authenticationService.authenticateAndGetUserDetails(authenticationRequest);
         Optional<User> user = userService.findUserByUserEmail(authenticationRequest.getUsername());
-        System.out.println("!!!!!!!!!!email!!!!!!");
-        System.out.println(user.get().getUserEmail());
 
         final String accessToken = jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 15);
         final String refreshToken = jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 60 * 60);
