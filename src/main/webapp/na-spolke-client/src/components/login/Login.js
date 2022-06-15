@@ -20,10 +20,11 @@ import {
 import * as Yup from 'yup'
 import { ChakraProvider } from '@chakra-ui/react';
 import axios from '../../api/axios';
+import AESEncrypt from "../../util/AESEncrypt";
 const LOGIN_URL = '/auth';
 
 const Login = () => {
-    const { auth, setAuth, persist, setPersist } = useAuth();
+    const { setAuth, persist, setPersist, user, setUser } = useAuth();
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
 
@@ -47,17 +48,20 @@ const Login = () => {
                     withCredentials: true
                 }
             );
-            console.log(JSON.stringify(response?.data));
-            //console.log(JSON.stringify(response));
+            // console.log(JSON.stringify(response?.data));
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
+            const email = response?.data?.email;
             setAuth({ user: values.email, pwd: values.password, roles, accessToken });
-            // console.log(auth);
-            // console.log(values)
-            // console.log(from)
+            // console.log(email)
+            localStorage.setItem("user", AESEncrypt(email));
+            // console.log(localStorage.getItem("user"));
+            setUser(email);
+            // console.log(user);
+            togglePersist(checkboxRef.current);
             navigate(from, { replace: true });
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             if (!err?.response) {
                 setErrMsg('Brak odpowiedzi serwera');
             } else if (err.response?.status === 400) {
@@ -71,14 +75,16 @@ const Login = () => {
         }
     }
 
-    const togglePersist = () => {
-        console.log(persist);
-        setPersist(prev => !prev);
+    const togglePersist = (target) => {
+        // console.log("toggle ", target.checked);
+        setPersist(target.checked);
+        // console.log(persist);
+        // setPersist(prev => !prev);
     }
 
     useEffect(() => {
         localStorage.setItem("persist", persist);
-        console.log("persist", persist);
+        // console.log("persist", persist);
     }, [persist])
 
     let password;
@@ -92,10 +98,16 @@ const Login = () => {
 
     let toggleFocus = (e) => {
         // document.querySelector("#email").focus();
-        console.log(e.target)
+        // console.log(e.target)
         e.target.focus();
         // email.setAttribute('focus', "true");
     }
+
+    const RefCheckbox = ({ innerRef, ...props }) => (
+        <Checkbox ref={innerRef} {...props} />
+    );
+
+    let checkboxRef = useRef();
 
     return (
     <ChakraProvider>
@@ -123,7 +135,7 @@ const Login = () => {
                             validateOnChange={false}
                             validateOnBlur={false}
                         >
-                        {({handleSubmit, handleChange, values, touched, errors, validateForm}) => (
+                        {({handleSubmit, handleChange, values, errors, validateForm}) => (
                         <form onSubmit={handleSubmit}>
                             <VStack spacing={4} align="flex-start">
                                 <FormControl isRequired isInvalid={!!errors.email}>
@@ -176,11 +188,12 @@ const Login = () => {
                                     <FormErrorMessage>{errors.password}</FormErrorMessage>
                                 </FormControl>
                                 <Field
-                                    as={Checkbox}
+                                    as={RefCheckbox}
+                                    innerRef={(el) => (checkboxRef.current = el)}
                                     id="trustDevice"
                                     name="trustDevice"
                                     value={persist}
-                                    onChange = {(val) => {handleChange(val); togglePersist()}}
+                                    onChange = {(e) => {handleChange(e)}}
                                     colorScheme="teal"
                                 >
                                     Zapamiętaj mnie
@@ -191,7 +204,7 @@ const Login = () => {
                                         <Link to="/register">Zarejestruj się</Link>
                                     </span>
                                 </p>
-                                <Button onClick={(e) => { validateForm()} } type="submit" colorScheme="teal" width="full">
+                                <Button onClick={(e) => { validateForm() }} type="submit" colorScheme="teal" width="full">
                                     Zaloguj się
                                 </Button>
                             </VStack>
@@ -204,4 +217,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Login;

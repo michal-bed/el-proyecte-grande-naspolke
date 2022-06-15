@@ -1,26 +1,22 @@
 package com.company.naspolke.controller;
 
+import com.company.naspolke.model.AppUser;
 import com.company.naspolke.service.AuthenticationService;
-import com.company.naspolke.service.MyUserDetailsServiceImplementation;
 import com.company.naspolke.config.util.JwtUtil;
 import com.company.naspolke.model.RefreshToken;
-import com.company.naspolke.model.User;
 import com.company.naspolke.model.auth.AuthenticationRequest;
 import com.company.naspolke.model.auth.AuthenticationResponse;
 import com.company.naspolke.service.RefreshTokenService;
 import com.company.naspolke.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +28,7 @@ public class HomeController {
     private UserService userService;
     private RefreshTokenService refreshTokenService;
     private AuthenticationService authenticationService;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public HomeController(JwtUtil jwtTokenUtil, UserService userService, RefreshTokenService refreshTokenService,
@@ -55,7 +51,7 @@ public class HomeController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
 
         UserDetails userDetails = authenticationService.authenticateAndGetUserDetails(authenticationRequest);
-        Optional<User> user = userService.findUserByUserEmail(authenticationRequest.getUsername());
+        Optional<AppUser> user = userService.findUserByUserEmail(authenticationRequest.getUsername());
         System.out.println("!!!!!!!!!!email!!!!!!");
         System.out.println(user.get().getUserEmail());
 
@@ -64,16 +60,17 @@ public class HomeController {
 
         System.out.println(accessToken);
         System.out.println(refreshToken);
-        if (refreshTokenService.findByUser(user.get()).isEmpty()) {
+        var foundUser = user.get();
+        if (refreshTokenService.findByUser(foundUser).isEmpty()) {
             RefreshToken savedToken = new RefreshToken(refreshToken, user.get());
             refreshTokenService.saveToken(savedToken);
         } else {
-            refreshTokenService.updateJwtByUser(refreshToken, user.get());
+            refreshTokenService.updateJwtByUser(refreshToken, foundUser);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Set-Cookie",String.format("jwt=%s;", refreshToken)  +
                 " Max-Age=86400; Secure; HttpOnly; SameSite=None");
         return ResponseEntity.ok().headers(headers)
-                .body(new AuthenticationResponse(accessToken, List.of("ROLE_USER")));
+                .body(new AuthenticationResponse(accessToken, List.of("ROLE_USER"), foundUser.getUserEmail()));
     }
 }

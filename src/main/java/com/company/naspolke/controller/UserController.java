@@ -1,6 +1,6 @@
 package com.company.naspolke.controller;
 
-import com.company.naspolke.model.User;
+import com.company.naspolke.model.AppUser;
 import com.company.naspolke.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,15 +22,15 @@ public class UserController {
     }
 
     @PostMapping(value = "/registration")
-    public void registerNewUser(@RequestBody User user) {
-        Optional<User> usernameEntry = userService.findUserByUserEmail(user.getUserEmail());
+    public void registerNewUser(@RequestBody AppUser appUser) {
+        Optional<AppUser> usernameEntry = userService.findUserByUserEmail(appUser.getUserEmail());
         if (usernameEntry.isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists!");
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(user.getUserPassword());
-            user.setUserPassword(encodedPassword);
-            userService.registerUser(user);
+            String encodedPassword = passwordEncoder.encode(appUser.getUserPassword());
+            appUser.setUserPassword(encodedPassword);
+            userService.registerUser(appUser);
         }
     }
 }

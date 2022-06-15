@@ -1,7 +1,7 @@
 package com.company.naspolke.service;
 
+import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.RefreshToken;
-import com.company.naspolke.model.User;
 import com.company.naspolke.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,8 @@ public class RefreshTokenServiceImplementation implements RefreshTokenService {
     }
 
     @Override
-    public Optional<RefreshToken> findByUser(User user) {
-        return Optional.ofNullable(refreshTokenRepository.findByUser(user));
+    public Optional<RefreshToken> findByUser(AppUser appUser) {
+        return Optional.ofNullable(refreshTokenRepository.findByAppUser(appUser));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class RefreshTokenServiceImplementation implements RefreshTokenService {
     }
 
     @Override
-    public void updateJwtByUser(String jwt, User user) {
-        refreshTokenRepository.updateJwtByUser(jwt, user);
+    public void updateJwtByUser(String jwt, AppUser appUser) {
+        refreshTokenRepository.updateJwtByAppUser(jwt, appUser);
     }
 }

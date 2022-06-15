@@ -1,6 +1,6 @@
 package com.company.naspolke.service;
 
-import com.company.naspolke.model.User;
+import com.company.naspolke.model.AppUser;
 import com.company.naspolke.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,7 +27,7 @@ public class MyUserDetailsServiceImplementation implements MyUserDetailService, 
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         String login = "";
-        Optional<User> user = Optional.ofNullable(userRepository.findByUserEmail(userEmail));
+        Optional<AppUser> user = Optional.ofNullable(userRepository.findByUserEmail(userEmail));
 
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Could not find user");

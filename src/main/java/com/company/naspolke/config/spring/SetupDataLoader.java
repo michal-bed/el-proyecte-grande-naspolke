@@ -1,6 +1,6 @@
 package com.company.naspolke.config.spring;
 
-import com.company.naspolke.model.User;
+import com.company.naspolke.model.AppUser;
 import com.company.naspolke.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -39,17 +39,17 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Transactional
     void createUserIfNotFound(String email, Set<SimpleGrantedAuthority> roles) {
-        User foundUser = userRepository.findByUserEmail(email);
-        if (foundUser == null) {
-            User user = new User();
-            user.setUserName("Test");
-            user.setUserSurname("Test");
-            user.setUserPassword(passwordEncoder.encode("test"));
-            user.setUserEmail(email);
-            user.setEnabled(true);
-            user.getApplicationRoles().addAll(roles);
+        AppUser foundAppUser = userRepository.findByUserEmail(email);
+        if (foundAppUser == null) {
+            AppUser appUser = new AppUser();
+            appUser.setUserName("Test");
+            appUser.setUserSurname("Test");
+            appUser.setUserPassword(passwordEncoder.encode("test"));
+            appUser.setUserEmail(email);
+            appUser.setEnabled(true);
+            appUser.getApplicationRoles().addAll(roles);
 //            user.setCompanyRoles(Set.of());
-            userRepository.save(user);
+            userRepository.save(appUser);
         }
     }
 }

@@ -20,7 +20,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "User_Table", uniqueConstraints = { @UniqueConstraint(columnNames = {"user_email"}) })
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -43,8 +43,8 @@ public class User {
     @Column(name = "application_roles")
     private Set<SimpleGrantedAuthority> applicationRoles = new HashSet<>();
 
-    public <T, E> User(UUID randomUUID, String userName, String userSurname, String userEmail, String userPassword, boolean b, boolean b1, Set<T> role_user, Set<E> of) {
-    }
+//    public <T, E> AppUser(UUID randomUUID, String userName, String userSurname, String userEmail, String userPassword, boolean b, boolean b1, Set<T> role_user, Set<E> of) {
+//    }
 //    @OneToMany(mappedBy = "primaryKey.user", cascade = CascadeType.ALL)
 //    @Column(name = "company_user_role")
 //    private Set<CompanyUserRole> companyUserRole = new HashSet<>();
@@ -59,8 +59,8 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
-        return userId != null && Objects.equals(userId, user.userId);
+        AppUser appUser = (AppUser) o;
+        return userId != null && Objects.equals(userId, appUser.userId);
     }
 
     @Override
