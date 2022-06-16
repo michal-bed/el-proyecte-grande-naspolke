@@ -1,7 +1,7 @@
 import styles from "./CompanyForm.module.css";
 import {useState} from "react";
 import BaseInfo from "./BaseInfo";
-import Address from "./Adress";
+import Address from "./Address";
 import MembersCompanyBodies from "./MembersCompanyBodies";
 import Partners from "./Partners";
 import {Company} from "../../../classes/company/Company";
@@ -10,17 +10,24 @@ import {Company} from "../../../classes/company/Company";
 const CompanyForm = (props)=>{
     const [page, setPage] = useState(0)
     const FormTitles = ["Dane Podstawowe", "Adres", "Zarząd", "Rada Nadzorcza", "Wspólnicy"]
-    console.log(props.companyData)
-    const company = new Company(props.companyData)
-    // const dataFromKRS = props.companyData.data.odpis.dane;
 
+    function checkForCompanyData() {
+        if (props.companyData !== null) {
+            return new Company(props.companyData)
+        } else {
+            return null;
+        }
+    }
+
+    const company = checkForCompanyData();
+    // const dataFromKRS = props.companyData.data.odpis.dane;
     const PageDisplay = ()=> {
         switch (page){
-            case 0: return <BaseInfo company={company}/>;
-            case 1: return <Address adress={company.Address}/>;
-            case 2: return <MembersCompanyBodies boardMembers={company.BoardMembers} />;
-            case 3: return <MembersCompanyBodies boardMembers={company.BoardOfDirectors}/>;
-            case 4: return <Partners partners={company.Partners}/>;
+            case 0: return <BaseInfo company={company===null ? null: company}/>;
+            case 1: return <Address address={company===null ? null: company.Address}/>;
+            case 2: return <MembersCompanyBodies companyBodies={company===null ? null: company.BoardMembers} />;
+            case 3: return <MembersCompanyBodies companyBodies={company===null ? null: company.BoardOfDirectors}/>;
+            case 4: return <Partners partners={company===null ? null: company.Partners}/>;
         }
     }
 

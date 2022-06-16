@@ -3,8 +3,8 @@ import {BoardMember} from "../../../classes/persons/BoardMember";
 
 const MembersCompanyBodies = (props) => {
 
-    if (props.boardMembers.length === 0) {
-        return <div>Brak członków!</div>
+    if (props.companyBodies===null || props.companyBodies.length === 0) {
+        return <div>Brak członków Zarządu!</div>
         //TODO przemyśleć sytuacje braku zarządu
     }
     let counter = 0;
@@ -37,7 +37,7 @@ const MembersCompanyBodies = (props) => {
 
 
     return <div>
-        {props.boardMembers.map(member => (
+        {props.companyBodies.map(member => (
             <div key={counter++}><label>Nazwisko pierwszy człon</label>
                 <input defaultValue={member.lastNameI}/>
 

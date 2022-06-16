@@ -8,6 +8,11 @@ export function ModalErrorMessage(props) {
         props.hide();
     };
 
+    const CloseAndDisplayForm = () =>{
+        props.closeAndDisplay();
+
+    }
+
     return (
         <>
             <Modal
@@ -17,17 +22,17 @@ export function ModalErrorMessage(props) {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal title</Modal.Title>
+                    <Modal.Title>{props.messageTitle}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    I will not close if you click outside me. Don't even try to press
-                    escape key.
+                    {props.message}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                        Close
+                        Anuluj
                     </Button>
-                    <Button variant="primary">Understood</Button>
+                    <Button variant="primary" onClick={CloseAndDisplayForm}>
+                        Samodzielne uzupełnie danych</Button>
                 </Modal.Footer>
             </Modal>
         </>

@@ -29,20 +29,18 @@ public class CompanyService {
 
 
     public ResponseEntity<Company> getCompanyData(String krsNumber){
-//        String result = krsClient.webClient(krsNumber);
-        String result = "404";
+        String result = krsClient.webClient(krsNumber);
+//        String result = "404";
         HttpStatus httpStatus = HttpStatus.OK;
         Company company = null;
         HttpHeaders headers = new HttpHeaders();
         String resultApi;
         if(result.length()==3){
-            resultApi = result;
+            httpStatus = HttpStatus.valueOf(Integer.parseInt(result));
         } else {
             company = monoStringToCompanyAdapter.getCompany(krsNumber);
-            resultApi = "200";
         }
-        headers.add("apiStatus", resultApi);
-        return new ResponseEntity<>(company, headers, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(company, headers, httpStatus);
     }
 
     public void saveCompany(Company company){

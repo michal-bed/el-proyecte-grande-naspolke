@@ -1,8 +1,20 @@
 import {IndividualPartner, PartnerCompany,} from "../../../classes/persons/Partners";
+import {checkForDataToDisplay} from "../../../classes/company/Utils";
 import styles from "./Partners.module.css";
 const Partners = (props) => {
 
     let counter = 0;
+    if (props.partners===null || props.partners.length === 0) {
+        return <div>
+            <div>Brak danych wspólników!</div>
+            <button onClick={addPartnersToForm}>Dodaj wspólnika </button>
+        </div>
+        //TODO przemyśleć sytuacje braku zarządu
+    }
+
+    function addPartnersToForm(){
+
+    }
 
     function checkForSecondSurname(SecondSurname) {
         if (SecondSurname) {
@@ -25,19 +37,19 @@ const Partners = (props) => {
     function checkForPartnerType(partner) {
         if (partner instanceof IndividualPartner) {
             return <div><label>Nazwisko pierwszy człon</label>
-                <input defaultValue={partner.lastNameI}/>
-                {checkForSecondSurname(partner.lastNameII)}
+                <input defaultValue={checkForDataToDisplay(partner.lastNameI)}/>
+                {checkForSecondSurname(checkForDataToDisplay(partner.lastNameII))}
 
 
                 <label>Pierwsze Imię:</label>
-                <input defaultValue={partner.firstName}/>
-                {checkForSecondName(partner.secondName)}
+                <input defaultValue={checkForDataToDisplay(partner.firstName)}/>
+                {checkForSecondName(checkForDataToDisplay(partner.secondName))}
 
             </div>
         } else if (partner instanceof PartnerCompany) {
             return <div>
                 <label> Nazwa wspólnika:</label>
-                <input defaultValue={partner.name}/>
+                <input defaultValue={checkForDataToDisplay(partner.name)}/>
             </div>
         }
     }
@@ -48,9 +60,9 @@ const Partners = (props) => {
                 <div className={styles["partner-separator"]}>Wspólnik {counter + 1}</div>
                 {checkForPartnerType(partner)}
                 <label>ilość udziałów</label>
-                <input defaultValue={partner.sharesCount}/>
+                <input defaultValue={checkForDataToDisplay(partner.sharesCount)}/>
                 <label>wartość udziałów</label>
-                <input defaultValue={partner.sharesValue}/>
+                <input defaultValue={checkForDataToDisplay(partner.sharesValue)}/>
             </div>
         ))
         }
