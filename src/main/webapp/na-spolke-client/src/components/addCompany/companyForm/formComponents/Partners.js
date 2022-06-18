@@ -1,5 +1,6 @@
 import {IndividualPartner, PartnerCompany,} from "../../../../classes/persons/Partners";
 import styles from "./Partners.module.css";
+import {Button} from "@material-ui/core";
 const Partners = (props) => {
 
     let counter = 0;
@@ -41,6 +42,10 @@ const Partners = (props) => {
         }
     }
 
+    function switchPrevPage(){
+        props.changePage(null, props.bodyType, -1)
+    }
+
     return <div>
         {props.partners.individualPartners!==null && props.partners.individualPartners.map(partner => (
             <div key={counter++}>
@@ -64,6 +69,11 @@ const Partners = (props) => {
             </div>
         ))
         }
+        <div>
+            <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
+            <Button disabled={props.next}>Dalej</Button>
+            <Button>Zapisz</Button>
+        </div>
     </div>
 }
 export default Partners;

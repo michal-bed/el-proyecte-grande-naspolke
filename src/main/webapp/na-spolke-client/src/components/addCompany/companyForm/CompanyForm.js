@@ -40,7 +40,8 @@ const CompanyForm = ({company})=>{
                                                  bodyType={"board"} prev={page === 0} next={page === FormTitles.length - 1}/>;
             case 3: return <MembersCompanyBodies companyBodies={company===null ? null: company.BoardOfDirectors} changePage={changePage}
                                                  bodyType={"directors"} prev={page === 0} next={page === FormTitles.length - 1}/>;
-            case 4: return <Partners partners={company===null ? null: company.Partners}/>;
+            case 4: return <Partners partners={company===null ? null: company.Partners} changePage={changePage}
+                                     bodyType={"partners"} prev={page === 0} next={page === FormTitles.length - 1}/>;
         }
     }
 
