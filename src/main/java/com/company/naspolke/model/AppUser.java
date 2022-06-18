@@ -1,6 +1,7 @@
 package com.company.naspolke.model;
 
 import com.company.naspolke.model.aggregate.CompanyUserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,7 +44,8 @@ public class AppUser {
     @ElementCollection
     @Column(name = "application_roles")
     private Set<SimpleGrantedAuthority> applicationRoles = new HashSet<>();
-    @OneToMany(mappedBy = "primaryKey.appUser", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "primaryKey.appUser", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Column(name = "company_user_role")
     private Set<CompanyUserRole> companyUserRole = new HashSet<>();
 

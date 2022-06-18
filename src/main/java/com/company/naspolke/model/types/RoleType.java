@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum RoleType {
 
-    OWNER(1),
-    EDITOR(2),
-    READER(3);
+    OWNER("OWNER"),
+    EDITOR("EDITOR"),
+    READER("READER");
 
-    private int roleType;
+    private String roleType;
 }

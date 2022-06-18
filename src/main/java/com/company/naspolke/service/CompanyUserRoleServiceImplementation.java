@@ -11,6 +11,7 @@ import com.company.naspolke.repository.CompanyUserRoleRepository;
 import com.company.naspolke.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -45,7 +46,6 @@ public class CompanyUserRoleServiceImplementation implements CompanyUserRoleServ
 
     @Override
     public void addNewMemberToCompany(Company company, AppUser appUser, Role role) {
-
         CompanyUserRole companyUserRole = new CompanyUserRole();
         companyUserRole.setCompany(company);
         companyUserRole.setUser(appUser);
@@ -64,14 +64,14 @@ public class CompanyUserRoleServiceImplementation implements CompanyUserRoleServ
     }
 
     @Override
+    @Transactional
     public void changeMemberRoleInCompany(Company company, AppUser appUser, Role role) {
+        companyUserRoleRepository.setModifiedRole(role.getRoleId(), company.getCompanyId(), appUser.getUserId());
+
         Optional<CompanyUserRole> companyUserRole = Optional.ofNullable(companyUserRoleRepository
                 .findByCompanyIdAndUserId(company.getCompanyId(), appUser.getUserId()));
 
         if (companyUserRole.isPresent()) {
-            companyUserRole.get().setRole(role);
-            companyUserRoleRepository.save(companyUserRole.get());
-
             Set<CompanyUserRole> companySet = company.getCompanyUserRole().stream()
                     .map(e -> e.getCompany().getKRSNumber().equals(company.getKRSNumber()) &&
                             e.getUser().getUserEmail().equals(appUser.getUserEmail()) ? companyUserRole.get() : e)
@@ -96,11 +96,34 @@ public class CompanyUserRoleServiceImplementation implements CompanyUserRoleServ
         }
     }
 
+    @Override
+    @Transactional
     public void deleteMemberFromCompany(Company company, AppUser appUser) {
-        Optional<CompanyUserRole> companyUserRole = Optional.ofNullable(companyUserRoleRepository
-                .findByCompanyIdAndUserId(company.getCompanyId(), appUser.getUserId()));
-        if (companyUserRole.isPresent()) {
-            companyUserRoleRepository.delete(companyUserRole.get());
-        }
+        Optional<Role> foundedRole = Optional.ofNullable(companyUserRoleRepository.findByCompanyIdAndUserId(
+                company.getCompanyId(), appUser.getUserId()).getRole());
+
+        Set<CompanyUserRole> companySet = company.getCompanyUserRole().stream()
+                .filter(e -> !(e.getCompany().getKRSNumber().equals(company.getKRSNumber()) &&
+                        e.getUser().getUserEmail().equals(appUser.getUserEmail())))
+                .collect(Collectors.toSet());
+        company.setCompanyUserRole(companySet);
+
+        Set<CompanyUserRole> appUserSet = appUser.getCompanyUserRole().stream()
+                .filter(e -> !(e.getCompany().getKRSNumber().equals(company.getKRSNumber()) &&
+                        e.getUser().getUserEmail().equals(appUser.getUserEmail())))
+                .collect(Collectors.toSet());
+        appUser.setCompanyUserRole(appUserSet);
+
+        Set<CompanyUserRole> roleSet = foundedRole.get().getCompanyUserRole().stream()
+                .filter(e -> !(e.getCompany().getKRSNumber().equals(company.getKRSNumber()) &&
+                        e.getUser().getUserEmail().equals(appUser.getUserEmail())))
+                .collect(Collectors.toSet());
+        foundedRole.get().setCompanyUserRole(roleSet);
+
+        companyRepository.save(company);
+        appUserRepository.save(appUser);
+        roleRepository.save(foundedRole.get());
+
+        companyUserRoleRepository.deleteMemberFromCompany(company.getCompanyId(), appUser.getUserId());
     }
 }

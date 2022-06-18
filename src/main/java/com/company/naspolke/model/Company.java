@@ -1,6 +1,7 @@
 package com.company.naspolke.model;
 
 import com.company.naspolke.model.aggregate.CompanyUserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +30,8 @@ public class Company {
     private String companyName;
     @Column(name = "krs_number")
     private Long KRSNumber;
-    @OneToMany(mappedBy = "primaryKey.company", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "primaryKey.company", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Column(name = "company_user_role")
     private Set<CompanyUserRole> companyUserRole = new HashSet<>();
 

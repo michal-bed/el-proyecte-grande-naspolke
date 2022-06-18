@@ -63,6 +63,9 @@ import HelloWorld from "./components/HelloWorld";
 import MainPage from "./components/MainPage";
 import {Route, Routes} from "react-router-dom";
 import Registration from "./components/registration/Registration";
+import AddMember from "./components/ownerPanel/AddMember";
+import DeleteMember from "./components/ownerPanel/DeleteMember";
+import ChangeRole from "./components/ownerPanel/ChangeRole";
 
 
 function App() {
@@ -73,6 +76,9 @@ function App() {
                 <Route path="/" element={<MainPage/>}/>
                 <Route path="login" element={<Login/>}/>
                 <Route path="register" element={<Registration/>}/>
+                {/*<Route path="add-member" element={<AddMember/>}/>*/}
+                {/*<Route path="delete-member" element={<DeleteMember/>}/>*/}
+                {/*<Route path="change-role" element={<ChangeRole/>}/>*/}
             </Route>
         </Routes>);
 }

@@ -2,6 +2,7 @@ package com.company.naspolke.model;
 
 import com.company.naspolke.model.aggregate.CompanyUserRole;
 import com.company.naspolke.model.types.RoleType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,19 +28,13 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "role_id")
     private int roleId;
+    @Enumerated(EnumType.STRING)
     @Column(name = "role_type")
     private RoleType roleType;
-    @OneToMany(mappedBy = "primaryKey.role", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "primaryKey.role", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Column(name = "company_user_role")
     private Set<CompanyUserRole> companyUserRole = new HashSet<>();
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-//        Role role = (Role) o;
-//        return roleId != null && Objects.equals(roleId, role.roleId);
-//    }
 
     @Override
     public int hashCode() {

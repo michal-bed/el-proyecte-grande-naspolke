@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, UUID> {
-    Role findByRoleType(RoleType roleType);
+public interface RoleRepository extends JpaRepository<Role, Integer> {
+    Role findRoleByRoleType(RoleType roleType);
 }

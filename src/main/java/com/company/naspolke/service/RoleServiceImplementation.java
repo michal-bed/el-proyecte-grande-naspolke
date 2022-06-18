@@ -21,6 +21,6 @@ public class RoleServiceImplementation implements RoleService {
 
     @Override
     public Optional<Role> findRoleByRoleType(RoleType roleType) {
-        return Optional.ofNullable(roleRepository.findByRoleType(roleType));
+        return Optional.ofNullable(roleRepository.findRoleByRoleType(roleType));
     }
 }
