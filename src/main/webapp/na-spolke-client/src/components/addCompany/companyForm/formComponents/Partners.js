@@ -1,6 +1,6 @@
 import {IndividualPartner, PartnerCompany,} from "../../../../classes/persons/Partners";
 import styles from "./Partners.module.css";
-import {Button} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 const Partners = (props) => {
 
     let counter = 0;
@@ -27,17 +27,40 @@ const Partners = (props) => {
 
     function checkForPartnerType(partner) {
         if (partner.hasOwnProperty("lastNameI")) {
-            return <div><label>Pierwszy człon nazwiska:</label>
-                <input defaultValue={partner.lastNameI}/>
-                {checkForData(partner.lastNameII, "Drugi człon nazwiska:")}
-                <label>Pierwsze imię:</label>
-                <input defaultValue={partner.firstName}/>
-                {checkForData(partner.secondName, "Drugie imię:")}
+            return <div>
+                <TextField
+                    label="Pierwszy człon nazwiska"
+                    name="lastNameI"
+                    variant="filled"
+                    defaultValue={partner.lastNameI === null ? "" : partner.lastNameI}
+                />
+                <TextField
+                    label="Drugi człon nazwiska"
+                    name="lastNameII"
+                    variant="filled"
+                    defaultValue={partner.lastNameII!== null ? partner.lastNameII : null}
+                />
+                <TextField
+                    label="Pierwsze imię"
+                    name="firstName"
+                    variant="filled"
+                    defaultValue={partner.firstName}
+                />
+                <TextField
+                    label="Drugie imię"
+                    name="secondName"
+                    variant="filled"
+                    defaultValue={partner.secondName!== null ? partner.secondName : null}
+                />
             </div>
         } else {
             return <div>
-                <label> Nazwa wspólnika:</label>
-                <input defaultValue={partner.name}/>
+                <TextField
+                    label="Nazwa wspólnika"
+                    name="name"
+                    variant="filled"
+                    defaultValue={partner.name}
+                />
             </div>
         }
     }
@@ -51,10 +74,18 @@ const Partners = (props) => {
             <div key={counter++}>
                 <div className={styles["partner-separator"]}>Wspólnik {counter + 1}</div>
                 {checkForPartnerType(partner)}
-                <label>ilość udziałów:</label>
-                <input defaultValue={partner.sharesCount}/>
-                <label>wartość udziałów (w PLN):</label>
-                <input defaultValue={partner.sharesValue}/>
+                <TextField
+                    label="ilość udziałów"
+                    name="sharesCount"
+                    variant="filled"
+                    defaultValue={partner.sharesCount}
+                />
+                <TextField
+                    label="wartość udziałów (w PLN)"
+                    name="sharesValue"
+                    variant="filled"
+                    defaultValue={partner.sharesValue}
+                />
             </div>
         ))
         }
@@ -62,10 +93,18 @@ const Partners = (props) => {
             <div key={counter++}>
                 <div className={styles["partner-separator"]}>Wspólnik {counter + 1}</div>
                 {checkForPartnerType(partner)}
-                <label>ilość udziałów:</label>
-                <input defaultValue={partner.sharesCount}/>
-                <label>wartość udziałów (w PLN):</label>
-                <input defaultValue={partner.sharesValue}/>
+                <TextField
+                    label="ilość udziałów"
+                    name="sharesCount"
+                    variant="filled"
+                    defaultValue={partner.sharesCount}
+                />
+                <TextField
+                    label="wartość udziałów (w PLN)"
+                    name="sharesValue"
+                    variant="filled"
+                    defaultValue={partner.sharesValue}
+                />
             </div>
         ))
         }
