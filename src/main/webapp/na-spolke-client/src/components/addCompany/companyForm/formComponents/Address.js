@@ -10,6 +10,15 @@ const Address = (props) => {
         }
     }
 
+
+    function switchNextPage(){
+        props.changePage(null, props.bodyType, 1)
+    }
+
+    function switchPrevPage(){
+        props.changePage(null, props.bodyType, -1)
+    }
+
     return <div>
         <div><label>ulica</label>
             <input defaultValue={props.address === null ? "" : props.address.streetName}/>
@@ -30,8 +39,8 @@ const Address = (props) => {
         </div>
         <input defaultValue={props.address === null ? "" : props.address.postOffice}/>
         <div>
-            <Button disabled={props.prev} onClick={props.changePage(null, props.pageType, -1)}>Wstecz</Button>
-            <Button disabled={props.next} onClick={props.changePage(null, props.pageType, 1)}>Dalej</Button>
+            <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
+            <Button disabled={props.next} onClick={switchNextPage}>Dalej</Button>
         </div>
     </div>
 }

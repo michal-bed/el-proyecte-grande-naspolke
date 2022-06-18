@@ -2,6 +2,7 @@ import KrsUserInput from "./krsInput/KrsUserInput";
 import CompanyForm from "./companyForm/CompanyForm";
 import {useState} from "react";
 import {ModalErrorMessage} from "./companyForm/formComponents/ModalFormError";
+import {Company} from "../../classes/company/Company";
 
 const AddCompany = ()=>{
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
@@ -11,7 +12,6 @@ const AddCompany = ()=>{
     }
 
     const addCompanyForm = (data) => {
-        console.debug(data)
         if (data === 404) {
             setCompanyDataForm(<ModalErrorMessage hide={hideModal}
                                                   messageTitle="Nie znaleziono.."
@@ -28,15 +28,24 @@ const AddCompany = ()=>{
                                                   message={"Ta spółka została już dodana. Sprawdź Twoje repozytorium"}
                                                   closeAndDisplay={closeAndDisplay}/>)
         } else {
-
-              setCompanyDataForm(<CompanyForm companyData={data.data}/>);
+              const company = checkForCompanyData(data.data)
+              setCompanyDataForm(<CompanyForm company={company}/>);
           }
       }
+
+
 
     const closeAndDisplay = () => {
         setCompanyDataForm(<CompanyForm companyData={null}/>)
     }
 
+    function checkForCompanyData(data) {
+        if (data !== null) {
+            return new Company(data)
+        } else {
+            return null;
+        }
+    }
     return <div>
         <KrsUserInput addCompanyData={addCompanyForm}/>
         {companyDataForm}

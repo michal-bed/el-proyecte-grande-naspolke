@@ -1,5 +1,5 @@
 import styles from "./CompanyForm.module.css";
-import {useState} from "react";
+import {useEffect, useReducer, useState} from "react";
 import BaseInfo from "./formComponents/BaseInfo";
 import Address from "./formComponents/Address";
 import MembersCompanyBodies from "./formComponents/MembersCompanyBodies";
@@ -7,28 +7,25 @@ import Partners from "./formComponents/Partners";
 import {Company} from "../../../classes/company/Company";
 
 
-const CompanyForm = (props)=>{
+const CompanyForm = ({company})=>{
     const [page, setPage] = useState(0)
-
     const FormTitles = ["Dane Podstawowe", "Adres", "Zarząd", "Rada Nadzorcza", "Wspólnicy"]
 
-    function checkForCompanyData() {
-        if (props.companyData !== null) {
-            return new Company(props.companyData)
-        } else {
-            return null;
-        }
-    }
-    const company = checkForCompanyData();
-    const changePage= (memberBody, pageType, newPage) => {
-        setPage((currPage) => currPage + newPage)
 
-        if (pageType==="board"){
-            company.BoardMembers = memberBody
-        } else if  (pageType==="directors"){
-            company.BoardOfDirectors = memberBody
-        }
+    useEffect(()=>{
         setPartFormToDisplay(PageDisplay)
+    }, [page])
+
+    const changePage = (memberBody, pageType, newPage) => {
+        setPartFormToDisplay(<div/>)
+        setPage((currPage) => currPage + newPage)
+        //
+        // if (pageType==="board"){
+        //     company.BoardMembers = memberBody
+        // } else if  (pageType==="directors"){
+        //     company.BoardOfDirectors = memberBody
+        // }
+
     }
     const [partFormToDisplay, setPartFormToDisplay] = useState(<BaseInfo pageType="baseInfo" changePage={changePage} company={company===null ? null: company}
                                                                          prev={page === 0} next={page === FormTitles.length - 1}/>)

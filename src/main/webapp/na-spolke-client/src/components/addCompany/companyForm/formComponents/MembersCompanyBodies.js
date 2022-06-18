@@ -2,16 +2,14 @@ import {Button, Container, TextField} from "@material-ui/core";
 import {useState} from "react";
 
 const MembersCompanyBodies = (props) => {
-
     const [memberBody, setMemberBody] = useState([
     ])
+
     if (props.companyBodies===null || props.companyBodies.length === 0) {
         return <div>
             <div>Brak Organu!</div>
             <Button>Dodaj osobę</Button>
         </div>
-
-        //TODO przemyśleć sytuacje braku zarządu
     } else if (memberBody.length===0){
        const v = []
         for (let i = 0; i < props.companyBodies.length; i++) {
@@ -42,6 +40,13 @@ const MembersCompanyBodies = (props) => {
         setMemberBody(values);
     }
 
+    function switchNextPage(){
+        props.changePage(memberBody, props.bodyType, 1)
+    }
+
+    function switchPrevPage(){
+        props.changePage(memberBody, props.bodyType, -1)
+    }
     return <Container>
         {memberBody.map((member, index) => (
             <div key={index}>
@@ -80,8 +85,8 @@ const MembersCompanyBodies = (props) => {
         }
         <div><Button>Dodaj osobę</Button></div>
         <div>
-            <Button disabled={props.prev} onClick={props.changePage(memberBody, props.bodyType, -1)}>Wstecz</Button>
-            <Button disabled={props.next} onClick={props.changePage(memberBody, props.bodyType, 1)}>Dalej</Button>
+            <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
+            <Button disabled={props.next} onClick={switchNextPage}>Dalej</Button>
         </div>
     </Container>
 }

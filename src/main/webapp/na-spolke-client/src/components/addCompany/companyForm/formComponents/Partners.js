@@ -15,35 +15,25 @@ const Partners = (props) => {
 
     }
 
-    function checkForSecondSurname(SecondSurname) {
-        if (SecondSurname) {
-            return <div>
-                <label>Drugi Człon:</label>
-                <input defaultValue={SecondSurname}/>
-            </div>
-        }
+    function checkForData(additionalData, label) {
+        return <div>
+            <label>{label}</label>
+            <input defaultValue={additionalData===null ? "" : additionalData}/>
+        </div>
+
     }
 
-    function checkForSecondName(SecondName) {
-        if (SecondName) {
-            return <div>
-                <label>Drugie Imię:</label>
-                <input defaultValue={SecondName}/>
-            </div>
-        }
-    }
 
     function checkForPartnerType(partner) {
-        if (partner instanceof IndividualPartner) {
-            return <div><label>Nazwisko pierwszy człon</label>
+        if (partner.hasOwnProperty("lastNameI")) {
+            return <div><label>Pierwszy człon nazwiska:</label>
                 <input defaultValue={partner.lastNameI}/>
-                {checkForSecondSurname(partner.lastNameII)}
-                <label>Pierwsze Imię:</label>
+                {checkForData(partner.lastNameII, "Drugi człon nazwiska:")}
+                <label>Pierwsze imię:</label>
                 <input defaultValue={partner.firstName}/>
-                {checkForSecondName(partner.secondName)}
-
+                {checkForData(partner.secondName, "Drugie imię:")}
             </div>
-        } else if (partner instanceof PartnerCompany) {
+        } else {
             return <div>
                 <label> Nazwa wspólnika:</label>
                 <input defaultValue={partner.name}/>
@@ -52,13 +42,24 @@ const Partners = (props) => {
     }
 
     return <div>
-        {props.partners.map(partner => (
+        {props.partners.individualPartners!==null && props.partners.individualPartners.map(partner => (
             <div key={counter++}>
                 <div className={styles["partner-separator"]}>Wspólnik {counter + 1}</div>
                 {checkForPartnerType(partner)}
-                <label>ilość udziałów</label>
+                <label>ilość udziałów:</label>
                 <input defaultValue={partner.sharesCount}/>
-                <label>wartość udziałów</label>
+                <label>wartość udziałów (w PLN):</label>
+                <input defaultValue={partner.sharesValue}/>
+            </div>
+        ))
+        }
+        {props.partners.partnerCompanies!==null && props.partners.partnerCompanies.map(partner => (
+            <div key={counter++}>
+                <div className={styles["partner-separator"]}>Wspólnik {counter + 1}</div>
+                {checkForPartnerType(partner)}
+                <label>ilość udziałów:</label>
+                <input defaultValue={partner.sharesCount}/>
+                <label>wartość udziałów (w PLN):</label>
                 <input defaultValue={partner.sharesValue}/>
             </div>
         ))
