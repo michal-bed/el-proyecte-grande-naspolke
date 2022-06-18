@@ -1,5 +1,4 @@
-import {IndividualPartner, PartnerCompany,} from "../../../classes/persons/Partners";
-import {checkForDataToDisplay} from "../../../classes/company/Utils";
+import {IndividualPartner, PartnerCompany,} from "../../../../classes/persons/Partners";
 import styles from "./Partners.module.css";
 const Partners = (props) => {
 
@@ -37,19 +36,17 @@ const Partners = (props) => {
     function checkForPartnerType(partner) {
         if (partner instanceof IndividualPartner) {
             return <div><label>Nazwisko pierwszy człon</label>
-                <input defaultValue={checkForDataToDisplay(partner.lastNameI)}/>
-                {checkForSecondSurname(checkForDataToDisplay(partner.lastNameII))}
-
-
+                <input defaultValue={partner.lastNameI}/>
+                {checkForSecondSurname(partner.lastNameII)}
                 <label>Pierwsze Imię:</label>
-                <input defaultValue={checkForDataToDisplay(partner.firstName)}/>
-                {checkForSecondName(checkForDataToDisplay(partner.secondName))}
+                <input defaultValue={partner.firstName}/>
+                {checkForSecondName(partner.secondName)}
 
             </div>
         } else if (partner instanceof PartnerCompany) {
             return <div>
                 <label> Nazwa wspólnika:</label>
-                <input defaultValue={checkForDataToDisplay(partner.name)}/>
+                <input defaultValue={partner.name}/>
             </div>
         }
     }
@@ -60,9 +57,9 @@ const Partners = (props) => {
                 <div className={styles["partner-separator"]}>Wspólnik {counter + 1}</div>
                 {checkForPartnerType(partner)}
                 <label>ilość udziałów</label>
-                <input defaultValue={checkForDataToDisplay(partner.sharesCount)}/>
+                <input defaultValue={partner.sharesCount}/>
                 <label>wartość udziałów</label>
-                <input defaultValue={checkForDataToDisplay(partner.sharesValue)}/>
+                <input defaultValue={partner.sharesValue}/>
             </div>
         ))
         }

@@ -1,3 +1,5 @@
+import {Button} from "@material-ui/core";
+
 const Address = (props) => {
     function checkForLocalNumber(localNumber) {
         if(localNumber){
@@ -27,6 +29,10 @@ const Address = (props) => {
             <label>poczta:</label>
         </div>
         <input defaultValue={props.address === null ? "" : props.address.postOffice}/>
+        <div>
+            <Button disabled={props.prev} onClick={props.changePage(null, props.pageType, -1)}>Wstecz</Button>
+            <Button disabled={props.next} onClick={props.changePage(null, props.pageType, 1)}>Dalej</Button>
+        </div>
     </div>
 }
 

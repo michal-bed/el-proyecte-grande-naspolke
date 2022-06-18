@@ -29,8 +29,8 @@ public class CompanyService {
 
 
     public ResponseEntity<Company> getCompanyData(String krsNumber){
-        String result = krsClient.webClient(krsNumber);
-//        String result = "404";
+//        String result = krsClient.webClient(krsNumber);
+        String result = "4046";
         HttpStatus httpStatus = HttpStatus.OK;
         Company company = null;
         HttpHeaders headers = new HttpHeaders();
@@ -38,7 +38,7 @@ public class CompanyService {
         if(result.length()==3){
             httpStatus = HttpStatus.valueOf(Integer.parseInt(result));
         } else {
-            company = monoStringToCompanyAdapter.getCompany(krsNumber);
+            company = monoStringToCompanyAdapter.getCompany(result);
         }
         return new ResponseEntity<>(company, headers, httpStatus);
     }
