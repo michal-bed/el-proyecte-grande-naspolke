@@ -38,15 +38,6 @@ const CompanyForm = ({company})=>{
             case "partners": setPartnersList(companyData); break
 
         }
-        console.log(companyData.streetName +" d" +companyAddress.streetName)
-
-        //
-        // if (pageType==="board"){
-        //     company.BoardMembers = companyData
-        // } else if  (pageType==="directors"){
-        //     company.BoardOfDirectors = companyData
-        // }
-
     }
     const [partFormToDisplay, setPartFormToDisplay] = useState(<BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo}
                                                                          prev={page === 0} next={page === FormTitles.length - 1}/>)

@@ -1,10 +1,30 @@
 import styles from "./BaseInfo.module.css";
 import {Button, TextField} from "@material-ui/core";
+import {useState} from "react";
 
 const BaseInfo = (props) => {
 
+    const [companyName, setCompanyName] = useState(props.baseInfo === null ? "" : props.baseInfo.name)
+    const [nipInput, setNipInput] = useState(props.baseInfo === null ? "" : props.baseInfo.nip)
+    const [regonInput, setRegonInput] = useState(props.baseInfo === null ? "" : props.baseInfo.regon)
+    const [shareCapitalInput, setShareCapitalInput] = useState(props.baseInfo === null ? "" : props.baseInfo.shareCapital)
+
     function switchPage(){
-        props.changePage(null, props.pageType, 1)
+        const baseInfo = {name: companyName,
+            krsNumber:props.baseInfo.krsNumber,
+            nip: nipInput,
+            regon: regonInput,
+            shareCapital: shareCapitalInput}
+        props.changePage(baseInfo, props.pageType, 1)
+    }
+
+    function handleChangeInput(e){
+        switch (e.target.name) {
+            case "companyName":setCompanyName(e.target.value); break
+            case "nip":setNipInput(e.target.value); break
+            case "regon":setRegonInput(e.target.value); break
+            case "shareCapital":setShareCapitalInput(e.target.value); break
+        }
     }
 
     return <div className={"base-info"}>
@@ -12,25 +32,29 @@ const BaseInfo = (props) => {
             label="Nazwa spółki"
             name="name"
             variant="filled"
-            defaultValue={props.baseInfo === null ? "" : props.baseInfo.name}
-            />
+            defaultValue={companyName}
+            onChange={event => handleChangeInput(event)}
+        />
         <TextField
             label="NIP"
             name="nip"
             variant="filled"
-            defaultValue={props.baseInfo === null ? "" : props.baseInfo.nip}
+            defaultValue={nipInput}
+            onChange={event => handleChangeInput(event)}
         />
         <TextField
             label="REGON"
             name="regon"
             variant="filled"
-            defaultValue={props.baseInfo === null ? "" : props.baseInfo.regon}
+            defaultValue={regonInput}
+            onChange={event => handleChangeInput(event)}
         />
         <TextField
-            label="Kapitał zakładowy"
+            label="Kapitał zakładowy (w PLN)"
             name="shareCapital"
             variant="filled"
-            defaultValue={`${props.baseInfo === null ? "" : props.baseInfo.shareCapital} zł`}
+            defaultValue={shareCapitalInput}
+            onChange={event => handleChangeInput(event)}
         />
         <div>
             <Button disabled={props.prev} >Wstecz</Button>
