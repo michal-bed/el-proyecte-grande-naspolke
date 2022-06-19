@@ -20,7 +20,7 @@ const BaseInfo = (props) => {
 
     function handleChangeInput(e){
         switch (e.target.name) {
-            case "companyName":setCompanyName(e.target.value); break
+            case "name":setCompanyName(e.target.value); break
             case "nip":setNipInput(e.target.value); break
             case "regon":setRegonInput(e.target.value); break
             case "shareCapital":setShareCapitalInput(e.target.value); break

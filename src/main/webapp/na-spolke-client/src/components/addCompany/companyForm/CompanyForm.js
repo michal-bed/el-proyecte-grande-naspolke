@@ -29,14 +29,12 @@ const CompanyForm = ({company})=>{
     const changePage = (companyData, pageType, newPage) => {
         setPartFormToDisplay(<div/>)
         setPage((currPage) => currPage + newPage)
-        console.log(companyData.streetName + companyAddress.streetName)
         switch (pageType){
             case "baseInfo": setBaseInfo(companyData); break
             case "address": setCompanyAddress(companyData); break
             case "board": setBoardMembers(companyData); break
             case "directors": setBoardOfDirectors(companyData); break
             case "partners": setPartnersList(companyData); break
-
         }
     }
     const [partFormToDisplay, setPartFormToDisplay] = useState(<BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo}
