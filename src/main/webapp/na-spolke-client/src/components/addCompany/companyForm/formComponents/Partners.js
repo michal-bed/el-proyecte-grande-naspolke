@@ -1,12 +1,44 @@
-import {IndividualPartner, PartnerCompany,} from "../../../../classes/persons/Partners";
 import styles from "./Partners.module.css";
 import {Button, TextField} from "@material-ui/core";
-import {useState} from "react";
+import {useReducer, useEffect } from "react";
 import {populateList} from "../../../../classes/company/Utils";
+
+
+const listType = {
+    INDIVIDUAL_PARTNERS : "individuals",
+    COMPANY_PARTNERS : "companies"
+}
+
+function reducer(state, action){
+    switch (action.listType){
+        case listType.INDIVIDUAL_PARTNERS:{
+            let individualPartners = state.partners.individualPartners;
+            individualPartners[action.index][action.event.target.name] = action.event.target.value;
+            individualPartners = changeSharesInfo(action, individualPartners)
+            return {...state, individualPartners: individualPartners}
+        }
+        case listType.COMPANY_PARTNERS:{
+            let partnerCompanies = state.partners.partnerCompanies;
+            partnerCompanies[action.index][action.event.target.name] = action.event.target.value;
+            partnerCompanies = changeSharesInfo(action, partnerCompanies)
+            return {...state, partnerCompanies: partnerCompanies}
+        }
+        default: return {...state}
+    }
+}
+
+function changeSharesInfo(action, value){
+    if (action.event.target.name==="sharesCount"){
+        value[action.index]["sharesValue"] = action.event.target.value * action.shareValue
+    } else if (action.event.target.name==="sharesValue") {
+        value[action.index]["sharesCount"] = action.event.target.value / action.shareValue
+    }
+    return value;
+}
+
 const Partners = (props) => {
 
-    const [individualPartnersList, setIndividualPartnersList] = useState(props.partners.individualPartners)
-    const [companyPartnersList, setCompanyPartnersList] = useState(props.partners.partnerCompanies)
+    const [state, dispatch] = useReducer(reducer, { partners: props.partners })
 
 
     let counter = 1;
@@ -18,34 +50,40 @@ const Partners = (props) => {
         //TODO przemyśleć sytuacje braku zarządu
     }
 
-    function handleChangeInput(index, event, list, updateListFunction){
-        const value = [...list];
-        value[index][event.target.name] = event.target.value;
-        updateListFunction(value);
+
+    function handleChangeInput(index, event, list){
+        const action = {
+            listType: list,
+            index: index,
+            event: event,
+            shareValue: props.shareValue
+        }
+        dispatch(action)
     }
 
     function addPartnersToForm(){
 
     }
 
-    function partnerSharesInfo(index, partner) {
+    function partnerSharesInfo(index, partner, listType) {
         return <div>
             <TextField
                 label="ilość udziałów"
                 name="sharesCount"
                 variant="filled"
-                defaultValue={partner.sharesCount}
-                onChange={event => handleChangeInput(index, event)}
+                type="number"
+                value={partner.sharesCount}
+                onChange={event => handleChangeInput(index, event, listType)}
             />
             <TextField
                 label="wartość udziałów (w PLN)"
                 name="sharesValue"
                 variant="filled"
-                defaultValue={partner.sharesValue}
-                onChange={event => handleChangeInput(index, event)}
+                type="number"
+                value={partner.sharesValue}
+                onChange={event => handleChangeInput(index, event, listType)}
             />
         </div>
-
     }
 
     function countAllSharesValue(newIndividualPartnerList) {
@@ -57,8 +95,8 @@ const Partners = (props) => {
     }
 
     function switchPrevPage(){
-        const newIndividualPartnerList =  populateList(individualPartnersList, "individuals");
-        const newCompanyPartnerList =  populateList(companyPartnersList, "companies");
+        const newIndividualPartnerList =  populateList(state.partners.individualPartners, "individuals");
+        const newCompanyPartnerList =  populateList(state.partners.partnerCompanies, "companies");
         const allIndividualSharesValue = countAllSharesValue(newIndividualPartnerList)
         const allCompanySharesValue = countAllSharesValue(newCompanyPartnerList)
         const newPartners = {individualPartners: newIndividualPartnerList, partnerCompanies: newCompanyPartnerList,
@@ -67,7 +105,7 @@ const Partners = (props) => {
     }
 
     return <div>
-        {props.partners.individualPartners!==null && props.partners.individualPartners.map((partner, index) => (
+        {state.partners.individualPartners!==null && state.partners.individualPartners.map((partner, index) => (
             <div key={index}>
                 <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
                 <div>
@@ -75,36 +113,36 @@ const Partners = (props) => {
                         label="Pierwszy człon nazwiska"
                         name="lastNameI"
                         variant="filled"
-                        defaultValue={partner.lastNameI}
-                        onChange={event => handleChangeInput(index, event, individualPartnersList, setIndividualPartnersList)}
+                        value={partner.lastNameI}
+                        onChange={event => handleChangeInput(index, event, listType.INDIVIDUAL_PARTNERS)}
                     />
                     <TextField
                         label="Drugi człon nazwiska"
                         name="lastNameII"
                         variant="filled"
-                        defaultValue={partner.lastNameII}
-                        onChange={event => handleChangeInput(index, event, individualPartnersList, setIndividualPartnersList)}
+                        value={partner.lastNameII}
+                        onChange={event => handleChangeInput(index, event, listType.INDIVIDUAL_PARTNERS)}
                     />
                     <TextField
                         label="Pierwsze imię"
                         name="firstName"
                         variant="filled"
-                        defaultValue={partner.firstName}
-                        onChange={event => handleChangeInput(index, event, individualPartnersList, setIndividualPartnersList)}
+                        value={partner.firstName}
+                        onChange={event => handleChangeInput(index, event, listType.INDIVIDUAL_PARTNERS)}
                     />
                     <TextField
                         label="Drugie imię"
                         name="secondName"
                         variant="filled"
-                        defaultValue={partner.secondName}
-                        onChange={event => handleChangeInput(index, event, individualPartnersList, setIndividualPartnersList)}
+                        value={partner.secondName}
+                        onChange={event => handleChangeInput(index, event, listType.INDIVIDUAL_PARTNERS)}
                     />
                 </div>
-                {partnerSharesInfo(index, partner, individualPartnersList, setIndividualPartnersList)}
+                {partnerSharesInfo(index, partner, listType.INDIVIDUAL_PARTNERS)}
             </div>
         ))
         }
-        {props.partners.partnerCompanies!==null && props.partners.partnerCompanies.map((partner, index) => (
+        {state.partners.partnerCompanies!==null && state.partners.partnerCompanies.map((partner, index) => (
             <div key={index}>
                 <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
                 <div>
@@ -112,11 +150,11 @@ const Partners = (props) => {
                         label="Nazwa wspólnika"
                         name="name"
                         variant="filled"
-                        defaultValue={partner.name}
-                        onChange={event => handleChangeInput(index, event, companyPartnersList, setCompanyPartnersList)}
+                        value={partner.name}
+                        onChange={event => handleChangeInput(index, event, listType.COMPANY_PARTNERS)}
                     />
                 </div>
-                {partnerSharesInfo(index, partner, companyPartnersList, setCompanyPartnersList)}
+                {partnerSharesInfo(index, partner, listType.COMPANY_PARTNERS)}
             </div>
         ))
         }

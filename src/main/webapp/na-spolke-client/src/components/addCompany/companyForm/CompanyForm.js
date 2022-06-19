@@ -51,7 +51,8 @@ const CompanyForm = ({company})=>{
             case 3: return <MembersCompanyBodies companyBodies={boardOfDirectors} changePage={changePage}
                                                  pageType={"directors"} prev={page === 0} next={page === FormTitles.length - 1}/>;
             case 4: return <Partners partners={partnersList} changePage={changePage}
-                                     bodyType={"partners"} prev={page === 0} next={page === FormTitles.length - 1}/>;
+                                     bodyType={"partners"} prev={page === 0} next={page === FormTitles.length - 1} shareCapital={company.shareCapital}
+                                     shareValue={company.shareValue}/>;
         }
     }
 

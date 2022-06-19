@@ -35,7 +35,7 @@ public class Company {
     private String regon;
     private BigDecimal shareCapital;
     private BigDecimal shareValue;
-    private Integer shareCount;
+    private Integer sharesCount;
     @OneToMany(cascade = CascadeType.ALL)
     private Set<BoardMember> boardMembers = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL)
@@ -61,7 +61,7 @@ public class Company {
         this.partnersRevealed = checkIfAllPartnersAreRevealed();
         this.manySharesAllowed = manySharesAllowed;
         this.shareValue = checkForShareValue();
-        this.shareCount = checkForShareCount();
+        this.sharesCount = checkForShareCount();
     }
 
     private Integer checkForShareCount() {
@@ -89,7 +89,7 @@ public class Company {
                 JuridicalPerson juridicalPerson = partners.getPartnerCompanies().iterator().next();
                 BigDecimal sharesValues = juridicalPerson.getSharesValue();
                 BigDecimal sharesCount = BigDecimal.valueOf(juridicalPerson.getSharesCount());
-                sharesValues = sharesValues.divide(sharesCount);
+                shareValue = sharesValues.divide(sharesCount);
             }
         }
         assert shareValue != null;
