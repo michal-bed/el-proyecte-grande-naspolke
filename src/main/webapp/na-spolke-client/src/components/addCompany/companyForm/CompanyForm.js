@@ -1,7 +1,7 @@
 import styles from "./CompanyForm.module.css";
 import {useEffect, useReducer, useState} from "react";
 import BaseInfo from "./formComponents/BaseInfo";
-import Address from "./formComponents/Address";
+import AddressForm from "./formComponents/AddressForm";
 import MembersCompanyBodies from "./formComponents/MembersCompanyBodies";
 import Partners from "./formComponents/Partners";
 import {Company} from "../../../classes/company/Company";
@@ -25,16 +25,21 @@ const CompanyForm = ({company})=>{
         setPartFormToDisplay(PageDisplay)
     }, [page])
 
+
     const changePage = (companyData, pageType, newPage) => {
         setPartFormToDisplay(<div/>)
         setPage((currPage) => currPage + newPage)
+        console.log(companyData.streetName + companyAddress.streetName)
         switch (pageType){
             case "baseInfo": setBaseInfo(companyData); break
             case "address": setCompanyAddress(companyData); break
             case "board": setBoardMembers(companyData); break
             case "directors": setBoardOfDirectors(companyData); break
             case "partners": setPartnersList(companyData); break
+
         }
+        console.log(companyData.streetName +" d" +companyAddress.streetName)
+
         //
         // if (pageType==="board"){
         //     company.BoardMembers = companyData
@@ -50,8 +55,8 @@ const CompanyForm = ({company})=>{
         switch (page){
             case 0: return <BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo}
                                       prev={page === 0} next={page === FormTitles.length - 1}/>;
-            case 1: return <Address address={companyAddress} changePage={changePage}
-                                    pageType={"address"} prev={page === 0} next={page === FormTitles.length - 1}/>;
+            case 1: return <AddressForm address={companyAddress} changePage={changePage}
+                                        pageType={"address"} prev={page === 0} next={page === FormTitles.length - 1}/>;
             case 2: return <MembersCompanyBodies companyBodies={boardMembers} changePage={changePage}
                                                  pageType={"board"} prev={page === 0} next={page === FormTitles.length - 1}/>;
             case 3: return <MembersCompanyBodies companyBodies={boardOfDirectors} changePage={changePage}

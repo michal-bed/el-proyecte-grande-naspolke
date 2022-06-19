@@ -66,7 +66,7 @@ const Partners = (props) => {
     }
 
     function switchPrevPage(){
-        props.changePage(null, props.bodyType, -1)
+        props.changePage(null, props.pageType, -1)
     }
 
     return <div>

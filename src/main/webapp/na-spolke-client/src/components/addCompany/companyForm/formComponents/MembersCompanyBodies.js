@@ -64,7 +64,9 @@ const MembersCompanyBodies = (props) => {
     }
 
     function switchNextPage(){
-        props.changePage(memberBody, props.pageType, 1)
+        const bodyList = createMemberBodyList()
+        props.changePage(bodyList, props.pageType, 1)
+
     }
 
     function switchPrevPage(){
