@@ -12,25 +12,25 @@ const BaseInfo = (props) => {
             label="Nazwa spółki"
             name="name"
             variant="filled"
-            defaultValue={props.company === null ? "" : props.company.Name}
+            defaultValue={props.baseInfo === null ? "" : props.baseInfo.name}
             />
         <TextField
             label="NIP"
             name="nip"
             variant="filled"
-            defaultValue={props.company === null ? "" : props.company.NIP}
+            defaultValue={props.baseInfo === null ? "" : props.baseInfo.nip}
         />
         <TextField
             label="REGON"
             name="regon"
             variant="filled"
-            defaultValue={props.company === null ? "" : props.company.REGON}
+            defaultValue={props.baseInfo === null ? "" : props.baseInfo.regon}
         />
         <TextField
             label="Kapitał zakładowy"
             name="shareCapital"
             variant="filled"
-            defaultValue={`${props.company === null ? "" : props.company.ShareCapital} zł`}
+            defaultValue={`${props.baseInfo === null ? "" : props.baseInfo.shareCapital} zł`}
         />
         <div>
             <Button disabled={props.prev} >Wstecz</Button>

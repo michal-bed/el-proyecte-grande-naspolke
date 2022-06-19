@@ -1,5 +1,7 @@
 import {Button, Container, TextField} from "@material-ui/core";
 import {useState} from "react";
+import {BoardMember} from "../../../../classes/persons/BoardMember";
+import {BoardOfDirector} from "../../../../classes/persons/BoardOfDirector";
 
 const MembersCompanyBodies = (props) => {
     const [memberBody, setMemberBody] = useState([
@@ -40,12 +42,34 @@ const MembersCompanyBodies = (props) => {
         setMemberBody(values);
     }
 
+    function createMemberBodyList() {
+        switch (props.pageType) {
+            case "board":{
+                const boardMember = [];
+                memberBody.map(member => {
+                    const person = new BoardMember(member);
+                    boardMember.push(person);
+                })
+                return boardMember;
+            }
+            case "directors":{
+                const boardOfDirectors = [];
+                memberBody.map(member => {
+                    const person = new BoardOfDirector(member);
+                    boardOfDirectors.push(person);
+                })
+                return boardOfDirectors;
+            }
+        }
+    }
+
     function switchNextPage(){
-        props.changePage(memberBody, props.bodyType, 1)
+        props.changePage(memberBody, props.pageType, 1)
     }
 
     function switchPrevPage(){
-        props.changePage(memberBody, props.bodyType, -1)
+        const bodyList = createMemberBodyList()
+        props.changePage(bodyList, props.pageType, -1)
     }
     return <Container>
         {memberBody.map((member, index) => (

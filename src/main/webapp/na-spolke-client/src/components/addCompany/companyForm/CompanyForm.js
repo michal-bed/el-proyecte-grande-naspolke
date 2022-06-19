@@ -9,38 +9,54 @@ import {Company} from "../../../classes/company/Company";
 
 const CompanyForm = ({company})=>{
     const [page, setPage] = useState(0)
+    const [baseInfo, setBaseInfo] = useState(company===null ? null:{
+        name: company.name,
+        krsNumber:company.krsNumber,
+        nip:company.nip,
+        regon:company.regon,
+        shareCapital:company.shareCapital})
+    const [companyAddress, setCompanyAddress] = useState(company===null ? null: company.address)
+    const [boardMembers, setBoardMembers] = useState(company===null ? null: company.boardMembers)
+    const [boardOfDirectors, setBoardOfDirectors] = useState(company===null ? null: company.boardOfDirectors)
+    const [partnersList, setPartnersList] = useState(company===null ? null: company.partners)
     const FormTitles = ["Dane Podstawowe", "Adres", "Zarząd", "Rada Nadzorcza", "Wspólnicy"]
-
 
     useEffect(()=>{
         setPartFormToDisplay(PageDisplay)
     }, [page])
 
-    const changePage = (memberBody, pageType, newPage) => {
+    const changePage = (companyData, pageType, newPage) => {
         setPartFormToDisplay(<div/>)
         setPage((currPage) => currPage + newPage)
+        switch (pageType){
+            case "baseInfo": setBaseInfo(companyData); break
+            case "address": setCompanyAddress(companyData); break
+            case "board": setBoardMembers(companyData); break
+            case "directors": setBoardOfDirectors(companyData); break
+            case "partners": setPartnersList(companyData); break
+        }
         //
         // if (pageType==="board"){
-        //     company.BoardMembers = memberBody
+        //     company.BoardMembers = companyData
         // } else if  (pageType==="directors"){
-        //     company.BoardOfDirectors = memberBody
+        //     company.BoardOfDirectors = companyData
         // }
 
     }
-    const [partFormToDisplay, setPartFormToDisplay] = useState(<BaseInfo pageType="baseInfo" changePage={changePage} company={company===null ? null: company}
+    const [partFormToDisplay, setPartFormToDisplay] = useState(<BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo}
                                                                          prev={page === 0} next={page === FormTitles.length - 1}/>)
 
     const PageDisplay = ()=> {
         switch (page){
-            case 0: return <BaseInfo pageType="baseInfo" changePage={changePage} company={company===null ? null: company}
+            case 0: return <BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo}
                                       prev={page === 0} next={page === FormTitles.length - 1}/>;
-            case 1: return <Address address={company===null ? null: company.Address} changePage={changePage}
+            case 1: return <Address address={companyAddress} changePage={changePage}
                                     pageType={"address"} prev={page === 0} next={page === FormTitles.length - 1}/>;
-            case 2: return <MembersCompanyBodies companyBodies={company===null ? null: company.BoardMembers} changePage={changePage}
-                                                 bodyType={"board"} prev={page === 0} next={page === FormTitles.length - 1}/>;
-            case 3: return <MembersCompanyBodies companyBodies={company===null ? null: company.BoardOfDirectors} changePage={changePage}
-                                                 bodyType={"directors"} prev={page === 0} next={page === FormTitles.length - 1}/>;
-            case 4: return <Partners partners={company===null ? null: company.Partners} changePage={changePage}
+            case 2: return <MembersCompanyBodies companyBodies={boardMembers} changePage={changePage}
+                                                 pageType={"board"} prev={page === 0} next={page === FormTitles.length - 1}/>;
+            case 3: return <MembersCompanyBodies companyBodies={boardOfDirectors} changePage={changePage}
+                                                 pageType={"directors"} prev={page === 0} next={page === FormTitles.length - 1}/>;
+            case 4: return <Partners partners={partnersList} changePage={changePage}
                                      bodyType={"partners"} prev={page === 0} next={page === FormTitles.length - 1}/>;
         }
     }
