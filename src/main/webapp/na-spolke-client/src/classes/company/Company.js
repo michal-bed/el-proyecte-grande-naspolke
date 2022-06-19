@@ -1,8 +1,6 @@
 import {Address} from "./Address";
 import {populateList} from "./Utils";
-import {BoardMember} from "../persons/BoardMember";
-import {BoardOfDirector} from "../persons/BoardOfDirector";
-import {PartnerCompany, PartnerPerson, Partners} from "../persons/Partners";
+import {Partners} from "../persons/Partners";
 
 export class Company {
     name;

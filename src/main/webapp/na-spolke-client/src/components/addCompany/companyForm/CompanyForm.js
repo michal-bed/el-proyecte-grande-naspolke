@@ -52,7 +52,7 @@ const CompanyForm = ({company})=>{
                                                  pageType={"directors"} prev={page === 0} next={page === FormTitles.length - 1}/>;
             case 4: return <Partners partners={partnersList} changePage={changePage}
                                      bodyType={"partners"} prev={page === 0} next={page === FormTitles.length - 1} shareCapital={company.shareCapital}
-                                     shareValue={company.shareValue}/>;
+                                     shareValue={company.shareValue} sharesCount={company.sharesCount}/>;
         }
     }
 

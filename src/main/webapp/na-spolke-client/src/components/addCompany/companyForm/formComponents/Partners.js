@@ -1,6 +1,6 @@
 import styles from "./Partners.module.css";
 import {Button, TextField} from "@material-ui/core";
-import {useReducer, useEffect } from "react";
+import {useReducer} from "react";
 import {populateList} from "../../../../classes/company/Utils";
 
 
@@ -39,7 +39,6 @@ function changeSharesInfo(action, value){
 const Partners = (props) => {
 
     const [state, dispatch] = useReducer(reducer, { partners: props.partners })
-
 
     let counter = 1;
     if (props.partners===null || props.partners.length === 0) {
@@ -86,7 +85,22 @@ const Partners = (props) => {
         </div>
     }
 
-    function countAllSharesValue(newIndividualPartnerList) {
+    function countAllSharesCount(){
+        let sharesCount = 0;
+        for (let i = 0; i < state.partners.individualPartners.length; i++) {
+            sharesCount += +state.partners.individualPartners[i].sharesCount;
+        }
+        for (let i = 0; i < state.partners.partnerCompanies.length; i++) {
+            sharesCount += +state.partners.partnerCompanies[i].sharesCount;
+        }
+        return sharesCount;
+    }
+
+    function countAllSharesValues(){
+        return countPartnersListSharesValue(state.partners.individualPartners) + countPartnersListSharesValue(state.partners.partnerCompanies)
+    }
+
+    function countPartnersListSharesValue(newIndividualPartnerList) {
         let sharesValue = 0;
         for (let i = 0; i < newIndividualPartnerList.length; i++) {
             sharesValue += newIndividualPartnerList[i].sharesValue;
@@ -97,13 +111,12 @@ const Partners = (props) => {
     function switchPrevPage(){
         const newIndividualPartnerList =  populateList(state.partners.individualPartners, "individuals");
         const newCompanyPartnerList =  populateList(state.partners.partnerCompanies, "companies");
-        const allIndividualSharesValue = countAllSharesValue(newIndividualPartnerList)
-        const allCompanySharesValue = countAllSharesValue(newCompanyPartnerList)
+        const allIndividualSharesValue = countPartnersListSharesValue(newIndividualPartnerList)
+        const allCompanySharesValue = countPartnersListSharesValue(newCompanyPartnerList)
         const newPartners = {individualPartners: newIndividualPartnerList, partnerCompanies: newCompanyPartnerList,
             allSharesValue : allIndividualSharesValue + allCompanySharesValue}
         props.changePage(newPartners, props.pageType, -1)
     }
-
     return <div>
         {state.partners.individualPartners!==null && state.partners.individualPartners.map((partner, index) => (
             <div key={index}>
@@ -158,6 +171,46 @@ const Partners = (props) => {
             </div>
         ))
         }
+        <div>Podsumowanie:</div>
+        <div>
+            <TextField
+                label="wpisana ilość udziałów"
+                name="allSharesCount"
+                variant="filled"
+                value={countAllSharesCount()}
+                disabled={true}
+            />
+            <TextField
+                label="łączna wartość udziałów"
+                name="sharesCapital"
+                variant="filled"
+                value={`${countAllSharesValues()} zł`}
+                disabled={true}
+            />
+        </div>
+        <div>
+            <TextField
+                label="łączna ilość udziałów"
+                name="allSharesCount"
+                variant="filled"
+                defaultValue={props.shareCapital / props.shareValue}
+                disabled={true}
+            />
+            <TextField
+                label="kapitał zakładowy"
+                name="sharesCapital"
+                variant="filled"
+                value={`${props.shareCapital} zł`}
+                disabled={true}
+            />
+            <TextField
+                label="jeden udział:"
+                name="allSharesValue"
+                variant="filled"
+                value={`${props.shareValue} zł`}
+                disabled={true}
+            />
+        </div>
         <div>
             <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
             <Button disabled={props.next}>Dalej</Button>

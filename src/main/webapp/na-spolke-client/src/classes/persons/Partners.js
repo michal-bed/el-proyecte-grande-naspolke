@@ -7,11 +7,13 @@ export class Partners {
     individualPartners;
     partnerCompanies;
     allSharesValue;
+    allSharesCount;
 
     constructor(partnerData) {
         this.individualPartners = populateList(partnerData.individualPartners, "individuals");
         this.partnerCompanies = populateList(partnerData.partnerCompanies, "companies");
         this.allSharesValue = partnerData.allSharesValue;
+        this.allSharesCount = partnerData.sharesCount;
     }
 }
 
