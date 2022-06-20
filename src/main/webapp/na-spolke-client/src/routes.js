@@ -51,63 +51,42 @@ import Login from "./componentsInUse/login/Login";
 
 const routes = [
   {
-    name: "pages",
-    icon: <Icon>dashboard</Icon>,
+    name: "Użytkownik",
+    icon: <Icon>account_circle</Icon>,
     columns: 1,
     rowsPerColumn: 2,
     collapse: [
+
       {
-        name: "landing pages",
+        name: "Konto",
         collapse: [
           {
-            name: "about us",
-            route: "/pages/landing-pages/about-us",
-            component: <KitComponentSection />
-          },
-          {
-            name: "contact us",
-            route: "/pages/landing-pages/contact-us",
-
-          },
-          {
-            name: "author",
-            route: "/pages/landing-pages/author",
-
-          },
-        ],
-      },
-      {
-        name: "account",
-        collapse: [
-          {
-            name: "sign in",
-            route: "/pages/authentication/sign-in",
+            name: "Logowanie",
+            route: "/log-in",
             component: <Login />
           },
+          {
+            name: "Rejestracja",
+            route: "/registration",
+            component: <Registration />
+          }
         ],
       },
     ],
   },
   {
     name: "sections",
-    icon: <Icon>view_day</Icon>,
+    icon: <Icon>help</Icon>,
     collapse: [
-      {
-        name: "page sections",
-        description: "See all sections",
-        dropdown: true,
-        collapse: [
           {
-            name: "page headers",
-            route: "/sections/page-sections/page-headers",
+            name: "O nas",
+            href: "#o_nas",
 
           },
           {
-            name: "features",
-            route: "/sections/page-sections/features",
+            name: "Usługi",
+            href: "#uslugi",
 
-          },
-        ],
       },
       {
         name: "navigation",

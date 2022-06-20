@@ -1,17 +1,13 @@
-
 import SectionTitle from "../sectionTitle/SectionTitle";
-import SectionComponent from "../sectionComponent/SectionComponent";
 import { SectionComponentStyle } from "../sectionComponent/SectionComponentStyle";
-import React from "react";
-import Grid from "@mui/material/Grid"
-
-import Divider from "@mui/material/Divider"
+import { Box, Grid, Divider } from "@mui/material";
 
 import index_photo1 from "../../assets/photos/index_photo1.jpg"
 import index_photo2 from "../../assets/photos/index_photo2.jpg"
-import { Box } from "@mui/material";
+
 
 import KitComponentSection from "../kitComponentSection/KitComponentSection"
+import MKBox from "../../mkFiles/components/MKBox";
 
 let text1 = "Celem naszej apliakcji jest pomoc w zarządzaniu dokumnetacją koproracyjną niezbędną do prowadzenia spółki."
 
@@ -20,32 +16,33 @@ let text2= 'Jesteśmy małą firmą z wielkimi ambicjami. Stale rozwijamy się a
 
 const MainPage = ()=> {
     return<>
-
         <Grid container >
             <Box sx={SectionComponentStyle.titleHolder}>
                 <SectionTitle title= 'Jedna aplikacja do zarządzania dokumentacją w Twojej spółce' />
             </Box>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} id="uslugi">
                 <KitComponentSection textContent={text1}
                                      id={'uslugi'}
                                      title='Nasze usługi'
                                      position="positionL"
                                      photoPath={index_photo1} />
 
-
             </Grid>
-            <Divider />
             <Grid item xs={12}>
-                <KitComponentSection textContent={text2}
-                                     id={'o_nas'}
-                                     title='O nas'
-                                     position="positionR"
-                                     photoPath={index_photo2} />
-
+                <Divider  />
+            </Grid>
+                <Grid item xs={12} id="o_nas">
+                    <KitComponentSection textContent={text2}
+                                         id={'o_nas'}
+                                         title='O nas'
+                                         position="positionR"
+                                         photoPath={index_photo2} />
 
             </Grid>
-            <Divider />
+            <Grid item xs={12}>
+                <Divider  />
+            </Grid>
         </Grid>
     </>
 

@@ -19,6 +19,7 @@ import App from './App';
 import Login from "./componentsInUse/login/Login"
 import { AuthProvider } from './context/AuthProvider';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Registration from "./componentsInUse/registration/Registration";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -28,7 +29,8 @@ root.render(
                 <AuthProvider>
                     <Routes>
                         <Route path="/*" element={<App />} />
-                        <Route path="/pages/authentication/sign-in" element={<Login />} />
+                        <Route path="/log-in" element={<Login />} />
+                        <Route path="/registration" element={<Registration />} />
                     </Routes>
                 </AuthProvider>
             </BrowserRouter>

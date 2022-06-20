@@ -8,10 +8,7 @@ import {PhotoWDescriptionStyle} from "./PhotoWDiscriptionStyle";
 
 
 
-function PhotoWDescripton(props){
-
-
-
+function PhotoWDescription(props){
 
     return<Box sx={PhotoWDescriptionStyle.section}>
         <Box sx={PhotoWDescriptionStyle.textImgHolder}>
@@ -27,4 +24,4 @@ function PhotoWDescripton(props){
 
 }
 
-export default SectionComponent
+export default PhotoWDescription

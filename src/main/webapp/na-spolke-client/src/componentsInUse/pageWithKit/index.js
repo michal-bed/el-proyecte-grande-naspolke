@@ -30,7 +30,6 @@ import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
 
 import MainPage from "../mainPage/mainPage";
 
-
 // Presentation page components
 import BuiltByDevelopers from "../kitComponentSection/KitComponentSection";
 
@@ -111,10 +110,6 @@ function Presentation() {
         }}
       >
         <MainPage />
-        
-        <Container sx={{ mt: 6 }}>
-          <BuiltByDevelopers />
-        </Container>
 
         <MKBox pt={18} pb={6}>
           <Container>
