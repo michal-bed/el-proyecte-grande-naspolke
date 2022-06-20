@@ -1,5 +1,4 @@
-import Navbar from "../Navbar/Navbar";
-import style from "../sectionTitle/SectionTitle.css";
+
 import SectionTitle from "../sectionTitle/SectionTitle";
 import SectionComponent from "../sectionComponent/SectionComponent";
 import { SectionComponentStyle } from "../sectionComponent/SectionComponentStyle";
@@ -20,36 +19,37 @@ let text2= 'Jesteśmy małą firmą z wielkimi ambicjami. Stale rozwijamy się a
     'było tylko formalnością.'
 
 const MainPage = ()=> {
-  return<>
-      
+    return<>
+
         <Grid container >
-      <Box sx={SectionComponentStyle.titleHolder}>
-          <SectionTitle title= 'Jedna aplikacja do zarządzania dokumentacją w Twojej spółce' />
-      </Box>
-      
-      <Grid item xs={12}>
-        <KitComponentSection textContent={text1}
-                        id={'uslugi'}
-                        title='Nasze usługi'
-                        position="positionL"
-                        photoPath={index_photo1} />
+            <Box sx={SectionComponentStyle.titleHolder}>
+                <SectionTitle title= 'Jedna aplikacja do zarządzania dokumentacją w Twojej spółce' />
+            </Box>
+
+            <Grid item xs={12}>
+                <KitComponentSection textContent={text1}
+                                     id={'uslugi'}
+                                     title='Nasze usługi'
+                                     position="positionL"
+                                     photoPath={index_photo1} />
 
 
-      </Grid>
-      <Divider />
-      <Grid item xs={12}>
-      <KitComponentSection textContent={text2}
-                        id={'o_nas'}
-                        title='O nas'
-                        position="positionR"
-                        photoPath={index_photo2} />
+            </Grid>
+            <Divider />
+            <Grid item xs={12}>
+                <KitComponentSection textContent={text2}
+                                     id={'o_nas'}
+                                     title='O nas'
+                                     position="positionR"
+                                     photoPath={index_photo2} />
 
+
+            </Grid>
+            <Divider />
         </Grid>
-        <Divider />
-        </Grid>
-      </>
-      
-  
+    </>
+
+
 }
 
 export default MainPage;

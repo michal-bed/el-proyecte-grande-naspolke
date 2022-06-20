@@ -1,11 +1,13 @@
 import React from "react";
 
 import Typography from "@mui/material/Typography"
+import {SectionTitleStyle} from "./SectionTitleStyle";
+import {Box} from "@mui/material";
 
 function SectionTitle(props){
-    return <div className={'title'} id={props.id}>
+    return <Box sx={SectionTitleStyle.title} id={props.id}>
         <Typography variant="h2">{props.title}</Typography>
-    </div>
+    </Box>
 }
 
 export default SectionTitle
