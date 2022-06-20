@@ -57,24 +57,30 @@
 //
 // export default App;
 import './App.css';
-import Layout from './components/Layout';
-import Login from './components/login/Login';
-import HelloWorld from "./components/HelloWorld";
-import MainPage from "./components/MainPage";
-import {Route, Routes} from "react-router-dom";
-import Registration from "./components/registration/Registration";
 
+import Layout from './componentsInUse/Layout';
+import Login from './componentsInUse/login/Login';
+import Presentation from "./componentsInUse/pageWithKit"
+import {Route, Routes} from "react-router-dom";
+import Registration from "./componentsInUse/registration/Registration";
+import {CssBaseline, ThemeProvider} from "@mui/material";
+import theme from "./assets/theme";
 
 function App() {
+
+
     return (
-        <Routes>
-            <Route path="/" element={<Layout/>}>
-                {/* public routes */}
-                <Route path="/" element={<MainPage/>}/>
-                <Route path="login" element={<Login/>}/>
-                <Route path="register" element={<Registration/>}/>
-            </Route>
-        </Routes>);
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <Routes>
+                <Route path="/" element={<Layout/>}>
+                    {/* public routes */}
+                    <Route path="/" element={<Presentation/>}/>
+                    <Route path="login" element={<Login/>}/>
+                    <Route path="register" element={<Registration/>}/>
+                </Route>
+            </Routes>
+        </ThemeProvider>);
 }
 
 export default App;
