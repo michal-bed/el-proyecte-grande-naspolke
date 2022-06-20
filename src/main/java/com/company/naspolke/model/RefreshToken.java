@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Optional;
 
 @Getter
 @Setter
@@ -22,10 +21,10 @@ public class RefreshToken {
     private String jwt;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private AppUser appUser;
 
-    public RefreshToken(String jwt, User user) {
+    public RefreshToken(String jwt, AppUser appUser) {
         this.jwt = jwt;
-        this.user = user;
+        this.appUser = appUser;
     }
 }

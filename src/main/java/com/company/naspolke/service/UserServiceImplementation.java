@@ -1,13 +1,17 @@
 package com.company.naspolke.service;
 
+import com.company.naspolke.model.Role;
 import com.company.naspolke.model.User;
+import com.company.naspolke.model.types.RoleType;
 import com.company.naspolke.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static java.util.UUID.randomUUID;
 
@@ -25,7 +29,8 @@ public class UserServiceImplementation implements UserService {
     public void registerUser(User user) {
         userRepository.save(new User(
                 randomUUID(), user.getUserName(), user.getUserSurname(), user.getUserEmail(), user.getUserPassword(),
-                true, false, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))));
+                true, false, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+                Set.of()));
     }
 
     @Override

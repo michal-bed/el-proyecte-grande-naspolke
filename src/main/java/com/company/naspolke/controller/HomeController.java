@@ -1,10 +1,11 @@
 package com.company.naspolke.controller;
 
+import com.company.naspolke.service.AppUserService;
 import com.company.naspolke.service.AuthenticationService;
 import com.company.naspolke.service.MyUserDetailsServiceImplementation;
 import com.company.naspolke.config.util.JwtUtil;
 import com.company.naspolke.model.RefreshToken;
-import com.company.naspolke.model.User;
+import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.auth.AuthenticationRequest;
 import com.company.naspolke.model.auth.AuthenticationResponse;
 import com.company.naspolke.service.RefreshTokenService;
@@ -29,16 +30,16 @@ import java.util.Optional;
 public class HomeController {
 
     private JwtUtil jwtTokenUtil;
-    private UserService userService;
+    private AppUserService appUserService;
     private RefreshTokenService refreshTokenService;
     private AuthenticationService authenticationService;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public HomeController(JwtUtil jwtTokenUtil, UserService userService, RefreshTokenService refreshTokenService,
-                          AuthenticationService authenticationService, PasswordEncoder passwordEncoder) {
+    public HomeController(JwtUtil jwtTokenUtil, AppUserService appUserService,
+                          RefreshTokenService refreshTokenService, AuthenticationService authenticationService) {
         this.jwtTokenUtil = jwtTokenUtil;
-        this.userService = userService;
+        this.appUserService = appUserService;
         this.refreshTokenService = refreshTokenService;
         this.authenticationService = authenticationService;
         this.passwordEncoder = passwordEncoder;
@@ -55,7 +56,7 @@ public class HomeController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
 
         UserDetails userDetails = authenticationService.authenticateAndGetUserDetails(authenticationRequest);
-        Optional<User> user = userService.findUserByUserEmail(authenticationRequest.getUsername());
+        Optional<AppUser> user = appUserService.findUserByUserEmail(authenticationRequest.getUsername());
 
         final String accessToken = jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 15);
         final String refreshToken = jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 60 * 60);
