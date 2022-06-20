@@ -39,6 +39,7 @@ const MembersCompanyBodies = (props) => {
     function handleChangeInput(index, e){
         const values = [...memberBody];
         values[index][e.target.name] = e.target.value;
+        console.debug(values);
         setMemberBody(values);
     }
 
@@ -50,6 +51,7 @@ const MembersCompanyBodies = (props) => {
                     const person = new BoardMember(member);
                     boardMember.push(person);
                 })
+                console.debug(boardMember);
                 return boardMember;
             }
             case "directors":{
@@ -58,6 +60,7 @@ const MembersCompanyBodies = (props) => {
                     const person = new BoardOfDirector(member);
                     boardOfDirectors.push(person);
                 })
+                console.debug(boardOfDirectors);
                 return boardOfDirectors;
             }
         }

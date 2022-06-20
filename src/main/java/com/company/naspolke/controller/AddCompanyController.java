@@ -24,5 +24,10 @@ public class AddCompanyController {
 //        ResponseEntity<Company> entity = new ResponseEntity<>(company, headers, HttpStatus.OK);
         return companyService.getCompanyData(krsNumber);
     }
+
+    @PostMapping
+    public String saveCompanyToDb(@RequestBody Company newCompany){
+        companyService.saveCompany(newCompany);
+        return "ok";
+    }
 }
-// zwraca mi status w kluczu i body Map

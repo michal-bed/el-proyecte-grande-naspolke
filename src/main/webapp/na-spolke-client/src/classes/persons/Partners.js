@@ -1,6 +1,3 @@
-import {Person} from "./Person";
-import {BoardMember} from "./BoardMember";
-import {BoardOfDirector} from "./BoardOfDirector";
 import {populateList} from "../company/Utils";
 
 export class Partners {

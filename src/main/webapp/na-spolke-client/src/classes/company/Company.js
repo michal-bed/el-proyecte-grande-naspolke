@@ -3,7 +3,7 @@ import {populateList} from "./Utils";
 import {Partners} from "../persons/Partners";
 
 export class Company {
-    name;
+    companyName;
     krsNumber;
     address;
     nip;
@@ -17,7 +17,7 @@ export class Company {
     manySharesAllowed;
 
     constructor(companyData) {
-        this.name = companyData.name.includes("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ")? companyData.name.split("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ")[0] + " sp. z o.o." : companyData.name;
+        this.companyName = companyData.companyName.includes("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ")? companyData.companyName.split("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ")[0] + " sp. z o.o." : companyData.companyName;
         this.krsNumber = companyData.krsNumber;
         this.nip = companyData.nip;
         this.regon = companyData.regon;

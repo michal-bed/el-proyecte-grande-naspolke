@@ -3,14 +3,14 @@ import {Button, TextField} from "@material-ui/core";
 import {useState} from "react";
 
 const BaseInfo = (props) => {
-
-    const [companyName, setCompanyName] = useState(props.baseInfo === null ? "" : props.baseInfo.name)
+    console.debug(props.baseInfo)
+    const [companyName, setCompanyName] = useState(props.baseInfo === null ? "" : props.baseInfo.companyName)
     const [nipInput, setNipInput] = useState(props.baseInfo === null ? "" : props.baseInfo.nip)
     const [regonInput, setRegonInput] = useState(props.baseInfo === null ? "" : props.baseInfo.regon)
     const [shareCapitalInput, setShareCapitalInput] = useState(props.baseInfo === null ? "" : props.baseInfo.shareCapital)
 
     function switchPage(){
-        const baseInfo = {name: companyName,
+        const baseInfo = {companyName: companyName,
             krsNumber:props.baseInfo.krsNumber,
             nip: nipInput,
             regon: regonInput,

@@ -4,19 +4,12 @@ import com.company.naspolke.model.company.repositories.CompanyRepository;
 import com.company.naspolke.helpers.adapters.MonoStringToCompanyAdapter;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.webclient.krs.KrsClient;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.function.ServerRequest;
-import reactor.core.CoreSubscriber;
-import reactor.core.publisher.Mono;
-
-import java.util.HashMap;
-import java.util.Objects;
 
 @Service
 @Slf4j
@@ -44,6 +37,18 @@ public class CompanyService {
     }
 
     public void saveCompany(Company company){
-        companyRepository.save(company);
+        Company companyToSave = Company.builder()
+                        .companyName(company.getCompanyName())
+                        .krsNumber(company.getKrsNumber())
+                        .address(company.getAddress())
+                        .nip(company.getNip())
+                        .regon(company.getRegon())
+                        .shareCapital(company.getShareCapital())
+                        .boardMembers(company.getBoardMembers())
+                        .boardOfDirectors(company.getBoardOfDirectors())
+                        .partners(company.getPartners())
+                        .manySharesAllowed(company.isManySharesAllowed())
+                        .build();
+        companyRepository.save(companyToSave);
     }
 }

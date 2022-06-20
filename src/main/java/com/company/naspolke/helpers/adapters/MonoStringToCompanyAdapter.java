@@ -45,7 +45,7 @@ public class MonoStringToCompanyAdapter {
         boolean largerAmountOfSharesAllowed = JsonPath.read(document, "$.odpis.dane.dzial1.pozostaleInformacje.informacjaOLiczbieUdzialow").equals(largerSharesInfo);
 
         return Company.builder()
-                .name(companyName)
+                .companyName(companyName)
                 .krsNumber(krsNumber)
                 .nip(nip)
                 .regon(regon)

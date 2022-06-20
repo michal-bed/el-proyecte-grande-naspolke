@@ -5,12 +5,13 @@ import AddressForm from "./formComponents/AddressForm";
 import MembersCompanyBodies from "./formComponents/MembersCompanyBodies";
 import Partners from "./formComponents/Partners";
 import {Company} from "../../../classes/company/Company";
+import {Address} from "../../../classes/company/Address";
 
 
-const CompanyForm = ({company})=>{
+const CompanyForm = ({company, saveData})=>{
     const [page, setPage] = useState(0)
     const [baseInfo, setBaseInfo] = useState(company===null ? null:{
-        name: company.name,
+        companyName: company.companyName,
         krsNumber:company.krsNumber,
         nip:company.nip,
         regon:company.regon,
@@ -28,6 +29,7 @@ const CompanyForm = ({company})=>{
 
     const changePage = (companyData, pageType, newPage) => {
         setPartFormToDisplay(<div/>)
+        console.debug(companyData);
         setPage((currPage) => currPage + newPage)
         switch (pageType){
             case "baseInfo": setBaseInfo(companyData); break
@@ -39,6 +41,22 @@ const CompanyForm = ({company})=>{
     }
     const [partFormToDisplay, setPartFormToDisplay] = useState(<BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo}
                                                                          prev={page === 0} next={page === FormTitles.length - 1}/>)
+
+    function saveCompanyData(data){
+        const companyToSave = {
+            companyName: baseInfo.companyName,
+            krsNumber: baseInfo.krsNumber,
+            nip: baseInfo.nip,
+            regon: baseInfo.regon,
+            shareCapital: baseInfo.shareCapital,
+            address: companyAddress,
+            boardMembers: boardMembers,
+            boardOfDirectors: boardOfDirectors,
+            partners: data,
+            manySharesAllowed: company.manySharesAllowed
+        }
+        saveData(companyToSave);
+    }
 
     const PageDisplay = ()=> {
         switch (page){
@@ -52,7 +70,7 @@ const CompanyForm = ({company})=>{
                                                  pageType={"directors"} prev={page === 0} next={page === FormTitles.length - 1}/>;
             case 4: return <Partners partners={partnersList} changePage={changePage}
                                      bodyType={"partners"} prev={page === 0} next={page === FormTitles.length - 1} shareCapital={company.shareCapital}
-                                     shareValue={company.shareValue} sharesCount={company.sharesCount}/>;
+                                     shareValue={company.shareValue} sharesCount={company.sharesCount} saveCompanyData={saveCompanyData}/>;
         }
     }
 

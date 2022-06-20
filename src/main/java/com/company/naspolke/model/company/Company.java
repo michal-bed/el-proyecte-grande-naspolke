@@ -25,8 +25,8 @@ public class Company {
     @Id
     @NotNull
     @Type(type = "uuid-char")
-    private UUID companyUuid = UUID.randomUUID();
-    private String name;
+    private UUID companyId = UUID.randomUUID();
+    private String companyName;
     private Long krsNumber;
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "address_id")
@@ -45,11 +45,15 @@ public class Company {
     private Partners partners;
     private boolean partnersRevealed;
     private boolean manySharesAllowed;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "primaryKey.company", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+//    @Column(name = "company_user_role")
+//    private Set<CompanyUserRole> companyUserRole = new HashSet<>();
 
 
     @Builder
-    public Company(String name, Long krsNumber, Address address, String nip, String regon, BigDecimal shareCapital, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners, boolean manySharesAllowed) {
-        this.name = name;
+    public Company(String companyName, Long krsNumber, Address address, String nip, String regon, BigDecimal shareCapital, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners, boolean manySharesAllowed) {
+        this.companyName = companyName;
         this.krsNumber = krsNumber;
         this.address = address;
         this.nip = nip;
@@ -71,7 +75,6 @@ public class Company {
         }
         return null;
     }
-
 
     public boolean checkIfAllPartnersAreRevealed() {
         return partners.getAllSharesValue().equals(shareCapital);
@@ -96,4 +99,20 @@ public class Company {
         shareValue = shareValue.setScale(2, RoundingMode.CEILING);
         return shareValue;
     }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+//        Company company = (Company) o;
+//        return companyId != null && Objects.equals(companyId, company.companyId);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return getClass().hashCode();
+//    }
+
+//    public void addCompanyUserRole(CompanyUserRole companyUserRole) {
+//        this.companyUserRole.add(companyUserRole);
+//    }
 }

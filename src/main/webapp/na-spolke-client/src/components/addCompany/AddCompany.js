@@ -3,6 +3,7 @@ import CompanyForm from "./companyForm/CompanyForm";
 import {useState} from "react";
 import {ModalErrorMessage} from "./companyForm/formComponents/ModalFormError";
 import {Company} from "../../classes/company/Company";
+import Axios from "axios";
 
 const AddCompany = ()=>{
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
@@ -29,11 +30,17 @@ const AddCompany = ()=>{
                                                   closeAndDisplay={closeAndDisplay}/>)
         } else {
               const company = checkForCompanyData(data.data)
-              setCompanyDataForm(<CompanyForm company={company}/>);
+              setCompanyDataForm(<CompanyForm company={company} saveData={saveDataIntoDb}/>);
           }
       }
 
-
+    function saveDataIntoDb(data){
+        Axios.post("http://localhost:8080/add-company/",data)
+            .then(response=>console.log(response))
+            .catch(error=>{
+                console.log(error)
+            })
+    }
 
     const closeAndDisplay = () => {
         setCompanyDataForm(<CompanyForm companyData={null}/>)

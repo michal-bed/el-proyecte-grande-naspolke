@@ -88,35 +88,49 @@ const Partners = (props) => {
     function countAllSharesCount(){
         let sharesCount = 0;
         for (let i = 0; i < state.partners.individualPartners.length; i++) {
-            sharesCount += +state.partners.individualPartners[i].sharesCount;
+            sharesCount += parseInt(state.partners.individualPartners[i].sharesCount);
         }
         for (let i = 0; i < state.partners.partnerCompanies.length; i++) {
-            sharesCount += +state.partners.partnerCompanies[i].sharesCount;
+            sharesCount += parseInt(state.partners.partnerCompanies[i].sharesCount);
         }
         return sharesCount;
     }
 
     function countAllSharesValues(){
-        return countPartnersListSharesValue(state.partners.individualPartners) + countPartnersListSharesValue(state.partners.partnerCompanies)
+        return parseInt(countPartnersListSharesValue(state.partners.individualPartners)) + parseInt(countPartnersListSharesValue(state.partners.partnerCompanies))
     }
 
     function countPartnersListSharesValue(newIndividualPartnerList) {
         let sharesValue = 0;
         for (let i = 0; i < newIndividualPartnerList.length; i++) {
-            sharesValue += newIndividualPartnerList[i].sharesValue;
+            sharesValue += parseInt(newIndividualPartnerList[i].sharesValue);
         }
         return sharesValue;
     }
 
-    function switchPrevPage(){
-        const newIndividualPartnerList =  populateList(state.partners.individualPartners, "individuals");
-        const newCompanyPartnerList =  populateList(state.partners.partnerCompanies, "companies");
+    function setNewPartnersData() {
+        const newIndividualPartnerList = populateList(state.partners.individualPartners, "individuals");
+        const newCompanyPartnerList = populateList(state.partners.partnerCompanies, "companies");
         const allIndividualSharesValue = countPartnersListSharesValue(newIndividualPartnerList)
         const allCompanySharesValue = countPartnersListSharesValue(newCompanyPartnerList)
-        const newPartners = {individualPartners: newIndividualPartnerList, partnerCompanies: newCompanyPartnerList,
-            allSharesValue : allIndividualSharesValue + allCompanySharesValue}
+        const allSharesCount = countAllSharesCount()
+        const newPartners = {
+            individualPartners: newIndividualPartnerList, partnerCompanies: newCompanyPartnerList,
+            allSharesValue: allIndividualSharesValue + allCompanySharesValue, allSharesCount: allSharesCount
+        }
+        return newPartners;
+    }
+
+    function switchPrevPage(){
+        const newPartners = setNewPartnersData();
         props.changePage(newPartners, props.pageType, -1)
     }
+
+    function saveCompanyData(){
+        const newPartners = setNewPartnersData();
+        props.saveCompanyData(newPartners);
+    }
+
     return <div>
         {state.partners.individualPartners!==null && state.partners.individualPartners.map((partner, index) => (
             <div key={index}>
@@ -193,7 +207,7 @@ const Partners = (props) => {
                 label="łączna ilość udziałów"
                 name="allSharesCount"
                 variant="filled"
-                defaultValue={props.shareCapital / props.shareValue}
+                defaultValue={parseInt(props.shareCapital) / parseInt(props.shareValue)}
                 disabled={true}
             />
             <TextField
@@ -214,7 +228,7 @@ const Partners = (props) => {
         <div>
             <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
             <Button disabled={props.next}>Dalej</Button>
-            <Button >Zapisz</Button>
+            <Button onClick={saveCompanyData}>Zapisz</Button>
         </div>
     </div>
 }
