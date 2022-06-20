@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -36,19 +38,37 @@ public class CompanyService {
         return new ResponseEntity<>(company, headers, httpStatus);
     }
 
-    public void saveCompany(Company company){
-        Company companyToSave = Company.builder()
-                        .companyName(company.getCompanyName())
-                        .krsNumber(company.getKrsNumber())
-                        .address(company.getAddress())
-                        .nip(company.getNip())
-                        .regon(company.getRegon())
-                        .shareCapital(company.getShareCapital())
-                        .boardMembers(company.getBoardMembers())
-                        .boardOfDirectors(company.getBoardOfDirectors())
-                        .partners(company.getPartners())
-                        .manySharesAllowed(company.isManySharesAllowed())
-                        .build();
-        companyRepository.save(companyToSave);
+    public boolean checkForDuplicate(Long krsNumber){
+        return companyRepository.findByKrsNumber(krsNumber).isEmpty();
+    }
+
+    public ResponseEntity<String> saveCompany(Company company){
+        if (checkForDuplicate(company.getKrsNumber())) {
+            Company companyToSave = Company.builder()
+                    .companyName(company.getCompanyName())
+                    .krsNumber(company.getKrsNumber())
+                    .address(company.getAddress())
+                    .nip(company.getNip())
+                    .regon(company.getRegon())
+                    .shareCapital(company.getShareCapital())
+                    .boardMembers(company.getBoardMembers())
+                    .boardOfDirectors(company.getBoardOfDirectors())
+                    .partners(company.getPartners())
+                    .manySharesAllowed(company.isManySharesAllowed())
+                    .build();
+            companyRepository.save(companyToSave);
+        }
+        return buildSaveResponse(company.getKrsNumber());
+
+    }
+
+    private ResponseEntity<String> buildSaveResponse(Long krsNumber) {
+        List<Company> companyList = companyRepository.findByKrsNumber(1L);
+        if (!companyList.isEmpty()) {
+            String companyName = companyList.get(companyList.size()-1).getCompanyName();
+            return new ResponseEntity<>(companyName, new HttpHeaders(), HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.NO_CONTENT);
+        }
     }
 }

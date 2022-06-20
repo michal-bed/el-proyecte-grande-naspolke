@@ -36,9 +36,14 @@ const AddCompany = ()=>{
 
     function saveDataIntoDb(data){
         Axios.post("http://localhost:8080/add-company/",data)
-            .then(response=>console.log(response))
+            .then(response=> {
+                if (response.status===201) {
+                    alert(`Spółka ${response.data} została pomyślnie zapisana`)
+                }
+            })
             .catch(error=>{
                 console.log(error)
+                alert(`Wystąpił błąd.. spółka nie zapisana. Spróbuj ponownie później.`)
             })
     }
 

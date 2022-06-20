@@ -3,9 +3,6 @@ package com.company.naspolke.controller;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.service.CompanyService;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONObject;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +23,7 @@ public class AddCompanyController {
     }
 
     @PostMapping
-    public String saveCompanyToDb(@RequestBody Company newCompany){
-        companyService.saveCompany(newCompany);
-        return "ok";
+    public ResponseEntity<String> saveCompanyToDb(@RequestBody Company newCompany){
+        return companyService.saveCompany(newCompany);
     }
 }

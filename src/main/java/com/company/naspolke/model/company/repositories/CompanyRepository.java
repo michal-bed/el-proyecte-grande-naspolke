@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CompanyRepository {
-    Optional<Company> findByKrsNumber(Long krsNumber);
+    List<Company> findByKrsNumber(Long krsNumber);
     List<Company> findAll();
 //    Optional<List<Company>> findByKrsNumber(Long krsNumber);
     Company save(Company entity);
