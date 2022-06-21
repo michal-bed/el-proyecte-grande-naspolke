@@ -30,6 +30,10 @@ function reducer(state, action){
             let partnerCompanies = state.partners.partnerCompanies;
             partnerCompanies.push(action.newPartner);
         }
+        case actionType.ADD_NEW_INDIVIDUAL_PARTNER:{
+            let partnerCompanies = state.partners.individualPartners;
+            partnerCompanies.push(action.newPartner);
+        }
         default: return {...state}
     }
 }
@@ -51,7 +55,7 @@ const Partners = (props) => {
     if (props.partners===null || props.partners.length === 0) {
         return <div>
             <div>Brak danych wspólników!</div>
-            <button onClick={addNewPartnerCompanyToForm}>Dodaj wspólnika </button>
+            <button onClick={addEmptyPartnerCompanyToForm}>Dodaj wspólnika </button>
         </div>
         //TODO przemyśleć sytuacje braku zarządu
     }
@@ -67,7 +71,7 @@ const Partners = (props) => {
         dispatch(action)
     }
 
-    function addNewPartnerCompanyToForm(){
+    function addEmptyPartnerCompanyToForm(){
         let newCompanyPartner = new PartnerCompany({name:"",
             sharesValue : parseInt(props.shareCapital) - countAllSharesValues(),
             sharesCount : (parseInt(props.shareCapital) / parseInt(props.shareValue)) - countAllSharesCount()})
@@ -75,6 +79,20 @@ const Partners = (props) => {
             actionType : actionType.ADD_NEW_COMPANY_PARTNER,
             newPartner : newCompanyPartner
             }
+        dispatch(action);
+    }
+    function addEmptyIndividualToForm(){
+        let newCompanyPartner = new PartnerCompany({
+            firstname:"",
+            secondName:"",
+            lastNameI:"",
+            lastNameII:"",
+            sharesValue : parseInt(props.shareCapital) - countAllSharesValues(),
+            sharesCount : (parseInt(props.shareCapital) / parseInt(props.shareValue)) - countAllSharesCount()})
+        const action = {
+            actionType : actionType.ADD_NEW_INDIVIDUAL_PARTNER,
+            newPartner : newCompanyPartner
+        }
         dispatch(action);
     }
 
@@ -244,7 +262,7 @@ const Partners = (props) => {
         <div>
             <div>
                 <div>Dodaj wspólnika:</div>
-                <Button onClick={addNewPartnerCompanyToForm}>osoba prawna</Button><Button>osoba fizyczna</Button>
+                <Button onClick={addEmptyPartnerCompanyToForm}>osoba prawna</Button><Button onClick={addEmptyIndividualToForm}>osoba fizyczna</Button>
             </div>
         </div>
         <div>
