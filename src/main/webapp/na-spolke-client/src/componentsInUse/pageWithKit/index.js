@@ -29,7 +29,7 @@ import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
 
 
 import MainPage from "../mainPage/mainPage";
-
+import FaqPage from "../faqPage/FaqPage";
 // Presentation page components
 import BuiltByDevelopers from "../kitComponentSection/KitComponentSection";
 
@@ -45,18 +45,27 @@ import index_photo3 from "../../assets/photos/index_photo3.jpg";
 
 
 function Presentation(props) {
+    let title = "Na Spółkę"
+    let titleDescription = "Free & Open Source Web UI Kit built over ReactJS &amp; MUI. Join over 1.6 million\n" +
+        "                    developers around the world."
     const currentSite = props.site;
-    function setContent(currentSiteś) {
+
+    function setContent(ś) {
+        console.log(currentSite)
         switch (currentSite){
             case "index":
                 return(<MainPage />)
 
             case "faq":
-                return(<DefaultNavbar />)
+                title = "Frequently Asked Questions"
+                titleDescription = "Zebraliśmy najczęściej pojawiające się pytania i " +
+                    "posatraliśmy się w jak najlepszy sposób na nie odpowiedzieć"
+                return(<FaqPage />)
         }
-
     }
+
     const component = setContent()
+
   return (
     <>
       <DefaultNavbar
@@ -94,7 +103,7 @@ function Presentation(props) {
                 },
               })}
             >
-              Na Spółkę
+                {title}
             </MKTypography>
             <MKTypography
               variant="body1"
@@ -103,8 +112,7 @@ function Presentation(props) {
               px={{ xs: 6, lg: 12 }}
               mt={1}
             >
-              Free & Open Source Web UI Kit built over ReactJS &amp; MUI. Join over 1.6 million
-              developers around the world.
+                {titleDescription}
             </MKTypography>
           </Grid>
         </Container>
