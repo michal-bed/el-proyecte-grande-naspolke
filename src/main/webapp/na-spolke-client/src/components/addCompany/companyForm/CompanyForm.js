@@ -3,7 +3,7 @@ import {useEffect, useReducer, useState} from "react";
 import BaseInfo from "./formComponents/BaseInfo";
 import AddressForm from "./formComponents/AddressForm";
 import MembersCompanyBodies from "./formComponents/MembersCompanyBodies";
-import Partners from "./formComponents/Partners";
+import Partners from "./formComponents/partners/Partners";
 import {Company} from "../../../classes/company/Company";
 import {Address} from "../../../classes/company/Address";
 
