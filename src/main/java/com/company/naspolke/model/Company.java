@@ -29,7 +29,7 @@ public class Company {
     @Column(name = "company_name")
     private String companyName;
     @Column(name = "krs_number")
-    private Long KRSNumber;
+    private Long krsNumber;
     @JsonIgnore
     @OneToMany(mappedBy = "primaryKey.company", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Column(name = "company_user_role")

@@ -73,19 +73,19 @@ public class CompanyUserRoleServiceImplementation implements CompanyUserRoleServ
 
         if (companyUserRole.isPresent()) {
             Set<CompanyUserRole> companySet = company.getCompanyUserRole().stream()
-                    .map(e -> e.getCompany().getKRSNumber().equals(company.getKRSNumber()) &&
+                    .map(e -> e.getCompany().getKrsNumber().equals(company.getKrsNumber()) &&
                             e.getUser().getUserEmail().equals(appUser.getUserEmail()) ? companyUserRole.get() : e)
                     .collect(Collectors.toSet());
             company.setCompanyUserRole(companySet);
 
             Set<CompanyUserRole> appUserSet = appUser.getCompanyUserRole().stream()
-                    .map(e -> e.getCompany().getKRSNumber().equals(company.getKRSNumber()) &&
+                    .map(e -> e.getCompany().getKrsNumber().equals(company.getKrsNumber()) &&
                             e.getUser().getUserEmail().equals(appUser.getUserEmail()) ? companyUserRole.get() : e)
                     .collect(Collectors.toSet());
             appUser.setCompanyUserRole(appUserSet);
 
             Set<CompanyUserRole> roleSet = role.getCompanyUserRole().stream()
-                    .map(e -> e.getCompany().getKRSNumber().equals(company.getKRSNumber()) &&
+                    .map(e -> e.getCompany().getKrsNumber().equals(company.getKrsNumber()) &&
                             e.getUser().getUserEmail().equals(appUser.getUserEmail()) ? companyUserRole.get() : e)
                     .collect(Collectors.toSet());
             role.setCompanyUserRole(roleSet);
@@ -103,19 +103,19 @@ public class CompanyUserRoleServiceImplementation implements CompanyUserRoleServ
                 company.getCompanyId(), appUser.getUserId()).getRole());
 
         Set<CompanyUserRole> companySet = company.getCompanyUserRole().stream()
-                .filter(e -> !(e.getCompany().getKRSNumber().equals(company.getKRSNumber()) &&
+                .filter(e -> !(e.getCompany().getKrsNumber().equals(company.getKrsNumber()) &&
                         e.getUser().getUserEmail().equals(appUser.getUserEmail())))
                 .collect(Collectors.toSet());
         company.setCompanyUserRole(companySet);
 
         Set<CompanyUserRole> appUserSet = appUser.getCompanyUserRole().stream()
-                .filter(e -> !(e.getCompany().getKRSNumber().equals(company.getKRSNumber()) &&
+                .filter(e -> !(e.getCompany().getKrsNumber().equals(company.getKrsNumber()) &&
                         e.getUser().getUserEmail().equals(appUser.getUserEmail())))
                 .collect(Collectors.toSet());
         appUser.setCompanyUserRole(appUserSet);
 
         Set<CompanyUserRole> roleSet = foundedRole.get().getCompanyUserRole().stream()
-                .filter(e -> !(e.getCompany().getKRSNumber().equals(company.getKRSNumber()) &&
+                .filter(e -> !(e.getCompany().getKrsNumber().equals(company.getKrsNumber()) &&
                         e.getUser().getUserEmail().equals(appUser.getUserEmail())))
                 .collect(Collectors.toSet());
         foundedRole.get().setCompanyUserRole(roleSet);

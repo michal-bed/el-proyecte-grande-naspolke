@@ -18,7 +18,7 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
-    public Optional<Company> getCompanyByKRSNumber(Long KRSNumber) {
-        return Optional.ofNullable(companyRepository.findByKRSNumber(KRSNumber));
+    public Optional<Company> getCompanyByKrsNumber(Long krsNumber) {
+        return Optional.ofNullable(companyRepository.findByKrsNumber(krsNumber));
     }
 }

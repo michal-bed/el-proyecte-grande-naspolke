@@ -1,27 +1,25 @@
 package com.company.naspolke.controller;
 
-import com.company.naspolke.service.AppUserService;
-import com.company.naspolke.service.AuthenticationService;
-import com.company.naspolke.service.MyUserDetailsServiceImplementation;
 import com.company.naspolke.config.util.JwtUtil;
-import com.company.naspolke.model.RefreshToken;
 import com.company.naspolke.model.AppUser;
+import com.company.naspolke.model.RefreshToken;
 import com.company.naspolke.model.auth.AuthenticationRequest;
 import com.company.naspolke.model.auth.AuthenticationResponse;
+import com.company.naspolke.service.AppUserService;
+import com.company.naspolke.service.AuthenticationService;
 import com.company.naspolke.service.RefreshTokenService;
-import com.company.naspolke.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +31,6 @@ public class HomeController {
     private AppUserService appUserService;
     private RefreshTokenService refreshTokenService;
     private AuthenticationService authenticationService;
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public HomeController(JwtUtil jwtTokenUtil, AppUserService appUserService,
@@ -42,7 +39,6 @@ public class HomeController {
         this.appUserService = appUserService;
         this.refreshTokenService = refreshTokenService;
         this.authenticationService = authenticationService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @RequestMapping({ "/hello" })

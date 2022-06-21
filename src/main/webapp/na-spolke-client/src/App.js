@@ -80,9 +80,9 @@ function App() {
                     <Route path="/" element={<Presentation/>}/>
                     <Route path="login" element={<Login/>}/>
                     <Route path="register" element={<Registration/>}/>
-                    {/*<Route path="add-member" element={<AddMember/>}/>*/}
-                    {/*<Route path="delete-member" element={<DeleteMember/>}/>*/}
-                    {/*<Route path="change-role" element={<ChangeRole/>}/>*/}
+                    <Route path="add-member" element={<AddMember/>}/>
+                    <Route path="delete-member" element={<DeleteMember/>}/>
+                    <Route path="change-role" element={<ChangeRole/>}/>
                 </Route>
             </Routes>
         </ThemeProvider>);

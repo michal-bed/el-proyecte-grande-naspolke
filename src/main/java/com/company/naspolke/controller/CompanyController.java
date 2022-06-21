@@ -40,7 +40,7 @@ public class CompanyController {
     public void addNewCompany(@RequestBody String userEmail) {
         //TODO: potrzebuje obiektu spółki zapisanego już w bazie danych i to będzie zamiast
         //TODO: tego poniżej
-        Optional<Company> company = companyService.getCompanyByKRSNumber(10L);
+        Optional<Company> company = companyService.getCompanyByKrsNumber(10L);
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(userEmail);
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.OWNER);
         if (company.isPresent() && appUser.isPresent() && role.isPresent()) {
@@ -52,7 +52,7 @@ public class CompanyController {
 
     @PostMapping(value = "/add-member-to-company")
     public void addNewMemberToCompany(@RequestBody ObjectNode objectNode) {
-        Optional<Company> company = companyService.getCompanyByKRSNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(objectNode.get("userEmail").asText());
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.valueOf(objectNode.get("roleType").asText()));
         if (company.isPresent() && appUser.isPresent() && role.isPresent()) {
@@ -64,7 +64,7 @@ public class CompanyController {
 
     @PutMapping(value = "/change-role")
     public void changeMemberRoleInCompany(@RequestBody ObjectNode objectNode) {
-        Optional<Company> company = companyService.getCompanyByKRSNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(objectNode.get("userEmail").asText());
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.valueOf(objectNode.get("roleType").asText()));
         if (company.isPresent() && appUser.isPresent() && role.isPresent()) {
@@ -76,7 +76,7 @@ public class CompanyController {
 
     @DeleteMapping(value = "/delete-member")
     public void deleteMemberFromCompany(@RequestBody ObjectNode objectNode) {
-        Optional<Company> company = companyService.getCompanyByKRSNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(objectNode.get("userEmail").asText());
         if (company.isPresent() && appUser.isPresent()) {
             companyUserRoleService.deleteMemberFromCompany(company.get(), appUser.get());
