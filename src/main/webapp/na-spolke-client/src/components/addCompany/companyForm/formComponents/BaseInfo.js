@@ -3,7 +3,6 @@ import {Button, TextField} from "@material-ui/core";
 import {useState} from "react";
 
 const BaseInfo = (props) => {
-    console.debug(props.baseInfo)
     const [companyName, setCompanyName] = useState(props.baseInfo === null ? "" : props.baseInfo.companyName)
     const [nipInput, setNipInput] = useState(props.baseInfo === null ? "" : props.baseInfo.nip)
     const [regonInput, setRegonInput] = useState(props.baseInfo === null ? "" : props.baseInfo.regon)

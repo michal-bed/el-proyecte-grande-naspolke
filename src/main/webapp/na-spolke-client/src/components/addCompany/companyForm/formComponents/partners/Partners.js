@@ -1,15 +1,19 @@
 import styles from "./Partners.module.css";
-import {Button, TextField} from "@material-ui/core";
+import {Button, IconButton, TextField} from "@material-ui/core";
 import {useReducer} from "react";
 import {populateList} from "../../../../../classes/company/Utils";
 import {PartnerCompany} from "../../../../../classes/persons/Partners";
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 
 const actionType = {
     DISPLAY_INDIVIDUAL_PARTNERS : "individuals",
     DISPLAY_COMPANY_PARTNERS : "companies",
     ADD_NEW_COMPANY_PARTNER : "addNewCompanyPartner",
-    ADD_NEW_INDIVIDUAL_PARTNER : "addNewIndividualPartner"
+    ADD_NEW_INDIVIDUAL_PARTNER : "addNewIndividualPartner",
+    REMOVE_INDIVIDUAL_PARTNER: "removeIndividualPartner",
+    REMOVE_COMPANY_PARTNER: "removeCompanyPartner",
 }
 
 function reducer(state, action){
@@ -29,10 +33,22 @@ function reducer(state, action){
         case actionType.ADD_NEW_COMPANY_PARTNER:{
             let partnerCompanies = state.partners.partnerCompanies;
             partnerCompanies.push(action.newPartner);
+            return {...state, partnerCompanies: partnerCompanies}
         }
         case actionType.ADD_NEW_INDIVIDUAL_PARTNER:{
             let partnerCompanies = state.partners.individualPartners;
             partnerCompanies.push(action.newPartner);
+            return {...state, individualPartners: partnerCompanies}
+        }
+        case actionType.REMOVE_INDIVIDUAL_PARTNER:{
+            let partnerCompanies = state.partners.individualPartners;
+            partnerCompanies.splice(action.index, 1)
+            return {...state, individualPartners: partnerCompanies}
+        }
+        case actionType.REMOVE_COMPANY_PARTNER: {
+            let partnerCompanies = state.partners.partnerCompanies;
+            partnerCompanies.splice(action.index, 1)
+            return {...state, partnerCompanies: partnerCompanies}
         }
         default: return {...state}
     }
@@ -59,7 +75,6 @@ const Partners = (props) => {
         </div>
         //TODO przemyśleć sytuacje braku zarządu
     }
-
 
     function handleChangeInput(index, event, list){
         const action = {
@@ -96,6 +111,9 @@ const Partners = (props) => {
         dispatch(action);
     }
 
+    function removePartnerFromList(index, actionType){
+        dispatch({index: index, actionType: actionType})
+    }
 
     function countAllSharesCount(){
         let sharesCount = 0;
@@ -199,6 +217,10 @@ const Partners = (props) => {
                     />
                 </div>
                 {partnerSharesInfo(index, partner, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
+                <div>
+                    <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={()=> removePartnerFromList(index, actionType.REMOVE_INDIVIDUAL_PARTNER) }>Usuń</Button>
+                    <Button variant="outlined" startIcon={<PersonAddIcon />}>Powiel</Button>
+                </div>
             </div>
         ))
         }
@@ -216,6 +238,11 @@ const Partners = (props) => {
                     />
                 </div>
                 {partnerSharesInfo(index, partner, actionType.DISPLAY_COMPANY_PARTNERS)}
+                <div>
+                    <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={()=> {
+                        removePartnerFromList(index, actionType.REMOVE_COMPANY_PARTNER) }} >Usuń</Button>
+                    <Button variant="outlined" startIcon={<PersonAddIcon />}>Powiel</Button>
+                </div>
             </div>
         ))
         }

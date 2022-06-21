@@ -4,8 +4,7 @@ import BaseInfo from "./formComponents/BaseInfo";
 import AddressForm from "./formComponents/AddressForm";
 import MembersCompanyBodies from "./formComponents/MembersCompanyBodies";
 import Partners from "./formComponents/partners/Partners";
-import {Company} from "../../../classes/company/Company";
-import {Address} from "../../../classes/company/Address";
+
 
 
 const CompanyForm = ({company, saveData})=>{
@@ -29,7 +28,6 @@ const CompanyForm = ({company, saveData})=>{
 
     const changePage = (companyData, pageType, newPage) => {
         setPartFormToDisplay(<div/>)
-        console.debug(companyData);
         setPage((currPage) => currPage + newPage)
         switch (pageType){
             case "baseInfo": setBaseInfo(companyData); break
@@ -86,18 +84,6 @@ const CompanyForm = ({company, saveData})=>{
             <div className={styles["body"]}>{partFormToDisplay}</div>
             <div className={styles["footer"]}></div>
             <div className={styles["form-nav-bar"]}>
-                {/*<button*/}
-                {/*    disabled={page === 0}*/}
-                {/*    onClick={() => {*/}
-                {/*        setPage((currPage) => currPage - 1)*/}
-                {/*    }}> Prev*/}
-                {/*</button>*/}
-                {/*<button*/}
-                {/*    disabled={page === FormTitles.length - 1}*/}
-                {/*    onClick={() => {*/}
-                {/*        setPage((currPage) => currPage + 1)*/}
-                {/*    }}> Next*/}
-                {/*</button>*/}
             </div>
         </div>
     </div>
