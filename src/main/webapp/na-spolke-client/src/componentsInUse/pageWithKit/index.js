@@ -44,8 +44,19 @@ import index_photo3 from "../../assets/photos/index_photo3.jpg";
 
 
 
-function Presentation() {
+function Presentation(props) {
+    const currentSite = props.site;
+    function setContent(currentSiteś) {
+        switch (currentSite){
+            case "index":
+                return(<MainPage />)
 
+            case "faq":
+                return(<DefaultNavbar />)
+        }
+
+    }
+    const component = setContent()
   return (
     <>
       <DefaultNavbar
@@ -109,7 +120,7 @@ function Presentation() {
           boxShadow: ({ boxShadows: { xxl } }) => xxl,
         }}
       >
-        <MainPage />
+          {component}
 
         <MKBox pt={18} pb={6}>
           <Container>

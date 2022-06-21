@@ -75,7 +75,7 @@ const routes = [
     ],
   },
   {
-    name: "sections",
+    name: "Informacje",
     icon: <Icon>help</Icon>,
     collapse: [
           {
@@ -87,29 +87,11 @@ const routes = [
             name: "Usługi",
             href: "#uslugi",
 
-      },
-      {
-        name: "navigation",
-        description: "See all navigations",
-        dropdown: true,
-        collapse: [
-          {
-            name: "navbars",
-            route: "/sections/navigation/navbars",
-
           },
           {
-            name: "nav tabs",
-            route: "/sections/navigation/nav-tabs",
-
+            name: "FAQ",
+            route: "/faq",
           },
-          {
-            name: "pagination",
-            route: "/sections/navigation/pagination",
-
-          },
-        ],
-      },
       {
         name: "input areas",
         description: "See all input areas",
