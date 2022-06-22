@@ -100,7 +100,6 @@ const Partners = (props) => {
             <div>Brak danych wspólników!</div>
             <button onClick={addEmptyPartnerCompanyToForm}>Dodaj wspólnika </button>
         </div>
-        //TODO przemyśleć sytuacje braku zarządu
     }
 
     function handleChangeInput(index, event, list){

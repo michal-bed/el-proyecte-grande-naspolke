@@ -1,7 +1,9 @@
 import {Button,Container, TextField} from "@material-ui/core";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {BoardMember} from "../../../../classes/persons/BoardMember";
 import {BoardOfDirector} from "../../../../classes/persons/BoardOfDirector";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 const MembersCompanyBodies = (props) => {
     const [memberBody, setMemberBody] = useState(props.companyBodies)
@@ -96,6 +98,13 @@ const MembersCompanyBodies = (props) => {
         const bodyList = createMemberBodyList()
         props.changePage(bodyList, props.pageType, -1)
     }
+
+    function handleBodyMemberList(index) {
+        let newMemberList = [...memberBody];
+        newMemberList.splice(index, 1);
+        setMemberBody(newMemberList);
+    }
+
     return <Container>
         {memberBody.map((member, index) => (
             <div key={index}>
@@ -129,6 +138,9 @@ const MembersCompanyBodies = (props) => {
                 />
 
                 {displayMemberFunction(index, member)}
+                <div>
+                    <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={()=>handleBodyMemberList(index)}>Usuń</Button>
+                </div>
             </div>
         ))
         }
