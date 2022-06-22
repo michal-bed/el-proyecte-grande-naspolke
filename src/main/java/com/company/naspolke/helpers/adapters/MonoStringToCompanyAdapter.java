@@ -28,7 +28,7 @@ public class MonoStringToCompanyAdapter {
 
     public Company getCompany(String apiResponse) {
 //        String data = new String(apiResponse);
-        String data = EASYSOLAR;
+        String data = SWLEX;
         String largerSharesInfo = "WIĘKSZĄ LICZBĘ UDZIAŁÓW";
         Configuration conf = Configuration.defaultConfiguration()
                 .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);

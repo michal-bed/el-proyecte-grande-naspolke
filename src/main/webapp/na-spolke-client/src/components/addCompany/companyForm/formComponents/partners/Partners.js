@@ -1,10 +1,12 @@
 import styles from "./Partners.module.css";
-import {Button, TextField} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import {useReducer} from "react";
 import {populateList} from "../../../../../classes/company/Utils";
 import {IndividualPartner, PartnerCompany} from "../../../../../classes/persons/Partners";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import TextField from '@mui/material/TextField';
+
 
 
 const actionType = {
@@ -208,14 +210,19 @@ const Partners = (props) => {
         </div>
     }
 
+    function checkLastNameInput(partner) {
+        return /[^a-zA-Z.*\sążźćółęśńŻŹĆĄŚĘŁÓŃ]/.test(partner.lastNameI) || partner.lastNameI.trim().length < 3 || partner.lastNameI === null;
+    }
+
     return <div>
         {state.partners.individualPartners!==null && state.partners.individualPartners.map((partner, index) => (
             <div key={index}>
                 <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
                 <div>
                     <TextField
-                        error={/[^a-zA-Z.*\sążźćółęśńŻŹĆĄŚĘŁÓŃ]/.test(partner.lastNameI) || partner.lastNameI.trim().length<3 || partner.lastNameI === null}
+                        error={checkLastNameInput(partner)}
                         label="Pierwszy człon nazwiska"
+                        color={/[*]/.test(partner.lastNameI) && "warning"}
                         name="lastNameI"
                         variant="filled"
                         value={partner.lastNameI}
@@ -231,6 +238,7 @@ const Partners = (props) => {
                     />
                     <TextField
                         error={/[^a-zA-Z.*\sążźćółęśńŻŹĆĄŚĘŁÓŃ]/.test(partner.firstName) || partner.firstName.trim().length<3 || partner.firstName === null}
+                        helperText={"nieprawidłowe imię"}
                         label="Pierwsze imię"
                         name="firstName"
                         variant="filled"
@@ -258,11 +266,11 @@ const Partners = (props) => {
             <div key={index}>
                 <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
                 <div>
-                    {console.log(/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(partner.name) || partner.name.trim().length<3 || partner.name === null)}
                     <TextField
                         error={/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(partner.name) || partner.name.trim().length<3 || partner.name === null}
+                        helperText={"nazwa nie może być pusta"}
                         fullWidth
-                        label="Nazwa wspólnika"
+                        label="Nazwa wspólnika *"
                         name="name"
                         variant="filled"
                         value={partner.name}
@@ -281,6 +289,8 @@ const Partners = (props) => {
         <div>Podsumowanie:</div>
         <div>
             <TextField
+                error={parseInt(props.shareCapital) / parseInt(props.shareValue) !== countAllSharesCount()}
+                helperText={"liczba udziałów jest nieprawidłowa"}
                 label="wpisana ilość udziałów"
                 name="allSharesCount"
                 variant="filled"
@@ -288,7 +298,9 @@ const Partners = (props) => {
                 disabled={true}
             />
             <TextField
+                error={props.shareCapital !== countAllSharesValues()}
                 label="łączna wartość udziałów"
+                helperText={"wartosć udziałów jest nieprawidłowa"}
                 name="sharesCapital"
                 variant="filled"
                 value={`${countAllSharesValues()} zł`}

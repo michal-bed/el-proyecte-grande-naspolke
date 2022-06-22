@@ -1,16 +1,19 @@
-import {Button, Container, TextField} from "@material-ui/core";
-import {useState} from "react";
+import {Button,Container, TextField} from "@material-ui/core";
+import {useEffect, useState} from "react";
 import {BoardMember} from "../../../../classes/persons/BoardMember";
 import {BoardOfDirector} from "../../../../classes/persons/BoardOfDirector";
 
 const MembersCompanyBodies = (props) => {
-    const [memberBody, setMemberBody] = useState([
-    ])
+    const [memberBody, setMemberBody] = useState(props.companyBodies)
 
-    if (props.companyBodies===null || props.companyBodies.length === 0) {
+    if (memberBody===null || memberBody.length === 0) {
         return <div>
             <div>Brak Organu!</div>
-            <Button>Dodaj osobę</Button>
+            <Button onClick={addCompanyBodyMember}>Dodaj {props.pageType==="board"? "członka zarządu" : "członka rady nadzorczej"}</Button>
+            <div>
+                <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
+                <Button disabled={props.next} onClick={switchNextPage}>Dalej</Button>
+            </div>
         </div>
     } else if (memberBody.length===0){
        const v = []
@@ -24,8 +27,28 @@ const MembersCompanyBodies = (props) => {
         setMemberBody(v)
     }
 
+    function addCompanyBodyMember(){
+    let blankNewDirectorData = {firstName: "", secondName: null, lastNameI: "", lastNameII: null,};
+        switch (props.pageType){
+            case "board" :{
+                blankNewDirectorData.function = "CZŁONEK ZARZĄDU";
+                let bodyList = [...memberBody]
+                bodyList.push(blankNewDirectorData)
+                setMemberBody(bodyList);
+                break;
+            }
+            case "directors" :{
+                let boardOfDirectors = [...memberBody];
+                boardOfDirectors.push(blankNewDirectorData);
+                setMemberBody(boardOfDirectors);
+                break;
+            }
+        }
+    }
+
+
     function displayMemberFunction(index, member) {
-        if (member.function!==null) {
+        if (member.hasOwnProperty("function")) {
             return   <TextField
                 label="Funkcja"
                 name="function"
@@ -109,7 +132,9 @@ const MembersCompanyBodies = (props) => {
             </div>
         ))
         }
-        <div><Button>Dodaj osobę</Button></div>
+        <div>
+            <Button onClick={addCompanyBodyMember}>Dodaj {props.pageType==="board"? "członka zarządu" : "członka rady nadzorczej"}</Button>
+        </div>
         <div>
             <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
             <Button disabled={props.next} onClick={switchNextPage}>Dalej</Button>
