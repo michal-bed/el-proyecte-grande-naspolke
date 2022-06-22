@@ -1,5 +1,5 @@
 import styles from "./Partners.module.css";
-import {Button, IconButton, TextField} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 import {useReducer} from "react";
 import {populateList} from "../../../../../classes/company/Utils";
 import {IndividualPartner, PartnerCompany} from "../../../../../classes/persons/Partners";
@@ -136,11 +136,7 @@ const Partners = (props) => {
         dispatch(action);
     }
 
-    function removePartnerFromList(index, actionType){
-        dispatch({index: index, actionType: actionType})
-    }
-
-    function countAllSharesCount(){
+       function countAllSharesCount(){
         let sharesCount = 0;
         for (let i = 0; i < state.partners.individualPartners.length; i++) {
             sharesCount += parseInt(state.partners.individualPartners[i].sharesCount);
@@ -169,11 +165,10 @@ const Partners = (props) => {
         const allIndividualSharesValue = countPartnersListSharesValue(newIndividualPartnerList)
         const allCompanySharesValue = countPartnersListSharesValue(newCompanyPartnerList)
         const allSharesCount = countAllSharesCount()
-        const newPartners = {
+        return {
             individualPartners: newIndividualPartnerList, partnerCompanies: newCompanyPartnerList,
             allSharesValue: allIndividualSharesValue + allCompanySharesValue, allSharesCount: allSharesCount
-        }
-        return newPartners;
+        };
     }
 
     function switchPrevPage(){
@@ -186,13 +181,14 @@ const Partners = (props) => {
         props.saveCompanyData(newPartners);
     }
 
-    function duplicatePartner(index, actionType){
+    function handlePartnersList(index, actionType){
         dispatch({index:index, actionType:actionType})
     }
 
     function partnerSharesInfo(index, partner, listType) {
         return <div>
             <TextField
+                error={partner.sharesCount<0 || !Number.isInteger(+partner.sharesCount)}
                 label="ilość udziałów"
                 name="sharesCount"
                 variant="filled"
@@ -201,6 +197,7 @@ const Partners = (props) => {
                 onChange={event => handleChangeInput(index, event, listType)}
             />
             <TextField
+                error={partner.sharesValue<0}
                 label="wartość udziałów (w PLN)"
                 name="sharesValue"
                 variant="filled"
@@ -217,6 +214,7 @@ const Partners = (props) => {
                 <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
                 <div>
                     <TextField
+                        error={/[^a-zA-Z.*\s]/.test(partner.lastNameI) || partner.lastNameI.trim().length<3 || partner.lastNameI === null}
                         label="Pierwszy człon nazwiska"
                         name="lastNameI"
                         variant="filled"
@@ -224,6 +222,7 @@ const Partners = (props) => {
                         onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
                     />
                     <TextField
+                        error={/[^a-zA-Z.*\s]/.test(partner.lastNameII)}
                         label="Drugi człon nazwiska"
                         name="lastNameII"
                         variant="filled"
@@ -231,6 +230,7 @@ const Partners = (props) => {
                         onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
                     />
                     <TextField
+                        error={/[^a-zA-Z.*\s]/.test(partner.firstName) || partner.firstName.trim().length<3 || partner.firstName === null}
                         label="Pierwsze imię"
                         name="firstName"
                         variant="filled"
@@ -238,6 +238,7 @@ const Partners = (props) => {
                         onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
                     />
                     <TextField
+                        error={/[^a-zA-Z.*\s]/.test(partner.secondName)}
                         label="Drugie imię"
                         name="secondName"
                         variant="filled"
@@ -247,8 +248,8 @@ const Partners = (props) => {
                 </div>
                 {partnerSharesInfo(index, partner, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
                 <div>
-                    <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={()=> removePartnerFromList(index, actionType.REMOVE_INDIVIDUAL_PARTNER) }>Usuń</Button>
-                    <Button variant="outlined" startIcon={<PersonAddIcon /> } onClick={()=>duplicatePartner(index, actionType.DUPLICATE_INDIVIDUAL_PARTNER)}>Powiel</Button>
+                    <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={()=> handlePartnersList(index, actionType.REMOVE_INDIVIDUAL_PARTNER) }>Usuń</Button>
+                    <Button variant="outlined" startIcon={<PersonAddIcon /> } onClick={()=>handlePartnersList(index, actionType.DUPLICATE_INDIVIDUAL_PARTNER)}>Powiel</Button>
                 </div>
             </div>
         ))
@@ -257,7 +258,9 @@ const Partners = (props) => {
             <div key={index}>
                 <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
                 <div>
+                    {console.log(/[^a-zA-Z.\s]/.test(partner.name) || partner.name.trim().length<3 || partner.name === null)}
                     <TextField
+                        error={/[^a-zA-Z.\s]/.test(partner.name) || partner.name.trim().length<3 || partner.name === null}
                         fullWidth
                         label="Nazwa wspólnika"
                         name="name"
@@ -269,8 +272,8 @@ const Partners = (props) => {
                 {partnerSharesInfo(index, partner, actionType.DISPLAY_COMPANY_PARTNERS)}
                 <div>
                     <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={()=> {
-                        removePartnerFromList(index, actionType.REMOVE_COMPANY_PARTNER) }} >Usuń</Button>
-                    <Button variant="outlined" startIcon={<PersonAddIcon />} onClick={()=>duplicatePartner(index, actionType.DUPLICATE_COMPANY_PARTNER)}>Powiel</Button>
+                        handlePartnersList(index, actionType.REMOVE_COMPANY_PARTNER) }} >Usuń</Button>
+                    <Button variant="outlined" startIcon={<PersonAddIcon />} onClick={()=>handlePartnersList(index, actionType.DUPLICATE_COMPANY_PARTNER)}>Powiel</Button>
                 </div>
             </div>
         ))
