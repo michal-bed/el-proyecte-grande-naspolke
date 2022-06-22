@@ -20,7 +20,7 @@ export class Company {
         this.companyName = companyData.companyName.includes("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ")? companyData.companyName.split("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ")[0] + " sp. z o.o." : companyData.companyName;
         this.krsNumber = companyData.krsNumber;
         this.nip = companyData.nip;
-        this.regon = companyData.regon;
+        this.regon = companyData.regon.slice(0,9);
         this.shareCapital = companyData.shareCapital;
         this.shareValue = companyData.shareValue;
         this.address = new Address(companyData.address);
