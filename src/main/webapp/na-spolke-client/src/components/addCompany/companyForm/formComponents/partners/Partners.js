@@ -214,7 +214,7 @@ const Partners = (props) => {
                 <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
                 <div>
                     <TextField
-                        error={/[^a-zA-Z.*\s]/.test(partner.lastNameI) || partner.lastNameI.trim().length<3 || partner.lastNameI === null}
+                        error={/[^a-zA-Z.*\sążźćółęśńŻŹĆĄŚĘŁÓŃ]/.test(partner.lastNameI) || partner.lastNameI.trim().length<3 || partner.lastNameI === null}
                         label="Pierwszy człon nazwiska"
                         name="lastNameI"
                         variant="filled"
@@ -230,7 +230,7 @@ const Partners = (props) => {
                         onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
                     />
                     <TextField
-                        error={/[^a-zA-Z.*\s]/.test(partner.firstName) || partner.firstName.trim().length<3 || partner.firstName === null}
+                        error={/[^a-zA-Z.*\sążźćółęśńŻŹĆĄŚĘŁÓŃ]/.test(partner.firstName) || partner.firstName.trim().length<3 || partner.firstName === null}
                         label="Pierwsze imię"
                         name="firstName"
                         variant="filled"
@@ -258,9 +258,9 @@ const Partners = (props) => {
             <div key={index}>
                 <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
                 <div>
-                    {console.log(/[^a-zA-Z.\s]/.test(partner.name) || partner.name.trim().length<3 || partner.name === null)}
+                    {console.log(/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(partner.name) || partner.name.trim().length<3 || partner.name === null)}
                     <TextField
-                        error={/[^a-zA-Z.\s]/.test(partner.name) || partner.name.trim().length<3 || partner.name === null}
+                        error={/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(partner.name) || partner.name.trim().length<3 || partner.name === null}
                         fullWidth
                         label="Nazwa wspólnika"
                         name="name"
