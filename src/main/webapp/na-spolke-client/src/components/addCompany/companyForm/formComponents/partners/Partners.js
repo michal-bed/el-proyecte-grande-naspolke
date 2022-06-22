@@ -2,7 +2,7 @@ import styles from "./Partners.module.css";
 import {Button, IconButton, TextField} from "@material-ui/core";
 import {useReducer} from "react";
 import {populateList} from "../../../../../classes/company/Utils";
-import {PartnerCompany} from "../../../../../classes/persons/Partners";
+import {IndividualPartner, PartnerCompany} from "../../../../../classes/persons/Partners";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
@@ -14,6 +14,8 @@ const actionType = {
     ADD_NEW_INDIVIDUAL_PARTNER : "addNewIndividualPartner",
     REMOVE_INDIVIDUAL_PARTNER: "removeIndividualPartner",
     REMOVE_COMPANY_PARTNER: "removeCompanyPartner",
+    DUPLICATE_INDIVIDUAL_PARTNER: "duplicateIndividualPartner",
+    DUPLICATE_COMPANY_PARTNER: "duplicateCompanyPartner",
 }
 
 function reducer(state, action){
@@ -21,33 +23,56 @@ function reducer(state, action){
         case actionType.DISPLAY_INDIVIDUAL_PARTNERS:{
             let individualPartners = state.partners.individualPartners;
             individualPartners[action.index][action.event.target.name] = action.event.target.value;
-            individualPartners = changeSharesInfo(action, individualPartners)
-            return {...state, individualPartners: individualPartners}
+            individualPartners = changeSharesInfo(action, individualPartners);
+            return {...state, individualPartners: individualPartners};
         }
         case actionType.DISPLAY_COMPANY_PARTNERS:{
             let partnerCompanies = state.partners.partnerCompanies;
             partnerCompanies[action.index][action.event.target.name] = action.event.target.value;
-            partnerCompanies = changeSharesInfo(action, partnerCompanies)
-            return {...state, partnerCompanies: partnerCompanies}
+            partnerCompanies = changeSharesInfo(action, partnerCompanies);
+            return {...state, partnerCompanies: partnerCompanies};
         }
         case actionType.ADD_NEW_COMPANY_PARTNER:{
             let partnerCompanies = state.partners.partnerCompanies;
             partnerCompanies.push(action.newPartner);
-            return {...state, partnerCompanies: partnerCompanies}
+            return {...state, partnerCompanies: partnerCompanies};
         }
         case actionType.ADD_NEW_INDIVIDUAL_PARTNER:{
             let partnerCompanies = state.partners.individualPartners;
             partnerCompanies.push(action.newPartner);
-            return {...state, individualPartners: partnerCompanies}
+            return {...state, individualPartners: partnerCompanies};
         }
         case actionType.REMOVE_INDIVIDUAL_PARTNER:{
             let partnerCompanies = state.partners.individualPartners;
             partnerCompanies.splice(action.index, 1)
-            return {...state, individualPartners: partnerCompanies}
+            return {...state, individualPartners: partnerCompanies};
         }
         case actionType.REMOVE_COMPANY_PARTNER: {
             let partnerCompanies = state.partners.partnerCompanies;
             partnerCompanies.splice(action.index, 1)
+            return {...state, partnerCompanies: partnerCompanies};
+        }
+        case actionType.DUPLICATE_INDIVIDUAL_PARTNER: {
+            let partnerCompanies = state.partners.individualPartners;
+            const newDuplicatePartner = new IndividualPartner({
+                firstName: "",
+                secondName: "",
+                lastNameI: "",
+                lastNameII: "",
+                sharesCount: partnerCompanies[action.index].sharesCount,
+                sharesValue: partnerCompanies[action.index].sharesValue
+            })
+            partnerCompanies.splice(action.index+1,0,newDuplicatePartner);
+            return {...state, individualPartners: partnerCompanies}
+        }
+        case actionType.DUPLICATE_COMPANY_PARTNER: {
+            let partnerCompanies = state.partners.partnerCompanies;
+            const newDuplicatePartner = new PartnerCompany({
+                name: "",
+                sharesCount: partnerCompanies[action.index].sharesCount,
+                sharesValue: partnerCompanies[action.index].sharesValue
+            })
+            partnerCompanies.splice(action.index+1,0,newDuplicatePartner);
             return {...state, partnerCompanies: partnerCompanies}
         }
         default: return {...state}
@@ -161,6 +186,10 @@ const Partners = (props) => {
         props.saveCompanyData(newPartners);
     }
 
+    function duplicatePartner(index, actionType){
+        dispatch({index:index, actionType:actionType})
+    }
+
     function partnerSharesInfo(index, partner, listType) {
         return <div>
             <TextField
@@ -219,7 +248,7 @@ const Partners = (props) => {
                 {partnerSharesInfo(index, partner, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
                 <div>
                     <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={()=> removePartnerFromList(index, actionType.REMOVE_INDIVIDUAL_PARTNER) }>Usuń</Button>
-                    <Button variant="outlined" startIcon={<PersonAddIcon />}>Powiel</Button>
+                    <Button variant="outlined" startIcon={<PersonAddIcon /> } onClick={()=>duplicatePartner(index, actionType.DUPLICATE_INDIVIDUAL_PARTNER)}>Powiel</Button>
                 </div>
             </div>
         ))
@@ -241,7 +270,7 @@ const Partners = (props) => {
                 <div>
                     <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={()=> {
                         removePartnerFromList(index, actionType.REMOVE_COMPANY_PARTNER) }} >Usuń</Button>
-                    <Button variant="outlined" startIcon={<PersonAddIcon />}>Powiel</Button>
+                    <Button variant="outlined" startIcon={<PersonAddIcon />} onClick={()=>duplicatePartner(index, actionType.DUPLICATE_COMPANY_PARTNER)}>Powiel</Button>
                 </div>
             </div>
         ))
