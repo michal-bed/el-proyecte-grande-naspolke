@@ -6,7 +6,7 @@ import {IndividualPartner, PartnerCompany} from "../../../../../classes/persons/
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TextField from '@mui/material/TextField';
-import validatePartners from "./ValidationPartners";
+import validatePartners from "./ValidationCompanyOrgans";
 
 
 

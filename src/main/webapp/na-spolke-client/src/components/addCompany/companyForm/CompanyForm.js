@@ -2,8 +2,8 @@ import styles from "./CompanyForm.module.css";
 import {useEffect, useReducer, useState} from "react";
 import BaseInfo from "./formComponents/baseInfo/BaseInfo";
 import AddressForm from "./formComponents/address/AddressForm";
-import MembersCompanyBodies from "./formComponents/MembersCompanyBodies";
-import Partners from "./formComponents/partners/Partners";
+import MembersCompanyBodies from "./formComponents/companyOrgans/MembersCompanyBodies";
+import Partners from "./formComponents/companyOrgans/Partners";
 
 
 

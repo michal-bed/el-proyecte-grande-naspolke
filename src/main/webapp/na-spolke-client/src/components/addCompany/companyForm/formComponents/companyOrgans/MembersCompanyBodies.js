@@ -1,9 +1,10 @@
 import {Button,Container, TextField} from "@material-ui/core";
 import {useState} from "react";
-import {BoardMember} from "../../../../classes/persons/BoardMember";
-import {BoardOfDirector} from "../../../../classes/persons/BoardOfDirector";
+import {BoardMember} from "../../../../../classes/persons/BoardMember";
+import {BoardOfDirector} from "../../../../../classes/persons/BoardOfDirector";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import validatePartners from "./ValidationCompanyOrgans";
 
 const MembersCompanyBodies = (props) => {
     const [memberBody, setMemberBody] = useState(props.companyBodies)
@@ -56,6 +57,8 @@ const MembersCompanyBodies = (props) => {
                 name="function"
                 variant="filled"
                 defaultValue={member.function}
+                error={validatePartners({function : member.function}).hasOwnProperty("function")}
+                helperText={validatePartners({function : member.function}).function}
                 onChange={event => handleChangeInput(index, event)}
             />
         }
@@ -113,6 +116,8 @@ const MembersCompanyBodies = (props) => {
                     name="lastNameI"
                     variant="filled"
                     defaultValue={member.lastNameI}
+                    error={validatePartners({lastNameI : member.lastNameI}).hasOwnProperty("lastNameI")}
+                    helperText={validatePartners({lastNameI : member.lastNameI}).lastNameI}
                     onChange={event => handleChangeInput(index, event)}
                 />
                 <TextField
@@ -120,6 +125,8 @@ const MembersCompanyBodies = (props) => {
                     name="lastNameII"
                     variant="filled"
                     defaultValue={member.lastNameII}
+                    error={validatePartners({lastNameII : member.lastNameII}).hasOwnProperty("lastNameII")}
+                    helperText={validatePartners({lastNameII : member.lastNameII}).lastNameII}
                     onChange={event => handleChangeInput(index, event)}
                 />
                 <TextField
@@ -127,6 +134,8 @@ const MembersCompanyBodies = (props) => {
                     name="firstName"
                     variant="filled"
                     defaultValue={member.firstName}
+                    error={validatePartners({firstName : member.firstName}).hasOwnProperty("firstName")}
+                    helperText={validatePartners({firstName : member.firstName}).firstName}
                     onChange={event => handleChangeInput(index, event)}
                 />
                 <TextField
@@ -134,6 +143,8 @@ const MembersCompanyBodies = (props) => {
                     name="secondName"
                     variant="filled"
                     defaultValue={member.secondName}
+                    error={validatePartners({secondName : member.secondName}).hasOwnProperty("secondName")}
+                    helperText={validatePartners({v : member.secondName}).secondName}
                     onChange={event => handleChangeInput(index, event)}
                 />
 
