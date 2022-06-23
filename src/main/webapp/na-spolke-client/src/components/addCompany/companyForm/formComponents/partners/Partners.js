@@ -6,6 +6,7 @@ import {IndividualPartner, PartnerCompany} from "../../../../../classes/persons/
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TextField from '@mui/material/TextField';
+import validatePartners from "./ValidationPartners";
 
 
 
@@ -91,7 +92,6 @@ function changeSharesInfo(action, value){
 }
 
 const Partners = (props) => {
-
     const [state, dispatch] = useReducer(reducer, { partners: props.partners })
 
     let counter = 1;
@@ -189,29 +189,28 @@ const Partners = (props) => {
     function partnerSharesInfo(index, partner, listType) {
         return <div>
             <TextField
-                error={partner.sharesCount<0 || !Number.isInteger(+partner.sharesCount)}
                 label="ilość udziałów"
                 name="sharesCount"
                 variant="filled"
                 type="number"
                 value={partner.sharesCount}
+                error={validatePartners({sharesCount : partner.sharesCount}).hasOwnProperty("sharesCount")}
+                helperText={validatePartners({sharesCount : partner.sharesCount}).sharesCount}
                 onChange={event => handleChangeInput(index, event, listType)}
             />
             <TextField
-                error={partner.sharesValue<0}
                 label="wartość udziałów (w PLN)"
                 name="sharesValue"
                 variant="filled"
                 type="number"
                 value={partner.sharesValue}
+                error={validatePartners({sharesValue : partner.sharesValue}).hasOwnProperty("sharesValue")}
+                helperText={validatePartners({sharesValue : partner.sharesValue}).sharesValue}
                 onChange={event => handleChangeInput(index, event, listType)}
             />
         </div>
     }
 
-    function checkLastNameInput(partner) {
-        return /[^a-zA-Z.*\sążźćółęśńŻŹĆĄŚĘŁÓŃ]/.test(partner.lastNameI) || partner.lastNameI.trim().length < 3 || partner.lastNameI === null;
-    }
 
     return <div>
         {state.partners.individualPartners!==null && state.partners.individualPartners.map((partner, index) => (
@@ -219,37 +218,39 @@ const Partners = (props) => {
                 <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
                 <div>
                     <TextField
-                        error={checkLastNameInput(partner)}
                         label="Pierwszy człon nazwiska"
-                        color={/[*]/.test(partner.lastNameI) && "warning"}
                         name="lastNameI"
                         variant="filled"
                         value={partner.lastNameI}
+                        error={validatePartners({lastNameI: partner.lastNameI}).hasOwnProperty("lastNameI")}
+                        helperText={validatePartners({lastNameI: partner.lastNameI}).lastNameI}
                         onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
                     />
                     <TextField
-                        error={/[^a-zA-Z.*\s]/.test(partner.lastNameII)}
                         label="Drugi człon nazwiska"
                         name="lastNameII"
                         variant="filled"
                         value={partner.lastNameII}
+                        error={validatePartners({lastNameII: partner.lastNameII}).hasOwnProperty("lastNameII")}
+                        helperText={validatePartners({lastNameII: partner.lastNameII}).lastNameII}
                         onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
                     />
                     <TextField
-                        error={/[^a-zA-Z.*\sążźćółęśńŻŹĆĄŚĘŁÓŃ]/.test(partner.firstName) || partner.firstName.trim().length<3 || partner.firstName === null}
-                        helperText={"nieprawidłowe imię"}
                         label="Pierwsze imię"
                         name="firstName"
                         variant="filled"
                         value={partner.firstName}
+                        error={validatePartners({firstName : partner.firstName}).hasOwnProperty("firstName")}
+                        helperText={validatePartners({firstName : partner.firstName}).firstName}
                         onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
                     />
                     <TextField
-                        error={/[^a-zA-Z.*\s]/.test(partner.secondName)}
                         label="Drugie imię"
                         name="secondName"
                         variant="filled"
                         value={partner.secondName}
+                        error={validatePartners({secondName : partner.secondName}).hasOwnProperty("secondName")}
+                        helperText={validatePartners({secondName : partner.secondName}).secondName}
                         onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
                     />
                 </div>
@@ -266,13 +267,13 @@ const Partners = (props) => {
                 <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
                 <div>
                     <TextField
-                        error={/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(partner.name) || partner.name.trim().length<3 || partner.name === null}
-                        helperText={"nazwa nie może być pusta"}
                         fullWidth
                         label="Nazwa wspólnika *"
                         name="name"
                         variant="filled"
                         value={partner.name}
+                        error={validatePartners({name : partner.name}).hasOwnProperty("name")}
+                        helperText={validatePartners({name : partner.name}).name}
                         onChange={event => handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
                     />
                 </div>

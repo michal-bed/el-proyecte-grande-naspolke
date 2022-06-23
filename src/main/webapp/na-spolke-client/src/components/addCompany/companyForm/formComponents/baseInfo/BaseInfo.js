@@ -1,7 +1,7 @@
 import styles from "./BaseInfo.module.css";
 import {Button, TextField} from "@material-ui/core";
 import {useState} from "react";
-import validateBaseInfo from "./validateBaseInfo"
+import validateBaseInfo from "./ValidateBaseInfo"
 
 const inputType = {
     COMPANY_NAME : "companyName",

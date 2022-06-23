@@ -6,8 +6,9 @@ export default function validateBaseInfo(values){
         errors.companyName = "Wpisz pełną nazwę spółki";
     } else if (/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(values.companyName)){
         errors.companyName = "Nazwa zawiera niedozwolone znaki";
+    } else if (values.companyName.trim().length < 9) {
+        errors.companyName = "Nazwa powinna składać się z conajmniej 2 liter"
     }
-
 
     //nip validation
 
