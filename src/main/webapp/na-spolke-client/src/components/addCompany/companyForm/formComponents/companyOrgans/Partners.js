@@ -82,6 +82,7 @@ function reducer(state, action){
     }
 }
 
+
 function changeSharesInfo(action, value){
     if (action.event.target.name==="sharesCount"){
         value[action.index]["sharesValue"] = action.event.target.value * action.shareValue
@@ -100,6 +101,22 @@ const Partners = (props) => {
             <div>Brak danych wspólników!</div>
             <button onClick={addEmptyPartnerCompanyToForm}>Dodaj wspólnika </button>
         </div>
+    }
+
+    function checkForErrors(){
+        for (let i = 0; i < state.partners.individualPartners.length; i++) {
+            let errors = validatePartners(state.partners.individualPartners[i])
+            if (Object.keys(errors).length > 2){
+                return true;
+            }
+        }
+        for (let i = 0; i < state.partners.partnerCompanies.length; i++) {
+            let errors = validatePartners(state.partners.partnerCompanies[i])
+            if (Object.keys(errors).length > 3){
+                return true;
+            }
+        }
+        return false;
     }
 
     function handleChangeInput(index, event, list){
@@ -174,12 +191,14 @@ const Partners = (props) => {
 
     function switchPrevPage(){
         const newPartners = setNewPartnersData();
-        props.changePage(newPartners, props.pageType, -1)
+        const hasErrors = checkForErrors();
+        props.changePage(newPartners, props.pageType, -1, hasErrors)
     }
 
     function saveCompanyData(){
         const newPartners = setNewPartnersData();
-        props.saveCompanyData(newPartners);
+        const hasErrors = checkForErrors();
+        props.saveCompanyData(newPartners, hasErrors);
     }
 
     function handlePartnersList(index, actionType){

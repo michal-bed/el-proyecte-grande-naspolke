@@ -26,7 +26,7 @@ const CompanyForm = ({company, saveData})=>{
 
     useEffect(()=>{
         setPartFormToDisplay(PageDisplay)
-    }, [page])
+    }, [page, componentError])
 
 
     const changePage = (companyData, pageType, newPage, containError) => {
@@ -59,8 +59,8 @@ const CompanyForm = ({company, saveData})=>{
                 break
             }
             case "partners": {
-                setComponentErrors(containError);
                 componentErrors.partners = containError;
+                setComponentErrors(containError);
                 setPartnersList(componentErrors);
                 break
             }
@@ -70,12 +70,18 @@ const CompanyForm = ({company, saveData})=>{
                                                                          prev={page === 0} next={page === FormTitles.length - 1}/>)
 
     function checkIfComponentsIncludesErrors(){
-        const a = componentError;
         return Object.values(componentError).includes(true);
     }
 
-    function checkIfCompanyDataCanBeSaved(data){
+    function handleSaveDataFromPartnerForm(data, hasError){
+        let componentErrors = {...componentError};
+        componentErrors.partners = hasError;
+        setComponentErrors(componentErrors);
         setPartnersList(data);
+        checkIfCompanyDataCanBeSaved()
+    }
+
+    function checkIfCompanyDataCanBeSaved(){
         if (!checkIfComponentsIncludesErrors()) {
         saveCompanyData()
         } else {
@@ -116,7 +122,7 @@ const CompanyForm = ({company, saveData})=>{
                                                  pageType={"directors"} prev={page === 0} next={page === FormTitles.length - 1}/>;
             case 4: return <Partners partners={partnersList} changePage={changePage}
                                      bodyType={"partners"} prev={page === 0} next={page === FormTitles.length - 1} shareCapital={company.shareCapital}
-                                     shareValue={company.shareValue} sharesCount={company.sharesCount} saveCompanyData={checkIfCompanyDataCanBeSaved}/>;
+                                     shareValue={company.shareValue} sharesCount={company.sharesCount} saveCompanyData={handleSaveDataFromPartnerForm}/>;
         }
     }
 
