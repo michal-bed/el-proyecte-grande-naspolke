@@ -91,15 +91,27 @@ const MembersCompanyBodies = (props) => {
         }
     }
 
+    function checkForErrors(){
+        for (let i = 0; i < memberBody.length; i++) {
+            const errors = validatePartners(memberBody[i]);
+            let a = Object.keys(errors).length;
+            if(Object.keys(errors).length > 3 && props.pageType==="board" || Object.keys(errors).length > 4 && props.pageType==="directors")
+                return true
+        }
+        return false;
+    }
+
     function switchNextPage(){
-        const bodyList = createMemberBodyList()
-        props.changePage(bodyList, props.pageType, 1)
+        const bodyList = createMemberBodyList();
+        const containsError = checkForErrors();
+        props.changePage(bodyList, props.pageType, 1, containsError)
 
     }
 
     function switchPrevPage(){
         const bodyList = createMemberBodyList()
-        props.changePage(bodyList, props.pageType, -1)
+        const containsError = checkForErrors();
+        props.changePage(bodyList, props.pageType, -1, containsError)
     }
 
     function handleBodyMemberList(index) {
