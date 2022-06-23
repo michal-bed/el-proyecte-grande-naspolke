@@ -1,9 +1,10 @@
 import styles from "./CompanyForm.module.css";
-import {useEffect, useReducer, useState} from "react";
+import {useEffect, useState} from "react";
 import BaseInfo from "./formComponents/baseInfo/BaseInfo";
 import AddressForm from "./formComponents/address/AddressForm";
 import MembersCompanyBodies from "./formComponents/companyOrgans/MembersCompanyBodies";
 import Partners from "./formComponents/companyOrgans/Partners";
+import {ModalErrorFormComponent} from "./ModalErrorComponent";
 
 
 
@@ -19,6 +20,8 @@ const CompanyForm = ({company, saveData})=>{
     const [boardMembers, setBoardMembers] = useState(company===null ? null: company.boardMembers)
     const [boardOfDirectors, setBoardOfDirectors] = useState(company===null ? null: company.boardOfDirectors)
     const [partnersList, setPartnersList] = useState(company===null ? null: company.partners)
+    const [componentError, setComponentErrors] = useState({})
+    const [modalError, setModalError] = useState(<div/>)
     const FormTitles = ["Dane Podstawowe", "Adres", "Zarząd", "Rada Nadzorcza", "Wspólnicy"]
 
     useEffect(()=>{
@@ -26,21 +29,64 @@ const CompanyForm = ({company, saveData})=>{
     }, [page])
 
 
-    const changePage = (companyData, pageType, newPage) => {
+    const changePage = (companyData, pageType, newPage, containError) => {
         setPartFormToDisplay(<div/>)
+        let componentErrors = {...componentError}
         setPage((currPage) => currPage + newPage)
         switch (pageType){
-            case "baseInfo": setBaseInfo(companyData); break
-            case "address": setCompanyAddress(companyData); break
-            case "board": setBoardMembers(companyData); break
-            case "directors": setBoardOfDirectors(companyData); break
-            case "partners": setPartnersList(companyData); break
+            case "baseInfo": {
+                setBaseInfo(companyData);
+                componentErrors.baseInfo = containError;
+                setComponentErrors(componentErrors);
+                break
+            }
+            case "address": {
+                setCompanyAddress(companyData);
+                componentError.address = containError;
+                setComponentErrors(componentErrors);
+                break
+            }
+            case "board": {
+                setBoardMembers(companyData);
+                componentError.board = containError;
+                setComponentErrors(componentErrors);
+                break
+            }
+            case "directors": {
+                setBoardOfDirectors(companyData);
+                componentError.directors = containError;
+                setComponentErrors(componentErrors);
+                break
+            }
+            case "partners": {
+                componentError.partners = containError;
+                setComponentErrors(containError);
+                setPartnersList(componentErrors);
+                break
+            }
         }
     }
     const [partFormToDisplay, setPartFormToDisplay] = useState(<BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo}
                                                                          prev={page === 0} next={page === FormTitles.length - 1}/>)
 
-    function saveCompanyData(data){
+    function checkIfComponentsIncludesErrors(){
+        return Object.values(componentError).includes(true);
+    }
+
+    function checkIfCompanyDataCanBeSaved(data){
+        setPartnersList(data);
+        if (!checkIfComponentsIncludesErrors()) {
+        saveCompanyData()
+        } else {
+            setModalError(<ModalErrorFormComponent hide={closeErrorModal} saveData={saveCompanyData}/>)
+        }
+    }
+
+    function closeErrorModal(){
+        setModalError(<div/>)
+    }
+
+    function saveCompanyData(){
         const companyToSave = {
             companyName: baseInfo.companyName,
             krsNumber: baseInfo.krsNumber,
@@ -50,10 +96,11 @@ const CompanyForm = ({company, saveData})=>{
             address: companyAddress,
             boardMembers: boardMembers,
             boardOfDirectors: boardOfDirectors,
-            partners: data,
+            partners: partnersList,
             manySharesAllowed: company.manySharesAllowed
         }
-        saveData(companyToSave);
+            saveData(companyToSave);
+            setModalError(<div/>);
     }
 
     const PageDisplay = ()=> {
@@ -68,7 +115,7 @@ const CompanyForm = ({company, saveData})=>{
                                                  pageType={"directors"} prev={page === 0} next={page === FormTitles.length - 1}/>;
             case 4: return <Partners partners={partnersList} changePage={changePage}
                                      bodyType={"partners"} prev={page === 0} next={page === FormTitles.length - 1} shareCapital={company.shareCapital}
-                                     shareValue={company.shareValue} sharesCount={company.sharesCount} saveCompanyData={saveCompanyData}/>;
+                                     shareValue={company.shareValue} sharesCount={company.sharesCount} saveCompanyData={checkIfCompanyDataCanBeSaved}/>;
         }
     }
 
@@ -81,7 +128,7 @@ const CompanyForm = ({company, saveData})=>{
             <div className={styles["header"]}>
                 <h1>{FormTitles[page]}</h1>
             </div>
-            <div className={styles["body"]}>{partFormToDisplay}</div>
+            <div className={styles["body"]}>{partFormToDisplay} {modalError}</div>
             <div className={styles["footer"]}></div>
             <div className={styles["form-nav-bar"]}>
             </div>

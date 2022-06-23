@@ -40,7 +40,7 @@ export default function validatePartners(values){
     //share count validation
     if (!values.sharesCount) {
         errors.sharesCount = "Podaj ilość udziałów";
-    } else if (/[^0-9]/.test(values.sharesCount)) {
+    } else if (/[^0-9,]/.test(values.sharesCount)) {
         errors.sharesCount = "Niedozwolone znaki";
     } else if (parseInt(values.sharesCount) <= 0) {
         errors.sharesCount = "ilość udziałów powinna być dodatnia"

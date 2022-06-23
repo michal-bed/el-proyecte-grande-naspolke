@@ -1,7 +1,8 @@
 import {Button, TextField} from "@material-ui/core";
-import {useState} from "react";
+import {useState, useReducer} from "react";
 import {Address} from "../../../../../classes/company/Address";
 import validateAddress from "./ValidationAddress"
+
 
 
 
@@ -16,13 +17,13 @@ const AddressForm = (props) => {
     function switchNextPage(){
         const address = new Address({streetName:streetNameInput, streetNumber: streetNumberInput, localNumber: localNumberInput,
             city: cityInput, zipCode: zipCodeInput, postOffice: postOfficeInput})
-        props.changePage(address, props.pageType, 1)
+        props.changePage(address, props.pageType, 1, checkForErrors())
     }
 
     function switchPrevPage(){
         const address = new Address({streetName:streetNameInput, streetNumber: streetNumberInput, localNumber: localNumberInput,
             city: cityInput, zipCode: zipCodeInput, postOffice: postOfficeInput})
-        props.changePage(address, props.pageType, -1)
+        props.changePage(address, props.pageType, -1, checkForErrors())
     }
 
     function handleChangeInput(e){
@@ -34,6 +35,16 @@ const AddressForm = (props) => {
             case "zipCode":setZipCodeInput(e.target.value); break
             case "postOffice":setPostOfficeInput(e.target.value); break
         }
+    }
+
+    function checkForErrors(){
+        let values = [streetNameInput, streetNumberInput, localNumberInput, cityInput, zipCodeInput, postOfficeInput]
+        for (let i = 0; i < values; i++) {
+            if (validateAddress({streetNameInput}).hasOwnProperty("streetNameInput")){
+                return true
+            }
+        }
+        return false;
     }
 
     return <div>

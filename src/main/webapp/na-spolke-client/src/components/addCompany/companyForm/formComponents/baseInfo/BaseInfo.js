@@ -18,9 +18,10 @@ const BaseInfo = (props) => {
 
     function checkForErrors() {
         const dataToCheck = [companyName, nipInput, regonInput, shareCapitalInput]
-        for (let i = 0; i < dataToCheck; i++) {
+        for (let i = 0; i < dataToCheck.length; i++) {
             const errors = validateBaseInfo(dataToCheck[i])
-            if (errors.length > 0){
+            console.log(Object.keys(errors).length);
+            if (Object.keys(errors).length > 0){
                 return true
             }
         }
@@ -34,7 +35,7 @@ const BaseInfo = (props) => {
             regon: regonInput,
             shareCapital: shareCapitalInput}
         const isError = checkForErrors()
-        props.changePage(baseInfo, props.pageType, 1)
+        props.changePage(baseInfo, props.pageType, 1, isError)
     }
 
     function handleChangeInput(e){

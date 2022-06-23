@@ -1,6 +1,6 @@
 export default function ValidationKrsUserInput(values) {
     let errors = {};
-    console.log(values)
+
     //company name validation
     if (!values) {
         errors.krsNumber = "Wpisz numer KRS spółki którą chcesz dodać";

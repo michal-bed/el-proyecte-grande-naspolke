@@ -38,12 +38,12 @@ const AddCompany = ()=>{
         Axios.post("http://localhost:8080/add-company/",data)
             .then(response=> {
                 if (response.status===201) {
-                    alert(`Spółka ${response.data} została pomyślnie zapisana`)
+                    alert(`Spółka ${response.data} została pomyślnie dodana`)
                 }
             })
             .catch(error=>{
                 console.log(error)
-                alert(`Wystąpił błąd.. spółka nie zapisana. Spróbuj ponownie później.`)
+                alert(`Wystąpił błąd.. spółka nie została dodana. Spróbuj ponownie później.`)
             })
     }
 
