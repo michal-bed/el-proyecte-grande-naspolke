@@ -1,7 +1,7 @@
 import KrsUserInput from "./krsInput/KrsUserInput";
 import CompanyForm from "./companyForm/CompanyForm";
 import {useState} from "react";
-import {ModalErrorMessage} from "./companyForm/formComponents/ModalFormError";
+import {ModalErrorMessage} from "./companyForm/ModalFormKrsInputError";
 import {Company} from "../../classes/company/Company";
 import Axios from "axios";
 
