@@ -1,6 +1,7 @@
 export default function validateBaseInfo(values){
     let errors = {};
 
+    console.log(values.companyName)
     //company name validation
     if (!values.companyName){
         errors.companyName = "Wpisz pełną nazwę spółki";

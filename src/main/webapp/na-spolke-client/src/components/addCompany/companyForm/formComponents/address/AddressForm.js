@@ -17,13 +17,15 @@ const AddressForm = (props) => {
     function switchNextPage(){
         const address = new Address({streetName:streetNameInput, streetNumber: streetNumberInput, localNumber: localNumberInput,
             city: cityInput, zipCode: zipCodeInput, postOffice: postOfficeInput})
-        props.changePage(address, props.pageType, 1, checkForErrors())
+        const hasErrors = checkForErrors()
+        props.changePage(address, props.pageType, 1, checkForErrors(), hasErrors)
     }
 
     function switchPrevPage(){
         const address = new Address({streetName:streetNameInput, streetNumber: streetNumberInput, localNumber: localNumberInput,
             city: cityInput, zipCode: zipCodeInput, postOffice: postOfficeInput})
-        props.changePage(address, props.pageType, -1, checkForErrors())
+        const hasErrors = checkForErrors()
+        props.changePage(address, props.pageType, -1, hasErrors)
     }
 
     function handleChangeInput(e){
@@ -38,9 +40,11 @@ const AddressForm = (props) => {
     }
 
     function checkForErrors(){
-        let values = [streetNameInput, streetNumberInput, localNumberInput, cityInput, zipCodeInput, postOfficeInput]
-        for (let i = 0; i < values; i++) {
-            if (validateAddress({streetNameInput}).hasOwnProperty("streetNameInput")){
+        let dataToCheck = [{"streetNameInput": streetNameInput}, {"streetNumberInput": streetNumberInput}, {"localNumberInput": localNumberInput}, {"cityInput": cityInput}, {"zipCodeInput": zipCodeInput}, {"postOfficeInput": postOfficeInput}]
+        let keysToCheck = ["streetNameInput", "streetNumberInput", "localNumberInput", "cityInput", "zipCodeInput", "postOfficeInput"]
+        for (let i = 0; i < dataToCheck.length; i++) {
+            const errors = validateAddress(dataToCheck[i])
+            if (Object.keys(errors).includes(keysToCheck[i])) {
                 return true
             }
         }

@@ -42,25 +42,25 @@ const CompanyForm = ({company, saveData})=>{
             }
             case "address": {
                 setCompanyAddress(companyData);
-                componentError.address = containError;
+                componentErrors.address = containError;
                 setComponentErrors(componentErrors);
                 break
             }
             case "board": {
                 setBoardMembers(companyData);
-                componentError.board = containError;
+                componentErrors.board = containError;
                 setComponentErrors(componentErrors);
                 break
             }
             case "directors": {
                 setBoardOfDirectors(companyData);
-                componentError.directors = containError;
+                componentErrors.directors = containError;
                 setComponentErrors(componentErrors);
                 break
             }
             case "partners": {
-                componentError.partners = containError;
                 setComponentErrors(containError);
+                componentErrors.partners = containError;
                 setPartnersList(componentErrors);
                 break
             }
@@ -70,6 +70,7 @@ const CompanyForm = ({company, saveData})=>{
                                                                          prev={page === 0} next={page === FormTitles.length - 1}/>)
 
     function checkIfComponentsIncludesErrors(){
+        const a = componentError;
         return Object.values(componentError).includes(true);
     }
 

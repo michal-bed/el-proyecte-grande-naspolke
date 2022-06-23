@@ -17,11 +17,11 @@ const BaseInfo = (props) => {
     const [shareCapitalInput, setShareCapitalInput] = useState(props.baseInfo === null ? "" : props.baseInfo.shareCapital)
 
     function checkForErrors() {
-        const dataToCheck = [companyName, nipInput, regonInput, shareCapitalInput]
+        const dataToCheck = [{"companyName": companyName}, {"nipInput": nipInput}, {"regonInput": regonInput}, {"shareCapitalInput": shareCapitalInput}]
+        const keysToCheck = ["companyName", "nipInput", "regonInput", "shareCapitalInput"]
         for (let i = 0; i < dataToCheck.length; i++) {
             const errors = validateBaseInfo(dataToCheck[i])
-            console.log(Object.keys(errors).length);
-            if (Object.keys(errors).length > 0){
+            if (Object.keys(errors).includes(keysToCheck[i])) {
                 return true
             }
         }
