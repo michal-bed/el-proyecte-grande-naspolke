@@ -1,6 +1,7 @@
 import {Button, TextField} from "@material-ui/core";
 import {useState} from "react";
-import {Address} from "../../../../classes/company/Address";
+import {Address} from "../../../../../classes/company/Address";
+import validateAddress from "./ValidationAddress"
 
 
 
@@ -41,6 +42,8 @@ const AddressForm = (props) => {
             name="streetName"
             variant="filled"
             defaultValue={streetNameInput}
+            error={validateAddress({streetNameInput}).hasOwnProperty("streetNameInput")}
+            helperText={validateAddress({streetNameInput}).streetNameInput}
             onChange={event => handleChangeInput(event)}
 
         />
@@ -49,6 +52,8 @@ const AddressForm = (props) => {
             name="streetNumber"
             variant="filled"
             defaultValue={streetNumberInput}
+            error={validateAddress({streetNumberInput}).hasOwnProperty("streetNumberInput")}
+            helperText={validateAddress({streetNumberInput}).streetNumberInput}
             onChange={event => handleChangeInput(event)}
         />
         <TextField
@@ -56,6 +61,8 @@ const AddressForm = (props) => {
             name="localNumber"
             variant="filled"
             defaultValue={localNumberInput}
+            error={validateAddress({localNumberInput}).hasOwnProperty("localNumberInput")}
+            helperText={validateAddress({localNumberInput}).localNumberInput}
             onChange={event => handleChangeInput(event)}
         />
         <TextField
@@ -63,6 +70,8 @@ const AddressForm = (props) => {
             name="city"
             variant="filled"
             defaultValue={cityInput}
+            error={validateAddress({cityInput}).hasOwnProperty("cityInput")}
+            helperText={validateAddress({cityInput}).cityInput}
             onChange={event => handleChangeInput(event)}
         />
         <TextField
@@ -70,6 +79,9 @@ const AddressForm = (props) => {
             name="zipCode"
             variant="filled"
             defaultValue={zipCodeInput}
+            placeholder={"xx-xxx"}
+            error={validateAddress({zipCodeInput}).hasOwnProperty("zipCodeInput")}
+            helperText={validateAddress({zipCodeInput}).zipCodeInput}
             onChange={event => handleChangeInput(event)}
         />
         <TextField
@@ -77,6 +89,8 @@ const AddressForm = (props) => {
             name="postOffice"
             variant="filled"
             defaultValue={postOfficeInput}
+            error={validateAddress({postOfficeInput}).hasOwnProperty("postOfficeInput")}
+            helperText={validateAddress({postOfficeInput}).postOfficeInput}
             onChange={event => handleChangeInput(event)}
         />
         <div>
