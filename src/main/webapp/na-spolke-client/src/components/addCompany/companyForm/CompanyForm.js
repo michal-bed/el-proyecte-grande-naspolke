@@ -67,7 +67,7 @@ const CompanyForm = ({company, saveData})=>{
         }
     }
     const [partFormToDisplay, setPartFormToDisplay] = useState(<BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo}
-                                                                         prev={page === 0} next={page === FormTitles.length - 1}/>)
+                                                                         address={companyAddress} prev={page === 0} next={page === FormTitles.length - 1}/>)
 
     function checkIfComponentsIncludesErrors(){
         return Object.values(componentError).includes(true);
@@ -112,7 +112,7 @@ const CompanyForm = ({company, saveData})=>{
 
     const PageDisplay = ()=> {
         switch (page){
-            case 0: return <BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo}
+            case 0: return <BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo} address={companyAddress}
                                       prev={page === 0} next={page === FormTitles.length - 1}/>;
             case 1: return <AddressForm address={companyAddress} changePage={changePage}
                                         pageType={"address"} prev={page === 0} next={page === FormTitles.length - 1}/>;

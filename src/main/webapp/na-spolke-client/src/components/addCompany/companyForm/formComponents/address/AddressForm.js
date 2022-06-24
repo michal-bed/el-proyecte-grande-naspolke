@@ -2,11 +2,13 @@ import {Button, TextField} from "@material-ui/core";
 import {useState, useReducer} from "react";
 import {Address} from "../../../../../classes/company/Address";
 import validateAddress from "./ValidationAddress"
+import {Box, Card, CardContent, Grid} from "@mui/material";
 
 
 
 
 const AddressForm = (props) => {
+    console.log(props.address)
     const [streetNameInput, setStreetNameInput] = useState(props.address === null ? "" : props.address.streetName)
     const [streetNumberInput, setStreetNumberInput] = useState(props.address === null ? "" : props.address.streetNumber)
     const [localNumberInput, setLocalNumberInput] = useState(props.address === null ? "" : props.address.localNumber)
@@ -45,68 +47,79 @@ const AddressForm = (props) => {
         return false;
     }
 
-    return <div>
-        <TextField
-            label="ulica"
-            name="streetName"
-            variant="filled"
-            defaultValue={streetNameInput}
-            error={validateAddress({streetNameInput}).hasOwnProperty("streetNameInput")}
-            helperText={validateAddress({streetNameInput}).streetNameInput}
-            onChange={event => handleChangeInput(event)}
-
-        />
-        <TextField
-            label="nr"
-            name="streetNumber"
-            variant="filled"
-            defaultValue={streetNumberInput}
-            error={validateAddress({streetNumberInput}).hasOwnProperty("streetNumberInput")}
-            helperText={validateAddress({streetNumberInput}).streetNumberInput}
-            onChange={event => handleChangeInput(event)}
-        />
-        <TextField
-            label="nr lokalu"
-            name="localNumber"
-            variant="filled"
-            defaultValue={localNumberInput}
-            error={validateAddress({localNumberInput}).hasOwnProperty("localNumberInput")}
-            helperText={validateAddress({localNumberInput}).localNumberInput}
-            onChange={event => handleChangeInput(event)}
-        />
-        <TextField
-            label="miasto"
-            name="city"
-            variant="filled"
-            defaultValue={cityInput}
-            error={validateAddress({cityInput}).hasOwnProperty("cityInput")}
-            helperText={validateAddress({cityInput}).cityInput}
-            onChange={event => handleChangeInput(event)}
-        />
-        <TextField
-            label="kod pocztowy"
-            name="zipCode"
-            variant="filled"
-            defaultValue={zipCodeInput}
-            placeholder={"xx-xxx"}
-            error={validateAddress({zipCodeInput}).hasOwnProperty("zipCodeInput")}
-            helperText={validateAddress({zipCodeInput}).zipCodeInput}
-            onChange={event => handleChangeInput(event)}
-        />
-        <TextField
-            label="poczta"
-            name="postOffice"
-            variant="filled"
-            defaultValue={postOfficeInput}
-            error={validateAddress({postOfficeInput}).hasOwnProperty("postOfficeInput")}
-            helperText={validateAddress({postOfficeInput}).postOfficeInput}
-            onChange={event => handleChangeInput(event)}
-        />
+    return <Card sx={{minWidth: 275, width: '95%', height: '100%', margin: "auto" }}>
+        <CardContent>
+        <Grid sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 1,
+            gridTemplateRows: 'auto',
+            gridTemplateAreas: `"header header header header"
+        "main main2 main4 main4"
+        "main3 main3 . footer"`,
+        }}>
+            <Box sx={{gridArea: 'header'}}>
+                <TextField
+                    label="ulica"
+                    name="streetName"
+                    variant="filled"
+                    defaultValue={streetNameInput}
+                    fullWidth="true"
+                    error={validateAddress({streetNameInput}).hasOwnProperty("streetNameInput")}
+                    helperText={validateAddress({streetNameInput}).streetNameInput}
+                    onChange={event => handleChangeInput(event)}
+                /></Box>
+            <Box sx={{gridArea: 'main'}}><TextField
+                label="nr"
+                name="streetNumber"
+                variant="filled"
+                defaultValue={streetNumberInput}
+                error={validateAddress({streetNumberInput}).hasOwnProperty("streetNumberInput")}
+                helperText={validateAddress({streetNumberInput}).streetNumberInput}
+                onChange={event => handleChangeInput(event)}
+            /></Box>
+            <Box sx={{gridArea: 'main2'}}><TextField
+                label="nr lokalu"
+                name="localNumber"
+                variant="filled"
+                defaultValue={localNumberInput}
+                error={validateAddress({localNumberInput}).hasOwnProperty("localNumberInput")}
+                helperText={validateAddress({localNumberInput}).localNumberInput}
+                onChange={event => handleChangeInput(event)}
+            /></Box>
+            <Box sx={{gridArea: 'main3'}}><TextField
+                label="miasto"
+                name="city"
+                variant="filled"
+                defaultValue={cityInput}
+                error={validateAddress({cityInput}).hasOwnProperty("cityInput")}
+                helperText={validateAddress({cityInput}).cityInput}
+                onChange={event => handleChangeInput(event)}
+            /></Box>
+            <Box sx={{gridArea: 'main4'}}><TextField
+                label="kod pocztowy"
+                name="zipCode"
+                variant="filled"
+                defaultValue={zipCodeInput}
+                placeholder={"xx-xxx"}
+                error={validateAddress({zipCodeInput}).hasOwnProperty("zipCodeInput")}
+                helperText={validateAddress({zipCodeInput}).zipCodeInput}
+                onChange={event => handleChangeInput(event)}
+            /></Box>
+            <Box sx={{gridArea: 'footer'}}><TextField
+                label="poczta"
+                name="postOffice"
+                variant="filled"
+                defaultValue={postOfficeInput}
+                error={validateAddress({postOfficeInput}).hasOwnProperty("postOfficeInput")}
+                helperText={validateAddress({postOfficeInput}).postOfficeInput}
+                onChange={event => handleChangeInput(event)}
+            /></Box></Grid>
         <div>
-            <Button disabled={props.prev} onClick={()=>changePageHandler(-1)}>Wstecz</Button>
-            <Button disabled={props.next} onClick={()=>changePageHandler(1)}>Dalej</Button>
+            <Button disabled={props.prev} onClick={() => changePageHandler(-1)}>Wstecz</Button>
+            <Button disabled={props.next} onClick={() => changePageHandler(1)}>Dalej</Button>
         </div>
-    </div>
+    </CardContent></Card>
 }
 
 export default AddressForm;
