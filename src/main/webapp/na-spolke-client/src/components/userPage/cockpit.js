@@ -6,10 +6,11 @@ import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import {Box} from "@mui/material";
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Routes, Route, Link, matchPath, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, matchPath, useLocation} from 'react-router-dom';
 
 import MainCockpitPage from "./content/mainCockpitPage";
 import TestPage from "./content/testPage";
+import CompanyInfo from "./content/companyContent/CompanyInfo"
 
 
 const styles = theme => ({
@@ -38,8 +39,18 @@ function Cockpit ({classes}) {
 
 
     function PopulateNavbar () {
-        if (!this.authenticated()) {
-
+        const location = useLocation();
+        const match = matchPath(location.pathname, "/userpanel")
+        if (match == null) {
+            return (
+                <SubMenu title="komponent 1" icon={<DocumentScannerIcon/>}>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        zagnieżdżony komponent <Link to={"/userpanel/test"}/>
+                    </MenuItem>
+                </SubMenu>
+            );
+        } else {
+            return null;
         }
     }
 
@@ -65,12 +76,8 @@ function Cockpit ({classes}) {
                                 </MenuItem>
 
 
+                                <PopulateNavbar />
 
-                                <SubMenu title="komponent 1" icon={<DocumentScannerIcon/>}>
-                                    <MenuItem icon={<DraftsIcon/>}>
-                                        zagnieżdżony komponent <Link to={"/userpanel/test"} />
-                                    </MenuItem>
-                                </SubMenu>
 
                             </Menu>
                         </SidebarContent>
@@ -87,6 +94,7 @@ function Cockpit ({classes}) {
                             {/* jeśli route ma routy pod nim, trzeba dodać "/*" */}
                             <Route path="/" element={<MainCockpitPage />} />
                             <Route path="/test" element={<TestPage />} />
+                            <Route path="/:companyId" element={<CompanyInfo/>} />
                         </Routes>
 
                     </div>
