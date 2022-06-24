@@ -34,7 +34,7 @@ export default function validatePartners(values){
     //individual Partner second name validation
     if (!values.secondName) {
     } else if (/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(values.secondName)) {
-        errors.secondName = "Nazwisko zawiera niedozwolone znaki";
+        errors.secondName = "Imię zawiera niedozwolone znaki";
     } else if (values.secondName.length < 2) {
         errors.secondName = "Imię powinno zawierać conajmniej 2 litery";
     }

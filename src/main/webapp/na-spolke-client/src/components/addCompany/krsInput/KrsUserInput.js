@@ -2,7 +2,6 @@ import {useState} from "react";
 import styles from "./KrsUserInput.module.css";
 import Axios from "axios";
 import {TextField} from "@material-ui/core";
-import validatePartners from "../companyForm/formComponents/companyOrgans/ValidationCompanyOrgans";
 import ValidationKrsUserInput from "./ValidationKrsUserInput";
 
 const KrsUserInput = (props)=>{
@@ -46,7 +45,7 @@ const KrsUserInput = (props)=>{
                    error={ValidationKrsUserInput(krsNumber).hasOwnProperty("krsNumber")}
                    helperText={ValidationKrsUserInput(krsNumber).krsNumber}
                    onChange={krsNumberHandler}/>
-            <button type="submit">Pobierz dane spółki</button>
+            <button type="submit" >Pobierz dane spółki</button>
         </form>
     </div>
 }

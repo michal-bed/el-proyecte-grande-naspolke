@@ -7,6 +7,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TextField from '@mui/material/TextField';
 import validatePartners from "./ValidationCompanyOrgans";
+import {Box, Card, CardActions, CardContent, Grid} from "@mui/material";
 
 
 
@@ -206,18 +207,18 @@ const Partners = (props) => {
     }
 
     function partnerSharesInfo(index, partner, listType) {
-        return <div>
-            <TextField
+        return <>
+            <Box sx={{width: "auto", gridArea: "sharesCount"}}><TextField
                 label="ilość udziałów"
                 name="sharesCount"
                 variant="filled"
                 type="number"
                 value={partner.sharesCount}
-                error={validatePartners({sharesCount : partner.sharesCount}).hasOwnProperty("sharesCount")}
-                helperText={validatePartners({sharesCount : partner.sharesCount}).sharesCount}
+                error={validatePartners({sharesCount: partner.sharesCount}).hasOwnProperty("sharesCount")}
+                helperText={validatePartners({sharesCount: partner.sharesCount}).sharesCount}
                 onChange={event => handleChangeInput(index, event, listType)}
-            />
-            <TextField
+            /></Box>
+            <Box sx={{width: "auto", gridArea: "sharesValue"}}><TextField
                 label="wartość udziałów (w PLN)"
                 name="sharesValue"
                 variant="filled"
@@ -226,90 +227,123 @@ const Partners = (props) => {
                 error={validatePartners({sharesValue : partner.sharesValue}).hasOwnProperty("sharesValue")}
                 helperText={validatePartners({sharesValue : partner.sharesValue}).sharesValue}
                 onChange={event => handleChangeInput(index, event, listType)}
-            />
-        </div>
+            /></Box>
+        </>
     }
 
 
     return <div>
-        {state.partners.individualPartners!==null && state.partners.individualPartners.map((partner, index) => (
+        <Grid sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: 1,
+            gridTemplateRows: "auto",
+            margin: "auto"
+        }}>
+        {state.partners.individualPartners !== null && state.partners.individualPartners.map((partner, index) => (
             <div key={index}>
-                <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
-                <div>
-                    <TextField
-                        label="Pierwszy człon nazwiska"
-                        name="lastNameI"
-                        variant="filled"
-                        value={partner.lastNameI}
-                        error={validatePartners({lastNameI: partner.lastNameI}).hasOwnProperty("lastNameI")}
-                        helperText={validatePartners({lastNameI: partner.lastNameI}).lastNameI}
-                        onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
-                    />
-                    <TextField
-                        label="Drugi człon nazwiska"
-                        name="lastNameII"
-                        variant="filled"
-                        value={partner.lastNameII}
-                        error={validatePartners({lastNameII: partner.lastNameII}).hasOwnProperty("lastNameII")}
-                        helperText={validatePartners({lastNameII: partner.lastNameII}).lastNameII}
-                        onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
-                    />
-                    <TextField
-                        label="Pierwsze imię"
-                        name="firstName"
-                        variant="filled"
-                        value={partner.firstName}
-                        error={validatePartners({firstName : partner.firstName}).hasOwnProperty("firstName")}
-                        helperText={validatePartners({firstName : partner.firstName}).firstName}
-                        onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
-                    />
-                    <TextField
-                        label="Drugie imię"
-                        name="secondName"
-                        variant="filled"
-                        value={partner.secondName}
-                        error={validatePartners({secondName : partner.secondName}).hasOwnProperty("secondName")}
-                        helperText={validatePartners({secondName : partner.secondName}).secondName}
-                        onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
-                    />
-                </div>
-                {partnerSharesInfo(index, partner, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
-                <div>
-                    <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={()=> handlePartnersList(index, actionType.REMOVE_INDIVIDUAL_PARTNER) }>Usuń</Button>
-                    <Button variant="outlined" startIcon={<PersonAddIcon /> } onClick={()=>handlePartnersList(index, actionType.DUPLICATE_INDIVIDUAL_PARTNER)}>Powiel</Button>
-                </div>
+                <Card sx={{minWidth: 275, width: "95%", margin: "auto", height: "100%"}}>
+                <Box className={styles["partner-separator"]}> Wspólnik {counter++}</Box>
+                    <CardContent sx={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, 1fr)",
+                        gap: 1,
+                        gridTemplateRows: "auto",
+                        gridTemplateAreas: `"lastNameI lastNameII "
+                        "firstName secondName "
+                        "sharesCount sharesValue "`,
+                        margin: "auto"
+                    }}>
+                        <Box sx={{width: "auto", gridArea: "lastNameI"}}><TextField
+                            label="Nazwisko"
+                            name="lastNameI"
+                            variant="filled"
+                            value={partner.lastNameI}
+                            error={validatePartners({lastNameI: partner.lastNameI}).hasOwnProperty("lastNameI")}
+                            helperText={validatePartners({lastNameI: partner.lastNameI}).lastNameI}
+                            onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
+                        /></Box>
+                        <Box sx={{width: "auto", gridArea: "lastNameII"}}><TextField
+                            label="Drugi człon nazwiska"
+                            name="lastNameII"
+                            variant="filled"
+                            value={partner.lastNameII}
+                            error={validatePartners({lastNameII: partner.lastNameII}).hasOwnProperty("lastNameII")}
+                            helperText={validatePartners({lastNameII: partner.lastNameII}).lastNameII}
+                            onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
+                        /></Box>
+                        <Box sx={{width: "auto", gridArea: "firstName"}}><TextField
+                            label="Pierwsze imię"
+                            name="firstName"
+                            variant="filled"
+                            value={partner.firstName}
+                            error={validatePartners({firstName: partner.firstName}).hasOwnProperty("firstName")}
+                            helperText={validatePartners({firstName: partner.firstName}).firstName}
+                            onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
+                        /></Box>
+                        <Box sx={{width: "auto", gridArea: "secondName"}}><TextField
+                            label="Drugie imię"
+                            name="secondName"
+                            variant="filled"
+                            value={partner.secondName}
+                            error={validatePartners({secondName: partner.secondName}).hasOwnProperty("secondName")}
+                            helperText={validatePartners({secondName: partner.secondName}).secondName}
+                            onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
+                        /></Box>
+                        {partnerSharesInfo(index, partner, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}</CardContent>
+                    <CardActions>
+                        <div>
+                            <Button variant="outlined" startIcon={<PersonRemoveIcon/>}
+                                    onClick={() => handlePartnersList(index, actionType.REMOVE_INDIVIDUAL_PARTNER)}>Usuń</Button>
+                            <Button variant="outlined" startIcon={<PersonAddIcon/>}
+                                    onClick={() => handlePartnersList(index, actionType.DUPLICATE_INDIVIDUAL_PARTNER)}>Powiel</Button>
+                        </div>
+                    </CardActions>
+                </Card>
             </div>
         ))
         }
-        {state.partners.partnerCompanies!==null && state.partners.partnerCompanies.map((partner, index) => (
+        {state.partners.partnerCompanies !== null && state.partners.partnerCompanies.map((partner, index) => (
             <div key={index}>
-                <div className={styles["partner-separator"]}>Wspólnik {counter++}</div>
-                <div>
-                    <TextField
-                        fullWidth
-                        label="Nazwa wspólnika *"
-                        name="name"
-                        variant="filled"
-                        value={partner.name}
-                        error={validatePartners({name : partner.name}).hasOwnProperty("name")}
-                        helperText={validatePartners({name : partner.name}).name}
-                        onChange={event => handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
-                    />
-                </div>
-                {partnerSharesInfo(index, partner, actionType.DISPLAY_COMPANY_PARTNERS)}
-                <div>
-                    <Button variant="outlined" startIcon={<PersonRemoveIcon />} onClick={()=> {
-                        handlePartnersList(index, actionType.REMOVE_COMPANY_PARTNER) }} >Usuń</Button>
-                    <Button variant="outlined" startIcon={<PersonAddIcon />} onClick={()=>handlePartnersList(index, actionType.DUPLICATE_COMPANY_PARTNER)}>Powiel</Button>
-                </div>
+                <Card sx={{minWidth: 275, width: "95%", margin: "auto", height: "100%"}}>
+                <Box className={styles["partner-separator"]}>Wspólnik {counter++}</Box>
+                    <CardContent sx={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, 1fr)",
+                        gap: 1,
+                        gridTemplateRows: "auto",
+                        gridTemplateAreas: `"name name "
+                        "sharesCount sharesValue "`,
+                        margin: "auto"
+                    }}>
+                        <Box sx={{width: "auto", gridArea: "name"}}><TextField
+                            fullWidth
+                            label="Nazwa wspólnika *"
+                            name="name"
+                            variant="filled"
+                            value={partner.name}
+                            error={validatePartners({name: partner.name}).hasOwnProperty("name")}
+                            helperText={validatePartners({name: partner.name}).name}
+                            onChange={event => handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
+                        /></Box>
+                        {partnerSharesInfo(index, partner, actionType.DISPLAY_COMPANY_PARTNERS)}</CardContent>
+                    <div>
+                        <Button variant="outlined" startIcon={<PersonRemoveIcon/>} onClick={() => {
+                            handlePartnersList(index, actionType.REMOVE_COMPANY_PARTNER)
+                        }}>Usuń</Button>
+                        <Button variant="outlined" startIcon={<PersonAddIcon/>}
+                                onClick={() => handlePartnersList(index, actionType.DUPLICATE_COMPANY_PARTNER)}>Powiel</Button>
+                    </div>
+                </Card>
             </div>
         ))
         }
+        </Grid>
         <div>Podsumowanie:</div>
         <div>
             <TextField
                 error={parseInt(props.shareCapital) / parseInt(props.shareValue) !== countAllSharesCount()}
-                helperText={"liczba udziałów jest nieprawidłowa"}
+                helperText={parseInt(props.shareCapital) / parseInt(props.shareValue) !== countAllSharesCount() && "liczba udziałów jest nieprawidłowa"}
                 label="wpisana ilość udziałów"
                 name="allSharesCount"
                 variant="filled"
@@ -319,7 +353,7 @@ const Partners = (props) => {
             <TextField
                 error={props.shareCapital !== countAllSharesValues()}
                 label="łączna wartość udziałów"
-                helperText={"wartosć udziałów jest nieprawidłowa"}
+                helperText={props.shareCapital !== countAllSharesValues() && "wartosć udziałów jest nieprawidłowa"}
                 name="sharesCapital"
                 variant="filled"
                 value={`${countAllSharesValues()} zł`}

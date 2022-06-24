@@ -1,8 +1,8 @@
-import {Button, TextField} from "@material-ui/core";
-import {useState, useReducer} from "react";
-import {Address} from "../../../../../classes/company/Address";
+import {Button} from "@material-ui/core";
+import {useState} from "react";
+import {Address} from "../../../../../../classes/company/Address";
 import validateAddress from "./ValidationAddress"
-import {Box, Card, CardContent, Grid} from "@mui/material";
+import {Box, Card, CardContent, Grid, TextField} from "@mui/material";
 
 
 
@@ -51,12 +51,13 @@ const AddressForm = (props) => {
         <CardContent>
         <Grid sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateColumns: 'repeat(3, 1fr)',
             gap: 1,
             gridTemplateRows: 'auto',
-            gridTemplateAreas: `"header header header header"
-        "main main2 main4 main4"
-        "main3 main3 . footer"`,
+            gridTemplateAreas: `"header header header"
+        "main main2 main4"
+        "header2 header2 header2"
+        "footer footer footer"`,
         }}>
             <Box sx={{gridArea: 'header'}}>
                 <TextField
@@ -87,7 +88,7 @@ const AddressForm = (props) => {
                 helperText={validateAddress({localNumberInput}).localNumberInput}
                 onChange={event => handleChangeInput(event)}
             /></Box>
-            <Box sx={{gridArea: 'main3'}}><TextField
+            <Box sx={{gridArea: 'header2', display: 'inline-grid'}}><TextField
                 label="miasto"
                 name="city"
                 variant="filled"
@@ -106,7 +107,7 @@ const AddressForm = (props) => {
                 helperText={validateAddress({zipCodeInput}).zipCodeInput}
                 onChange={event => handleChangeInput(event)}
             /></Box>
-            <Box sx={{gridArea: 'footer'}}><TextField
+            <Box sx={{gridArea: 'footer', display: 'inline-grid'}}><TextField
                 label="poczta"
                 name="postOffice"
                 variant="filled"
@@ -115,10 +116,6 @@ const AddressForm = (props) => {
                 helperText={validateAddress({postOfficeInput}).postOfficeInput}
                 onChange={event => handleChangeInput(event)}
             /></Box></Grid>
-        <div>
-            <Button disabled={props.prev} onClick={() => changePageHandler(-1)}>Wstecz</Button>
-            <Button disabled={props.next} onClick={() => changePageHandler(1)}>Dalej</Button>
-        </div>
     </CardContent></Card>
 }
 

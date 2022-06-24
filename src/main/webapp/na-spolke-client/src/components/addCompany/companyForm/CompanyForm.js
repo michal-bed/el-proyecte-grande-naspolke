@@ -1,7 +1,7 @@
 import styles from "./CompanyForm.module.css";
 import {useEffect, useState} from "react";
 import BaseInfo from "./formComponents/baseInfo/BaseInfo";
-import AddressForm from "./formComponents/address/AddressForm";
+import AddressForm from "./formComponents/baseInfo/addressCard/AddressForm";
 import MembersCompanyBodies from "./formComponents/companyOrgans/MembersCompanyBodies";
 import Partners from "./formComponents/companyOrgans/Partners";
 import {ModalErrorFormComponent} from "./ModalErrorComponent";
@@ -22,7 +22,7 @@ const CompanyForm = ({company, saveData})=>{
     const [partnersList, setPartnersList] = useState(company===null ? null: company.partners)
     const [componentError, setComponentErrors] = useState({})
     const [modalError, setModalError] = useState(<div/>)
-    const FormTitles = ["Dane Podstawowe", "Adres", "Zarząd", "Rada Nadzorcza", "Wspólnicy"]
+    const FormTitles = ["Dane Podstawowe", "Zarząd", "Rada Nadzorcza", "Wspólnicy"]
 
     useEffect(()=>{
         setPartFormToDisplay(PageDisplay)
@@ -114,13 +114,13 @@ const CompanyForm = ({company, saveData})=>{
         switch (page){
             case 0: return <BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo} address={companyAddress}
                                       prev={page === 0} next={page === FormTitles.length - 1}/>;
-            case 1: return <AddressForm address={companyAddress} changePage={changePage}
-                                        pageType={"address"} prev={page === 0} next={page === FormTitles.length - 1}/>;
-            case 2: return <MembersCompanyBodies companyBodies={boardMembers} changePage={changePage}
+            // case 1: return <AddressForm address={companyAddress} changePage={changePage}
+            //                             pageType={"address"} prev={page === 0} next={page === FormTitles.length - 1}/>;
+            case 1: return <MembersCompanyBodies companyBodies={boardMembers} changePage={changePage}
                                                  pageType={"board"} prev={page === 0} next={page === FormTitles.length - 1}/>;
-            case 3: return <MembersCompanyBodies companyBodies={boardOfDirectors} changePage={changePage}
+            case 2: return <MembersCompanyBodies companyBodies={boardOfDirectors} changePage={changePage}
                                                  pageType={"directors"} prev={page === 0} next={page === FormTitles.length - 1}/>;
-            case 4: return <Partners partners={partnersList} changePage={changePage}
+            case 3: return <Partners partners={partnersList} changePage={changePage}
                                      bodyType={"partners"} prev={page === 0} next={page === FormTitles.length - 1} shareCapital={company.shareCapital}
                                      shareValue={company.shareValue} sharesCount={company.sharesCount} saveCompanyData={handleSaveDataFromPartnerForm}/>;
         }
@@ -130,7 +130,7 @@ const CompanyForm = ({company, saveData})=>{
     return<div className={styles["form"]}>
         <div className={styles["form-container"]}>
         <div className={styles["progressbar"]}>
-            <div style={{width: page === 0 ? "20%" : page === 1 ? "40%" : page === 2 ? "60%" : page === 3 ? "80%" : "100%"}}/>
+            <div style={{width: page === 0 ? "1%" : page === 1 ? "33%" : page === 2 ? "66%" : "100%"}}/>
         </div>
             <div className={styles["header"]}>
                 <h1>{FormTitles[page]}</h1>

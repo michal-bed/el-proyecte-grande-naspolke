@@ -4,13 +4,16 @@ import {useState} from "react";
 import {ModalErrorMessage} from "./companyForm/ModalFormKrsInputError";
 import {Company} from "../../classes/company/Company";
 import Axios from "axios";
+import {Box} from "@mui/material";
 
 const AddCompany = ()=>{
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
+    const [hideKrsInput, setHideKrsInput] = useState("block")
 
     const hideModal = () => {
       setCompanyDataForm(<div/>);
     }
+
 
     const addCompanyForm = (data) => {
         if (data === 404) {
@@ -30,6 +33,7 @@ const AddCompany = ()=>{
                                                   closeAndDisplay={closeAndDisplay}/>)
         } else {
               const company = checkForCompanyData(data.data)
+            setHideKrsInput("none")
               setCompanyDataForm(<CompanyForm company={company} saveData={saveDataIntoDb}/>);
           }
       }
@@ -59,7 +63,9 @@ const AddCompany = ()=>{
         }
     }
     return <div>
-        <KrsUserInput addCompanyData={addCompanyForm}/>
+        <Box style={{display: hideKrsInput}}>
+            <KrsUserInput addCompanyData={addCompanyForm}/>
+        </Box>
         {companyDataForm}
     </div>
 }
