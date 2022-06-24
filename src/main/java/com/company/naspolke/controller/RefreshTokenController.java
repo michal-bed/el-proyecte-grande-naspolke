@@ -1,10 +1,9 @@
 package com.company.naspolke.controller;
 
 import com.company.naspolke.config.util.JwtUtil;
-import com.company.naspolke.model.User;
+import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.RefreshToken;
 import com.company.naspolke.model.auth.AuthenticationResponse;
-import com.company.naspolke.repository.RefreshTokenRepository;
 import com.company.naspolke.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,15 +51,15 @@ public class RefreshTokenController {
             RefreshToken foundToken = refreshTokenService.findByJwt(jwt);
 
             if (foundToken != null) {
-                User foundUser = foundToken.getUser();
+                AppUser foundAppUser = foundToken.getAppUser();
                 UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                        jwtUtil.extractUsername(jwt), foundUser.getUserPassword(), foundUser.isEnabled(),
+                        jwtUtil.extractUsername(jwt), foundAppUser.getUserPassword(), foundAppUser.isEnabled(),
                         true, true, true,
                         List.of(new SimpleGrantedAuthority("ROLE_USER")));
                 Boolean isTokenValid = jwtUtil.validateToken(jwt, userDetails);
 
-                if (isTokenValid && (Objects.equals(foundUser.getUserEmail(), jwtUtil.extractUsername(jwt)) ||
-                        Objects.equals(foundUser.getUserEmail(), jwtUtil.extractUsername(jwt)))) {
+                if (isTokenValid && (Objects.equals(foundAppUser.getUserEmail(), jwtUtil.extractUsername(jwt)) ||
+                        Objects.equals(foundAppUser.getUserEmail(), jwtUtil.extractUsername(jwt)))) {
                     final String accessToken = jwtUtil.generateToken(userDetails, 1000 * 60 * 15);
                     return ResponseEntity.ok().body(new AuthenticationResponse(accessToken, List.of("ROLE_USER")));
                 } else {

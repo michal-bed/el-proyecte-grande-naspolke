@@ -46,12 +46,12 @@ import index_photo3 from "../../assets/photos/index_photo3.jpg";
 
 function Presentation(props) {
     let title = "Na Spółkę"
-    let titleDescription = "Free & Open Source Web UI Kit built over ReactJS &amp; MUI. Join over 1.6 million\n" +
-        "                    developers around the world."
+    let titleDescription = "Ta aplikacja jest projektem końcowym studnetów\n" +
+                            " codecool."
     const currentSite = props.site;
 
-    function setContent(ś) {
-        console.log(currentSite)
+    function setContent() {
+
         switch (currentSite){
             case "index":
                 return(<MainPage />)
@@ -59,7 +59,7 @@ function Presentation(props) {
             case "faq":
                 title = "Frequently Asked Questions"
                 titleDescription = "Zebraliśmy najczęściej pojawiające się pytania i " +
-                    "posatraliśmy się w jak najlepszy sposób na nie odpowiedzieć"
+                    "posatraliśmy się w jak najlepszy sposób na nie odpowiedzieć."
                 return(<FaqPage />)
         }
     }

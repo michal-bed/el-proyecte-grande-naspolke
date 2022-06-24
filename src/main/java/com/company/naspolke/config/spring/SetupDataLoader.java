@@ -1,7 +1,7 @@
 package com.company.naspolke.config.spring;
 
-import com.company.naspolke.model.User;
-import com.company.naspolke.repository.UserRepository;
+import com.company.naspolke.model.AppUser;
+import com.company.naspolke.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -18,12 +18,12 @@ import java.util.Set;
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     boolean alreadySetup = false;
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SetupDataLoader(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public SetupDataLoader(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
+        this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -39,17 +39,17 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Transactional
     void createUserIfNotFound(String email, Set<SimpleGrantedAuthority> roles) {
-        User foundUser = userRepository.findByUserEmail(email);
-        if (foundUser == null) {
-            User user = new User();
-            user.setUserName("Test");
-            user.setUserSurname("Test");
-            user.setUserPassword(passwordEncoder.encode("test"));
-            user.setUserEmail(email);
-            user.setEnabled(true);
-            user.getApplicationRoles().addAll(roles);
-//            user.setCompanyRoles(Set.of());
-            userRepository.save(user);
+        AppUser foundAppUser = appUserRepository.findByUserEmail(email);
+        if (foundAppUser == null) {
+            AppUser appUser = new AppUser();
+            appUser.setUserName("Test");
+            appUser.setUserSurname("Test");
+            appUser.setUserPassword(passwordEncoder.encode("test"));
+            appUser.setUserEmail(email);
+            appUser.setEnabled(true);
+            appUser.getApplicationRoles().addAll(roles);
+            appUser.setCompanyUserRole(Set.of());
+            appUserRepository.save(appUser);
         }
     }
 }

@@ -80,12 +80,12 @@ const routes = [
     collapse: [
           {
             name: "O nas",
-            href: "#o_nas",
+            href: "/#o_nas",
 
           },
           {
             name: "Usługi",
-            href: "#uslugi",
+            href: "/#uslugi",
 
           },
           {

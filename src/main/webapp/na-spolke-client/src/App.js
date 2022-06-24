@@ -65,10 +65,12 @@ import {Route, Routes} from "react-router-dom";
 import Registration from "./componentsInUse/registration/Registration";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import theme from "./assets/theme";
+import AddMember from "./componentsInUse/ownerPanel/AddMember";
+import DeleteMember from "./componentsInUse/ownerPanel/DeleteMember";
+import ChangeRole from "./componentsInUse/ownerPanel/ChangeRole";
+
 
 function App() {
-
-
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
@@ -79,6 +81,9 @@ function App() {
                     <Route path="faq" element={<Presentation site="faq"/>}/>
                     <Route path="login" element={<Login/>}/>
                     <Route path="register" element={<Registration/>}/>
+                    <Route path="add-member" element={<AddMember/>}/>
+                    <Route path="delete-member" element={<DeleteMember/>}/>
+                    <Route path="change-role" element={<ChangeRole/>}/>
                 </Route>
             </Routes>
         </ThemeProvider>);
