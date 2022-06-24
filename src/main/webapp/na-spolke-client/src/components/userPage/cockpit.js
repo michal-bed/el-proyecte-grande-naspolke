@@ -6,7 +6,7 @@ import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import {Box} from "@mui/material";
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, matchPath, useLocation } from 'react-router-dom';
 
 import MainCockpitPage from "./content/mainCockpitPage";
 import TestPage from "./content/testPage";
@@ -37,6 +37,12 @@ function Cockpit ({classes}) {
     })
 
 
+    function PopulateNavbar () {
+        if (!this.authenticated()) {
+
+        }
+    }
+
 
     return (
         <>
@@ -57,6 +63,8 @@ function Cockpit ({classes}) {
                                 <MenuItem icon={<DraftsIcon />}>
                                     Kokpit <Link to={"/userpanel"} />
                                 </MenuItem>
+
+
 
                                 <SubMenu title="komponent 1" icon={<DocumentScannerIcon/>}>
                                     <MenuItem icon={<DraftsIcon/>}>
