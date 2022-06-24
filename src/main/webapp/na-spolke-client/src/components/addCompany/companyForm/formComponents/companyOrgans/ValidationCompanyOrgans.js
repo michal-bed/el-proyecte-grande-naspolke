@@ -6,12 +6,17 @@ export default function validatePartners(values){
         errors.lastNameI = "Wpisz nazwisko";
     } else if (/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(values.lastNameI)) {
         errors.lastNameI = "Nazwisko zawiera niedozwolone znaki";
+    } else if (values.lastNameI.length < 3) {
+        errors.lastNameI = "Nazwisko powinno zawierać conajmniej 3 litery";
     }
 
 
     //individual Partner last nameII validation
-    if (/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(values.lastNameII)) {
+    if (!values.lastNameII) {
+    } else if (/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(values.lastNameII)) {
         errors.lastNameII = "Nazwisko zawiera niedozwolone znaki";
+    } else if (values.lastNameII.length < 3) {
+        errors.lastNameII = "Nazwisko powinno zawierać conajmniej 3 litery";
     }
 
 
@@ -20,14 +25,18 @@ export default function validatePartners(values){
         errors.firstName = "Wpisz imię";
     } else if (/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(values.firstName)) {
         errors.firstName = "Imię zawiera niedozwolone znaki";
+    } else if (values.firstName.length < 2) {
+        errors.firstName = "Nazwisko musi zawierać conajmniej 2 znaki";
     } else if (values.firstName.length > 31) {
-        errors.secondName = "Nazwisko moze zawierać maksymalnie 30 znakow";
+        errors.firstName = "Nazwisko moze zawierać maksymalnie 30 znakow";
     }
 
     //individual Partner second name validation
     if (!values.secondName) {
     } else if (/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(values.secondName)) {
         errors.secondName = "Nazwisko zawiera niedozwolone znaki";
+    } else if (values.secondName.length < 2) {
+        errors.secondName = "Imię powinno zawierać conajmniej 2 litery";
     }
 
     //company partner name validation
@@ -35,6 +44,8 @@ export default function validatePartners(values){
         errors.name = "Wpisz pełną nazwę spółki";
     } else if (/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(values.name)) {
         errors.name = "Nazwa zawiera niedozwolone znaki";
+    } else if (values.name.length < 3) {
+        errors.name = "Nazwa powinna zawierać conajmniej 3 litery";
     }
 
     //share count validation

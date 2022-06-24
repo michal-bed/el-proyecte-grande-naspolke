@@ -14,8 +14,8 @@ const MembersCompanyBodies = (props) => {
             <div>Brak Organu!</div>
             <Button onClick={addCompanyBodyMember}>Dodaj {props.pageType==="board"? "członka zarządu" : "członka rady nadzorczej"}</Button>
             <div>
-                <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
-                <Button disabled={props.next} onClick={switchNextPage}>Dalej</Button>
+                <Button disabled={props.prev} onClick={()=>changePageHandler(-1)}>Wstecz</Button>
+                <Button disabled={props.next} onClick={()=>changePageHandler(1)}>Dalej</Button>
             </div>
         </div>
     } else if (memberBody.length===0){
@@ -101,17 +101,10 @@ const MembersCompanyBodies = (props) => {
         return false;
     }
 
-    function switchNextPage(){
-        const bodyList = createMemberBodyList();
-        const containsError = checkForErrors();
-        props.changePage(bodyList, props.pageType, 1, containsError)
-
-    }
-
-    function switchPrevPage(){
+    function changePageHandler(pageChange){
         const bodyList = createMemberBodyList()
         const containsError = checkForErrors();
-        props.changePage(bodyList, props.pageType, -1, containsError)
+        props.changePage(bodyList, props.pageType, pageChange, containsError)
     }
 
     function handleBodyMemberList(index) {
@@ -171,8 +164,8 @@ const MembersCompanyBodies = (props) => {
             <Button onClick={addCompanyBodyMember}>Dodaj {props.pageType==="board"? "członka zarządu" : "członka rady nadzorczej"}</Button>
         </div>
         <div>
-            <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
-            <Button disabled={props.next} onClick={switchNextPage}>Dalej</Button>
+            <Button disabled={props.prev} onClick={()=>changePageHandler(-1)}>Wstecz</Button>
+            <Button disabled={props.next} onClick={()=>changePageHandler(1)}>Dalej</Button>
         </div>
     </Container>
 }

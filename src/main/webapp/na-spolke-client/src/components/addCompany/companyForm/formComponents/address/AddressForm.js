@@ -14,18 +14,12 @@ const AddressForm = (props) => {
     const [zipCodeInput, setZipCodeInput] = useState(props.address === null ? "" : props.address.zipCode)
     const [postOfficeInput, setPostOfficeInput] = useState(props.address === null ? "" : props.address.postOffice)
 
-    function switchNextPage(){
-        const address = new Address({streetName:streetNameInput, streetNumber: streetNumberInput, localNumber: localNumberInput,
-            city: cityInput, zipCode: zipCodeInput, postOffice: postOfficeInput})
-        const hasErrors = checkForErrors()
-        props.changePage(address, props.pageType, 1, checkForErrors(), hasErrors)
-    }
 
-    function switchPrevPage(){
+    function changePageHandler(changePageValue){
         const address = new Address({streetName:streetNameInput, streetNumber: streetNumberInput, localNumber: localNumberInput,
             city: cityInput, zipCode: zipCodeInput, postOffice: postOfficeInput})
         const hasErrors = checkForErrors()
-        props.changePage(address, props.pageType, -1, hasErrors)
+        props.changePage(address, props.pageType, changePageValue, hasErrors)
     }
 
     function handleChangeInput(e){
@@ -109,8 +103,8 @@ const AddressForm = (props) => {
             onChange={event => handleChangeInput(event)}
         />
         <div>
-            <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
-            <Button disabled={props.next} onClick={switchNextPage}>Dalej</Button>
+            <Button disabled={props.prev} onClick={()=>changePageHandler(-1)}>Wstecz</Button>
+            <Button disabled={props.next} onClick={()=>changePageHandler(1)}>Dalej</Button>
         </div>
     </div>
 }
