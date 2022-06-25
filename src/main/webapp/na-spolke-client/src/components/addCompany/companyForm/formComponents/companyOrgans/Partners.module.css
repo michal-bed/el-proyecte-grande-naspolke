@@ -1,3 +1,26 @@
 .partner-separator{
     margin-top: 2vh;
 }
+.Box {
+    display: inline-grid;
+}
+.card-grid-container{
+    margin-bottom: 2vh;
+}
+.summarize-container {
+    margin-bottom: 2vh;
+    width: 30%;
+}
+.summarize-user-inputs {
+    width: 80%;
+    display: flex;
+}
+
+.summarize-company-data {
+    display: flex;
+}
+
+.add-partner-container {
+    margin-bottom: 2vh;
+    display: inline-block;
+}

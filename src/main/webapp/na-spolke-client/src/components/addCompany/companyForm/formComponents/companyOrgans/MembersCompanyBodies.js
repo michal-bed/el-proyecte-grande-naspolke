@@ -6,6 +6,7 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import validatePartners from "./ValidationCompanyOrgans";
 import {Box, Card, CardContent, Grid} from "@mui/material";
+import styles from "./MembersCompanyBodies.module.css";
 
 const MembersCompanyBodies = (props) => {
     const [memberBody, setMemberBody] = useState(props.companyBodies)
@@ -58,7 +59,7 @@ const MembersCompanyBodies = (props) => {
 
     function displayMemberFunction(index, member) {
         if (member.hasOwnProperty("function")) {
-            return <Box sx={{gridArea: 'function', display: 'inline-grid'}}><TextField
+            return <Box sx={{gridArea: 'function', display: 'inline-grid'}} className={styles["Box"]}><TextField
                 label="Funkcja"
                 name="function"
                 variant="filled"
@@ -142,7 +143,7 @@ const MembersCompanyBodies = (props) => {
                         "firstName secondName"
                         "function function"`,
                             }}>
-                                <Box sx={{gridArea: 'lastNameI'}}><TextField
+                                <Box sx={{gridArea: 'lastNameI'}} className={styles["Box"]}><TextField
                                     label="Nazwisko"
                                     name="lastNameI"
                                     variant="filled"
@@ -151,7 +152,7 @@ const MembersCompanyBodies = (props) => {
                                     helperText={validatePartners({lastNameI: member.lastNameI}).lastNameI}
                                     onChange={event => handleChangeInput(index, event)}
                                 /></Box>
-                                <Box sx={{gridArea: 'lastNameII'}}><TextField
+                                <Box sx={{gridArea: 'lastNameII'}} className={styles["Box"]}><TextField
                                     label="Nazwisko (drugi człon)"
                                     name="lastNameII"
                                     variant="filled"
@@ -160,7 +161,7 @@ const MembersCompanyBodies = (props) => {
                                     helperText={validatePartners({lastNameII: member.lastNameII}).lastNameII}
                                     onChange={event => handleChangeInput(index, event)}
                                 /></Box>
-                                <Box sx={{gridArea: 'firstName'}}><TextField
+                                <Box sx={{gridArea: 'firstName'}} className={styles["Box"]}><TextField
                                     label="Imię"
                                     name="firstName"
                                     variant="filled"
@@ -169,7 +170,7 @@ const MembersCompanyBodies = (props) => {
                                     helperText={validatePartners({firstName: member.firstName}).firstName}
                                     onChange={event => handleChangeInput(index, event)}
                                 /></Box>
-                                <Box sx={{gridArea: 'secondName'}}><TextField
+                                <Box sx={{gridArea: 'secondName'}} className={styles["Box"]}><TextField
                                     label="Drugie imię"
                                     name="secondName"
                                     variant="filled"
