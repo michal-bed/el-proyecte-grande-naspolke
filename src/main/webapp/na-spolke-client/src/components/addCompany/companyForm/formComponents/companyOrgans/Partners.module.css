@@ -7,20 +7,21 @@
 .card-grid-container{
     margin-bottom: 2vh;
 }
-.summarize-container {
+.summary-container {
     margin-bottom: 2vh;
     width: 30%;
 }
-.summarize-user-inputs {
+.summary-user-inputs {
     width: 80%;
     display: flex;
 }
 
-.summarize-company-data {
+.summary-company-data {
     display: flex;
 }
 
 .add-partner-container {
     margin-bottom: 2vh;
     display: inline-block;
+
 }

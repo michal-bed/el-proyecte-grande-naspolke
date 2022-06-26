@@ -11,8 +11,8 @@ import {CompanyContext} from "../../CompanyContext";
 
 const MembersCompanyBodies = (props) => {
     const companyData = useContext(CompanyContext)
-    const [memberBody, setMemberBody] = useState(props.pageType==="board" ? companyData.state.company.boardMembers :
-        companyData.state.company.boardOfDirectors)
+    console.log(companyData)
+    const [memberBody, setMemberBody] = useState("")
 
     useEffect(()=> {
         let delay = setTimeout(()=> {
@@ -27,7 +27,12 @@ const MembersCompanyBodies = (props) => {
         return ()=> {clearTimeout(delay)}
     }, [memberBody])
 
-    if (memberBody === null || memberBody.length === 0) {
+    if (memberBody.length=== 0 || memberBody.length===null) {
+        if (memberBody!== (props.pageType==="board" ? companyData.state.company.boardMembers :
+            companyData.state.company.boardOfDirectors)) {
+            setMemberBody(props.pageType === "board" ? companyData.state.company.boardMembers :
+                companyData.state.company.boardOfDirectors)
+        }
         return <div>
             <div>Brak Organu!</div>
             <Button

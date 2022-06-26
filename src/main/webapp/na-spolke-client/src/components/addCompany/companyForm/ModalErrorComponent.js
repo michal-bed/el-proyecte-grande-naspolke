@@ -13,10 +13,10 @@ const ModalOverlay = (props) => {
         container={document.getElementById("overlay-root")}
     >
         <Modal.Header closeButton>
-            <Modal.Title>Błedy w formularzu</Modal.Title>
+            <Modal.Title>Błędy w formularzu</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            W niektórych elementach formularza występują błędy.
+            W formularzu nadal znajdują się błędne lub niezweryfikowane pola.
             Czy mimo to chcesz dodać spółkę?
         </Modal.Body>
         <Modal.Footer>

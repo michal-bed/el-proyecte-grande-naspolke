@@ -14,7 +14,6 @@ export const pageType = {
 }
 
 const companyDataReducer = (state, action) => {
-    console.log(state)
     let newState = {...state};
     switch (action.pageType) {
         case pageType.BOARD_MEMBER: {

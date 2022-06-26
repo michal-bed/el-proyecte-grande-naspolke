@@ -50,6 +50,8 @@ function a11yProps(index) {
 }
 
 export default function FullWidthTabs(props) {
+    const companyData = useContext(CompanyContext)
+
     const FormTitles = ["Zarząd", "Rada Nadzorcza", "Wspólnicy"]
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
@@ -67,7 +69,7 @@ export default function FullWidthTabs(props) {
     };
 
     function saveCompany(){
-        props.saveCompanyData()
+        props.saveCompanyData(companyData)
     }
 
     return (

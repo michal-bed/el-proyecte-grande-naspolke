@@ -5,6 +5,7 @@ import {ModalErrorMessage} from "./companyForm/ModalFormKrsInputError";
 import {Company} from "../../classes/company/Company";
 import Axios from "axios";
 import {Box} from "@mui/material";
+import CompanyContextProvider from "./companyForm/CompanyContext";
 
 
 const AddCompany = ()=>{
@@ -35,7 +36,11 @@ const AddCompany = ()=>{
         } else {
               const company = checkForCompanyData(data.data)
             setHideKrsInput("none")
-              setCompanyDataForm(<CompanyForm company={company} saveData={saveDataIntoDb}/>);
+              setCompanyDataForm(
+                  <CompanyContextProvider company={company}>
+                    <CompanyForm company={company} saveData={saveDataIntoDb}/>
+                  </CompanyContextProvider>
+              );
           }
       }
 

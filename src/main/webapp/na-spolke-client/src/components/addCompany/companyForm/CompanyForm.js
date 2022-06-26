@@ -1,5 +1,5 @@
 import styles from "./CompanyForm.module.css";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import BaseInfo from "./formComponents/baseInfo/BaseInfo";
 import MembersCompanyBodies from "./formComponents/companyOrgans/MembersCompanyBodies";
 import Partners from "./formComponents/companyOrgans/Partners";
@@ -8,6 +8,8 @@ import FullWidthTabs from "./FormNavbar";
 import CompanyContextProvider, {CompanyContext} from "./CompanyContext";
 
 const CompanyForm = ({company, saveData})=>{
+    const companyData = useContext(CompanyContext);
+    console.log(companyData);
     const [page, setPage] = useState(0)
     const [baseInfo, setBaseInfo] = useState(company===null ? null:{
         companyName: company.companyName,
@@ -72,19 +74,14 @@ const CompanyForm = ({company, saveData})=>{
         return Object.values(componentError).includes(true);
     }
 
-    function handleSaveDataFromPartnerForm(data, hasError){
-        let componentErrors = {...componentError};
-        componentErrors.partners = hasError;
-        setComponentErrors(componentErrors);
-        setPartnersList(data);
-        checkIfCompanyDataCanBeSaved()
-    }
-
-    function checkIfCompanyDataCanBeSaved(){
-        if (!checkIfComponentsIncludesErrors()) {
-        saveCompanyData()
+    function handleSaveDataFromPartnerForm(){
+        console.log(companyData.state.componentsErrors);
+        console.log(companyData.state.company);
+        console.log(Object.values(companyData.state.componentsErrors).includes(true));
+        if (Object.values(companyData.state.componentsErrors).includes(true)){
+            setModalError( <ModalErrorFormComponent hide={closeErrorModal} saveData={saveCompanyData}/>);
         } else {
-            setModalError(<ModalErrorFormComponent hide={closeErrorModal} saveData={saveCompanyData}/>)
+            saveCompanyData(companyData.state.company)
         }
     }
 
@@ -93,20 +90,20 @@ const CompanyForm = ({company, saveData})=>{
     }
 
     function saveCompanyData(){
-        const companyToSave = {
-            companyName: baseInfo.companyName,
-            krsNumber: baseInfo.krsNumber,
-            nip: baseInfo.nip,
-            regon: baseInfo.regon,
-            shareCapital: baseInfo.shareCapital,
-            address: companyAddress,
-            boardMembers: boardMembers,
-            boardOfDirectors: boardOfDirectors,
-            partners: partnersList,
-            manySharesAllowed: company.manySharesAllowed
-        }
-            saveData(companyToSave);
-            setModalError(<div/>);
+        // const companyToSave = {
+        //     companyName: baseInfo.companyName,
+        //     krsNumber: baseInfo.krsNumber,
+        //     nip: baseInfo.nip,
+        //     regon: baseInfo.regon,
+        //     shareCapital: baseInfo.shareCapital,
+        //     address: companyAddress,
+        //     boardMembers: boardMembers,
+        //     boardOfDirectors: boardOfDirectors,
+        //     partners: partnersList,
+        //     manySharesAllowed: company.manySharesAllowed
+        // }
+            saveData(companyData.state.company);
+            setModalError( <div/>);
     }
 
     const PageDisplay = ()=> {
@@ -134,12 +131,11 @@ const CompanyForm = ({company, saveData})=>{
             <div className={styles["header"]}>
                 <h1>{FormTitles[page]}</h1>
             </div>
-            <CompanyContextProvider company={company}>
             <div className={styles["body"]}>
                 <BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo} address={companyAddress}/>;
-                {modalError}</div>
-                <FullWidthTabs company={company} saveCompanyData={handleSaveDataFromPartnerForm}/>
-            </CompanyContextProvider>
+                {modalError}
+            </div>
+                <FullWidthTabs company={companyData.state.company} saveCompanyData={handleSaveDataFromPartnerForm}/>
             <div className={styles["footer"]}/>
             <div className={styles["form-nav-bar"]}>
             </div>

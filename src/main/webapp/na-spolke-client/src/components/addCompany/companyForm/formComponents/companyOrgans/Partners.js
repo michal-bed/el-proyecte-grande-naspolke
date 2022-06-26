@@ -96,7 +96,6 @@ function changeSharesInfo(action, value) {
 
 const Partners = (props) => {
     const companyData = useContext(CompanyContext)
-    console.log(companyData);
     const [state, dispatch] = useReducer(reducer, companyData.state.company)
     useEffect(()=>{
         const delay = setTimeout(()=>{
@@ -104,6 +103,7 @@ const Partners = (props) => {
             const action = {
                 pageType: props.pageType,
                 partners: state.partners,
+                allPartnersDisplayed: companyData.state.company.shareCapital === countAllSharesValues(),
                 hasErrors: hasErrors
             }
             companyData.passNewData(action)
@@ -358,6 +358,16 @@ const Partners = (props) => {
                 </div>
             ))
             }
+        <Card sx={{minWidth: 275, width: "95%", margin: "auto", height: "30vh"}}>
+            <div className={styles["add-partner-container"]}>
+                <div className={styles["add-partner-title"]}>Dodaj wspólnika:</div>
+                <div className={styles["add-partner-buttons"]}>
+                    <Button onClick={addEmptyPartnerCompanyToForm} endIcon={<AddBusinessIcon/>}>osoba prawna</Button>
+                </div>
+                <div>
+                    <Button onClick={addEmptyIndividualToForm} endIcon={<PersonAddIcon/>}>osoba fizyczna</Button></div>
+                </div>
+        </Card>
         </Grid>
         <div className={styles["summarize-container"]}>
             <div className={styles["summarize-title"]}>Podsumowanie:</div>
@@ -407,13 +417,6 @@ const Partners = (props) => {
                 />
             </div>
         </div>
-            <div className={styles["add-partner-container"]}>
-                <div className={styles["add-partner-title"]}>Dodaj wspólnika:</div>
-                <div className={styles["add-partner-buttons"]}>
-                    <Button onClick={addEmptyPartnerCompanyToForm} endIcon={<AddBusinessIcon/>}>osoba prawna</Button>
-                    <Button onClick={addEmptyIndividualToForm} endIcon={<PersonAddIcon/>}>osoba fizyczna</Button>
-                </div>
-            </div>
         {/*<div>*/}
         {/*    <Button disabled={companyData.prev} onClick={switchPrevPage}>Wstecz</Button>*/}
         {/*    <Button disabled={companyData.next}>Dalej</Button>*/}
