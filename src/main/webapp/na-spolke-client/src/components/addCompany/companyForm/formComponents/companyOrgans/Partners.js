@@ -95,22 +95,23 @@ function changeSharesInfo(action, value) {
 }
 
 const Partners = (props) => {
-    const {companyData, handleChangeCompanyData} = useContext(CompanyContext)
-    const [state, dispatch] = useReducer(reducer, {partners: companyData.partners})
+    const companyData = useContext(CompanyContext)
+    console.log(companyData);
+    const [state, dispatch] = useReducer(reducer, companyData.state.company)
     useEffect(()=>{
         const delay = setTimeout(()=>{
             const hasErrors = checkForErrors();
             const action = {
                 pageType: props.pageType,
-                partners: state,
+                partners: state.partners,
                 hasErrors: hasErrors
             }
-            handleChangeCompanyData(action)
+            companyData.passNewData(action)
         },1000)
         return () => {clearTimeout(delay)}
         }, [state])
     let counter = 1;
-    if (companyData.partners === null || companyData.partners.length === 0) {
+    if (state.partners === null || state.partners.length === 0) {
         return <div>
             <div>Brak danych wspólników!</div>
             <button onClick={addEmptyPartnerCompanyToForm}>Dodaj wspólnika</button>
@@ -139,7 +140,7 @@ const Partners = (props) => {
             actionType: list,
             index: index,
             event: event,
-            shareValue: companyData.shareValue
+            shareValue: companyData.state.company.shareValue
         }
         dispatch(action)
     }
@@ -147,8 +148,8 @@ const Partners = (props) => {
     function addEmptyPartnerCompanyToForm() {
         let newCompanyPartner = new PartnerCompany({
             name: "",
-            sharesValue: parseInt(companyData.shareCapital) - countAllSharesValues(),
-            sharesCount: (parseInt(companyData.shareCapital) / parseInt(companyData.shareValue)) - countAllSharesCount()
+            sharesValue: parseInt(companyData.state.company.shareCapital) - countAllSharesValues(),
+            sharesCount: (parseInt(companyData.state.company.shareCapital) / parseInt(companyData.state.company.shareValue)) - countAllSharesCount()
         })
         const action = {
             actionType: actionType.ADD_NEW_COMPANY_PARTNER,
@@ -163,8 +164,8 @@ const Partners = (props) => {
             secondName: "",
             lastNameI: "",
             lastNameII: "",
-            sharesValue: parseInt(companyData.shareCapital) - countAllSharesValues(),
-            sharesCount: (parseInt(companyData.shareCapital) / parseInt(companyData.shareValue)) - countAllSharesCount()
+            sharesValue: parseInt(companyData.state.company.shareCapital) - countAllSharesValues(),
+            sharesCount: (parseInt(companyData.state.company.shareCapital) / parseInt(companyData.state.company.shareValue)) - countAllSharesCount()
         })
         const action = {
             actionType: actionType.ADD_NEW_INDIVIDUAL_PARTNER,
@@ -212,7 +213,7 @@ const Partners = (props) => {
     function switchPrevPage() {
         const newPartners = setNewPartnersData();
         const hasErrors = checkForErrors();
-        companyData.changePage(newPartners, companyData.pageType, -1, hasErrors)
+        // companyData.changePage(newPartners, companyData.pageType, -1, hasErrors)
     }
 
     function saveCompanyData() {
@@ -362,9 +363,9 @@ const Partners = (props) => {
             <div className={styles["summarize-title"]}>Podsumowanie:</div>
             <div className={styles["summarize-user-inputs"]}>
                 <TextField
-                    error={parseInt(companyData.shareCapital) / parseInt(companyData.shareValue) !== countAllSharesCount()}
-                    helperText={parseInt(companyData.shareCapital) / parseInt(companyData.shareValue) < countAllSharesCount() ? "liczba udziałów jest za wysoka" :
-                        parseInt(companyData.shareCapital) / parseInt(companyData.shareValue) > countAllSharesCount() ? "liczba udziałów jest za niska" : ""}
+                    error={parseInt(companyData.state.company.shareCapital) / parseInt(companyData.state.company.shareValue) !== countAllSharesCount()}
+                    helperText={parseInt(companyData.state.company.shareCapital) / parseInt(companyData.state.company.shareValue) < countAllSharesCount() ? "liczba udziałów jest za wysoka" :
+                        parseInt(companyData.state.company.shareCapital) / parseInt(companyData.state.company.shareValue) > countAllSharesCount() ? "liczba udziałów jest za niska" : ""}
                     label="wpisano udziałów"
                     name="allSharesCount"
                     variant="filled"
@@ -372,10 +373,10 @@ const Partners = (props) => {
                     disabled={true}
                 />
                 <TextField
-                    error={companyData.shareCapital !== countAllSharesValues()}
+                    error={companyData.state.company.shareCapital !== countAllSharesValues()}
                     label="wartość"
-                    helperText={companyData.shareCapital < countAllSharesValues() ? "wartosć udziałów jest za wysoka" :
-                        companyData.shareCapital > countAllSharesValues() ? "wartosć udziałów jest za mała" : ""}
+                    helperText={companyData.state.company.shareCapital < countAllSharesValues() ? "wartosć udziałów jest za wysoka" :
+                        companyData.state.company.shareCapital > countAllSharesValues() ? "wartosć udziałów jest za mała" : ""}
                     name="sharesCapital"
                     variant="filled"
                     value={`${countAllSharesValues()} zł`}
@@ -387,21 +388,21 @@ const Partners = (props) => {
                     label="liczba udziałów"
                     name="allSharesCount"
                     variant="filled"
-                    defaultValue={parseInt(companyData.shareCapital) / parseInt(companyData.shareValue)}
+                    defaultValue={parseInt(companyData.state.company.shareCapital) / parseInt(companyData.state.company.shareValue)}
                     disabled={true}
                 />
                 <TextField
                     label="kapitał zakładowy"
                     name="sharesCapital"
                     variant="filled"
-                    value={`${companyData.shareCapital} zł`}
+                    value={`${companyData.state.company.shareCapital} zł`}
                     disabled={true}
                 />
                 <TextField
                     label="jeden udział:"
                     name="allSharesValue"
                     variant="filled"
-                    value={`${companyData.shareValue} zł`}
+                    value={`${companyData.state.company.shareValue} zł`}
                     disabled={true}
                 />
             </div>

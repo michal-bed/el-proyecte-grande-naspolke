@@ -26,7 +26,7 @@ const companyDataReducer = (state, action) => {
             return {...newState}
         }
         case pageType.PARTNERS: {
-            newState.company.partners = action.companyBodyList;
+            newState.company.partners = action.partners;
             newState.componentsErrors.partners = action.hasErrors;
             return {...newState}
         }
