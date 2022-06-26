@@ -58,7 +58,9 @@ const AddCompany = ()=>{
     }
 
     const closeAndDisplay = () => {
-        setCompanyDataForm(<CompanyForm companyData={null}/>)
+        setCompanyDataForm(<CompanyContextProvider company={new Company(null)}>
+            <CompanyForm />
+        </CompanyContextProvider>)
     }
 
     function checkForCompanyData(data) {

@@ -25,7 +25,7 @@ public class CompanyService {
 
     public ResponseEntity<Company> getCompanyData(String krsNumber){
 //        String result = krsClient.webClient(krsNumber);
-        String result = "4046";
+        String result = "404";
         HttpStatus httpStatus = HttpStatus.OK;
         Company company = null;
         HttpHeaders headers = new HttpHeaders();

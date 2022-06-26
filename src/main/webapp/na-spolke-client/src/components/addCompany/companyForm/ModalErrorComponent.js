@@ -23,7 +23,7 @@ const ModalOverlay = (props) => {
             <Button variant="secondary" onClick={props.hide}>
                 Anuluj
             </Button>
-            <Button variant="primary" onClick={props.saveData}>
+            <Button variant="primary" onClick={props.saveCompanyDataModal}>
                 Zapisz mimo to</Button>
         </Modal.Footer>
     </Modal>
@@ -36,7 +36,7 @@ export function ModalErrorFormComponent(props) {
             {ReactDOM.createPortal(
                 <ModalOverlay
                     hide={props.hide}
-                    closeAndDisplay={props.saveData}
+                    saveCompanyDataModal={props.saveCompanyDataModal}
                 />,
                 document.getElementById("overlay-root"))}
         </React.Fragment>

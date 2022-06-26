@@ -1,3 +1,31 @@
 .Box {
     display: inline-grid;
 }
+
+.add-member-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap:wrap;
+    text-align: center;
+    align-content: center;
+    cursor: pointer;
+}
+.add-member-container:hover {
+    filter: brightness(0.9);
+}
+
+.addPersonIcon{
+    width: 80px;
+    height: 80px
+}
+
+.no-members-header {
+    text-align: center;
+    font-size: 3vh;
+}
+
+.no-members-helper-text {
+    margin-top: 2vh;
+    font-weight: bold;
+    font-size: 3vh;
+}

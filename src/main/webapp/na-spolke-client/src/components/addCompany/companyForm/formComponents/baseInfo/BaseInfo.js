@@ -9,10 +9,11 @@ import {CompanyContext} from "../../CompanyContext";
 
 const BaseInfo = (props) => {
     const companyData = useContext(CompanyContext)
-    const [companyName, setCompanyName] = useState(props.baseInfo === null ? "" : props.baseInfo.companyName)
-    const [nipInput, setNipInput] = useState(props.baseInfo === null ? "" : props.baseInfo.nip)
-    const [regonInput, setRegonInput] = useState(props.baseInfo === null ? "" : props.baseInfo.regon.slice(0,9))
-    const [shareCapitalInput, setShareCapitalInput] = useState(props.baseInfo === null ? "" : props.baseInfo.shareCapital)
+    console.log(companyData)
+    const [companyName, setCompanyName] = useState(companyData.state.company.companyName === null ? "" : companyData.state.company.companyName)
+    const [nipInput, setNipInput] = useState(companyData.state.company.nip === null ? "" : companyData.state.company.nip)
+    const [regonInput, setRegonInput] = useState(companyData.state.company.regon === null ? "" : companyData.state.company.regon.slice(0,9))
+    const [shareCapitalInput, setShareCapitalInput] = useState(companyData.state.company.shareCapital === null ? "" : companyData.state.company.shareCapital)
 
     useEffect(()=> {
         let delay = setTimeout(()=> {
@@ -43,15 +44,15 @@ const BaseInfo = (props) => {
         return false;
     }
 
-    function switchPage(){
-        const baseInfo = {companyName: companyName,
-            krsNumber:props.baseInfo.krsNumber,
-            nip: nipInput,
-            regon: regonInput,
-            shareCapital: shareCapitalInput}
-        const isError = checkForErrors()
-        props.changePage(baseInfo, props.pageType, 1, isError)
-    }
+    // function switchPage(){
+    //     const baseInfo = {companyName: companyName,
+    //         krsNumber:props.baseInfo.krsNumber,
+    //         nip: nipInput,
+    //         regon: regonInput,
+    //         shareCapital: shareCapitalInput}
+    //     const isError = checkForErrors()
+    //     props.changePage(baseInfo, props.pageType, 1, isError)
+    // }
 
     function handleChangeInput(e){
         switch (e.target.name) {
@@ -70,9 +71,9 @@ const BaseInfo = (props) => {
         gridTemplateAreas: `"header header "`,
         margin: 'auto'
     }}>
-        <CompanyIdentifiersCard value={companyName} onChange={event => handleChangeInput(event)} value1={nipInput}
-                                value2={regonInput} baseInfo={props.baseInfo} value3={shareCapitalInput}/>
-        <AddressForm address={props.address} pageType={"address"}/>
+        <CompanyIdentifiersCard companyName={companyName} onChange={event => handleChangeInput(event)} nipInput={nipInput}
+                                regonInput={regonInput} baseInfo={props.baseInfo} shareCapitalInput={shareCapitalInput}/>
+        <AddressForm pageType={"address"}/>
         {/*<Button disabled={props.prev}>Wstecz</Button>*/}
         {/*<Button disabled={props.next} onClick={switchPage}>Dalej</Button>*/}
     </Box>

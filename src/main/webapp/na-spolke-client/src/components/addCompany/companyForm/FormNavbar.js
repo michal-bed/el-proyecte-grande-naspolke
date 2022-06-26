@@ -11,6 +11,11 @@ import Partners from "./formComponents/companyOrgans/Partners";
 import {useContext, useState} from "react";
 import {CompanyContext} from "./CompanyContext";
 import {Button} from "@mui/material";
+import ContentPasteSearchSharpIcon from '@mui/icons-material/ContentPasteSearchSharp';
+import DoneIcon from '@mui/icons-material/Done';
+import RemoveRedEyeTwoToneIcon from '@mui/icons-material/RemoveRedEyeTwoTone';
+import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
+import CheckCircleTwoToneIcon from '@mui/icons-material/CheckCircleTwoTone';
 
 function FormNavbar(props) {
     const { company, value, index, ...other } = props;
@@ -49,9 +54,10 @@ function a11yProps(index) {
     };
 }
 
+
 export default function FullWidthTabs(props) {
     const companyData = useContext(CompanyContext)
-
+    const componentsErrors = companyData.state.componentsErrors;
     const FormTitles = ["Zarząd", "Rada Nadzorcza", "Wspólnicy"]
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
@@ -72,6 +78,7 @@ export default function FullWidthTabs(props) {
         props.saveCompanyData(companyData)
     }
 
+
     return (
         <Box sx={{ bgcolor: 'background.paper' }}>
             <AppBar position="static">
@@ -83,9 +90,15 @@ export default function FullWidthTabs(props) {
                     variant="fullWidth"
                     aria-label="full width tabs example"
                 >
-                    <Tab label={FormTitles[0]} {...a11yProps(0)} />
-                    <Tab label={FormTitles[1]} {...a11yProps(1)} />
-                    <Tab label={FormTitles[2]} {...a11yProps(2)} />
+                    <Tab icon={ componentsErrors.boardMembers==="default"? < RemoveRedEyeTwoToneIcon /> :
+                        componentsErrors.boardMembers===true? < RemoveCircleTwoToneIcon style={{fill: "red"}}/> :
+                            < CheckCircleTwoToneIcon style={{fill: "darkgreen"}}/> } iconPosition="end" label={FormTitles[0]} {...a11yProps(0)} />
+                    <Tab icon={ componentsErrors.boardOfDirectors==="default"? < RemoveRedEyeTwoToneIcon /> :
+                        componentsErrors.boardOfDirectors===true? < RemoveCircleTwoToneIcon style={{fill: "red"}}/> :
+                            < CheckCircleTwoToneIcon /> } iconPosition="end" label={FormTitles[1]} {...a11yProps(1)} />
+                    <Tab icon={ componentsErrors.partners==="default"? < RemoveRedEyeTwoToneIcon /> :
+                        componentsErrors.partners===true? < RemoveCircleTwoToneIcon style={{fill: "red"}}/> :
+                            < CheckCircleTwoToneIcon style={{fill: "green"}}/> } iconPosition="end" label={FormTitles[2]} {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
             <SwipeableViews

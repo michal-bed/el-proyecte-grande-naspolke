@@ -23,8 +23,3 @@ export function populateList (members, type) {
     })
     return result;
 }
-
-export function checkForDataToDisplay(data){
-    return data!==null ? data : "";
-
-}

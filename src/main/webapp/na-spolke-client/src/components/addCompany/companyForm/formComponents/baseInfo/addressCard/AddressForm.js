@@ -11,12 +11,12 @@ import {CompanyContext} from "../../../CompanyContext";
 const AddressForm = (props) => {
 
     const companyData = useContext(CompanyContext);
-    const [streetNameInput, setStreetNameInput] = useState(props.address === null ? "" : props.address.streetName)
-    const [streetNumberInput, setStreetNumberInput] = useState(props.address === null ? "" : props.address.streetNumber)
-    const [localNumberInput, setLocalNumberInput] = useState(props.address === null ? "" : props.address.localNumber)
-    const [cityInput, setCityInput] = useState(props.address === null ? "" : props.address.city)
-    const [zipCodeInput, setZipCodeInput] = useState(props.address === null ? "" : props.address.zipCode)
-    const [postOfficeInput, setPostOfficeInput] = useState(props.address === null ? "" : props.address.postOffice)
+    const [streetNameInput, setStreetNameInput] = useState(companyData.state.company.address.streetName === null ? "" : companyData.state.company.address.streetName)
+    const [streetNumberInput, setStreetNumberInput] = useState(companyData.state.company.address.streetNumber === null ? "" : companyData.state.company.address.streetNumber)
+    const [localNumberInput, setLocalNumberInput] = useState(companyData.state.company.address.localNumber === null ? "" : companyData.state.company.address.localNumber)
+    const [cityInput, setCityInput] = useState(companyData.state.company.address.city === null ? "" : companyData.state.company.address.city)
+    const [zipCodeInput, setZipCodeInput] = useState(companyData.state.company.address.zipCode === null ? "" : companyData.state.company.address.zipCode)
+    const [postOfficeInput, setPostOfficeInput] = useState(companyData.state.company.address.postOffice === null ? "" : companyData.state.company.address.postOffice)
 
     useEffect(()=> {
         let delay = setTimeout(()=> {
@@ -38,12 +38,12 @@ const AddressForm = (props) => {
         return ()=> {clearTimeout(delay)}
     }, [streetNameInput,streetNumberInput,localNumberInput,cityInput,zipCodeInput,postOfficeInput])
 
-    function changePageHandler(changePageValue){
-        const address = new Address({streetName:streetNameInput, streetNumber: streetNumberInput, localNumber: localNumberInput,
-            city: cityInput, zipCode: zipCodeInput, postOffice: postOfficeInput})
-        const hasErrors = checkForErrors()
-        props.changePage(address, props.pageType, changePageValue, hasErrors)
-    }
+    // function changePageHandler(changePageValue){
+    //     const address = new Address({streetName:streetNameInput, streetNumber: streetNumberInput, localNumber: localNumberInput,
+    //         city: cityInput, zipCode: zipCodeInput, postOffice: postOfficeInput})
+    //     const hasErrors = checkForErrors()
+    //     props.changePage(address, props.pageType, changePageValue, hasErrors)
+    // }
 
     function handleChangeInput(e){
         switch (e.target.name) {
@@ -86,7 +86,7 @@ const AddressForm = (props) => {
                     name="streetName"
                     variant="filled"
                     defaultValue={streetNameInput}
-                    fullWidth="true"
+                    fullWidth
                     error={validateAddress({streetNameInput}).hasOwnProperty("streetNameInput")}
                     helperText={validateAddress({streetNameInput}).streetNameInput}
                     onChange={event => handleChangeInput(event)}

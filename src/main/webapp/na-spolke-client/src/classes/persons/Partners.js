@@ -1,45 +1,51 @@
 import {populateList} from "../company/Utils";
 
 export class Partners {
-    individualPartners;
-    partnerCompanies;
-    allSharesValue;
-    allSharesCount;
+    individualPartners = null;
+    partnerCompanies = null;
+    allSharesValue = null;
+    allSharesCount = null;
 
     constructor(partnerData) {
-        this.individualPartners = populateList(partnerData.individualPartners, "individuals");
-        this.partnerCompanies = populateList(partnerData.partnerCompanies, "companies");
-        this.allSharesValue = partnerData.allSharesValue;
-        this.allSharesCount = partnerData.sharesCount;
+        if (partnerData) {
+            this.individualPartners = partnerData.individualPartners && populateList(partnerData.individualPartners, "individuals");
+            this.partnerCompanies = partnerData.partnerCompanies && populateList(partnerData.partnerCompanies, "companies");
+            this.allSharesValue = partnerData.allSharesValue;
+            this.allSharesCount = partnerData.sharesCount;
+        }
     }
 }
 
 export class IndividualPartner{
-    firstName;
-    secondName;
-    lastNameI;
-    lastNameII;
-    sharesCount;
-    sharesValue;
+    firstName = null;
+    secondName = null;
+    lastNameI = null;
+    lastNameII = null;
+    sharesCount = null;
+    sharesValue = null;
 
     constructor(partnerData) {
-        this.firstName = partnerData.firstName;
-        this.secondName = partnerData.secondName;
-        this.lastNameI = partnerData.lastNameI;
-        this.lastNameII = partnerData.lastNameII;
-        this.sharesCount = partnerData.sharesCount;
-        this.sharesValue = partnerData.sharesValue;
+        if (partnerData) {
+            this.firstName = partnerData.firstName;
+            this.secondName = partnerData.secondName;
+            this.lastNameI = partnerData.lastNameI;
+            this.lastNameII = partnerData.lastNameII;
+            this.sharesCount = partnerData.sharesCount;
+            this.sharesValue = partnerData.sharesValue;
+        }
     }
 }
 
 export class PartnerCompany {
-    name;
-    sharesCount;
-    sharesValue;
+    name = null;
+    sharesCount = null;
+    sharesValue = null;
 
     constructor(partnerData) {
-        this.name = partnerData.name;
-        this.sharesCount = partnerData.sharesCount;
-        this.sharesValue =  partnerData.sharesValue;
+        if (partnerData) {
+            this.name = partnerData.name;
+            this.sharesCount = partnerData.sharesCount;
+            this.sharesValue = partnerData.sharesValue;
+        }
     }
 }
