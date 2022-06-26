@@ -1,6 +1,6 @@
 import styles from "./Partners.module.css";
 import {Button} from "@material-ui/core";
-import {useReducer} from "react";
+import {useContext, useEffect, useReducer} from "react";
 import {populateList} from "../../../../../classes/company/Utils";
 import {IndividualPartner, PartnerCompany} from "../../../../../classes/persons/Partners";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import validatePartners from "./ValidationCompanyOrgans";
 import {Box, Card, CardActions, CardContent, Grid} from "@mui/material";
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import {CompanyContext} from "../../CompanyContext";
 
 const actionType = {
     DISPLAY_INDIVIDUAL_PARTNERS: "individuals",
@@ -94,15 +95,28 @@ function changeSharesInfo(action, value) {
 }
 
 const Partners = (props) => {
-    const [state, dispatch] = useReducer(reducer, {partners: props.partners})
-
+    const {companyData, handleChangeCompanyData} = useContext(CompanyContext)
+    const [state, dispatch] = useReducer(reducer, {partners: companyData.partners})
+    useEffect(()=>{
+        const delay = setTimeout(()=>{
+            const hasErrors = checkForErrors();
+            const action = {
+                pageType: props.pageType,
+                partners: state,
+                hasErrors: hasErrors
+            }
+            handleChangeCompanyData(action)
+        },1000)
+        return () => {clearTimeout(delay)}
+        }, [state])
     let counter = 1;
-    if (props.partners === null || props.partners.length === 0) {
+    if (companyData.partners === null || companyData.partners.length === 0) {
         return <div>
             <div>Brak danych wspólników!</div>
             <button onClick={addEmptyPartnerCompanyToForm}>Dodaj wspólnika</button>
         </div>
     }
+
 
     function checkForErrors() {
         for (let i = 0; i < state.partners.individualPartners.length; i++) {
@@ -125,7 +139,7 @@ const Partners = (props) => {
             actionType: list,
             index: index,
             event: event,
-            shareValue: props.shareValue
+            shareValue: companyData.shareValue
         }
         dispatch(action)
     }
@@ -133,8 +147,8 @@ const Partners = (props) => {
     function addEmptyPartnerCompanyToForm() {
         let newCompanyPartner = new PartnerCompany({
             name: "",
-            sharesValue: parseInt(props.shareCapital) - countAllSharesValues(),
-            sharesCount: (parseInt(props.shareCapital) / parseInt(props.shareValue)) - countAllSharesCount()
+            sharesValue: parseInt(companyData.shareCapital) - countAllSharesValues(),
+            sharesCount: (parseInt(companyData.shareCapital) / parseInt(companyData.shareValue)) - countAllSharesCount()
         })
         const action = {
             actionType: actionType.ADD_NEW_COMPANY_PARTNER,
@@ -149,14 +163,15 @@ const Partners = (props) => {
             secondName: "",
             lastNameI: "",
             lastNameII: "",
-            sharesValue: parseInt(props.shareCapital) - countAllSharesValues(),
-            sharesCount: (parseInt(props.shareCapital) / parseInt(props.shareValue)) - countAllSharesCount()
+            sharesValue: parseInt(companyData.shareCapital) - countAllSharesValues(),
+            sharesCount: (parseInt(companyData.shareCapital) / parseInt(companyData.shareValue)) - countAllSharesCount()
         })
         const action = {
             actionType: actionType.ADD_NEW_INDIVIDUAL_PARTNER,
             newPartner: newCompanyPartner
         }
         dispatch(action);
+
     }
 
     function countAllSharesCount() {
@@ -197,13 +212,13 @@ const Partners = (props) => {
     function switchPrevPage() {
         const newPartners = setNewPartnersData();
         const hasErrors = checkForErrors();
-        props.changePage(newPartners, props.pageType, -1, hasErrors)
+        companyData.changePage(newPartners, companyData.pageType, -1, hasErrors)
     }
 
     function saveCompanyData() {
         const newPartners = setNewPartnersData();
         const hasErrors = checkForErrors();
-        props.saveCompanyData(newPartners, hasErrors);
+        companyData.saveCompanyData(newPartners, hasErrors);
     }
 
     function handlePartnersList(index, actionType) {
@@ -347,9 +362,9 @@ const Partners = (props) => {
             <div className={styles["summarize-title"]}>Podsumowanie:</div>
             <div className={styles["summarize-user-inputs"]}>
                 <TextField
-                    error={parseInt(props.shareCapital) / parseInt(props.shareValue) !== countAllSharesCount()}
-                    helperText={parseInt(props.shareCapital) / parseInt(props.shareValue) < countAllSharesCount() ? "liczba udziałów jest za wysoka" :
-                        parseInt(props.shareCapital) / parseInt(props.shareValue) > countAllSharesCount() ? "liczba udziałów jest za niska" : ""}
+                    error={parseInt(companyData.shareCapital) / parseInt(companyData.shareValue) !== countAllSharesCount()}
+                    helperText={parseInt(companyData.shareCapital) / parseInt(companyData.shareValue) < countAllSharesCount() ? "liczba udziałów jest za wysoka" :
+                        parseInt(companyData.shareCapital) / parseInt(companyData.shareValue) > countAllSharesCount() ? "liczba udziałów jest za niska" : ""}
                     label="wpisano udziałów"
                     name="allSharesCount"
                     variant="filled"
@@ -357,10 +372,10 @@ const Partners = (props) => {
                     disabled={true}
                 />
                 <TextField
-                    error={props.shareCapital !== countAllSharesValues()}
+                    error={companyData.shareCapital !== countAllSharesValues()}
                     label="wartość"
-                    helperText={props.shareCapital < countAllSharesValues() ? "wartosć udziałów jest za wysoka" :
-                        props.shareCapital > countAllSharesValues() ? "wartosć udziałów jest za mała" : ""}
+                    helperText={companyData.shareCapital < countAllSharesValues() ? "wartosć udziałów jest za wysoka" :
+                        companyData.shareCapital > countAllSharesValues() ? "wartosć udziałów jest za mała" : ""}
                     name="sharesCapital"
                     variant="filled"
                     value={`${countAllSharesValues()} zł`}
@@ -372,21 +387,21 @@ const Partners = (props) => {
                     label="liczba udziałów"
                     name="allSharesCount"
                     variant="filled"
-                    defaultValue={parseInt(props.shareCapital) / parseInt(props.shareValue)}
+                    defaultValue={parseInt(companyData.shareCapital) / parseInt(companyData.shareValue)}
                     disabled={true}
                 />
                 <TextField
                     label="kapitał zakładowy"
                     name="sharesCapital"
                     variant="filled"
-                    value={`${props.shareCapital} zł`}
+                    value={`${companyData.shareCapital} zł`}
                     disabled={true}
                 />
                 <TextField
                     label="jeden udział:"
                     name="allSharesValue"
                     variant="filled"
-                    value={`${props.shareValue} zł`}
+                    value={`${companyData.shareValue} zł`}
                     disabled={true}
                 />
             </div>
@@ -398,11 +413,11 @@ const Partners = (props) => {
                     <Button onClick={addEmptyIndividualToForm} endIcon={<PersonAddIcon/>}>osoba fizyczna</Button>
                 </div>
             </div>
-        <div>
-            <Button disabled={props.prev} onClick={switchPrevPage}>Wstecz</Button>
-            <Button disabled={props.next}>Dalej</Button>
-            <Button onClick={saveCompanyData}>Zapisz</Button>
-        </div>
+        {/*<div>*/}
+        {/*    <Button disabled={companyData.prev} onClick={switchPrevPage}>Wstecz</Button>*/}
+        {/*    <Button disabled={companyData.next}>Dalej</Button>*/}
+        {/*    <Button onClick={saveCompanyData}>Zapisz</Button>*/}
+        {/*</div>*/}
     </div>
 }
 export default Partners;

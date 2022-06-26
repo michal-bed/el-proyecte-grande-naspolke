@@ -6,6 +6,7 @@ import {Company} from "../../classes/company/Company";
 import Axios from "axios";
 import {Box} from "@mui/material";
 
+
 const AddCompany = ()=>{
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
     const [hideKrsInput, setHideKrsInput] = useState("block")

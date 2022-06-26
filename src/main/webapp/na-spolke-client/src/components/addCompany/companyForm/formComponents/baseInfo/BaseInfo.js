@@ -55,8 +55,8 @@ const BaseInfo = (props) => {
                                 value2={regonInput} baseInfo={props.baseInfo} value3={shareCapitalInput}/>
         <AddressForm address={props.address} changePage={props.changePage}
                      pageType={"address"}/>
-        <Button disabled={props.prev}>Wstecz</Button>
-        <Button disabled={props.next} onClick={switchPage}>Dalej</Button>
+        {/*<Button disabled={props.prev}>Wstecz</Button>*/}
+        {/*<Button disabled={props.next} onClick={switchPage}>Dalej</Button>*/}
     </Box>
 }
 export default BaseInfo;

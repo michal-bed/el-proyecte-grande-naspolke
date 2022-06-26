@@ -1,5 +1,5 @@
 import {Button, TextField} from "@material-ui/core";
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {BoardMember} from "../../../../../classes/persons/BoardMember";
 import {BoardOfDirector} from "../../../../../classes/persons/BoardOfDirector";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
@@ -7,19 +7,35 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import validatePartners from "./ValidationCompanyOrgans";
 import {Box, Card, CardContent, Grid} from "@mui/material";
 import styles from "./MembersCompanyBodies.module.css";
+import {CompanyContext} from "../../CompanyContext";
 
 const MembersCompanyBodies = (props) => {
-    const [memberBody, setMemberBody] = useState(props.companyBodies)
+    const companyData = useContext(CompanyContext)
+    const [memberBody, setMemberBody] = useState(props.pageType==="board" ? companyData.state.company.boardMembers :
+        companyData.state.company.boardOfDirectors)
+
+    useEffect(()=> {
+        let delay = setTimeout(()=> {
+            const hasErrors = checkForErrors()
+            const action = {
+                pageType: props.pageType,
+                memberBody: memberBody,
+                hasErrors: hasErrors
+            }
+            companyData.passNewData(action)
+        },1000)
+        return ()=> {clearTimeout(delay)}
+    }, [memberBody])
 
     if (memberBody === null || memberBody.length === 0) {
         return <div>
             <div>Brak Organu!</div>
             <Button
                 onClick={addCompanyBodyMember}>Dodaj {props.pageType === "board" ? "członka zarządu" : "członka rady nadzorczej"}</Button>
-            <div>
-                <Button disabled={props.prev} onClick={() => changePageHandler(-1)}>Wstecz</Button>
-                <Button disabled={props.next} onClick={() => changePageHandler(1)}>Dalej</Button>
-            </div>
+            {/*<div>*/}
+            {/*    <Button disabled={props.prev} onClick={() => changePageHandler(-1)}>Wstecz</Button>*/}
+            {/*    <Button disabled={props.next} onClick={() => changePageHandler(1)}>Dalej</Button>*/}
+            {/*</div>*/}
         </div>
     } else if (memberBody.length === 0) {
         const v = []
@@ -33,7 +49,11 @@ const MembersCompanyBodies = (props) => {
             })
         }
         setMemberBody(v)
-    }
+    } else if (Object.keys(memberBody[0]).includes("function") && props.pageType=== "directors"){
+        setMemberBody(companyData.state.company.boardOfDirectors)
+    } else if (!Object.keys(memberBody[0]).includes("function") && props.pageType=== "board"){
+        setMemberBody(companyData.state.company.boardMembers)}
+
 
     function addCompanyBodyMember() {
         let blankNewDirectorData = {firstName: "", secondName: null, lastNameI: "", lastNameII: null,};
@@ -196,10 +216,10 @@ const MembersCompanyBodies = (props) => {
                 onClick={addCompanyBodyMember} startIcon={
                 <PersonAddIcon/>}>Dodaj {props.pageType === "board" ? "członka zarządu" : "członka rady nadzorczej"}</Button>
         </div>
-        <div>
-            <Button disabled={props.prev} onClick={() => changePageHandler(-1)}>Wstecz</Button>
-            <Button disabled={props.next} onClick={() => changePageHandler(1)}>Dalej</Button>
-        </div>
+        {/*<div>*/}
+        {/*    <Button disabled={props.prev} onClick={() => changePageHandler(-1)}>Wstecz</Button>*/}
+        {/*    <Button disabled={props.next} onClick={() => changePageHandler(1)}>Dalej</Button>*/}
+        {/*</div>*/}
     </Box>
 }
 export default MembersCompanyBodies;

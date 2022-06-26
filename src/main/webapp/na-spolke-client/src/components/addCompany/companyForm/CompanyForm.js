@@ -1,12 +1,11 @@
 import styles from "./CompanyForm.module.css";
 import {useEffect, useState} from "react";
 import BaseInfo from "./formComponents/baseInfo/BaseInfo";
-import AddressForm from "./formComponents/baseInfo/addressCard/AddressForm";
 import MembersCompanyBodies from "./formComponents/companyOrgans/MembersCompanyBodies";
 import Partners from "./formComponents/companyOrgans/Partners";
 import {ModalErrorFormComponent} from "./ModalErrorComponent";
-
-
+import FullWidthTabs from "./FormNavbar";
+import CompanyContextProvider, {CompanyContext} from "./CompanyContext";
 
 const CompanyForm = ({company, saveData})=>{
     const [page, setPage] = useState(0)
@@ -127,7 +126,7 @@ const CompanyForm = ({company, saveData})=>{
     }
 
 
-    return<div className={styles["form"]}>
+    return<form className={styles["form"]}>
         <div className={styles["form-container"]}>
         <div className={styles["progressbar"]}>
             <div style={{width: page === 0 ? "1%" : page === 1 ? "33%" : page === 2 ? "66%" : "100%"}}/>
@@ -135,12 +134,18 @@ const CompanyForm = ({company, saveData})=>{
             <div className={styles["header"]}>
                 <h1>{FormTitles[page]}</h1>
             </div>
-            <div className={styles["body"]}>{partFormToDisplay} {modalError}</div>
-            <div className={styles["footer"]}></div>
+            <CompanyContextProvider company={company}>
+            <div className={styles["body"]}>
+                <BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo} address={companyAddress}
+                          prev={page === 0} next={page === FormTitles.length - 1}/>;
+                {modalError}</div>
+                <FullWidthTabs company={company} saveCompanyData={handleSaveDataFromPartnerForm}/>
+            </CompanyContextProvider>
+            <div className={styles["footer"]}/>
             <div className={styles["form-nav-bar"]}>
             </div>
         </div>
-    </div>
+    </form>
 }
 
 export default CompanyForm;
