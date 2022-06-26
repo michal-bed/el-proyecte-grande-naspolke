@@ -1,14 +1,16 @@
 import {Button} from "@material-ui/core";
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Address} from "../../../../../../classes/company/Address";
 import validateAddress from "./ValidationAddress"
 import {Box, Card, CardContent, Grid, TextField} from "@mui/material";
+import {CompanyContext} from "../../../CompanyContext";
 
 
 
 
 const AddressForm = (props) => {
-    console.log(props.address)
+
+    const companyData = useContext(CompanyContext);
     const [streetNameInput, setStreetNameInput] = useState(props.address === null ? "" : props.address.streetName)
     const [streetNumberInput, setStreetNumberInput] = useState(props.address === null ? "" : props.address.streetNumber)
     const [localNumberInput, setLocalNumberInput] = useState(props.address === null ? "" : props.address.localNumber)
@@ -16,6 +18,25 @@ const AddressForm = (props) => {
     const [zipCodeInput, setZipCodeInput] = useState(props.address === null ? "" : props.address.zipCode)
     const [postOfficeInput, setPostOfficeInput] = useState(props.address === null ? "" : props.address.postOffice)
 
+    useEffect(()=> {
+        let delay = setTimeout(()=> {
+            const hasErrors = checkForErrors()
+            const address = new Address({
+                streetName: streetNameInput,
+                streetNumber: streetNumberInput,
+                localNumber: localNumberInput,
+                city: cityInput,
+                zipCode: zipCodeInput,
+                postOffice: postOfficeInput})
+            const action = {
+                address: address,
+                pageType: props.pageType,
+                hasErrors: hasErrors
+            }
+            companyData.passNewData(action)
+        },1000)
+        return ()=> {clearTimeout(delay)}
+    }, [streetNameInput,streetNumberInput,localNumberInput,cityInput,zipCodeInput,postOfficeInput])
 
     function changePageHandler(changePageValue){
         const address = new Address({streetName:streetNameInput, streetNumber: streetNumberInput, localNumber: localNumberInput,

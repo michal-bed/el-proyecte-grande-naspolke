@@ -10,6 +10,7 @@ import MembersCompanyBodies from "./formComponents/companyOrgans/MembersCompanyB
 import Partners from "./formComponents/companyOrgans/Partners";
 import {useContext, useState} from "react";
 import {CompanyContext} from "./CompanyContext";
+import {Button} from "@mui/material";
 
 function FormNavbar(props) {
     const { company, value, index, ...other } = props;
@@ -65,6 +66,10 @@ export default function FullWidthTabs(props) {
         setValue(index);
     };
 
+    function saveCompany(){
+        props.saveCompanyData()
+    }
+
     return (
         <Box sx={{ bgcolor: 'background.paper' }}>
             <AppBar position="static">
@@ -89,8 +94,8 @@ export default function FullWidthTabs(props) {
                 <FormNavbar value={value} company={props.company} index={0} dir={theme.direction}/>
                 <FormNavbar value={value} company={props.company} index={1} dir={theme.direction}/>
                 <FormNavbar value={value} company={props.company} index={2} dir={theme.direction}/>
-
             </SwipeableViews>
+            <Button onClick={saveCompany}>Zapisz</Button>
         </Box>
     );
 }

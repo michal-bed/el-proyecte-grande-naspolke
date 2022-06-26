@@ -136,8 +136,7 @@ const CompanyForm = ({company, saveData})=>{
             </div>
             <CompanyContextProvider company={company}>
             <div className={styles["body"]}>
-                <BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo} address={companyAddress}
-                          prev={page === 0} next={page === FormTitles.length - 1}/>;
+                <BaseInfo pageType="baseInfo" changePage={changePage} baseInfo={baseInfo} address={companyAddress}/>;
                 {modalError}</div>
                 <FullWidthTabs company={company} saveCompanyData={handleSaveDataFromPartnerForm}/>
             </CompanyContextProvider>
