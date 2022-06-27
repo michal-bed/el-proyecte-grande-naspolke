@@ -8,6 +8,8 @@ import {CompanyContext} from "../../CompanyContext";
 export default function CompanyIdentifiersCard(props) {
     const companyData = useContext(CompanyContext)
 
+
+
     return <Card sx={{minWidth: 275, width: "95%", margin: "auto", height: "100%"}}>
         <CardContent sx={{
             display: "grid",
@@ -51,19 +53,23 @@ export default function CompanyIdentifiersCard(props) {
             /></Box>
             <Box sx={{width: "85%", gridArea: "main3"}}><TextField
                 label="Numer KRS"
-                name="shareCapital"
+                name="krsNumber"
                 variant="filled"
+                type="number"
                 defaultValue={companyData.state.company.krsNumber}
-                disabled={true}
+                // aria-readonly={companyData.state.company.krsNumber.length === 10}
                 onChange={props.onChange}
+                // onDoubleClick={this.readonly}
+                //TODO poprawić double click
             /></Box>
             <Box sx={{width: "auto", gridArea: "main4", marginLeft: "-15%"}}><TextField
                 label="Kapitał zakładowy (w PLN)"
                 name="shareCapital"
                 variant="filled"
-                value={companyData.state.company.shareCapitalInput}
-                error={validateBaseInfo({shareCapitalInput: companyData.state.company.shareCapitalInput}).hasOwnProperty("shareCapitalInput")}
-                helperText={validateBaseInfo({shareCapitalInput: companyData.state.company.shareCapitalInput}).shareCapitalInput}
+                type="number"
+                defaultValue={companyData.state.company.shareCapital}
+                error={parseInt(companyData.state.company.shareCapital)<5000}
+                helperText={"kapitał zakładowy powinien wynosić conajmniej 5000 zł"}
                 onChange={props.onChange}
             /></Box></CardContent>
     </Card>;

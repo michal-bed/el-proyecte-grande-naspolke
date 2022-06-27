@@ -7,7 +7,17 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TextField from '@mui/material/TextField';
 import validatePartners from "./ValidationCompanyOrgans";
-import {Box, Card, CardActions, CardContent, Grid} from "@mui/material";
+import {
+    Box,
+    Card,
+    CardActions,
+    CardContent,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Grid, Input, Radio,
+    RadioGroup
+} from "@mui/material";
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import {CompanyContext} from "../../CompanyContext";
 
@@ -20,53 +30,66 @@ const actionType = {
     REMOVE_COMPANY_PARTNER: "removeCompanyPartner",
     DUPLICATE_INDIVIDUAL_PARTNER: "duplicateIndividualPartner",
     DUPLICATE_COMPANY_PARTNER: "duplicateCompanyPartner",
+    SET_SHARE_VALUE: "setShareValue",
+    SET_MANY_SHARES_ALLOWED: "setManySharesAllowed"
 }
 
 function reducer(state, action) {
+    let newState = {...state};
+    console.log(state)
+    console.log(newState)
     switch (action.actionType) {
         case actionType.DISPLAY_INDIVIDUAL_PARTNERS: {
             let individualPartners = state.partners.individualPartners;
             individualPartners[action.index][action.event.target.name] = action.event.target.value;
             individualPartners = changeSharesInfo(action, individualPartners);
-            return {...state, individualPartners: individualPartners};
+            newState.partners.individualPartners = individualPartners;
+            return {...newState};
         }
         case actionType.DISPLAY_COMPANY_PARTNERS: {
             let partnerCompanies = state.partners.partnerCompanies;
             partnerCompanies[action.index][action.event.target.name] = action.event.target.value;
             partnerCompanies = changeSharesInfo(action, partnerCompanies);
-            return {...state, partnerCompanies: partnerCompanies};
+            newState.partners.partnerCompanies = partnerCompanies;
+            return {...newState};
         }
         case actionType.ADD_NEW_COMPANY_PARTNER: {
             if (state.partners.partnerCompanies) {
                 let partnerCompanies = state.partners.partnerCompanies;
                 partnerCompanies.push(action.newPartner);
-                return {...state, partnerCompanies: partnerCompanies};
+                newState.partners.partnerCompanies = partnerCompanies;
+                return {...newState};
             } else {
                 let partnerCompanies = [];
                 partnerCompanies.push(action.newPartner);
-                return {...state, partnerCompanies: partnerCompanies};
+                newState.partners.partnerCompanies = partnerCompanies;
+                return {...newState};
             }
         }
         case actionType.ADD_NEW_INDIVIDUAL_PARTNER: {
             if(state.partners.individualPartners) {
-                let partnerCompanies = state.partners.individualPartners;
-                partnerCompanies.push(action.newPartner);
-                return {...state, individualPartners: partnerCompanies};
+                let individualPartners = state.partners.individualPartners;
+                individualPartners.push(action.newPartner);
+                newState.partners.individualPartners = individualPartners;
+                return {...newState};
             } else {
-                let partnerCompanies = [];
-                partnerCompanies.push(action.newPartner);
-                return {...state, partnerCompanies: partnerCompanies};
+                let individualPartners = [];
+                individualPartners.push(action.newPartner);
+                newState.partners.individualPartners = individualPartners;
+                return {...newState};
             }
         }
         case actionType.REMOVE_INDIVIDUAL_PARTNER: {
-            let partnerCompanies = state.partners.individualPartners;
-            partnerCompanies.splice(action.index, 1)
-            return {...state, individualPartners: partnerCompanies};
+            let individualPartners = state.partners.individualPartners;
+            individualPartners.splice(action.index, 1)
+            newState.partners.individualPartners = individualPartners;
+            return {...newState};
         }
         case actionType.REMOVE_COMPANY_PARTNER: {
             let partnerCompanies = state.partners.partnerCompanies;
             partnerCompanies.splice(action.index, 1)
-            return {...state, partnerCompanies: partnerCompanies};
+            newState.partners.partnerCompanies = partnerCompanies;
+            return {...newState};
         }
         case actionType.DUPLICATE_INDIVIDUAL_PARTNER: {
             let partnerCompanies = state.partners.individualPartners;
@@ -79,7 +102,8 @@ function reducer(state, action) {
                 sharesValue: partnerCompanies[action.index].sharesValue
             })
             partnerCompanies.splice(action.index + 1, 0, newDuplicatePartner);
-            return {...state, individualPartners: partnerCompanies}
+            newState.partners.individualPartners = partnerCompanies;
+            return {...newState}
         }
         case actionType.DUPLICATE_COMPANY_PARTNER: {
             let partnerCompanies = state.partners.partnerCompanies;
@@ -89,7 +113,17 @@ function reducer(state, action) {
                 sharesValue: partnerCompanies[action.index].sharesValue
             })
             partnerCompanies.splice(action.index + 1, 0, newDuplicatePartner);
-            return {...state, partnerCompanies: partnerCompanies}
+            newState.partners.partnerCompanies = partnerCompanies;
+
+            return {...newState}
+        }
+        case actionType.SET_SHARE_VALUE: {
+            newState.shareValue = action.shareValue;
+            return {...newState}
+        }
+        case actionType.SET_MANY_SHARES_ALLOWED: {
+            newState.manySharesAllowed = action.manySharesAllowed;
+            return {...newState}
         }
         default:
             return {...state}
@@ -99,9 +133,9 @@ function reducer(state, action) {
 
 function changeSharesInfo(action, value) {
     if (action.event.target.name === "sharesCount") {
-        value[action.index]["sharesValue"] = action.event.target.value * action.shareValue
+        value[action.index]["sharesValue"] = parseInt(action.event.target.value) * action.shareValue
     } else if (action.event.target.name === "sharesValue") {
-        value[action.index]["sharesCount"] = action.event.target.value / action.shareValue
+        value[action.index]["sharesCount"] = parseInt(action.event.target.value) / action.shareValue
     }
     return value;
 }
@@ -109,6 +143,9 @@ function changeSharesInfo(action, value) {
 const Partners = (props) => {
     const companyData = useContext(CompanyContext)
     const [state, dispatch] = useReducer(reducer, companyData.state.company)
+    console.log(state.shareValue)
+    console.log(state.partners.partnerCompanies)
+    console.log(state.partners.individualPartners)
     useEffect(()=>{
         const delay = setTimeout(()=>{
             const hasErrors = checkForErrors();
@@ -117,6 +154,8 @@ const Partners = (props) => {
                 pageType: props.pageType,
                 partners: partners,
                 allPartnersDisplayed: companyData.state.company.shareCapital === countAllSharesValues(),
+                manySharesAllowed: state.manySharesAllowed,
+                shareValue: state.shareValue,
                 hasErrors: hasErrors
             }
             companyData.passNewData(action)
@@ -124,13 +163,6 @@ const Partners = (props) => {
         return () => {clearTimeout(delay)}
         }, [state])
     let counter = 1;
-    if (state.partners === null || state.partners.length === 0) {
-        return <div>
-            <div>Brak danych wspólników!</div>
-            <button onClick={addEmptyPartnerCompanyToForm}>Dodaj wspólnika</button>
-        </div>
-    }
-
 
     function checkForErrors() {
         if (state.partners.individualPartners) {
@@ -158,7 +190,7 @@ const Partners = (props) => {
             actionType: list,
             index: index,
             event: event,
-            shareValue: companyData.state.company.shareValue
+            shareValue: state.shareValue,
         }
         dispatch(action)
     }
@@ -166,8 +198,8 @@ const Partners = (props) => {
     function addEmptyPartnerCompanyToForm() {
         let newCompanyPartner = new PartnerCompany({
             name: "",
-            sharesValue: parseInt(companyData.state.company.shareCapital) - countAllSharesValues(),
-            sharesCount: (parseInt(companyData.state.company.shareCapital) / parseInt(companyData.state.company.shareValue)) - countAllSharesCount()
+            sharesValue: companyData.state.company.shareCapital? parseInt(companyData.state.company.shareCapital) - countAllSharesValues() : 0,
+            sharesCount:companyData.state.company.shareCapital? (parseInt(companyData.state.company.shareCapital) / parseInt(companyData.state.company.shareValue)) - countAllSharesCount() :0
         })
         const action = {
             actionType: actionType.ADD_NEW_COMPANY_PARTNER,
@@ -177,20 +209,40 @@ const Partners = (props) => {
     }
 
     function addEmptyIndividualToForm() {
-        let newCompanyPartner = new PartnerCompany({
+        let newCompanyPartner = new IndividualPartner({
             firstname: "",
             secondName: "",
             lastNameI: "",
             lastNameII: "",
-            sharesValue: companyData.state.company.shareCapital && parseInt(companyData.state.company.shareCapital) - countAllSharesValues(),
-            sharesCount: companyData.state.company.shareCapital && (parseInt(companyData.state.company.shareCapital) / parseInt(companyData.state.company.shareValue)) - countAllSharesCount()
+            sharesValue: companyData.state.company.shareCapital? parseInt(companyData.state.company.shareCapital) - countAllSharesValues(): 0,
+            sharesCount: companyData.state.company.shareCapital ? (parseInt(companyData.state.company.shareCapital) / parseInt(companyData.state.company.shareValue)) - countAllSharesCount() : 0
         })
         const action = {
             actionType: actionType.ADD_NEW_INDIVIDUAL_PARTNER,
-            newPartner: newCompanyPartner
+            newPartner: newCompanyPartner,
+            shareValue: state.shareValue
+
         }
         dispatch(action);
 
+    }
+
+    const handleChange = (event) => {
+        const action ={
+            actionType: actionType.SET_MANY_SHARES_ALLOWED,
+            manySharesAllowed: event.target.value,
+            shareValue: state.shareValue
+
+        };
+        dispatch(action)
+    };
+
+    const handleChangeShareValue = (event) => {
+        const action = {
+            actionType: actionType.SET_SHARE_VALUE,
+            shareValue: event.target.value,
+        }
+        dispatch(action)
     }
 
     function countAllSharesCount() {
@@ -209,7 +261,7 @@ const Partners = (props) => {
     }
 
     function countAllSharesValues() {
-        return parseInt(countPartnersListSharesValue(state.partners.individualPartners)) + parseInt(countPartnersListSharesValue(state.partners.partnerCompanies))
+        return countPartnersListSharesValue(state.partners.partnerCompanies) + countPartnersListSharesValue(state.partners.individualPartners)
     }
 
     function countPartnersListSharesValue(newIndividualPartnerList) {
@@ -223,8 +275,8 @@ const Partners = (props) => {
     }
 
     function setNewPartnersData() {
-        const newIndividualPartnerList = populateList(state.partners.individualPartners, "individuals");
-        const newCompanyPartnerList = populateList(state.partners.partnerCompanies, "companies");
+        const newIndividualPartnerList = state.partners.individualPartners && populateList(state.partners.individualPartners, "individuals");
+        const newCompanyPartnerList = state.partners.partnerCompanies && populateList(state.partners.partnerCompanies, "companies");
         const allIndividualSharesValue = countPartnersListSharesValue(newIndividualPartnerList)
         const allCompanySharesValue = countPartnersListSharesValue(newCompanyPartnerList)
         const allSharesCount = countAllSharesCount()
@@ -234,17 +286,17 @@ const Partners = (props) => {
         };
     }
 
-    function switchPrevPage() {
-        const newPartners = setNewPartnersData();
-        const hasErrors = checkForErrors();
-        // companyData.changePage(newPartners, companyData.pageType, -1, hasErrors)
-    }
-
-    function saveCompanyData() {
-        const newPartners = setNewPartnersData();
-        const hasErrors = checkForErrors();
-        companyData.saveCompanyData(newPartners, hasErrors);
-    }
+    // function switchPrevPage() {
+    //     const newPartners = setNewPartnersData();
+    //     const hasErrors = checkForErrors();
+    //     // companyData.changePage(newPartners, companyData.pageType, -1, hasErrors)
+    // }
+    //
+    // function saveCompanyData() {
+    //     const newPartners = setNewPartnersData();
+    //     const hasErrors = checkForErrors();
+    //     companyData.saveCompanyData(newPartners, hasErrors);
+    // }
 
     function handlePartnersList(index, actionType) {
         dispatch({index: index, actionType: actionType})
@@ -260,7 +312,7 @@ const Partners = (props) => {
                 value={partner.sharesCount}
                 error={validatePartners({sharesCount: partner.sharesCount}).hasOwnProperty("sharesCount")}
                 helperText={validatePartners({sharesCount: partner.sharesCount}).sharesCount}
-                onChange={event => handleChangeInput(index, event, listType)}
+                onChange={(event) => handleChangeInput(index, event, listType)}
             /></Box>
             <Box sx={{width: "auto", gridArea: "sharesValue"}} className={styles["Box"]}><TextField
                 label="wartość udziałów (w PLN)"
@@ -270,11 +322,10 @@ const Partners = (props) => {
                 value={partner.sharesValue}
                 error={validatePartners({sharesValue: partner.sharesValue}).hasOwnProperty("sharesValue")}
                 helperText={validatePartners({sharesValue: partner.sharesValue}).sharesValue}
-                onChange={event => handleChangeInput(index, event, listType)}
+                onChange={(event) => handleChangeInput(index, event, listType)}
             /></Box>
         </>
     }
-
 
     return <div>
         <Grid sx={{
@@ -284,6 +335,33 @@ const Partners = (props) => {
             gridTemplateRows: "auto",
             margin: "auto",
         }} className={styles["card-grid-container"]}>
+        <Card  sx={{minWidth: 275, width: "95%", margin: "auto", height: "100%"}}>
+            <FormControl>
+                <FormLabel id="demo-controlled-radio-buttons-group">Wspólnik może posiadać:</FormLabel>
+                <RadioGroup
+                    aria-labelledby="demo-controlled-radio-buttons-group"
+                    name="controlled-radio-buttons-group"
+                    value={state.manySharesAllowed ? state.manySharesAllowed : true}
+                    onChange={(event)=>handleChange(event)}
+                >
+                    <FormControlLabel value={false} control={<Radio />} label="tylko jeden udział" />
+                    <FormControlLabel value={true} control={<Radio />} label="więcej niż jeden udział" />
+                </RadioGroup>
+            </FormControl>
+        </Card>
+        <Card  sx={{minWidth: 275, width: "95%", margin: "auto", height: "100%"}}>
+            <CardContent>
+                    <TextField
+                label="Wartość jednego udziału (w PLN)"
+                name="shareValue"
+                variant="filled"
+                type="number"
+                defaultValue={state.shareValue? state.shareValue : 0}
+                error={state.shareValue? state.shareValue < 50 : true}
+                helperText={"Wartość jednego udziału musi być większa niż 50 zł"}
+                onChange={(event) => handleChangeShareValue(event)}
+            /></CardContent>
+        </Card>
             {state.partners.individualPartners !== null && state.partners.individualPartners.map((partner, index) => (
                 <div key={index}>
                     <Card sx={{minWidth: 275, width: "95%", margin: "auto", height: "100%"}}>
@@ -408,13 +486,13 @@ const Partners = (props) => {
                     disabled={true}
                 />
                 <TextField
-                    error={companyData.state.company.shareCapital !== countAllSharesValues()}
+                    error={parseInt(companyData.state.company.shareCapital) !== countAllSharesValues()}
                     label="wartość"
-                    helperText={companyData.state.company.shareCapital < countAllSharesValues() ? "wartosć udziałów jest za wysoka" :
-                        companyData.state.company.shareCapital > countAllSharesValues() ? "wartosć udziałów jest za mała" : ""}
+                    helperText={parseInt(companyData.state.company.shareCapital) < countAllSharesValues() ? "wartosć udziałów jest za wysoka" :
+                        parseInt(companyData.state.company.shareCapital) > countAllSharesValues() ? "wartosć udziałów jest za mała" : ""}
                     name="sharesCapital"
                     variant="filled"
-                    value={`${countAllSharesValues()} zł`}
+                    value={`${countAllSharesValues() } zł`}
                     disabled={true}
                 />
             </div>

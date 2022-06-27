@@ -8,9 +8,9 @@ export class Company {
     address = new Address(null);
     nip = null;
     regon = null;
-    shareCapital = null;
+    shareCapital = 5000;
     sharesCount = null;
-    shareValue = null;
+    shareValue = 50;
     boardMembers = null;
     boardOfDirectors = null;
     partners = new Partners(null);

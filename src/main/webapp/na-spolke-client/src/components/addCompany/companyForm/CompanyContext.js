@@ -29,6 +29,8 @@ const companyDataReducer = (state, action) => {
         case pageType.PARTNERS: {
             newState.company.partners = action.partners;
             newState.componentsErrors.partners = action.hasErrors;
+            newState.company.manySharesAllowed = action.manySharesAllowed;
+            newState.company.shareValue = action.shareValue;
             return {...newState};
         }
         case pageType.BASE_INFO:{
