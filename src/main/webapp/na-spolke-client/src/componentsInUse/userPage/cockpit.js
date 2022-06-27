@@ -72,7 +72,7 @@ function Cockpit ({classes}) {
                             <Menu iconShape="circle">
 
                                 <MenuItem icon={<DraftsIcon />}>
-                                    Kokpit <Link to={"/userpanel"} />
+                                    Wybór Spółki <Link to={"/userpanel"} />
                                 </MenuItem>
 
 
