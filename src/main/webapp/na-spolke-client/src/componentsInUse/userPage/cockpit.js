@@ -91,7 +91,7 @@ function Cockpit ({classes}) {
                     <div style={{overflow: 'auto', height: '100%', width: '100%'}}>
 
                         <Routes>
-                            {/* jeśli route ma routy pod nim, trzeba dodać "/*" */}
+                            {/* jeśli route ma routy pod nim, trzeba dodać "/*"  */}
                             <Route path="/" element={<MainCockpitPage />} />
                             <Route path="/test" element={<TestPage />} />
                             <Route path="/:companyId" element={<CompanyInfo/>} />
