@@ -1,18 +1,21 @@
 package com.company.naspolke.model.company;
 
-
-import com.company.naspolke.model.company.companyBodies.*;
+import com.company.naspolke.model.aggregate.CompanyUserRole;
+import com.company.naspolke.model.company.companyBodies.BoardMember;
+import com.company.naspolke.model.company.companyBodies.BoardOfDirector;
 import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.Partners;
-import com.sun.istack.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.Type;
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,9 +26,10 @@ import java.util.UUID;
 public class Company {
 
     @Id
-    @NotNull
-    @Type(type = "uuid-char")
-    private UUID companyId = UUID.randomUUID();
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "company_id")
+    private UUID companyId;
     private String companyName;
     private Long krsNumber;
     @ManyToOne(cascade = {CascadeType.ALL})
@@ -45,10 +49,10 @@ public class Company {
     private Partners partners;
     private boolean partnersRevealed;
     private boolean manySharesAllowed;
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "primaryKey.company", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-//    @Column(name = "company_user_role")
-//    private Set<CompanyUserRole> companyUserRole = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @Column(name = "company_user_role")
+    private Set<CompanyUserRole> companyUserRole = new HashSet<>();
 
 
     @Builder
@@ -69,7 +73,7 @@ public class Company {
     }
 
     private Integer checkForShareCount() {
-        if(manySharesAllowed){
+        if (manySharesAllowed) {
             BigDecimal shareCountBD = shareCapital.divide(shareValue);
             return shareCountBD.intValue();
         }
@@ -80,10 +84,10 @@ public class Company {
         return partners.getAllSharesValue().equals(shareCapital);
     }
 
-    public BigDecimal checkForShareValue(){
+    public BigDecimal checkForShareValue() {
         BigDecimal shareValue = null;
         if (manySharesAllowed) {
-            if (partners.getIndividualPartners().size()>0){
+            if (partners.getIndividualPartners().size() > 0) {
                 NaturalPerson person = partners.getIndividualPartners().iterator().next();
                 BigDecimal sharesValues = person.getSharesValue();
                 BigDecimal sharesCount = BigDecimal.valueOf(person.getSharesCount());
@@ -99,20 +103,21 @@ public class Company {
         shareValue = shareValue.setScale(2, RoundingMode.CEILING);
         return shareValue;
     }
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-//        Company company = (Company) o;
-//        return companyId != null && Objects.equals(companyId, company.companyId);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return getClass().hashCode();
-//    }
 
-//    public void addCompanyUserRole(CompanyUserRole companyUserRole) {
-//        this.companyUserRole.add(companyUserRole);
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Company company = (Company) o;
+        return companyId != null && Objects.equals(companyId, company.companyId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    public void addCompanyUserRole(CompanyUserRole companyUserRole) {
+        this.companyUserRole.add(companyUserRole);
+    }
 }

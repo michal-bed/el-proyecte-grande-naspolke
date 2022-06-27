@@ -1,0 +1,35 @@
+a, a:visited {
+    color: #1e60a1 !important;
+}
+.offscreen {
+    position: absolute;
+    left: -9999px;
+}
+
+.errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.line {
+    display: inline-block;
+}
+
+.persistCheck {
+    font-size: 0.75rem;
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.persistCheck label {
+    margin: 0;
+}
+
+/*::-ms-reveal {*/
+/*    display: inline !important;*/
+/*}*/
