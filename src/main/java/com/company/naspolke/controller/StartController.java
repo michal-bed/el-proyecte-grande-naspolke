@@ -1,16 +1,22 @@
 package com.company.naspolke.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import com.company.naspolke.service.CompanyService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/")
+@CrossOrigin("http://localhost:3000")
+@RequiredArgsConstructor
 public class StartController {
 
-    @GetMapping
+    private final CompanyService companyService;
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String start() {
-        return "Hello world";
+        return "hello world";
     }
+
 }

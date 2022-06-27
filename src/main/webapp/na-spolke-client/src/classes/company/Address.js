@@ -1,19 +1,19 @@
 
 export class Address{
-    StreetName;
-    StreetNumber;
-    LocalNumber;
-    City;
-    ZipCode;
-    PostOffice;
+    streetName = null;
+    streetNumber = null;
+    localNumber = null;
+    city = null;
+    zipCode = null;
+    postOffice = null;
     constructor(addressData) {
-        this.StreetName = addressData.ulica;
-        this.StreetNumber = addressData.nrDomu;
-        this.LocalNumber = addressData.nrLokalu
-            ? addressData.nrLokalu
-            : null;
-        this.City = addressData.miejscowosc;
-        this.ZipCode = addressData.kodPocztowy;
-        this.PostOffice = addressData.poczta;
+        if (addressData) {
+            this.streetName = addressData.streetName;
+            this.streetNumber = addressData.streetNumber;
+            this.localNumber = addressData.localNumber;
+            this.city = addressData.city;
+            this.zipCode = addressData.zipCode;
+            this.postOffice = addressData.postOffice;
+        }
     }
 }

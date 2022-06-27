@@ -89,6 +89,11 @@ const routes = [
 
       },
       {
+        name: "Dodaj spółkę",
+        href: "/add-company",
+
+      },
+      {
         name: "navigation",
         description: "See all navigations",
         dropdown: true,

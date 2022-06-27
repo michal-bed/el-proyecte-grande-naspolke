@@ -2,6 +2,8 @@ import React from "react";
 import {useState} from "react";
 import styles from "./KrsUserInput.module.css";
 import Axios from "axios";
+import {TextField} from "@material-ui/core";
+import ValidationKrsUserInput from "./ValidationKrsUserInput";
 
 const KrsUserInput = (props)=>{
     const [krsNumber, setKrsNumber] = useState("");
@@ -10,10 +12,10 @@ const KrsUserInput = (props)=>{
 
     const krsNumberHandler = event => {
         const userKrsInput = event.target.value.trim();
+        setKrsNumber(userKrsInput);
         const onlyNum = /^\d+$/.test(userKrsInput)
         if(userKrsInput.length === 10 && onlyNum){
             setIsValid(true);
-            setKrsNumber(userKrsInput);
         } else {
             setIsValid(false);
         }
@@ -27,11 +29,11 @@ const KrsUserInput = (props)=>{
     }
 
     const getDataFromKrsAPI = () => {
-        Axios.get(`https://api-krs.ms.gov.pl/api/krs/OdpisAktualny/${krsNumber}?rejestr=p&format=json`)
+        Axios.get(`http://localhost:8080/add-company/${krsNumber}`)
             .then((response)=> {
             props.addCompanyData(response);
         }).catch(error=>{
-            console.log(error.message)
+            props.addCompanyData(error.response.status);
         });
     }
 
@@ -39,11 +41,12 @@ const KrsUserInput = (props)=>{
     return <div className={styles["krs-input-container"]}>
         <form onSubmit={formSubmitHandler}>
             <div><label>Podaj numer KRS spółki</label></div>
-            <input type="text"
+            <TextField type="text"
                    placeholder="0000123456"
-                   className={`${styles["krs-input-field"]} ${isValid ? "correct" : "incorrect"}`}
+                   error={ValidationKrsUserInput(krsNumber).hasOwnProperty("krsNumber")}
+                   helperText={ValidationKrsUserInput(krsNumber).krsNumber}
                    onChange={krsNumberHandler}/>
-            <button type="submit">Pobierz dane spółki</button>
+            <button type="submit" >Pobierz dane spółki</button>
         </form>
     </div>
 }

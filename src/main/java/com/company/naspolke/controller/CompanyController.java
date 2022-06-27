@@ -1,8 +1,8 @@
 package com.company.naspolke.controller;
 
 import com.company.naspolke.model.AppUser;
-import com.company.naspolke.model.Company;
 import com.company.naspolke.model.Role;
+import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.types.RoleType;
 import com.company.naspolke.service.AppUserService;
 import com.company.naspolke.service.CompanyService;
@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,14 +38,17 @@ public class CompanyController {
     }
 
     @PostMapping(value = "/add-company")
-    public void addNewCompany(@RequestBody String userEmail) {
+    public ResponseEntity<String> addNewCompany(@RequestBody Company newCompany) {
         //TODO: potrzebuje obiektu spółki zapisanego już w bazie danych i to będzie zamiast
         //TODO: tego poniżej
-        Optional<Company> company = companyService.getCompanyByKrsNumber(10L);
-        Optional<AppUser> appUser = appUserService.findUserByUserEmail(userEmail);
+
+        Optional<AppUser> appUser = appUserService.findUserByUserEmail("test@test.com");
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.OWNER);
-        if (company.isPresent() && appUser.isPresent() && role.isPresent()) {
-            companyUserRoleService.addNewMemberToCompany(company.get(), appUser.get(), role.get());
+        if (appUser.isPresent() && role.isPresent()) {
+            Company savedCompany = companyService.saveCompany(newCompany);
+
+            companyUserRoleService.addNewMemberToCompany(savedCompany, appUser.get(), role.get());
+            return companyService.buildSaveResponse(savedCompany);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company or appUser");
         }
@@ -84,4 +88,10 @@ public class CompanyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company or appUser");
         }
     }
+
+    @GetMapping(value = "/add-company/{krsNumber}")
+    public ResponseEntity<Company> getCompanyDtoFromKrsApi(@PathVariable("krsNumber") String krsNumber) {
+        return companyService.getCompanyData(krsNumber);
+    }
+
 }

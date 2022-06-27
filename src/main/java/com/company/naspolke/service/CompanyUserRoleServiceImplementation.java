@@ -1,7 +1,7 @@
 package com.company.naspolke.service;
 
 import com.company.naspolke.model.AppUser;
-import com.company.naspolke.model.Company;
+import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.Role;
 import com.company.naspolke.model.aggregate.CompanyUserRole;
 import com.company.naspolke.model.types.RoleType;
@@ -46,21 +46,23 @@ public class CompanyUserRoleServiceImplementation implements CompanyUserRoleServ
 
     @Override
     public void addNewMemberToCompany(Company company, AppUser appUser, Role role) {
-        CompanyUserRole companyUserRole = new CompanyUserRole();
-        companyUserRole.setCompany(company);
-        companyUserRole.setUser(appUser);
-        companyUserRole.setRole(role);
-        companyUserRole.setRegisteredDate(LocalDateTime.now());
+        if (company!= null) {
+            CompanyUserRole companyUserRole = new CompanyUserRole();
+            companyUserRole.setCompany(company);
+            companyUserRole.setUser(appUser);
+            companyUserRole.setRole(role);
+            companyUserRole.setRegisteredDate(LocalDateTime.now());
 
-        companyUserRoleRepository.save(companyUserRole);
+            companyUserRoleRepository.save(companyUserRole);
 
-        company.addCompanyUserRole(companyUserRole);
-        appUser.addCompanyUserRole(companyUserRole);
-        role.addCompanyUserRole(companyUserRole);
+            company.addCompanyUserRole(companyUserRole);
+            appUser.addCompanyUserRole(companyUserRole);
+            role.addCompanyUserRole(companyUserRole);
 
-        companyRepository.save(company);
-        appUserRepository.save(appUser);
-        roleRepository.save(role);
+            companyRepository.save(company);
+            appUserRepository.save(appUser);
+            roleRepository.save(role);
+        }
     }
 
     @Override

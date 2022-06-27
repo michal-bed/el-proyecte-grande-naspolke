@@ -1,6 +1,6 @@
 package com.company.naspolke.repository;
 
-import com.company.naspolke.model.Company;
+import com.company.naspolke.model.company.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

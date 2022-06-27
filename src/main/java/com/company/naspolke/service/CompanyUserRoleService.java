@@ -1,7 +1,7 @@
 package com.company.naspolke.service;
 
 import com.company.naspolke.model.AppUser;
-import com.company.naspolke.model.Company;
+import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.Role;
 import com.company.naspolke.model.types.RoleType;
 
