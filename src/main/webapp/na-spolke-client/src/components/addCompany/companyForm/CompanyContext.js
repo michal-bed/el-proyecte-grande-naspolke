@@ -38,6 +38,7 @@ const companyDataReducer = (state, action) => {
             newState.company.nip = action.nipInput;
             newState.company.regonInput = action.regonInput;
             newState.company.shareCapital = action.shareCapitalInput;
+            newState.company.krsNumber = action.krsNumberInput;
             newState.componentsErrors.baseInfo = action.hasErrors;
             return {...newState};
         }

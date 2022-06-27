@@ -3,6 +3,7 @@ package com.company.naspolke.controller;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.service.CompanyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

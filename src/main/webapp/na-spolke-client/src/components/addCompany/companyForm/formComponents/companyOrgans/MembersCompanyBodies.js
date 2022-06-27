@@ -1,7 +1,5 @@
 import {Button, TextField} from "@material-ui/core";
 import {useContext, useEffect, useState} from "react";
-import {BoardMember} from "../../../../../classes/persons/BoardMember";
-import {BoardOfDirector} from "../../../../../classes/persons/BoardOfDirector";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import validatePartners from "./ValidationCompanyOrgans";
@@ -79,7 +77,6 @@ const MembersCompanyBodies = (props) => {
         }
     }
 
-
     function displayMemberFunction(index, member) {
         if (member.hasOwnProperty("function")) {
             return <Box sx={{gridArea: 'function', display: 'inline-grid'}} className={styles["Box"]}><TextField
@@ -100,28 +97,6 @@ const MembersCompanyBodies = (props) => {
         setMemberBody(values);
     }
 
-    function createMemberBodyList() {
-        switch (props.pageType) {
-            case "board": {
-                const boardMember = [];
-                memberBody.map(member => {
-                    const person = new BoardMember(member);
-                    boardMember.push(person);
-                })
-                return boardMember;
-            }
-            case "directors": {
-                const boardOfDirectors = [];
-                memberBody.map(member => {
-                    const person = new BoardOfDirector(member);
-                    boardOfDirectors.push(person);
-                })
-                return boardOfDirectors;
-            }
-            default:
-                return;
-        }
-    }
 
     function checkForErrors() {
         if (memberBody) {
@@ -135,11 +110,6 @@ const MembersCompanyBodies = (props) => {
         return true;
     }
 
-    function changePageHandler(pageChange) {
-        const bodyList = createMemberBodyList()
-        const containsError = checkForErrors();
-        props.changePage(bodyList, props.pageType, pageChange, containsError)
-    }
 
     function handleBodyMemberList(index) {
         let newMemberList = [...memberBody];

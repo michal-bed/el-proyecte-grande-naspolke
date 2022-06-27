@@ -286,18 +286,6 @@ const Partners = (props) => {
         };
     }
 
-    // function switchPrevPage() {
-    //     const newPartners = setNewPartnersData();
-    //     const hasErrors = checkForErrors();
-    //     // companyData.changePage(newPartners, companyData.pageType, -1, hasErrors)
-    // }
-    //
-    // function saveCompanyData() {
-    //     const newPartners = setNewPartnersData();
-    //     const hasErrors = checkForErrors();
-    //     companyData.saveCompanyData(newPartners, hasErrors);
-    // }
-
     function handlePartnersList(index, actionType) {
         dispatch({index: index, actionType: actionType})
     }
@@ -520,11 +508,6 @@ const Partners = (props) => {
                 />
             </div>
         </div>
-        {/*<div>*/}
-        {/*    <Button disabled={companyData.prev} onClick={switchPrevPage}>Wstecz</Button>*/}
-        {/*    <Button disabled={companyData.next}>Dalej</Button>*/}
-        {/*    <Button onClick={saveCompanyData}>Zapisz</Button>*/}
-        {/*</div>*/}
     </div>
 }
 export default Partners;

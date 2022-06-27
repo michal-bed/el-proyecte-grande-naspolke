@@ -27,8 +27,8 @@ public class MonoStringToCompanyAdapter {
 
 
     public Company getCompany(String apiResponse) {
-//        String data = new String(apiResponse);
-        String data = SWLEX;
+        String data = new String(apiResponse);
+//        String data = SWLEX;
         String largerSharesInfo = "WIĘKSZĄ LICZBĘ UDZIAŁÓW";
         Configuration conf = Configuration.defaultConfiguration()
                 .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
@@ -175,7 +175,7 @@ public class MonoStringToCompanyAdapter {
     private SharePackage getShareInfo(Object document, String path) {
         String sharesInfo = JsonPath.read(document, path + ".posiadaneUdzialy");
         String[] shares = sharesInfo.split("UDZIAŁÓW O ŁĄCZNEJ WARTOŚCI");
-        Integer shareCount = Integer.valueOf(shares[0].trim());
+        Integer shareCount = Integer.valueOf(shares[0].trim().replaceAll("[^\\d]",""));
         String sharesValueString = shares[1].replaceAll("[^\\d,]","").replaceAll("\\s+","");
         sharesValueString = sharesValueString.substring(0, sharesValueString.length()-2);
         BigDecimal sharesValueBigDecimal = BigDecimal.valueOf(Double.parseDouble(sharesValueString.replaceAll("[^\\d]", ".")));

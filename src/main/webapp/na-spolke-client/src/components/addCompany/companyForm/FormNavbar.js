@@ -31,8 +31,8 @@ function FormNavbar(props) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    {index===0 && <MembersCompanyBodies companyBodies={company.boardMembers} changePage={null}pageType={"board"}/>}
-                    {index===1 && <MembersCompanyBodies companyBodies={company.boardOfDirectors} changePage={null} pageType={"directors"}/>}
+                    {index===0 && <MembersCompanyBodies companyBodies={company.boardMembers} pageType={"board"}/>}
+                    {index===1 && <MembersCompanyBodies companyBodies={company.boardOfDirectors} pageType={"directors"}/>}
                     {index===2 && <Partners partners={company.partners} changePage={null} pageType={"partners"} shareCapital={company.shareCapital}
                                             shareValue={company.shareValue} sharesCount={company.sharesCount}/>}
                 </Box>

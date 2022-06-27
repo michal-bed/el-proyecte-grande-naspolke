@@ -57,7 +57,6 @@ export default function CompanyIdentifiersCard(props) {
                 variant="filled"
                 type="number"
                 defaultValue={companyData.state.company.krsNumber}
-                // aria-readonly={companyData.state.company.krsNumber.length === 10}
                 onChange={props.onChange}
                 // onDoubleClick={this.readonly}
                 //TODO poprawić double click

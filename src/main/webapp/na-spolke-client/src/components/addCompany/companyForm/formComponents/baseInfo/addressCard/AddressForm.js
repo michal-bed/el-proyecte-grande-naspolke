@@ -1,4 +1,3 @@
-import {Button} from "@material-ui/core";
 import {useContext, useEffect, useState} from "react";
 import {Address} from "../../../../../../classes/company/Address";
 import validateAddress from "./ValidationAddress"
@@ -38,12 +37,6 @@ const AddressForm = (props) => {
         return ()=> {clearTimeout(delay)}
     }, [streetNameInput,streetNumberInput,localNumberInput,cityInput,zipCodeInput,postOfficeInput])
 
-    // function changePageHandler(changePageValue){
-    //     const address = new Address({streetName:streetNameInput, streetNumber: streetNumberInput, localNumber: localNumberInput,
-    //         city: cityInput, zipCode: zipCodeInput, postOffice: postOfficeInput})
-    //     const hasErrors = checkForErrors()
-    //     props.changePage(address, props.pageType, changePageValue, hasErrors)
-    // }
 
     function handleChangeInput(e){
         switch (e.target.name) {

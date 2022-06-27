@@ -24,12 +24,12 @@ public class CompanyService {
 
 
     public ResponseEntity<Company> getCompanyData(String krsNumber){
-//        String result = krsClient.webClient(krsNumber);
-        String result = "404";
+        String result = krsClient.webClient(krsNumber);
+//        String result = "404";
         HttpStatus httpStatus = HttpStatus.OK;
         Company company = null;
         HttpHeaders headers = new HttpHeaders();
-        String resultApi;
+//        String resultApi;
         if(result.length()==3){
             httpStatus = HttpStatus.valueOf(Integer.parseInt(result));
         } else {
