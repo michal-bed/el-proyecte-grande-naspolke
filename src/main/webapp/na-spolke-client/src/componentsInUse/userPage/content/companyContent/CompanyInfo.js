@@ -5,6 +5,9 @@ import { getCompanyById } from "../../handlers/CompanyDataHandler";
 function CompanyInfo () {
 
     let {companyId} = useParams();
+
+    console.log(companyId);
+
     let company = getCompanyById(companyId);
 
     return (
