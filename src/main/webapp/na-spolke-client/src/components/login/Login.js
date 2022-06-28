@@ -52,7 +52,9 @@ const Login = () => {
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
             const email = response?.data?.email;
-            setAuth({ user: values.email, pwd: values.password, roles, accessToken });
+            setAuth({ user: values.email,
+                    // pwd: values.password,
+                    roles, accessToken });
             // console.log(email)
             localStorage.setItem("user", AESEncrypt(email));
             // console.log(localStorage.getItem("user"));
