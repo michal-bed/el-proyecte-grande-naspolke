@@ -36,3 +36,5 @@ build/
 src/main/resources/application.properties
 
 src/main/webapp/na-spolke-client/.env
+
+/node_modules/

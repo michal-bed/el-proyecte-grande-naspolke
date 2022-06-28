@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class RefreshTokenServiceImplementation implements RefreshTokenService {
 
-    private RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
     public RefreshTokenServiceImplementation(RefreshTokenRepository refreshTokenRepository) {

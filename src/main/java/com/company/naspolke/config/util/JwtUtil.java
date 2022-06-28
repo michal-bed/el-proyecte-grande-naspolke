@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
-    private final String SECRET_KEY = System.getenv("ACCESS_TOKEN_SECRET");;
+    private final String SECRET_KEY = System.getenv("ACCESS_TOKEN_SECRET");
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

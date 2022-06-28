@@ -1,5 +1,7 @@
 package com.company.naspolke.model;
 
+import com.company.naspolke.model.aggregate.CompanyUserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,18 +44,10 @@ public class AppUser {
     @ElementCollection
     @Column(name = "application_roles")
     private Set<SimpleGrantedAuthority> applicationRoles = new HashSet<>();
-
-//    public <T, E> AppUser(UUID randomUUID, String userName, String userSurname, String userEmail, String userPassword, boolean b, boolean b1, Set<T> role_user, Set<E> of) {
-//    }
-//    @OneToMany(mappedBy = "primaryKey.user", cascade = CascadeType.ALL)
-//    @Column(name = "company_user_role")
-//    private Set<CompanyUserRole> companyUserRole = new HashSet<>();
-
-//    @ManyToMany
-//    @JoinTable(name = "user_table_to_role_table",
-//            joinColumns = { @JoinColumn(name = "user_id") },
-//            inverseJoinColumns = { @JoinColumn(name = "role_id") })
-//    private Set<Role> companyRoles = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @Column(name = "company_user_role")
+    private Set<CompanyUserRole> companyUserRole = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -66,5 +60,9 @@ public class AppUser {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void addCompanyUserRole(CompanyUserRole companyUserRole) {
+        this.companyUserRole.add(companyUserRole);
     }
 }

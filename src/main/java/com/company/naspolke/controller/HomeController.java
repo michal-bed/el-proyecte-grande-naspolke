@@ -6,16 +6,18 @@ import com.company.naspolke.config.util.JwtUtil;
 import com.company.naspolke.model.RefreshToken;
 import com.company.naspolke.model.auth.AuthenticationRequest;
 import com.company.naspolke.model.auth.AuthenticationResponse;
+import com.company.naspolke.service.AppUserService;
 import com.company.naspolke.service.RefreshTokenService;
-import com.company.naspolke.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,20 +26,18 @@ import java.util.Optional;
 @RequestMapping(value = "/")
 public class HomeController {
 
-    private JwtUtil jwtTokenUtil;
-    private UserService userService;
-    private RefreshTokenService refreshTokenService;
-    private AuthenticationService authenticationService;
-    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtTokenUtil;
+    private final AppUserService appUserService;
+    private final RefreshTokenService refreshTokenService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public HomeController(JwtUtil jwtTokenUtil, UserService userService, RefreshTokenService refreshTokenService,
-                          AuthenticationService authenticationService, PasswordEncoder passwordEncoder) {
+    public HomeController(JwtUtil jwtTokenUtil, AppUserService appUserService,
+                          RefreshTokenService refreshTokenService, AuthenticationService authenticationService) {
         this.jwtTokenUtil = jwtTokenUtil;
-        this.userService = userService;
+        this.appUserService = appUserService;
         this.refreshTokenService = refreshTokenService;
         this.authenticationService = authenticationService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @RequestMapping({ "/hello" })
@@ -51,9 +51,9 @@ public class HomeController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
 
         UserDetails userDetails = authenticationService.authenticateAndGetUserDetails(authenticationRequest);
-        Optional<AppUser> user = userService.findUserByUserEmail(authenticationRequest.getUsername());
-        System.out.println("!!!!!!!!!!email!!!!!!");
-        System.out.println(user.get().getUserEmail());
+//        System.out.println("!!!!!!!!!!email!!!!!!");
+//        System.out.println(user.get().getUserEmail());
+        Optional<AppUser> user = appUserService.findUserByUserEmail(authenticationRequest.getUsername());
 
         final String accessToken = jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 15);
         final String refreshToken = jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 60 * 60);
