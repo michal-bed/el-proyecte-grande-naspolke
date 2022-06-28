@@ -30,6 +30,7 @@ import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
 
 import MainPage from "../mainPage/mainPage";
 import FaqPage from "../faqPage/FaqPage";
+import Footer from "../footer/Footer";
 // Presentation page components
 import BuiltByDevelopers from "../kitComponentSection/KitComponentSection";
 
@@ -41,6 +42,7 @@ import routes from "../../routes";
 
 // Images
 import index_photo3 from "../../assets/photos/index_photo3.jpg";
+
 
 
 
@@ -183,6 +185,7 @@ function Presentation(props) {
           </Container>
         </MKBox>
       </Card>
+        <Footer/>
     </>
   );
 }

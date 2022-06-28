@@ -168,7 +168,7 @@ const Login = () => {
                         <p>
                             Nie masz jeszcze konta?<br />
                             <span className={style.line}>
-                                <Link to="/register">Zarejestruj się</Link>
+                                <Link color="" to="/register">Zarejestruj się</Link>
                             </span>
                         </p>
                         <Button onClick={(e) => { validateForm()} } type="submit" colorScheme="teal" width="full">
