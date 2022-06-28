@@ -1,21 +1,87 @@
 package com.company.naspolke.service;
 
-import com.company.naspolke.model.Company;
+import com.company.naspolke.helpers.adapters.MonoStringToCompanyAdapter;
+import com.company.naspolke.model.company.Company;
 import com.company.naspolke.repository.CompanyRepository;
+import com.company.naspolke.webclient.krs.KrsClient;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Optional;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 public class CompanyServiceImplementation implements CompanyService {
 
     private CompanyRepository companyRepository;
+    private final KrsClient krsClient;
+    private final MonoStringToCompanyAdapter monoStringToCompanyAdapter;
 
     @Autowired
-    public CompanyServiceImplementation(CompanyRepository companyRepository) {
+    public CompanyServiceImplementation(CompanyRepository companyRepository, KrsClient krsClient, MonoStringToCompanyAdapter monoStringToCompanyAdapter) {
         this.companyRepository = companyRepository;
+        this.krsClient = krsClient;
+        this.monoStringToCompanyAdapter = monoStringToCompanyAdapter;
     }
+
+    @Override
+    public ResponseEntity<com.company.naspolke.model.company.Company> getCompanyData(String krsNumber) {
+        String result = krsClient.webClient(krsNumber);
+//        String result = "404";
+        HttpStatus httpStatus = HttpStatus.OK;
+        com.company.naspolke.model.company.Company company = null;
+        HttpHeaders headers = new HttpHeaders();
+//        String resultApi;
+        if (result.length() == 3) {
+            httpStatus = HttpStatus.valueOf(Integer.parseInt(result));
+        } else {
+            company = monoStringToCompanyAdapter.getCompany(result);
+        }
+        return new ResponseEntity<>(company, headers, httpStatus);
+    }
+
+    @Override
+    public boolean checkForDuplicate(Long krsNumber) {
+        Company a = companyRepository.findByKrsNumber(krsNumber);
+        return companyRepository.findByKrsNumber(krsNumber)== null ;
+    }
+    @Override
+    public Company saveCompany(Company company) {
+        if (checkForDuplicate(company.getKrsNumber())) {
+            Company companyToSave = Company.builder()
+                    .companyName(company.getCompanyName())
+                    .krsNumber(company.getKrsNumber())
+                    .address(company.getAddress())
+                    .nip(company.getNip())
+                    .regon(company.getRegon())
+                    .shareCapital(company.getShareCapital())
+                    .boardMembers(company.getBoardMembers())
+                    .boardOfDirectors(company.getBoardOfDirectors())
+                    .partners(company.getPartners())
+                    .manySharesAllowed(company.isManySharesAllowed())
+                    .build();
+            return companyRepository.save(companyToSave);
+        }
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<String> buildSaveResponse(Company company) {
+        if (company!= null) {
+            String companyName = company.getCompanyName();
+            return new ResponseEntity<>(companyName, new HttpHeaders(), HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.NO_CONTENT);
+        }
+    }
+
 
     @Override
     public Optional<Company> getCompanyByKrsNumber(Long krsNumber) {

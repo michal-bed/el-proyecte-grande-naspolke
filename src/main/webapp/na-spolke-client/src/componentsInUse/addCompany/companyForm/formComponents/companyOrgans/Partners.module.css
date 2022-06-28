@@ -1,0 +1,41 @@
+.partner-separator{
+    margin-top: 2vh;
+}
+.Box {
+    display: inline-grid;
+}
+.card-grid-container{
+    margin-bottom: 2vh;
+}
+.summary-container {
+    margin-bottom: 2vh;
+    width: 30%;
+}
+.summary-user-inputs {
+    width: 80%;
+    display: flex;
+}
+
+.summary-company-data {
+    display: flex;
+}
+
+.add-partner-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15%;
+    flex-wrap:wrap;
+    text-align: center;
+    align-content: center;
+
+}
+.add-partner-title{
+    width: 100%;
+    justify-content: center;
+    font-size: 2.5vh;
+    margin-bottom: 3vh;
+}
+
+.add-partner-buttons {
+    font-size: 3vh;
+}

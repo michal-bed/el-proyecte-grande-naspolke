@@ -46,6 +46,7 @@ import KitComponentSection from "./componentsInUse/kitComponentSection/KitCompon
 import Registration from "./componentsInUse/registration/Registration";
 import Login from "./componentsInUse/login/Login";
 
+import Cockpit from "./componentsInUse/userPage/cockpit";
 // Sections
 
 
@@ -69,6 +70,11 @@ const routes = [
             name: "Rejestracja",
             route: "/registration",
             component: <Registration />
+          },
+          {
+            name: "Kokpit",
+            route: "/userpanel",
+            component: <Cockpit />
           }
         ],
       },
@@ -78,104 +84,23 @@ const routes = [
     name: "Informacje",
     icon: <Icon>help</Icon>,
     collapse: [
-          {
-            name: "O nas",
-            href: "/#o_nas",
-
-          },
-          {
-            name: "Usługi",
-            href: "/#uslugi",
-
-          },
-          {
-            name: "FAQ",
-            route: "/faq",
-          },
       {
-        name: "input areas",
-        description: "See all input areas",
-        dropdown: true,
-        collapse: [
-          {
-            name: "inputs",
-            route: "/sections/input-areas/inputs",
+        name: "O nas",
+        href: "/#o_nas",
 
-          },
-          {
-            name: "forms",
-            route: "/sections/input-areas/forms",
-
-          },
-        ],
       },
       {
-        name: "attention catchers",
-        description: "See all examples",
-        dropdown: true,
-        collapse: [
-          {
-            name: "alerts",
-            route: "/sections/attention-catchers/alerts",
-
-          },
-          {
-            name: "modals",
-            route: "/sections/attention-catchers/modals",
-
-          },
-          {
-            name: "tooltips & popovers",
-            route: "/sections/attention-catchers/tooltips-popovers",
-
-          },
-        ],
+        name: "Usługi",
+        href: "/#uslugi",
       },
       {
-        name: "elements",
-        description: "See all 32 examples",
-        dropdown: true,
-        collapse: [
-          {
-            name: "avatars",
-            route: "/sections/elements/avatars",
+        name: "Dodaj spółkę",
+        href: "/add-company",
 
-          },
-          {
-            name: "badges",
-            route: "/sections/elements/badges",
-
-          },
-          {
-            name: "breadcrumbs",
-            route: "/sections/elements/breadcrumbs",
-
-          },
-          {
-            name: "buttons",
-            route: "/sections/elements/buttons",
-
-          },
-          {
-            name: "dropdowns",
-            route: "/sections/elements/dropdowns",
-
-          },
-          {
-            name: "progress bars",
-            route: "/sections/elements/progress-bars",
-
-          },
-          {
-            name: "toggles",
-            route: "/sections/elements/toggles",
-
-          },
-          {
-            name: "typography",
-            route: "/sections/elements/typography",
-          },
-        ],
+      },
+      {
+        name: "FAQ",
+        route: "/faq",
       },
     ],
   },

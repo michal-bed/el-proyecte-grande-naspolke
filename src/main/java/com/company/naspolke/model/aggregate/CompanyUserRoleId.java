@@ -1,9 +1,8 @@
 package com.company.naspolke.model.aggregate;
 
 import com.company.naspolke.model.AppUser;
-import com.company.naspolke.model.Company;
+import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 

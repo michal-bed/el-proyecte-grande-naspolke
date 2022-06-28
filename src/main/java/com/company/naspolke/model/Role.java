@@ -32,7 +32,7 @@ public class Role {
     @Column(name = "role_type")
     private RoleType roleType;
     @JsonIgnore
-    @OneToMany(mappedBy = "primaryKey.role", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Column(name = "company_user_role")
     private Set<CompanyUserRole> companyUserRole = new HashSet<>();
 
