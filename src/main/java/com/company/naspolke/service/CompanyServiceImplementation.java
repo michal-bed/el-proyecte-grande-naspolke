@@ -32,7 +32,7 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
-    public ResponseEntity<com.company.naspolke.model.company.Company> getCompanyData(String krsNumber) {
+    public ResponseEntity<com.company.naspolke.model.company.Company> getCompanyDtoFromKrsApi(String krsNumber) {
         String result = krsClient.webClient(krsNumber);
 //        String result = "404";
         HttpStatus httpStatus = HttpStatus.OK;

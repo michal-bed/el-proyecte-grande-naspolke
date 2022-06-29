@@ -13,54 +13,9 @@ import ChangeRole from "./componentsInUse/ownerPanel/ChangeRole";
 import AddCompany from "./componentsInUse/addCompany/AddCompany";
 import Cockpit from './componentsInUse/userPage/cockpit';
 
-// import Registration from "./components/registration/Registration";
-// import AddCompany from "./components/addCompany/AddCompany";
-// import MainPage from "./components/mainPage/mainPage";
-// import Nav from 'react-bootstrap/Nav'
-// import {useState} from "react";
-
-// import { Routes, Route, Link } from 'react-router-dom';
 
 function App() {
-  //   const [active, setActive] = useState("MainPage")
-  //
-  //   const getMainPage = ()=> {
-  //       setActive("MainPage")
-  //   }
-  //   const getRegistration = () => {
-  //     setActive("Registration")
-  //   }
-  //
-  //   const addCompany = () => {
-  //     setActive("addCompany")
-  //   }
-  //
-  // return (
-  //   <div className="App">
-  //       {/*<Nav variant="pills" defaultActiveKey="MainPage">*/}
-  //       {/*    <Nav.Item>*/}
-  //       {/*        <Nav.Link onClick={getMainPage} >Strona główna</Nav.Link>*/}
-  //       {/*    </Nav.Item>*/}
-  //       {/*    <Nav.Item>*/}
-  //       {/*        <Nav.Link onClick={getRegistration} >Rejestracja</Nav.Link>*/}
-  //       {/*    </Nav.Item>*/}
-  //       {/*    <Nav.Item>*/}
-  //       {/*        <Nav.Link onClick={addCompany}  >Dodaj spółkę</Nav.Link>*/}
-  //       {/*    </Nav.Item>*/}
-  //       {/*    <Nav.Item>*/}
-  //       {/*    </Nav.Item>*/}
-  //       {/*</Nav>*/}
-  //
-  //       {/*{active === "MainPage" && <MainPage title={"MainPage"}/>}*/}
-  //       {/*{active === "Registration" && <Registration title={"Registration"}/>}*/}
-  //       {/*{active === "addCompany" && <AddCompany title={"addCompany"}/>}*/}
-  //       <Routes>
-  //           <Route path="/" element={<MainPage title={"MainPage"} />} />
-  //
-  //       </Routes>
-  //
-  //   </div>
-  // );
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>

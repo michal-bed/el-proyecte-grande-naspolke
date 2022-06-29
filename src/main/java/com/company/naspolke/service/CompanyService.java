@@ -11,7 +11,7 @@ public interface CompanyService {
 
     Optional<Company> getCompanyByKrsNumber(Long krsNumber);
 
-    public ResponseEntity<Company> getCompanyData(String krsNumber);
+    public ResponseEntity<Company> getCompanyDtoFromKrsApi(String krsNumber);
 
     public boolean checkForDuplicate(Long krsNumber);
 

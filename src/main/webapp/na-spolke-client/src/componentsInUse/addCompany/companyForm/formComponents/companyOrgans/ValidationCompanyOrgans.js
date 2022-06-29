@@ -76,3 +76,7 @@ export default function validatePartners(values){
 
     return errors;
 }
+
+//TODO biblioteka do docx xforJ podzielić tekst protokołu na sekcje/ wczytywać text z pliku.
+// //plik przechowywać w chmurze
+// / wygenerowane pliki przechowywać w chmurze

@@ -57,8 +57,6 @@ public class HomeController {
         final String accessToken = jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 15);
         final String refreshToken = jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 60 * 60);
 
-        System.out.println(accessToken);
-        System.out.println(refreshToken);
         if (refreshTokenService.findByUser(user.get()).isEmpty()) {
             RefreshToken savedToken = new RefreshToken(refreshToken, user.get());
             refreshTokenService.saveToken(savedToken);
