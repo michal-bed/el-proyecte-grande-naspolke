@@ -4,25 +4,30 @@ import {Link, matchPath, Route, Routes, useLocation, useParams} from "react-rout
 import MainCockpitPage from "../../content/mainCockpitPage";
 import TestPage from "../../content/testPage";
 import CompanyInfo from "../../content/companyContent/CompanyInfo";
+import CompanyMembers from '../../content/companyContent/CompanyMembers';
 import {Box} from "@mui/material";
 import {useEffect, useState} from "react";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Subpage from "./Subpage";
+import useAuth from "../../../../hooks/useAuth";
 
 
 
 
 function Page ({classes}) {
+    const { auth } = useAuth();
+    console.log(auth.accessToken);
     return (
         <Box style={{display: "flex", flexDirection: "column", height: '100%', width: '100%', contain: 'paint'} }>
 
             <Routes>
                 {/* jeśli route ma routy pod nim, trzeba dodać "/*"  */}
                 <Route path="/" element={<Subpage component={<MainCockpitPage/>}/>}/>
-                <Route path="/test" element={<Subpage component={<TestPage/>}/>}/>
+                <Route path="/join" element={<Subpage component={<TestPage/>}/>}/>
                 <Route path="/:companyId/*">
                     <Route path="" element={<Subpage component={<CompanyInfo />}/>}/>
+                    <Route path="members" element={<Subpage component={<CompanyMembers />} />} />
                 </Route>
             </Routes>
         </Box>

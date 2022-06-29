@@ -13,7 +13,7 @@ function MainCockpitPage () {
 
         companies.forEach( company => {
             items.push(
-                <Card><Link to={"/userpanel/" + company['id'] }><ButtonBase>{company['name']}</ButtonBase></Link></Card>
+                <Card><Link to={"/userpanel/" + company['companyId'] }><ButtonBase>{company['companyName']}</ButtonBase></Link></Card>
             )
         })
         return items;

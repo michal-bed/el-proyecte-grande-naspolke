@@ -6,10 +6,11 @@ import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 
 
 
+
 export default function Sidebar () {
 
     const [windowWidth, setWindowWidth] = useState(undefined);
-    const [windowWidthCheck, setWindowWidthCheck] = useState(true);
+    const [windowWidthCheck, setWindowWidthCheck] = useState(false);
 
     useEffect(() => {
         function handleResize() {
@@ -31,15 +32,29 @@ export default function Sidebar () {
         const match = matchPath(location.pathname, "/userpanel")
 
         const {companyId} = useParams();
-        console.log(companyId + " fkoawekfo");
 
         if (match == null) {
             return (
-                <SubMenu title="komponent 1" icon={<DocumentScannerIcon/>}>
+                <>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        Twoja Spółka <Link to={"/userpanel/" + companyId}/>
+                    </MenuItem>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        Ludzie Spółki <Link to={"/userpanel/" + companyId + "/members"}/>
+                    </MenuItem>
                     <MenuItem icon={<DraftsIcon/>}>
                         {companyId} <Link to={"/userpanel/" + companyId}/>
                     </MenuItem>
-                </SubMenu>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        {companyId} <Link to={"/userpanel/" + companyId}/>
+                    </MenuItem>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        {companyId} <Link to={"/userpanel/" + companyId}/>
+                    </MenuItem>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        {companyId} <Link to={"/userpanel/" + companyId}/>
+                    </MenuItem>
+                </>
             );
         } else {
             return null;
@@ -59,6 +74,9 @@ export default function Sidebar () {
                     <MenuItem icon={<DraftsIcon/>}>
                         Wybór Spółki <Link to={"/userpanel"}/>
                     </MenuItem>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        Dołącz do Spółki <Link to={"/userpanel/join"}/>
+                    </MenuItem>
 
                     <hr />
                     <PopulateNavbar/>
@@ -68,7 +86,7 @@ export default function Sidebar () {
             </SidebarContent>
 
             <SidebarFooter>
-                krzysiek
+                naspolke.com
             </SidebarFooter>
         </ProSidebar>
     )
