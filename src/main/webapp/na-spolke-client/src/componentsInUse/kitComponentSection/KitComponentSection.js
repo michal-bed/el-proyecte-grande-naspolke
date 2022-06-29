@@ -34,7 +34,7 @@ function BuiltByDevelopers(props) {
       alignItems="center"
       borderRadius="xl"
       my={2}
-      py={6}
+      py={12}
       sx={{
         backgroundImage: ({ functions: { linearGradient, rgba }, palette: { gradients } }) =>
           `${linearGradient(

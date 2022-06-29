@@ -43,7 +43,7 @@ import DefaultNavbarMobile from "./DefaultNavbarMobile";
 // Material Kit 2 React base styles
 import breakpoints from "../../../assets/theme/base/breakpoints";
 
-function DefaultNavbar({ brand, routes, transparent, light, action, sticky, relative, center }) {
+function DefaultNavbar({ brand, routes, transparent, light, action, fixed, relative, center }) {
   const [dropdown, setDropdown] = useState("");
   const [dropdownEl, setDropdownEl] = useState("");
   const [dropdownName, setDropdownName] = useState("");
@@ -447,7 +447,9 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
   );
 
   return (
-    <Container sx={sticky ? { position: "sticky", top: 0, zIndex: 10 } : null}>
+      <MKBox display="flex" alignItems="center" justifyContent="center" width="100%">
+    <Container sx={fixed ? { position: "fixed", top: 0, zIndex: 20} : null}>
+
       <MKBox
         py={1}
         px={{ xs: 4, sm: transparent ? 2 : 3, lg: transparent ? 0 : 2 }}
@@ -542,6 +544,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
       {dropdownMenu}
       {nestedDropdownMenu}
     </Container>
+      </MKBox>
   );
 }
 
@@ -551,7 +554,7 @@ DefaultNavbar.defaultProps = {
   transparent: false,
   light: false,
   action: false,
-  sticky: false,
+  fixed: false,
   relative: false,
   center: false,
 };
@@ -582,7 +585,7 @@ DefaultNavbar.propTypes = {
       label: PropTypes.string.isRequired,
     }),
   ]),
-  sticky: PropTypes.bool,
+  fixed: PropTypes.bool,
   relative: PropTypes.bool,
   center: PropTypes.bool,
 };

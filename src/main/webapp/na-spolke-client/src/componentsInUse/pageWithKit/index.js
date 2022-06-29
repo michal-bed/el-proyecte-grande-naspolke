@@ -31,6 +31,7 @@ import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
 import MainPage from "../mainPage/mainPage";
 import FaqPage from "../faqPage/FaqPage";
 import Footer from "../footer/Footer";
+import useAuth from "../../hooks/useAuth";
 // Presentation page components
 import BuiltByDevelopers from "../kitComponentSection/KitComponentSection";
 
@@ -50,6 +51,7 @@ function Presentation(props) {
     let title = "Na Spółkę"
     let titleDescription = "Ta aplikacja jest projektem końcowym studnetów\n" +
                             " codecool."
+
     const currentSite = props.site;
 
     function setContent() {
@@ -68,6 +70,7 @@ function Presentation(props) {
 
     const component = setContent()
 
+
   return (
     <>
       <DefaultNavbar
@@ -79,7 +82,7 @@ function Presentation(props) {
           color: "info",
         }
         }
-        sticky
+        fixed
       />
       <MKBox
         minHeight="75vh"
