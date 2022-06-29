@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, UUID> {
-    Company findByKrsNumber(Long krsNumber);
+    Company findByKrsNumber(String krsNumber);
 }

@@ -31,7 +31,7 @@ public class Company {
     @Column(name = "company_id")
     private UUID companyId;
     private String companyName;
-    private Long krsNumber;
+    private String krsNumber;
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "address_id")
     private Address address;
@@ -56,7 +56,7 @@ public class Company {
 
 
     @Builder
-    public Company(String companyName, Long krsNumber, Address address, String nip, String regon, BigDecimal shareCapital, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners, boolean manySharesAllowed) {
+    public Company(String companyName, String krsNumber, Address address, String nip, String regon, BigDecimal shareCapital, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners, boolean manySharesAllowed) {
         this.companyName = companyName;
         this.krsNumber = krsNumber;
         this.address = address;

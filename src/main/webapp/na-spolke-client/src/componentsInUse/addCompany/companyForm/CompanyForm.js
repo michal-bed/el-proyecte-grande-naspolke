@@ -36,7 +36,7 @@ const CompanyForm = ({saveData})=>{
                 <h1>Dane podstawowe</h1>
             </div>
             <div className={styles["body"]}>
-                <BaseInfo pageType="baseInfo" />;
+                <BaseInfo pageType="baseInfo" />
                 {modalError}
             </div>
                 <FullWidthTabs company={companyData.state.company} saveCompanyData={handleSaveDataFromPartnerForm}/>

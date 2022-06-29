@@ -48,7 +48,7 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
-    public boolean checkForDuplicate(Long krsNumber) {
+    public boolean checkForDuplicate(String krsNumber) {
         Company a = companyRepository.findByKrsNumber(krsNumber);
         return companyRepository.findByKrsNumber(krsNumber)== null ;
     }
@@ -84,7 +84,7 @@ public class CompanyServiceImplementation implements CompanyService {
 
 
     @Override
-    public Optional<Company> getCompanyByKrsNumber(Long krsNumber) {
+    public Optional<Company> getCompanyByKrsNumber(String krsNumber) {
         return Optional.ofNullable(companyRepository.findByKrsNumber(krsNumber));
     }
 }

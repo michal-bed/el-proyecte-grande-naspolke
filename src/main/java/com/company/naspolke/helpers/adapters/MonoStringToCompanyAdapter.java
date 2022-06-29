@@ -1,6 +1,6 @@
 package com.company.naspolke.helpers.adapters;
 
-import com.company.naspolke.helpers.adapters.mocks.KRSMock;
+import com.company.naspolke.helpers.adapters.mocks.MocksData;
 import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.companyBodies.*;
@@ -20,9 +20,8 @@ import java.util.*;
 public class MonoStringToCompanyAdapter {
 
 
-    private final String SWLEX = KRSMock.SWLEX;
-    private final String EASYSOLAR = KRSMock.EASYSOLAR;
-
+    private final String SWLEX = MocksData.SWLEX;
+    private final String EASYSOLAR = MocksData.EASYSOLAR;
 
     public Company getCompany(String apiResponse) {
         String data = new String(apiResponse);
@@ -33,7 +32,7 @@ public class MonoStringToCompanyAdapter {
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(data);
         String nip = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.nip");
         String regon = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.regon");
-        Long krsNumber = Long.valueOf(JsonPath.read(document, "$.odpis.naglowekA.numerKRS"));
+        String krsNumber = JsonPath.read(document, "$.odpis.naglowekA.numerKRS");
         String companyName = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
         BigDecimal shareCapital = getShareCapitalFromApi(document);
         Partners partners = createCompanyPartners(document);

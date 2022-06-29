@@ -12,6 +12,7 @@ import DeleteMember from "./componentsInUse/ownerPanel/DeleteMember";
 import ChangeRole from "./componentsInUse/ownerPanel/ChangeRole";
 import AddCompany from "./componentsInUse/addCompany/AddCompany";
 import Cockpit from './componentsInUse/userPage/cockpit';
+import FinancialStatement from "./componentsInUse/generateDocuments/financialStatement/FinancialStatement";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                     <Route path="change-role" element={<ChangeRole/>}/>
                     <Route path="add-company" element={<AddCompany/>}/>
                     <Route path="userpanel/*" element={<Cockpit />} />
+                    <Route path="generate/financial-statements" element={<FinancialStatement />} />
                 </Route>
             </Routes>
         </ThemeProvider>);

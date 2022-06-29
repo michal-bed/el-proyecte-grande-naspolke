@@ -9,11 +9,11 @@ import java.util.Optional;
 public interface CompanyService {
 
 
-    Optional<Company> getCompanyByKrsNumber(Long krsNumber);
+    Optional<Company> getCompanyByKrsNumber(String krsNumber);
 
     public ResponseEntity<Company> getCompanyDtoFromKrsApi(String krsNumber);
 
-    public boolean checkForDuplicate(Long krsNumber);
+    public boolean checkForDuplicate(String krsNumber);
 
     public Company saveCompany(Company company);
 

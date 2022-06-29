@@ -4,7 +4,6 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({});
-    console.log(localStorage.getItem("persist"));
     const [persist, setPersist] = useState(localStorage.getItem("persist") === "undefined" ? false : JSON.parse(localStorage.getItem("persist")));
 
     return (

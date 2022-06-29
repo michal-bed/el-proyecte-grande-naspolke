@@ -1,5 +1,6 @@
 package com.company.naspolke.controller;
 
+import com.company.naspolke.helpers.adapters.mocks.MocksData;
 import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.Role;
 import com.company.naspolke.model.company.Company;
@@ -55,7 +56,7 @@ public class CompanyController {
 
     @PostMapping(value = "/add-member-to-company")
     public void addNewMemberToCompany(@RequestBody ObjectNode objectNode) {
-        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByKrsNumber(objectNode.get("KRSNumber").asText());
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(objectNode.get("userEmail").asText());
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.valueOf(objectNode.get("roleType").asText()));
         if (company.isPresent() && appUser.isPresent() && role.isPresent()) {
@@ -67,7 +68,7 @@ public class CompanyController {
 
     @PutMapping(value = "/change-role")
     public void changeMemberRoleInCompany(@RequestBody ObjectNode objectNode) {
-        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByKrsNumber(objectNode.get("KRSNumber").asText());
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(objectNode.get("userEmail").asText());
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.valueOf(objectNode.get("roleType").asText()));
         if (company.isPresent() && appUser.isPresent() && role.isPresent()) {
@@ -79,7 +80,7 @@ public class CompanyController {
 
     @DeleteMapping(value = "/delete-member")
     public void deleteMemberFromCompany(@RequestBody ObjectNode objectNode) {
-        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByKrsNumber(objectNode.get("KRSNumber").asText());
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(objectNode.get("userEmail").asText());
         if (company.isPresent() && appUser.isPresent()) {
             companyUserRoleService.deleteMemberFromCompany(company.get(), appUser.get());
@@ -93,4 +94,8 @@ public class CompanyController {
         return companyService.getCompanyDtoFromKrsApi(krsNumber);
     }
 
+    @GetMapping(value = "/company/{id}")
+    public Company getCompanyById(@PathVariable String id) {
+        return MocksData.getMockCompany();
+    }
 }
