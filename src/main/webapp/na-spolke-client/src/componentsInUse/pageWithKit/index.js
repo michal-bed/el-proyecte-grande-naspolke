@@ -29,14 +29,16 @@ import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
 
 
 import MainPage from "../mainPage/mainPage";
-
+import FaqPage from "../faqPage/FaqPage";
+import Footer from "../footer/Footer";
+import useAuth from "../../hooks/useAuth";
 // Presentation page components
 import BuiltByDevelopers from "../kitComponentSection/KitComponentSection";
 
 
 
 // Routes
-import routes from "../../routes";
+import Routes from "../../routes";
 
 
 // Images
@@ -44,20 +46,37 @@ import index_photo3 from "../../assets/photos/index_photo3.jpg";
 
 
 
-function Presentation() {
+
+function Presentation(props) {
+    const route = Routes()
+    let title = "Na Spółkę"
+    let titleDescription = "Ta aplikacja jest projektem końcowym studnetów\n" +
+                            " codecool."
+
+    const currentSite = props.site;
+
+    function setContent() {
+
+        switch (currentSite){
+            case "index":
+                return(<MainPage />)
+
+            case "faq":
+                title = "Frequently Asked Questions"
+                titleDescription = "Zebraliśmy najczęściej pojawiające się pytania i " +
+                    "posatraliśmy się w jak najlepszy sposób na nie odpowiedzieć."
+                return(<FaqPage />)
+        }
+    }
+
+    const component = setContent()
+
 
   return (
     <>
       <DefaultNavbar
-        routes={routes}
-        action={{
-          type: "external",
-          route: "https://www.creative-tim.com/product/material-kit-react",
-          label: "login",
-          color: "info",
-        }
-        }
-        sticky
+        routes={route}
+        fixed
       />
       <MKBox
         minHeight="75vh"
@@ -83,7 +102,7 @@ function Presentation() {
                 },
               })}
             >
-              Na Spółkę
+                {title}
             </MKTypography>
             <MKTypography
               variant="body1"
@@ -92,8 +111,7 @@ function Presentation() {
               px={{ xs: 6, lg: 12 }}
               mt={1}
             >
-              Free & Open Source Web UI Kit built over ReactJS &amp; MUI. Join over 1.6 million
-              developers around the world.
+                {titleDescription}
             </MKTypography>
           </Grid>
         </Container>
@@ -109,7 +127,7 @@ function Presentation() {
           boxShadow: ({ boxShadows: { xxl } }) => xxl,
         }}
       >
-        <MainPage />
+          {component}
 
         <MKBox pt={18} pb={6}>
           <Container>
@@ -164,6 +182,7 @@ function Presentation() {
           </Container>
         </MKBox>
       </Card>
+        <Footer/>
     </>
   );
 }
