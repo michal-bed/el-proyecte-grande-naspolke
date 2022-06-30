@@ -124,9 +124,12 @@ function Routes(){
           href: "/#oferta",
         },
         {
+          name: "Cennik",
+          href: "/cennik"
+        },
+        {
           name: "Dodaj spółkę",
           href: "/add-company",
-
         },
         {
           name: "FAQ",
@@ -136,4 +139,6 @@ function Routes(){
     },
   ];
 }
-export default Routes;
+
+
+export default Routes

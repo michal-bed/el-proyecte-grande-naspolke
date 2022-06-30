@@ -37,6 +37,7 @@ export default function CompanyIdentifiersCard(props) {
                 label="NIP"
                 name="nip"
                 variant="filled"
+                type="number"
                 value={props.nipInput}
                 error={validateBaseInfo({nipInput: props.nipInput}).hasOwnProperty("nipInput")}
                 helperText={validateBaseInfo({nipInput: props.nipInput}).nipInput}
@@ -46,6 +47,7 @@ export default function CompanyIdentifiersCard(props) {
                 label="REGON"
                 name="regon"
                 variant="filled"
+                type="number"
                 value={props.regonInput}
                 error={validateBaseInfo({regonInput: props.regonInput}).hasOwnProperty("regonInput")}
                 helperText={validateBaseInfo({regonInput: props.regonInput}).regonInput}
@@ -71,7 +73,7 @@ export default function CompanyIdentifiersCard(props) {
                 helperText={"kapitał zakładowy powinien wynosić conajmniej 5000 zł"}
                 onChange={props.onChange}
             /></Box></CardContent>
-    </Card>;
+    </Card>
 }
 
 CompanyIdentifiersCard.propTypes = {

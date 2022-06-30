@@ -46,7 +46,6 @@ public class CompanyController {
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.OWNER);
         if (appUser.isPresent() && role.isPresent()) {
             Company savedCompany = companyService.saveCompany(newCompany);
-
             companyUserRoleService.addNewMemberToCompany(savedCompany, appUser.get(), role.get());
             return companyService.buildSaveResponse(savedCompany);
         } else {
@@ -90,8 +89,8 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/add-company/{krsNumber}")
-    public ResponseEntity<Company> getCompanyDtoFromKrsApi(@PathVariable("krsNumber") String krsNumber) {
-        return companyService.getCompanyData(krsNumber);
+    public ResponseEntity<Company> getCompanyDataFromKrsApi(@PathVariable("krsNumber") String krsNumber) {
+        return companyService.getCompanyDtoFromKrsApi(krsNumber);
     }
 
 }

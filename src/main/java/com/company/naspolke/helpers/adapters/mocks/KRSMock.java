@@ -1,4 +1,4 @@
-package com.company.naspolke.controller;
+package com.company.naspolke.helpers.adapters.mocks;
 
 public class KRSMock {
 

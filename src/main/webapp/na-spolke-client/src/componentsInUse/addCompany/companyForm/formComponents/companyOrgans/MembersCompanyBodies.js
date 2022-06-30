@@ -37,18 +37,6 @@ const MembersCompanyBodies = (props) => {
                 </CardContent>
             </Card>
         </div>
-    } else if (memberBody.length === 0) {
-        const companyBody = []
-        for (let i = 0; i < props.companyBodies.length; i++) {
-            companyBody.push({
-                firstName: props.companyBodies[i].firstName,
-                secondName: props.companyBodies[i].secondName,
-                lastNameI: props.companyBodies[i].lastNameI,
-                lastNameII: props.companyBodies[i].lastNameII,
-                function: props.companyBodies[i].hasOwnProperty("function") ? props.companyBodies[i].function : null
-            })
-        }
-        setMemberBody(companyBody)
     } else if (Object.keys(memberBody[0]).includes("function") && props.pageType === "directors") {
         setMemberBody(companyData.state.company.boardOfDirectors)
     } else if (!Object.keys(memberBody[0]).includes("function") && props.pageType === "board") {
