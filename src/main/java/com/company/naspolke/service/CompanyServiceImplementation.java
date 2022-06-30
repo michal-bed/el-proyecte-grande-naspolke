@@ -1,6 +1,7 @@
 package com.company.naspolke.service;
 
 import com.company.naspolke.helpers.adapters.MonoStringToCompanyAdapter;
+import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.repository.CompanyRepository;
 import com.company.naspolke.webclient.krs.KrsClient;
@@ -13,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -82,9 +85,14 @@ public class CompanyServiceImplementation implements CompanyService {
         }
     }
 
-
     @Override
     public Optional<Company> getCompanyByKrsNumber(Long krsNumber) {
         return Optional.ofNullable(companyRepository.findByKrsNumber(krsNumber));
     }
+
+    @Override
+    public Optional<Company> getCompanyByCompanyId(UUID companyId) {
+        return Optional.ofNullable(companyRepository.findByCompanyId(companyId));
+    }
+
 }
