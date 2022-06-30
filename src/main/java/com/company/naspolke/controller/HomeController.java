@@ -11,6 +11,7 @@ import com.company.naspolke.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/")
@@ -40,11 +41,11 @@ public class HomeController {
         this.authenticationService = authenticationService;
     }
 
-    @RequestMapping({ "/hello" })
-    public String helloPage() {
-        System.out.println(SecurityContextHolder.getContext().getAuthentication());
-        return "Hello World";
-    }
+//    @RequestMapping({ "/hello" })
+//    public String helloPage() {
+//        System.out.println(SecurityContextHolder.getContext().getAuthentication());
+//        return "Hello World";
+//    }
 
     @Transactional
     @PostMapping(value = "/auth")
@@ -71,6 +72,10 @@ public class HomeController {
         headers.add("Set-Cookie",String.format("jwt=%s;", refreshToken)  +
                 " Max-Age=86400; Secure; HttpOnly; SameSite=None");
         return ResponseEntity.ok().headers(headers)
-                .body(new AuthenticationResponse(accessToken, List.of("ROLE_USER"), foundUser.getUserEmail()));
+                .body(new AuthenticationResponse(accessToken,
+                        foundUser.getApplicationRoles()
+                                .stream().map(SimpleGrantedAuthority::getAuthority)
+                                .collect(Collectors.toList()),
+                        foundUser.getUserEmail()));
     }
 }

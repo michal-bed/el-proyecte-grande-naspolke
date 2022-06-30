@@ -62,12 +62,12 @@ const routes = [
         collapse: [
           {
             name: "Logowanie",
-            route: "/log-in",
+            route: "/login",
             component: <Login />
           },
           {
             name: "Rejestracja",
-            route: "/registration",
+            route: "/register",
             component: <Registration />
           }
         ],

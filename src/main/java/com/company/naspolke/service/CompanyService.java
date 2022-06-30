@@ -3,6 +3,7 @@ package com.company.naspolke.service;
 import com.company.naspolke.model.company.Company;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -18,4 +19,6 @@ public interface CompanyService {
     public Company saveCompany(Company company);
 
     ResponseEntity<String> buildSaveResponse(Company company);
+
+    public List<Company> findAll();
 }

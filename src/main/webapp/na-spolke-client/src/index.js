@@ -12,11 +12,12 @@ root.render(
         <React.StrictMode>
             <BrowserRouter>
                 <AuthProvider>
-                    <Routes>
-                        <Route path="/*" element={<App />} />
-                        <Route path="/log-in" element={<Login />} />
-                        <Route path="/registration" element={<Registration />} />
-                    </Routes>
+                    <App />
+                    {/*<Routes>*/}
+                    {/*    <Route path="/*" element={<App />} />*/}
+                    {/*    <Route path="/login" element={<Login />} />*/}
+                    {/*    <Route path="/registration" element={<Registration />} />*/}
+                    {/*</Routes>*/}
                 </AuthProvider>
             </BrowserRouter>
         </React.StrictMode>
