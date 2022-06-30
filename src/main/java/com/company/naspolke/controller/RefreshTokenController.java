@@ -61,7 +61,8 @@ public class RefreshTokenController {
                 if (isTokenValid && (Objects.equals(foundAppUser.getUserEmail(), jwtUtil.extractUsername(jwt)) ||
                         Objects.equals(foundAppUser.getUserEmail(), jwtUtil.extractUsername(jwt)))) {
                     final String accessToken = jwtUtil.generateToken(userDetails, 1000 * 60 * 15);
-                    return ResponseEntity.ok().body(new AuthenticationResponse(accessToken, List.of("ROLE_USER")));
+                    return ResponseEntity.ok().body(new AuthenticationResponse(accessToken, List.of("ROLE_USER"),
+                            foundAppUser.getUserEmail()));
                 } else {
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
                 }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -86,5 +87,11 @@ public class CompanyServiceImplementation implements CompanyService {
     @Override
     public Optional<Company> getCompanyByKrsNumber(Long krsNumber) {
         return Optional.ofNullable(companyRepository.findByKrsNumber(krsNumber));
+    }
+
+    @Override
+    public List<Company> findAll()
+    {
+        return companyRepository.findAll();
     }
 }

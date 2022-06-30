@@ -17,7 +17,7 @@ import java.util.Optional;
 @Transactional
 public class MyUserDetailsServiceImplementation implements MyUserDetailService, UserDetailsService {
 
-    private AppUserRepository appUserRepository;
+    private final AppUserRepository appUserRepository;
 
     @Autowired
     public MyUserDetailsServiceImplementation(AppUserRepository appUserRepository) {
@@ -28,6 +28,7 @@ public class MyUserDetailsServiceImplementation implements MyUserDetailService, 
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         String login = "";
         Optional<AppUser> user = Optional.ofNullable(appUserRepository.findByUserEmail(userEmail));
+
 
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Could not find user");
