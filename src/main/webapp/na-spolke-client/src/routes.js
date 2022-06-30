@@ -45,6 +45,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import KitComponentSection from "./componentsInUse/kitComponentSection/KitComponentSection";
 import Registration from "./componentsInUse/registration/Registration";
 import Login from "./componentsInUse/login/Login";
+import AddCompany from "./componentsInUse/addCompany/AddCompany";
 
 // Sections
 
@@ -90,7 +91,7 @@ const routes = [
       },
       {
         name: "Dodaj spółkę",
-        href: "/add-company",
+        route: "/add-company",
 
       },
       {

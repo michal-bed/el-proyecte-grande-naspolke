@@ -13,9 +13,9 @@ import DeleteMember from "./componentsInUse/ownerPanel/DeleteMember";
 import ChangeRole from "./componentsInUse/ownerPanel/ChangeRole";
 import AddCompany from "./componentsInUse/addCompany/AddCompany";
 import Cockpit from './componentsInUse/userPage/cockpit';
-import PersistLogin from "./componentsInUse/login/PersistLogin";
 import RequireAuth from "./componentsInUse/login/RequireAuth";
 import Unauthorized from "./componentsInUse/login/Unaurthorized";
+import PersistLogin from "./componentsInUse/login/PersistLogin";
 
 function App() {
     return (<ThemeProvider theme={theme}>

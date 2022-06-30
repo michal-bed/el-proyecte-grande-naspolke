@@ -41,7 +41,7 @@ const KrsUserInput = (props)=>{
     return <div className={styles["krs-input-container"]}>
         <form onSubmit={formSubmitHandler}>
             <div><label>Podaj numer KRS spółki</label></div>
-            <TextField type="text"
+            <TextField type="number"
                    placeholder="0000123456"
                    error={ValidationKrsUserInput(krsNumber).hasOwnProperty("krsNumber")}
                    helperText={ValidationKrsUserInput(krsNumber).krsNumber}
