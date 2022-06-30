@@ -38,7 +38,7 @@ import BuiltByDevelopers from "../kitComponentSection/KitComponentSection";
 
 
 // Routes
-import routes from "../../routes";
+import Routes from "../../routes";
 
 
 // Images
@@ -48,6 +48,7 @@ import index_photo3 from "../../assets/photos/index_photo3.jpg";
 
 
 function Presentation(props) {
+    const route = Routes()
     let title = "Na Spółkę"
     let titleDescription = "Ta aplikacja jest projektem końcowym studnetów\n" +
                             " codecool."
@@ -74,14 +75,7 @@ function Presentation(props) {
   return (
     <>
       <DefaultNavbar
-        routes={routes}
-        action={{
-          type: "external",
-          route: "https://www.creative-tim.com/product/material-kit-react",
-          label: "login",
-          color: "info",
-        }
-        }
+        routes={route}
         fixed
       />
       <MKBox

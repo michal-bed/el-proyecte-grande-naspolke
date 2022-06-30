@@ -13,7 +13,7 @@ function FaqComponent(props){
         setExpanded(!expanded);
     };
 
-    return  <Grid container sx={{display: 'inline'}}>
+    return  <Grid container sx={{display: 'inline'}} py={1}>
         <Card sx={{padding: "1em", width: "100%" }} xs={12} >
             <Typography paragraph onClick={handleExpandClick}>
                 <Box fontWeight='fontWeightMedium' display='inline'>{props.count}.</Box> {props.question}

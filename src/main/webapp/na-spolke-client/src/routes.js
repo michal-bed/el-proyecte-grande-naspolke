@@ -39,102 +39,101 @@ Coded by www.creative-tim.com
 // @mui material components
 import Icon from "@mui/material/Icon";
 
-// @mui icons
-import GitHubIcon from "@mui/icons-material/GitHub";
-
-import KitComponentSection from "./componentsInUse/kitComponentSection/KitComponentSection";
+// website components
 import Registration from "./componentsInUse/registration/Registration";
 import Login from "./componentsInUse/login/Login";
-
 import Cockpit from "./componentsInUse/userPage/cockpit";
-// Sections
+import useAuth from "./hooks/useAuth";
 
 
-const routes = [
-  {
-    name: "Użytkownik",
-    icon: <Icon>account_circle</Icon>,
-    columns: 1,
-    rowsPerColumn: 2,
-    collapse: [
 
-      {
-        name: "Konto",
-        collapse: [
-          {
-            name: "Logowanie",
-            route: "/log-in",
-            component: <Login />
-          },
-          {
-            name: "Rejestracja",
-            route: "/registration",
-            component: <Registration />
-          },
-          {
-            name: "Kokpit",
-            route: "/userpanel",
-            component: <Cockpit />
-          }
-        ],
-      },
-    ],
-  },
-  {
-    name: "Informacje",
-    icon: <Icon>help</Icon>,
-    collapse: [
-      {
-        name: "O nas",
-        href: "/#o_nas",
 
-      },
-      {
-        name: "Usługi",
-        href: "/#uslugi",
-      },
-      {
-        name: "Dodaj spółkę",
-        href: "/add-company",
+function Routes(){
 
-      },
-      {
-        name: "FAQ",
-        route: "/faq",
-      },
-    ],
-  },
-  {
-    name: "docs",
-    icon: <Icon>article</Icon>,
-    collapse: [
-      {
-        name: "getting started",
-        description: "All about overview, quick start, license and contents",
-        href: "https://www.creative-tim.com/learning-lab/react/quick-start/material-kit/",
-      },
-      {
-        name: "foundation",
-        description: "See our colors, icons and typography",
-        href: "https://www.creative-tim.com/learning-lab/react/colors/material-kit/",
-      },
-      {
-        name: "components",
-        description: "Explore our collection of fully designed components",
-        href: "https://www.creative-tim.com/learning-lab/react/alerts/material-kit/",
-      },
-      {
-        name: "plugins",
-        description: "Check how you can integrate our plugins",
-        href: "https://www.creative-tim.com/learning-lab/react/datepicker/material-kit/",
-      },
-    ],
-  },
-  {
-    name: "github",
-    icon: <GitHubIcon />,
-    href: "https://www.github.com/creativetimofficial/material-kit-react",
-  },
-];
+    let userRoutes = []
+    const auth = useAuth()
+    const obj = auth[Object.keys(auth)[0]]
+    const objArr = Object.values(obj)
+    if (Object.values(obj).length == 0) {
+      userRoutes =
+        {
+          name: "Konto",
+          collapse: [
+            {
+              name: "Logowanie",
+              route: "/log-in",
+              component: <Login/>
+            },
+            {
+              name: "Rejestracja",
+              route: "/registration",
+              component: <Registration/>
+            },
+          ],
+        }
 
-export default routes;
+    }
+
+    else {
+      userRoutes =
+        {
+          name: "Konto",
+          collapse: [
+            {
+              name : `Zalogowany jako: ${objArr[0]}`
+            },
+            {
+              name: "Kokpit",
+              description: `Zalogowany jako ${objArr[0]}`,
+              route: "/userpanel",
+              component: <Cockpit/>
+            },
+            {
+              name: "Wyloguj",
+              route: "/log-out",
+              component: <Login/>
+            }
+          ],
+        }
+    }
+
+
+  return [
+    {
+      name: "Użytkownik",
+      icon: <Icon>account_circle</Icon>,
+      columns: 1,
+      rowsPerColumn: 3,
+      collapse: [userRoutes]
+    },
+    {
+      name: "Informacje",
+      icon: <Icon>help</Icon>,
+      collapse: [
+        {
+          name: "O nas",
+          href: "/#o_nas",
+
+        },
+        {
+          name: "Usługi",
+          href: "/#uslugi",
+        },
+        {
+          name: "Oferta",
+          href: "/#oferta",
+        },
+        {
+          name: "Dodaj spółkę",
+          href: "/add-company",
+
+        },
+        {
+          name: "FAQ",
+          route: "/faq",
+        },
+      ],
+    },
+  ];
+}
+export default Routes;
