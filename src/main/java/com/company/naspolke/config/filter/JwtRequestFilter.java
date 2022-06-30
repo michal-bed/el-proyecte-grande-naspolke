@@ -22,7 +22,7 @@ import java.util.List;
 //@Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    List<String> EXCLUDED_PATHS = Arrays.asList("/login", "/auth");
+    List<String> EXCLUDED_PATHS = Arrays.asList("/", "/login", "/auth", "/logout");
 
     private MyUserDetailsServiceImplementation userDetailsService;
     private JwtUtil jwtUtil;

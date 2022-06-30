@@ -18,8 +18,8 @@ import java.util.Set;
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     boolean alreadySetup = false;
-    private AppUserRepository appUserRepository;
-    private PasswordEncoder passwordEncoder;
+    private final AppUserRepository appUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public SetupDataLoader(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
@@ -39,6 +39,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Transactional
     void createUserIfNotFound(String email, Set<SimpleGrantedAuthority> roles) {
+
         AppUser foundAppUser = appUserRepository.findByUserEmail(email);
         if (foundAppUser == null) {
             AppUser appUser = new AppUser();

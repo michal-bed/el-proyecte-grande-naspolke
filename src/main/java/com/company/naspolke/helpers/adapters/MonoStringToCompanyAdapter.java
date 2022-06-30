@@ -1,6 +1,6 @@
 package com.company.naspolke.helpers.adapters;
 
-import com.company.naspolke.controller.KRSMock;
+import com.company.naspolke.helpers.adapters.mocks.KRSMock;
 import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.companyBodies.*;

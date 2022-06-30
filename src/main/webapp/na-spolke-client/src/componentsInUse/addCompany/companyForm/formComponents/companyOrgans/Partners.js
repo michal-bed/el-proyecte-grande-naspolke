@@ -15,7 +15,7 @@ import {
     FormControl,
     FormControlLabel,
     FormLabel,
-    Grid, Input, Radio,
+    Grid, Radio,
     RadioGroup
 } from "@mui/material";
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
@@ -36,8 +36,6 @@ const actionType = {
 
 function reducer(state, action) {
     let newState = {...state};
-    console.log(state)
-    console.log(newState)
     switch (action.actionType) {
         case actionType.DISPLAY_INDIVIDUAL_PARTNERS: {
             let individualPartners = state.partners.individualPartners;
@@ -56,9 +54,11 @@ function reducer(state, action) {
         case actionType.ADD_NEW_COMPANY_PARTNER: {
             if (state.partners.partnerCompanies) {
                 let partnerCompanies = state.partners.partnerCompanies;
-                partnerCompanies.push(action.newPartner);
-                newState.partners.partnerCompanies = partnerCompanies;
-                return {...newState};
+                if (!partnerCompanies.includes(action.newPartner)) {
+                    partnerCompanies.push(action.newPartner);
+                    newState.partners.partnerCompanies = partnerCompanies;
+                    return {...newState};
+                } else return state;
             } else {
                 let partnerCompanies = [];
                 partnerCompanies.push(action.newPartner);
@@ -69,9 +69,11 @@ function reducer(state, action) {
         case actionType.ADD_NEW_INDIVIDUAL_PARTNER: {
             if(state.partners.individualPartners) {
                 let individualPartners = state.partners.individualPartners;
-                individualPartners.push(action.newPartner);
-                newState.partners.individualPartners = individualPartners;
-                return {...newState};
+                if (!individualPartners.includes(action.newPartner)) {
+                    individualPartners.push(action.newPartner);
+                    newState.partners.individualPartners = individualPartners;
+                    return {...newState};
+                } else return state;
             } else {
                 let individualPartners = [];
                 individualPartners.push(action.newPartner);
@@ -81,41 +83,35 @@ function reducer(state, action) {
         }
         case actionType.REMOVE_INDIVIDUAL_PARTNER: {
             let individualPartners = state.partners.individualPartners;
-            individualPartners.splice(action.index, 1)
-            newState.partners.individualPartners = individualPartners;
-            return {...newState};
+            if (individualPartners.length >= action.index+1 && individualPartners[action.index] === action.newPartner) {
+                individualPartners.splice(action.index, 1)
+                newState.partners.individualPartners = individualPartners;
+                return {...newState};
+            } else return state;
         }
         case actionType.REMOVE_COMPANY_PARTNER: {
             let partnerCompanies = state.partners.partnerCompanies;
-            partnerCompanies.splice(action.index, 1)
-            newState.partners.partnerCompanies = partnerCompanies;
-            return {...newState};
+            if (partnerCompanies.length >= action.index+1 && partnerCompanies[action.index] === action.newPartner) {
+                partnerCompanies.splice(action.index, 1)
+                newState.partners.partnerCompanies = partnerCompanies;
+                return {...newState};
+            } else return state
         }
         case actionType.DUPLICATE_INDIVIDUAL_PARTNER: {
             let partnerCompanies = state.partners.individualPartners;
-            const newDuplicatePartner = new IndividualPartner({
-                firstName: "",
-                secondName: "",
-                lastNameI: "",
-                lastNameII: "",
-                sharesCount: partnerCompanies[action.index].sharesCount,
-                sharesValue: partnerCompanies[action.index].sharesValue
-            })
-            partnerCompanies.splice(action.index + 1, 0, newDuplicatePartner);
-            newState.partners.individualPartners = partnerCompanies;
-            return {...newState}
+            if (!partnerCompanies.includes(action.newPartner)) {
+                partnerCompanies.splice(action.index + 1, 0, action.newPartner);
+                newState.partners.individualPartners = partnerCompanies;
+                return {...newState};
+            } else return state;
         }
         case actionType.DUPLICATE_COMPANY_PARTNER: {
             let partnerCompanies = state.partners.partnerCompanies;
-            const newDuplicatePartner = new PartnerCompany({
-                name: "",
-                sharesCount: partnerCompanies[action.index].sharesCount,
-                sharesValue: partnerCompanies[action.index].sharesValue
-            })
-            partnerCompanies.splice(action.index + 1, 0, newDuplicatePartner);
-            newState.partners.partnerCompanies = partnerCompanies;
-
-            return {...newState}
+            if (!partnerCompanies.includes(action.newPartner)) {
+                partnerCompanies.splice(action.index + 1, 0, action.newPartner);
+                newState.partners.partnerCompanies = partnerCompanies;
+                return {...newState}
+            } else return state;
         }
         case actionType.SET_SHARE_VALUE: {
             newState.shareValue = action.shareValue;
@@ -143,9 +139,6 @@ function changeSharesInfo(action, value) {
 const Partners = (props) => {
     const companyData = useContext(CompanyContext)
     const [state, dispatch] = useReducer(reducer, companyData.state.company)
-    console.log(state.shareValue)
-    console.log(state.partners.partnerCompanies)
-    console.log(state.partners.individualPartners)
     useEffect(()=>{
         const delay = setTimeout(()=>{
             const hasErrors = checkForErrors();
@@ -286,8 +279,33 @@ const Partners = (props) => {
         };
     }
 
-    function handlePartnersList(index, actionType) {
-        dispatch({index: index, actionType: actionType})
+    function partnerToHandle(action, partner) {
+        if (action === actionType.DUPLICATE_INDIVIDUAL_PARTNER || action === actionType.REMOVE_INDIVIDUAL_PARTNER) {
+            return action === actionType.DUPLICATE_INDIVIDUAL_PARTNER ? new IndividualPartner({
+                firstName: "",
+                secondName: "",
+                lastNameI: "",
+                lastNameII: "",
+                sharesCount: partner.sharesCount,
+                sharesValue: partner.sharesValue
+            }) : partner;
+        } else {
+            return action === actionType.DUPLICATE_COMPANY_PARTNER ? new PartnerCompany({
+                name: "",
+                sharesValue: partner.sharesValue,
+                sharesCount: partner.sharesCount
+            }) : partner
+        }
+    }
+
+    function handlePartnersList(index, actionType, partner) {
+        const newPartner = partnerToHandle(actionType, partner);
+        const action = {
+            index:index,
+            actionType:actionType,
+            newPartner: newPartner
+        }
+        dispatch(action)
     }
 
     function partnerSharesInfo(index, partner, listType) {
@@ -404,9 +422,9 @@ const Partners = (props) => {
                         <CardActions>
                             <div>
                                 <Button variant="outlined" startIcon={<PersonRemoveIcon/>}
-                                        onClick={() => handlePartnersList(index, actionType.REMOVE_INDIVIDUAL_PARTNER)}>Usuń</Button>
+                                        onClick={() => handlePartnersList(index, actionType.REMOVE_INDIVIDUAL_PARTNER, partner)}>Usuń</Button>
                                 <Button variant="outlined" startIcon={<PersonAddIcon/>}
-                                        onClick={() => handlePartnersList(index, actionType.DUPLICATE_INDIVIDUAL_PARTNER)}>Powiel</Button>
+                                        onClick={() => handlePartnersList(index, actionType.DUPLICATE_INDIVIDUAL_PARTNER, partner)}>Powiel</Button>
                             </div>
                         </CardActions>
                     </Card>
@@ -439,10 +457,10 @@ const Partners = (props) => {
                             {partnerSharesInfo(index, partner, actionType.DISPLAY_COMPANY_PARTNERS)}</CardContent>
                         <div>
                             <Button variant="outlined" startIcon={<PersonRemoveIcon/>} onClick={() => {
-                                handlePartnersList(index, actionType.REMOVE_COMPANY_PARTNER)
+                                handlePartnersList(index, actionType.REMOVE_COMPANY_PARTNER, partner)
                             }}>Usuń</Button>
                             <Button variant="outlined" startIcon={<PersonAddIcon/>}
-                                    onClick={() => handlePartnersList(index, actionType.DUPLICATE_COMPANY_PARTNER)}>Powiel</Button>
+                                    onClick={() => handlePartnersList(index, actionType.DUPLICATE_COMPANY_PARTNER, partner)}>Powiel</Button>
                         </div>
                     </Card>
                 </div>
@@ -452,10 +470,10 @@ const Partners = (props) => {
             <div className={styles["add-partner-container"]} >
                 <div className={styles["add-partner-title"]}>Nowy wspólnik:</div>
                 <div className={styles["add-partner-buttons"]}>
-                    <Button onClick={addEmptyPartnerCompanyToForm} endIcon={<AddBusinessIcon/>}>osoba prawna</Button>
+                    <Button onClick={()=>addEmptyPartnerCompanyToForm()} endIcon={<AddBusinessIcon/>}>osoba prawna</Button>
                 </div>
                 <div className={styles["add-partner-buttons"]}>
-                    <Button onClick={addEmptyIndividualToForm} endIcon={<PersonAddIcon/>}>osoba fizyczna</Button>
+                    <Button onClick={()=>addEmptyIndividualToForm()} endIcon={<PersonAddIcon/>}>osoba fizyczna</Button>
                 </div>
             </div>
         </Card>

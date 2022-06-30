@@ -14,9 +14,9 @@ public class StartController {
 
     private final CompanyService companyService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String start() {
-        return "hello world";
-    }
+//    @RequestMapping(value = "/", method = RequestMethod.GET)
+//    public String start() {
+//        return "hello world";
+//    }
 
 }

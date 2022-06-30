@@ -16,8 +16,8 @@ import java.util.Optional;
 @CrossOrigin("http://localhost:3000")
 public class UserController {
 
-    private AppUserService appUserService;
-    private EmailService emailService;
+    private final AppUserService appUserService;
+    private final EmailService emailService;
 
     @Autowired
     public UserController(AppUserService appUserService, EmailService emailService) {

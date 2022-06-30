@@ -1,7 +1,7 @@
 package com.company.naspolke.service;
 
-import com.company.naspolke.model.RefreshToken;
 import com.company.naspolke.model.AppUser;
+import com.company.naspolke.model.RefreshToken;
 import com.company.naspolke.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class RefreshTokenServiceImplementation implements RefreshTokenService {
 
-    private RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
     public RefreshTokenServiceImplementation(RefreshTokenRepository refreshTokenRepository) {
@@ -35,6 +35,6 @@ public class RefreshTokenServiceImplementation implements RefreshTokenService {
 
     @Override
     public void updateJwtByUser(String jwt, AppUser appUser) {
-        refreshTokenRepository.updateJwtByUser(jwt, appUser);
+        refreshTokenRepository.updateJwtByAppUser(jwt, appUser);
     }
 }
