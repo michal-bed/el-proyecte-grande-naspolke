@@ -40,6 +40,11 @@ export default function Footer() {
                                 <WhiteTextTypography>FAQ</WhiteTextTypography>
                             </Link>
                         </Box>
+                        <Box>
+                            <Link href="/#cennik">
+                                <WhiteTextTypography>Cennik</WhiteTextTypography>
+                            </Link>
+                        </Box>
                     </Grid>
                 </Grid>
                 <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
