@@ -17,3 +17,4 @@ export const getCompanyFromDb=(companyId, func) =>{
         .then((response)=> func(response.data))
         .catch((error)=>console.log(error))
 }
+

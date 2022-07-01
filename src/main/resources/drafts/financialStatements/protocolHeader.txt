@@ -1,0 +1,5 @@
+Protokół <<protocolNumber>>/<<meetengDay>>/<<meetingMonth>>/<<meetingYear>>
+<<meetingType>> Zgromadzenia Wspólników
+spółki pod firmą
+<<companyName>> z siedzibą w <<>>
+z dnia <<meetingDay>> <<meetingMonthInWords>> <<meetingYear>>  r.

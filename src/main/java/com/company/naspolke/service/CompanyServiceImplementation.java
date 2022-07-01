@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -81,7 +82,6 @@ public class CompanyServiceImplementation implements CompanyService {
             return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.NO_CONTENT);
         }
     }
-
 
     @Override
     public Optional<Company> getCompanyByKrsNumber(String krsNumber) {

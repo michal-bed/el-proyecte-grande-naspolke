@@ -6,6 +6,7 @@ import com.company.naspolke.model.company.companyBodies.BoardOfDirector;
 import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.Partners;
+import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -53,6 +54,9 @@ public class Company {
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Column(name = "company_user_role")
     private Set<CompanyUserRole> companyUserRole = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<FinancialStatementProtocol> financialStatementProtocols;
+
 
 
     @Builder
@@ -104,6 +108,9 @@ public class Company {
         return shareValue;
     }
 
+    public void addFinancialStatement(FinancialStatementProtocol financialStatement){
+        this.financialStatementProtocols.add(financialStatement);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
