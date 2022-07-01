@@ -10,18 +10,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationServiceImplementation implements AuthenticationService {
 
-    private MyUserDetailService myUserDetailsService;
-    private PasswordEncoder passwordEncoder;
+    private final MyUserDetailService myUserDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final AppUserService appUserService;
 
     @Autowired
-    public AuthenticationServiceImplementation(MyUserDetailService myUserDetailsService, PasswordEncoder passwordEncoder) {
+    public AuthenticationServiceImplementation(MyUserDetailService myUserDetailsService, PasswordEncoder passwordEncoder,
+                                               AppUserService appUserService) {
         this.myUserDetailsService = myUserDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.appUserService = appUserService;
     }
 
     public UserDetails authenticateAndGetUserDetails(AuthenticationRequest authenticationRequest) {
-        UserDetails userDetails = myUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        if (userDetails.getUsername().equals(authenticationRequest.getUsername())
+
+        var appUser = appUserService.findUserByUserEmail(authenticationRequest.getUsername());
+        String appUserId = "";
+        String appUserEmail = "";
+        if(appUser.isPresent())
+        {
+            appUserId = appUser.get().getUserId().toString();
+            appUserEmail = appUser.get().getUserEmail();
+        }
+
+
+        UserDetails userDetails = myUserDetailsService.loadUserByUsername(appUserId);
+        if (appUserEmail.equals(authenticationRequest.getUsername())
                 && passwordEncoder.matches(authenticationRequest.getPassword(), userDetails.getPassword())) {
             System.out.println("Authenticate user");
         } else {
