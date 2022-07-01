@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,9 +40,6 @@ public class CompanyController {
 
     @PostMapping(value = "/add-company")
     public ResponseEntity<String> addNewCompany(@RequestBody Company newCompany) {
-        //TODO: potrzebuje obiektu spółki zapisanego już w bazie danych i to będzie zamiast
-        //TODO: tego poniżej
-
         Optional<AppUser> appUser = appUserService.findUserByUserEmail("test@test.com");
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.OWNER);
         if (appUser.isPresent() && role.isPresent()) {
@@ -55,7 +53,7 @@ public class CompanyController {
 
     @PostMapping(value = "/add-member-to-company")
     public void addNewMemberToCompany(@RequestBody ObjectNode objectNode) {
-        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByCompanyId(UUID.fromString(objectNode.get("companyId").asText()));
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(objectNode.get("userEmail").asText());
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.valueOf(objectNode.get("roleType").asText()));
         if (company.isPresent() && appUser.isPresent() && role.isPresent()) {
@@ -67,7 +65,7 @@ public class CompanyController {
 
     @PutMapping(value = "/change-role")
     public void changeMemberRoleInCompany(@RequestBody ObjectNode objectNode) {
-        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByCompanyId(UUID.fromString(objectNode.get("companyId").asText()));
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(objectNode.get("userEmail").asText());
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.valueOf(objectNode.get("roleType").asText()));
         if (company.isPresent() && appUser.isPresent() && role.isPresent()) {
@@ -79,7 +77,7 @@ public class CompanyController {
 
     @DeleteMapping(value = "/delete-member")
     public void deleteMemberFromCompany(@RequestBody ObjectNode objectNode) {
-        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("KRSNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByCompanyId(UUID.fromString(objectNode.get("companyId").asText()));
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(objectNode.get("userEmail").asText());
         if (company.isPresent() && appUser.isPresent()) {
             companyUserRoleService.deleteMemberFromCompany(company.get(), appUser.get());
@@ -93,4 +91,13 @@ public class CompanyController {
         return companyService.getCompanyDtoFromKrsApi(krsNumber);
     }
 
+    @GetMapping(value = "/find-company-to-membership-request/{krsNumber}", produces = {"application/json"})
+    public ResponseEntity<Company> getCompanyDetails(@PathVariable String krsNumber) {
+        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(krsNumber));
+        if (company.isPresent()) {
+            return ResponseEntity.ok(company.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company");
+        }
+    }
 }

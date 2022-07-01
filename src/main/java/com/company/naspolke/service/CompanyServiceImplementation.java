@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -83,15 +84,18 @@ public class CompanyServiceImplementation implements CompanyService {
         }
     }
 
-
     @Override
     public Optional<Company> getCompanyByKrsNumber(Long krsNumber) {
         return Optional.ofNullable(companyRepository.findByKrsNumber(krsNumber));
     }
 
     @Override
-    public List<Company> findAll()
-    {
+    public Optional<Company> getCompanyByCompanyId(UUID companyId) {
+        return Optional.ofNullable(companyRepository.findByCompanyId(companyId));
+    }
+
+    @Override
+    public List<Company> findAll() {
         return companyRepository.findAll();
     }
 }

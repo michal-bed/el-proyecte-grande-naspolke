@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -22,10 +23,10 @@ import java.util.stream.Collectors;
 @Service
 public class CompanyUserRoleServiceImplementation implements CompanyUserRoleService {
 
-    private CompanyUserRoleRepository companyUserRoleRepository;
-    private CompanyRepository companyRepository;
-    private AppUserRepository appUserRepository;
-    private RoleRepository roleRepository;
+    private final CompanyUserRoleRepository companyUserRoleRepository;
+    private final CompanyRepository companyRepository;
+    private final AppUserRepository appUserRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public CompanyUserRoleServiceImplementation(CompanyUserRoleRepository companyUserRoleRepository,
@@ -127,5 +128,10 @@ public class CompanyUserRoleServiceImplementation implements CompanyUserRoleServ
         roleRepository.save(foundedRole.get());
 
         companyUserRoleRepository.deleteMemberFromCompany(company.getCompanyId(), appUser.getUserId());
+    }
+
+    @Override
+    public List<CompanyUserRole> getAllAppUserByCompanyAndByRole(UUID companyId, int role) {
+        return companyUserRoleRepository.findAppUserByCompanyAndByRole(companyId, role);
     }
 }
