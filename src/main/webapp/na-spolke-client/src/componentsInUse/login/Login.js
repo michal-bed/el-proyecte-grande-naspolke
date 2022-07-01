@@ -78,11 +78,10 @@ const Login = () => {
     }
 
     const togglePersist = (target) => {
-        console.log("toggle ", target.checked);
+        // console.log("toggle ", target.checked);
         localStorage.setItem("persist", target.checked);
         setPersist(target.checked);
-        console.log(persist);
-        // setPersist(prev => !prev);
+        // console.log(persist);
     }
 
     let password;
