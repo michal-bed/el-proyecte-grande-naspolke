@@ -2,7 +2,9 @@ package com.company.naspolke.service;
 
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
+import com.company.naspolke.model.documentDrafts.FinancialStatementProtocolGenerator;
 import com.company.naspolke.repository.CompanyRepository;
+import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +32,24 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
     public FinancialStatementProtocol saveFinancialStatement(FinancialStatementProtocol financialStatementsProtocol, UUID companyId) throws IOException {
         Optional<Company> company = companyRepository.findById(companyId);
         if (company.isPresent()) {
-            company.get().addFinancialStatement(financialStatementsProtocol);
-            companyRepository.save(company.get());
+//            company.get().addFinancialStatement(financialStatementsProtocol);
+//            companyRepository.save(company.get());
+            Company company1 = company.get();
+            try {
+                FinancialStatementProtocolGenerator.generateWordDocument(company1, financialStatementsProtocol);
+            } catch (DocumentException e) {
+                throw new RuntimeException(e);
+            }
+
             return financialStatementsProtocol;
         }
         return null;
     }
 
-//    public FinancialStatementProtocol getNewestFinancialStatementInfo(UUID companyId){
+//    public FinancialStatementProtocolGenerator getNewestFinancialStatementInfo(UUID companyId){
 //        Optional<Company> company = companyRepository.findById(companyId);
 //        if (company.isPresent()){
-//            Set<FinancialStatementProtocol> protocols = company.get().getFinancialStatementProtocols();
+//            Set<FinancialStatementProtocolGenerator> protocols = company.get().getFinancialStatementProtocols();
 //            LocalDate newestProtocolDate =  protocols.stream()
 //                    .map(u->u.getDateOfTheShareholdersMeeting())
 //                    .max(LocalDate::compareTo).get();

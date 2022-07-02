@@ -25,7 +25,7 @@ export default function FinancialStatement() {
         <Formik initialValues={{protocolNumber : 1, meetingDate:new Date()}} onSubmit={(data, {setSubmitting}) => {
             setSubmitting(true);
             const financialStatement = new FinancialStatementProtocol(data);
-            saveFinancialStatement(financialStatement, "bbb39b50-038e-49d4-883d-db253903398d");
+            saveFinancialStatement(financialStatement, "b884c2a9-5e4a-4f7c-bae0-5f5a98d67508");
             setSubmitting(false)}}>
             {({values, isSubmitting, handleChange, handleBlur, handleSubmit}) => (
                 <form onSubmit={handleSubmit}>
