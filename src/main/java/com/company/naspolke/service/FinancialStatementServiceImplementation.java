@@ -35,11 +35,7 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
 //            company.get().addFinancialStatement(financialStatementsProtocol);
 //            companyRepository.save(company.get());
             Company company1 = company.get();
-            try {
-                FinancialStatementProtocolGenerator.generateWordDocument(company1, financialStatementsProtocol);
-            } catch (DocumentException e) {
-                throw new RuntimeException(e);
-            }
+            FinancialStatementProtocolGenerator.generateWordDocument(company1, financialStatementsProtocol);
 
             return financialStatementsProtocol;
         }

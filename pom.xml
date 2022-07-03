@@ -102,14 +102,21 @@
 			<artifactId>pdfbox</artifactId>
 			<version>2.0.26</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.rythmengine/spring-rythm -->
 		<dependency>
 			<groupId>org.rythmengine</groupId>
 			<artifactId>spring-rythm</artifactId>
 			<version>1.2.2</version>
 		</dependency>
-
-
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
