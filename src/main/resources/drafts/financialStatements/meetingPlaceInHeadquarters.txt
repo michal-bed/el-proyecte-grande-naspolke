@@ -1,0 +1,1 @@
+Dnia @meetingDay @meetingMonthInWords @meetingYear  r. @meetingPlace odbyło się Zwyczajne Zgromadzenie Wspólników spółki pod firmą @companyName z siedzibą @city .

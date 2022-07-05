@@ -24,7 +24,7 @@ public class GenerateDocumentsController {
 
     @ResponseStatus
     @PostMapping("/save/financial/{companyId}")
-    public void saveFinancialStatement(@PathVariable("companyId") String companyId, @RequestBody FinancialStatementProtocol protocol ) throws IOException {
+    public void saveFinancialStatement(@PathVariable("companyId") String companyId, @RequestBody FinancialStatementProtocol protocol ) {
         financialStatementService.saveFinancialStatement(protocol, UUID.fromString(companyId));
 
     }

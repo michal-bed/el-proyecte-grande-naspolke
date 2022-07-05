@@ -13,7 +13,7 @@ export class Address{
             this.localNumber = addressData.localNumber;
             this.city = addressData.city;
             this.zipCode = addressData.zipCode;
-            this.postOffice = addressData.postOffice;
+            this.postOffice = addressData.postOffice===undefined? null : addressData.postOffice;
         }
     }
 }

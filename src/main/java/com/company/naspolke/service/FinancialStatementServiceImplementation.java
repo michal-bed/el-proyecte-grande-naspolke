@@ -29,14 +29,17 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
     }
 
     @Override
-    public FinancialStatementProtocol saveFinancialStatement(FinancialStatementProtocol financialStatementsProtocol, UUID companyId) throws IOException {
+    public FinancialStatementProtocol saveFinancialStatement(FinancialStatementProtocol financialStatementsProtocol, UUID companyId){
         Optional<Company> company = companyRepository.findById(companyId);
         if (company.isPresent()) {
 //            company.get().addFinancialStatement(financialStatementsProtocol);
 //            companyRepository.save(company.get());
             Company company1 = company.get();
-            FinancialStatementProtocolGenerator.generateWordDocument(company1, financialStatementsProtocol);
-
+            try {
+                FinancialStatementProtocolGenerator.generateWordDocument(company1, financialStatementsProtocol);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             return financialStatementsProtocol;
         }
         return null;
