@@ -36,11 +36,16 @@ public class FinancialStatementProtocolGenerator {
     }
 
     public static void saveDocument(XWPFDocument document) throws IOException {
-        File file = new File("src/main/resources/drafts/financialStatements/Test.docx");
-        file.delete();
-        file.createNewFile();
-        document.write(new FileOutputStream(file));
-        document.close();
+        try {
+            File file = new File("src/main/resources/drafts/financialStatements/Test.docx");
+            file.delete();
+            file.createNewFile();
+            document.write(new FileOutputStream(file));
+            document.close();
+        } catch (IOException e) {
+            System.out.printf(e.toString());
+            throw new RuntimeException(e);
+        }
     }
 
     public static void generateWordDocument(Company company, FinancialStatementProtocol financialStatementsProtocol) throws IOException {
@@ -79,7 +84,7 @@ public class FinancialStatementProtocolGenerator {
             pBody.setStyle(heading.getStyleId());
             run1.setStyle(heading.getStyleId());
             run1.setText(finalText);
-            run1.addCarriageReturn();
+//            run1.addCarriageReturn();
         } else {
             String text = getTextFromFile(Utils.MEETING_PLACE_NOT_IN_HEADQUARTERS);
             String finalText = replaceText(text, company, financialStatementsProtocol);
@@ -87,7 +92,7 @@ public class FinancialStatementProtocolGenerator {
             pBody.setStyle(heading.getStyleId());
             run1.setStyle(heading.getStyleId());
             run1.setText(finalText);
-            run1.addCarriageReturn();
+//            run1.addCarriageReturn();
         }
     }
     private static String getTextFromFile(String path){
