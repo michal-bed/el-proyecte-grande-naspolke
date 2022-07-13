@@ -4,16 +4,13 @@ import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.company.naspolke.model.documentDrafts.FinancialStatementProtocolGenerator;
 import com.company.naspolke.repository.CompanyRepository;
-import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -22,11 +19,14 @@ import java.util.UUID;
 public class FinancialStatementServiceImplementation implements FinancialStatementService {
 
     private CompanyRepository companyRepository;
+    private FinancialStatementProtocolGenerator financialStatementProtocolGenerator;
 
     @Autowired
-    public FinancialStatementServiceImplementation(CompanyRepository companyRepository) {
+    public FinancialStatementServiceImplementation(CompanyRepository companyRepository, FinancialStatementProtocolGenerator financialStatementProtocolGenerator) {
         this.companyRepository = companyRepository;
+        this.financialStatementProtocolGenerator = financialStatementProtocolGenerator;
     }
+
 
     @Override
     public FinancialStatementProtocol saveFinancialStatement(FinancialStatementProtocol financialStatementsProtocol, UUID companyId){
@@ -36,7 +36,8 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
 //            companyRepository.save(company.get());
             Company company1 = company.get();
             try {
-                FinancialStatementProtocolGenerator.generateWordDocument(company1, financialStatementsProtocol);
+
+                financialStatementProtocolGenerator.generatePdfDocument(company1, financialStatementsProtocol);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
