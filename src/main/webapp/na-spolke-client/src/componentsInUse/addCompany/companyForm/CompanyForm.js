@@ -29,7 +29,6 @@ const CompanyForm = ({saveData})=>{
             saveData(companyData.state.company);
     }
 
-
     return<form className={styles["form"]}>
         <div className={styles["form-container"]}>
             <div className={styles["header"]}>
