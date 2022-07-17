@@ -18,4 +18,5 @@ public interface CompanyService {
     Company saveCompany(Company company);
 
     ResponseEntity<String> buildSaveResponse(Company company);
+    Company getCompanyById(UUID uuid);
 }

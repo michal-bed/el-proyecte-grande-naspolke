@@ -5,10 +5,7 @@ import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.Role;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.types.RoleType;
-import com.company.naspolke.service.AppUserService;
-import com.company.naspolke.service.CompanyService;
-import com.company.naspolke.service.CompanyUserRoleService;
-import com.company.naspolke.service.RoleService;
+import com.company.naspolke.service.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -96,6 +94,7 @@ public class CompanyController {
 
     @GetMapping(value = "/company/{id}")
     public Company getCompanyById(@PathVariable String id) {
-        return MocksData.getMockCompany();
+        return companyService.getCompanyById(UUID.fromString(id));
+      //  return MocksData.getMockCompany();
     }
 }

@@ -84,7 +84,16 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
+    public Company getCompanyById(UUID uuid) {
+       Optional<Company> company = companyRepository.findById(uuid);
+        System.out.println(company);
+        return company.orElse(null);
+    }
+
+    @Override
     public Optional<Company> getCompanyByKrsNumber(String krsNumber) {
         return Optional.ofNullable(companyRepository.findByKrsNumber(krsNumber));
     }
+
+
 }
