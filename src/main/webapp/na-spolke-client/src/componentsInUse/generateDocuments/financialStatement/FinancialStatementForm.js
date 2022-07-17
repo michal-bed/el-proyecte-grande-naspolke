@@ -24,6 +24,8 @@ import styles from "./PartnersAbsents/PartnersAbsents.module.css";
 import Typography from "@mui/material/Typography";
 import {styled} from "@mui/material/styles";
 import {FormControl} from "@chakra-ui/react";
+import {Checkbox} from "@material-ui/core";
+import {number} from "yup";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
     const AntSwitch = styled(Switch)(({theme}) => ({
@@ -86,8 +88,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         city: "",
         zipCode: "",
         formalConvening: false,
-        president:""
-
+        president:"",
+        presidentUnanimously: true
 
     };
     if (company.partners.partnerCompanies !== null && partnerCompanies.length === 0) {
@@ -283,7 +285,81 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                 </Select>
                                 <FormHelperText>Wybierz przewodniczącego</FormHelperText>
                             </FormControl>
+                            <div>
+                                <p>Głosowanie</p>
+                                <div>
+                                    <Checkbox aria-label={"jednogłośnie"} name={"presidentUnanimously"} defaultChecked value={values.presidentUnanimously} onChange={handleChange} color="secondary" />
+                                </div>
+                                {values.presidentUnanimously===false && <div><p>Oddane głosy:</p>
+                                    <MyTextField
+                                        name={"presidentVotingFor"}
+                                        type="number"
+                                        value={values.presidentVotingFor}
+                                        label="głosów za:"
+                                        as={TextField}
+                                    /><MyTextField
+                                        name={"presidentVotingAgainst"}
+                                        type="number"
+                                        value={values.presidentVotingFor}
+                                        label="głosów przeciw:"
+                                        as={TextField}
+                                    /><MyTextField
+                                        name={"presidentVotingAgainst"}
+                                        type="number"
+                                        value={values.presidentVotingAbstentions}
+                                        label="głosów wstrzymujących się:"
+                                        as={TextField}
+                                    /></div>}
+                            </div>
                         </div>
+                    </Card>
+                    <Card>
+                        <p>Uchwała w sprawie wyboru protokolanta:</p>
+                        <div>
+                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-helper-label">Protokolant</InputLabel>
+                                <Select
+                                    name={"recorder"}
+                                    value={values.recorder}
+                                    label="Protokolant"
+                                    onChange={handleChange}
+                                >
+                                    {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map((partner, index) => (
+                                        <MenuItem key={`selectRecorder${index}`} value={`${partner.firstName} ${partner.lastNameI}`}>{partner.firstName+" "+partner.lastNameI}</MenuItem>))}
+                                    {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map((partner, index) => (
+                                        <MenuItem key={`selectRecorderCompanyPartner${index}`} value={partner.representativeFirstname+" "+partner.representativeLastname}>{partner.representativeFirstname+" "+partner.representativeLastname}</MenuItem>))}
+                                </Select>
+                            </FormControl>
+                            <div>
+                                <p>Głosowanie</p>
+                                <div>
+                                    <Checkbox aria-label={"jednogłośnie"} name={"recorderUnanimously"} defaultChecked value={values.recorderUnanimously} onChange={handleChange} color="secondary" />
+                                </div>
+                                {values.recorderUnanimously===false && <div><p>Oddane głosy:</p>
+                                    <MyTextField
+                                        name={"recorderVotingFor"}
+                                        type="number"
+                                        value={values.recorderVotingFor}
+                                        label="głosów za:"
+                                        as={TextField}
+                                    /><MyTextField
+                                        name={"recorderVotingAgainst"}
+                                        type="number"
+                                        value={values.recorderVotingFor}
+                                        label="głosów przeciw:"
+                                        as={TextField}
+                                    /><MyTextField
+                                        name={"recorderVotingAgainst"}
+                                        type="number"
+                                        value={values.recorderVotingAbstentions}
+                                        label="głosów wstrzymujących się:"
+                                        as={TextField}
+                                    /></div>}
+                            </div>
+                        </div>
+                    </Card>
+                    <Card>
+
                     </Card>
                     <Button type="submit" disabled={isSubmitting}> Zapisz</Button>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
