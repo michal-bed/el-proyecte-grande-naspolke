@@ -7,6 +7,7 @@ export class FinancialStatementProtocol{
     meetingPlaceInHeadquarters;
     meetingPlace;
     address;
+    formalConvening;
 
     constructor(data) {
         this.dateOfTheShareholdersMeeting = data.meetingDate;
@@ -19,6 +20,8 @@ export class FinancialStatementProtocol{
                 city:data.city,
                 zipCode:data.zipCode
             })
+
+        this.formalConvening = data.formalConvening;
     }
 
 }

@@ -7,16 +7,15 @@ import FinancialStatementForm from "./FinancialStatementForm";
 
 export default function FinancialStatement() {
     const companyIdMac= "19b39ee0-6093-4745-9fb2-c4734badccae"
+    const companyIdEASY= "ab8e5033-1d71-4182-b692-532ec7eae57e"
     const companyIdPC= "b884c2a9-5e4a-4f7c-bae0-5f5a98d67508"
     const [company, setCompany] = useState(new Company())
 
     if (!!!company.krsNumber) {
-        getCompanyFromDb(companyIdMac, setCompany)
+        getCompanyFromDb(companyIdEASY, setCompany)
     }
 
-    console.log(company.krsNumber)
-    console.log(company)
     return <div>
-        {company.krsNumber!==null && <FinancialStatementForm company={company} companyIdMac={companyIdMac}/>}
+        {company.krsNumber!==null && <FinancialStatementForm company={company} companyIdMac={companyIdEASY}/>}
     </div>
 }

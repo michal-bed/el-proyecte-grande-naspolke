@@ -40,12 +40,17 @@ export class PartnerCompany {
     name = null;
     sharesCount = null;
     sharesValue = null;
+    representativeFirstname = null;
+    representativeLastname = null;
+
 
     constructor(partnerData) {
         if (partnerData) {
             this.name = partnerData.name;
             this.sharesCount = partnerData.sharesCount;
             this.sharesValue = partnerData.sharesValue;
+            this.representativeFirstname = partnerData.representativeFirstname;
+            this.representativeLastname = partnerData.representativeLastname;
         }
     }
 }

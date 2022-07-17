@@ -46,7 +46,6 @@ const AddCompany = ()=>{
       }
 
     function saveDataIntoDb(data){
-
         Axios.post("http://localhost:8080/add-company/",data)
             .then(response=> {
                 if (response.status===201) {
