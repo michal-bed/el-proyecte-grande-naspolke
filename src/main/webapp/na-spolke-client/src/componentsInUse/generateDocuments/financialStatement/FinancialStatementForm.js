@@ -3,9 +3,9 @@ import {Form, Formik, useField, useFormikContext} from "formik";
 import {
     Box,
     Button,
-    FormControlLabel,
-    FormHelperText,
-    InputLabel,
+    FormControlLabel, FormGroup,
+    FormHelperText, IconButton,
+    InputLabel, List, ListItem, ListItemButton, ListItemIcon, ListItemText,
     MenuItem,
     Radio,
     Select,
@@ -25,7 +25,9 @@ import Typography from "@mui/material/Typography";
 import {styled} from "@mui/material/styles";
 import {FormControl} from "@chakra-ui/react";
 import {Checkbox} from "@material-ui/core";
-import {number} from "yup";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import Grid from "@mui/material/Grid";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
     const AntSwitch = styled(Switch)(({theme}) => ({
@@ -75,6 +77,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
             <FormControlLabel {...field} control={<Radio/>} label={label}/>
         )
     }
+    let coverageOfLossPosibility = ["Z zysków lat przyszłych", "inne..."]
+    let profitAllocation = ["Na kapitał zapasowy", "pokrycie straty z lat przeszłych", "Na kapitał zapasowy oraz na pokrycie starty z lat przeszłych", "wypłata dywidendy", "inne..."]
     let individualPartners = [];
     let partnerCompanies = [];
     let initialValues = {
@@ -88,8 +92,9 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         city: "",
         zipCode: "",
         formalConvening: false,
-        president:"",
-        presidentUnanimously: true
+        president: "",
+        presidentUnanimously: true,
+        amountProfitOrLoss: 0
 
     };
     if (company.partners.partnerCompanies !== null && partnerCompanies.length === 0) {
@@ -246,7 +251,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                         name={`representative${partner.id}lastName`}
                                         key={`representative${partner.id}lastName`}
                                         as={TextField}
-                                        />
+                                    />
                                 </div>
                             </Card>))
                         }
@@ -270,8 +275,9 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                     <Card>
                         <p>Przewodniczący Zgromadzenia:</p>
                         <div>
-                            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                <InputLabel id="demo-simple-select-helper-label">Przewodniczący Zgromadzenia</InputLabel>
+                            <FormControl sx={{m: 1, minWidth: 120}}>
+                                <InputLabel id="demo-simple-select-helper-label">Przewodniczący
+                                    Zgromadzenia</InputLabel>
                                 <Select
                                     name={"president"}
                                     value={values.president}
@@ -279,18 +285,22 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                     onChange={handleChange}
                                 >
                                     {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map((partner, index) => (
-                                        <MenuItem key={`select${index}`} value={`${partner.firstName} ${partner.lastNameI}`}>{partner.firstName+" "+partner.lastNameI}</MenuItem>))}
+                                        <MenuItem key={`select${index}`}
+                                                  value={`${partner.firstName} ${partner.lastNameI}`}>{partner.firstName + " " + partner.lastNameI}</MenuItem>))}
                                     {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map((partner, index) => (
-                                        <MenuItem key={`selectCompanyPartner${index}`} value={partner.representativeFirstname+" "+partner.representativeLastname}>{partner.representativeFirstname+" "+partner.representativeLastname}</MenuItem>))}
+                                        <MenuItem key={`selectCompanyPartner${index}`}
+                                                  value={partner.representativeFirstname + " " + partner.representativeLastname}>{partner.representativeFirstname + " " + partner.representativeLastname}</MenuItem>))}
                                 </Select>
                                 <FormHelperText>Wybierz przewodniczącego</FormHelperText>
                             </FormControl>
                             <div>
                                 <p>Głosowanie</p>
                                 <div>
-                                    <Checkbox aria-label={"jednogłośnie"} name={"presidentUnanimously"} defaultChecked value={values.presidentUnanimously} onChange={handleChange} color="secondary" />
+                                    <Checkbox aria-label={"jednogłośnie"} name={"presidentUnanimously"} defaultChecked
+                                              value={values.presidentUnanimously} onChange={handleChange}
+                                              color="secondary"/>
                                 </div>
-                                {values.presidentUnanimously===false && <div><p>Oddane głosy:</p>
+                                {values.presidentUnanimously === false && <div><p>Oddane głosy:</p>
                                     <MyTextField
                                         name={"presidentVotingFor"}
                                         type="number"
@@ -300,7 +310,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                     /><MyTextField
                                         name={"presidentVotingAgainst"}
                                         type="number"
-                                        value={values.presidentVotingFor}
+                                        value={values.presidentVotingAgainst}
                                         label="głosów przeciw:"
                                         as={TextField}
                                     /><MyTextField
@@ -316,7 +326,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                     <Card>
                         <p>Uchwała w sprawie wyboru protokolanta:</p>
                         <div>
-                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <FormControl sx={{m: 1, minWidth: 120}}>
                                 <InputLabel id="demo-simple-select-helper-label">Protokolant</InputLabel>
                                 <Select
                                     name={"recorder"}
@@ -325,17 +335,21 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                     onChange={handleChange}
                                 >
                                     {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map((partner, index) => (
-                                        <MenuItem key={`selectRecorder${index}`} value={`${partner.firstName} ${partner.lastNameI}`}>{partner.firstName+" "+partner.lastNameI}</MenuItem>))}
+                                        <MenuItem key={`selectRecorder${index}`}
+                                                  value={`${partner.firstName} ${partner.lastNameI}`}>{partner.firstName + " " + partner.lastNameI}</MenuItem>))}
                                     {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map((partner, index) => (
-                                        <MenuItem key={`selectRecorderCompanyPartner${index}`} value={partner.representativeFirstname+" "+partner.representativeLastname}>{partner.representativeFirstname+" "+partner.representativeLastname}</MenuItem>))}
+                                        <MenuItem key={`selectRecorderCompanyPartner${index}`}
+                                                  value={partner.representativeFirstname + " " + partner.representativeLastname}>{partner.representativeFirstname + " " + partner.representativeLastname}</MenuItem>))}
                                 </Select>
                             </FormControl>
                             <div>
                                 <p>Głosowanie</p>
                                 <div>
-                                    <Checkbox aria-label={"jednogłośnie"} name={"recorderUnanimously"} defaultChecked value={values.recorderUnanimously} onChange={handleChange} color="secondary" />
+                                    <Checkbox aria-label={"jednogłośnie"} name={"recorderUnanimously"} defaultChecked
+                                              value={values.recorderUnanimously} onChange={handleChange}
+                                              color="secondary"/>
                                 </div>
-                                {values.recorderUnanimously===false && <div><p>Oddane głosy:</p>
+                                {values.recorderUnanimously === false && <div><p>Oddane głosy:</p>
                                     <MyTextField
                                         name={"recorderVotingFor"}
                                         type="number"
@@ -345,7 +359,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                     /><MyTextField
                                         name={"recorderVotingAgainst"}
                                         type="number"
-                                        value={values.recorderVotingFor}
+                                        value={values.recorderVotingAgainst}
                                         label="głosów przeciw:"
                                         as={TextField}
                                     /><MyTextField
@@ -359,8 +373,104 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         </div>
                     </Card>
                     <Card>
-
+                        <p>Sprawozdanie finansowe</p>
+                        <p>Początek rozliczanego okresu sprawozdawczego</p>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="Początek okresu sprawozdawczego"
+                                name="beginningReportingPeriodNo1"
+                                value={values.beginningReportingPeriodNo1}
+                                inputFormat="dd/MM/yyyy"
+                                onChange={(value => setFieldValue("beginningReportingPeriodNo1", value))}
+                                renderInput={(params) => (
+                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                )}
+                            />
+                        </LocalizationProvider>
+                        <p>Koniec rozliczanego okresu sprawozdawczego</p>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="koniec okresu sprawozdawczego"
+                                name="endReportingPeriodNo1"
+                                value={values.endReportingPeriodNo1}
+                                inputFormat="dd/MM/yyyy"
+                                onChange={(value => setFieldValue("endReportingPeriodNo1", value))}
+                                renderInput={(params) => (
+                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                )}
+                            />
+                        </LocalizationProvider>
+                        <p>Kwota którą wykazuje bilans po stronie aktywów i pasywów</p>
+                        <MyTextField
+                            name={"sumOfAssetsAndLiabilities"}
+                            type="number"
+                            value={values.sumOfAssetsAndLiabilities}
+                            onChange={handleChange}
+                            label="wysokość aktywów i pasywów (w PLN)"
+                            as={TextField}
+                        />
+                        <p>Wysokość zysku lub straty netto którą wykazuje rachunek zysków i strat</p>
+                        <MyTextField
+                            name={"amountProfitOrLoss"}
+                            type="number"
+                            value={values.amountProfitOrLoss}
+                            onChange={handleChange}
+                            label="Wysokość zysku lub straty (w PLN)"
+                            as={TextField}
+                        />
+                        {values.amountProfitOrLoss !== 0 && <FormControl sx={{m: 1, minWidth: 120}}>
+                            <InputLabel
+                                id="demo-simple-select-helper-label">{values.amountProfitOrLoss > 0 ? "Przeznaczenie zysku" : "Sposób pokrycia straty"}</InputLabel>
+                            <Select
+                                name={"coverageOfLossOrProfitAllocation"}
+                                value={values.coverageOfLossOrProfitAllocation}
+                                onChange={handleChange}
+                            >
+                                {values.amountProfitOrLoss > 0 && profitAllocation.map((possibility, index) => (
+                                    <MenuItem key={possibility}
+                                              value={possibility}>{possibility}</MenuItem>))}
+                                {values.amountProfitOrLoss < 0 && coverageOfLossPosibility.map((possibility, index) => (
+                                    <MenuItem key={possibility}
+                                              value={possibility}>{possibility}</MenuItem>))}
+                            </Select>
+                        </FormControl>}
+                        {values.coverageOfLossOrProfitAllocation === "inne..." &&
+                            <MyTextField
+                            name={"coverageOfLossOrProfitAllocationDifferentWay"}
+                            value={values.coverageOfLossOrProfitAllocationDifferentWay}
+                            onChange={handleChange}
+                            label={values.amountProfitOrLoss > 0 ? "Zgromadzenie Wspólników postanawia przeznaczyć zysk w następujący sposób:" : "Zgromadzenie Wspólników postanawia pokryć stratę w następujący sposób:"}
+                            as={TextField}
+                        />}
                     </Card>
+                    <div>
+                        <p>{values.amountProfitOrLoss > 0 ? "Głosowanie nad przeznaczeniem zysku" : "Głosowanie nad sposobem pokryciem straty"}</p>
+                        <div>
+                            <Checkbox aria-label={"jednogłośnie"} name={"recorderUnanimously"} defaultChecked
+                                      value={values.amountProfitOrLossVotingUnanimously} onChange={handleChange}
+                                      color="secondary"/>
+                        </div>
+                        {values.amountProfitOrLossVotingUnanimously === false && <div><p>Oddane głosy:</p>
+                            <MyTextField
+                                name={"recorderVotingFor"}
+                                type="number"
+                                value={values.amountProfitOrLossVotingFor}
+                                label="głosów za:"
+                                as={TextField}
+                            /><MyTextField
+                                name={"recorderVotingAgainst"}
+                                type="number"
+                                value={values.amountProfitOrLossVotingAgainst}
+                                label="głosów przeciw:"
+                                as={TextField}
+                            /><MyTextField
+                                name={"recorderVotingAgainst"}
+                                type="number"
+                                value={values.amountProfitOrLossVotingAbstentions}
+                                label="głosów wstrzymujących się:"
+                                as={TextField}
+                            /></div>}
+                    </div>
                     <Button type="submit" disabled={isSubmitting}> Zapisz</Button>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
                 </Form>
@@ -370,3 +480,45 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         </Formik>
     </Box>
 }
+
+// <p>Porządek obrad</p>
+// <ol>
+//     <li>otwarcie Zwyczajnego Zgromadzenia</li>
+//     <li>wybór Przewodniczącego Zgromadzenia i Protokolanta</li>
+//     <li>stwierdzenie prawidłowości zwołania Zgromadzenia,</li>
+//     <li>podjęcie uchwały w przedmiocie rozpatrzenia i zatwierdzenie sprawozdania finansowego
+//         Spółki oraz sprawozdania Zarządu</li>
+//     <li>podjęcie uchwały w przedmiocie podziału zysku / pokrycia straty</li>
+//     <li>podjęcie uchwały w przedmiocie udzielenia absolutorium organom spółki</li>
+//     <li>wolne głosy i wnioski</li>
+//     <li>zamknięcie obrad Zgromadzenia</li>
+// </ol>
+// <div>
+//     <p>Głosowanie na przyjęciem porządku obrad</p>
+//     <div>
+//         <Checkbox aria-label={"jednogłośnie"} name={"recorderUnanimously"} defaultChecked
+//                   value={values.agendaUnanimously} onChange={handleChange}
+//                   color="secondary"/>
+//     </div>
+//     {values.recorderUnanimously === false && <div><p>Oddane głosy:</p>
+//         <MyTextField
+//             name={"recorderVotingFor"}
+//             type="number"
+//             value={values.agendaVotingFor}
+//             label="głosów za:"
+//             as={TextField}
+//         /><MyTextField
+//             name={"recorderVotingAgainst"}
+//             type="number"
+//             value={values.agendaVotingFor}
+//             label="głosów przeciw:"
+//             as={TextField}
+//         /><MyTextField
+//             name={"recorderVotingAgainst"}
+//             type="number"
+//             value={values.agendaVotingAbstentions}
+//             label="głosów wstrzymujących się:"
+//             as={TextField}
+//         /></div>
+//     }
+// </div>
