@@ -3,9 +3,9 @@ import {Form, Formik, useField, useFormikContext} from "formik";
 import {
     Box,
     Button,
-    FormControlLabel, FormGroup,
-    FormHelperText, IconButton,
-    InputLabel, List, ListItem, ListItemButton, ListItemIcon, ListItemText,
+    FormControlLabel,
+    FormHelperText,
+    InputLabel,
     MenuItem,
     Radio,
     Select,
@@ -25,9 +25,6 @@ import Typography from "@mui/material/Typography";
 import {styled} from "@mui/material/styles";
 import {FormControl} from "@chakra-ui/react";
 import {Checkbox} from "@material-ui/core";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import Grid from "@mui/material/Grid";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
     const AntSwitch = styled(Switch)(({theme}) => ({
@@ -97,6 +94,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         amountProfitOrLoss: 0
 
     };
+    console.log(company.boardMembers)
     if (company.partners.partnerCompanies !== null && partnerCompanies.length === 0) {
         for (let i = 0; i < company.partners.partnerCompanies.length; i++) {
             partnerCompanies.push({"id": company.partners.partnerCompanies[i].id, isPresent: true})
@@ -436,15 +434,16 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         </FormControl>}
                         {values.coverageOfLossOrProfitAllocation === "inne..." &&
                             <MyTextField
-                            name={"coverageOfLossOrProfitAllocationDifferentWay"}
-                            value={values.coverageOfLossOrProfitAllocationDifferentWay}
-                            onChange={handleChange}
-                            label={values.amountProfitOrLoss > 0 ? "Zgromadzenie Wspólników postanawia przeznaczyć zysk w następujący sposób:" : "Zgromadzenie Wspólników postanawia pokryć stratę w następujący sposób:"}
-                            as={TextField}
-                        />}
+                                name={"coverageOfLossOrProfitAllocationDifferentWay"}
+                                value={values.coverageOfLossOrProfitAllocationDifferentWay}
+                                onChange={handleChange}
+                                label={values.amountProfitOrLoss > 0 ? "Zgromadzenie Wspólników postanawia przeznaczyć zysk w następujący sposób:" : "Zgromadzenie Wspólników postanawia pokryć stratę w następujący sposób:"}
+                                as={TextField}
+                            />}
                     </Card>
                     <div>
-                        <p>{values.amountProfitOrLoss > 0 ? "Głosowanie nad przeznaczeniem zysku" : "Głosowanie nad sposobem pokryciem straty"}</p>
+                        <p>{values.amountProfitOrLoss > 0 && "Głosowanie nad przeznaczeniem zysku"}</p>
+                        <p>{values.amountProfitOrLoss < 0 && "Głosowanie nad sposobem pokryciem straty"}</p>
                         <div>
                             <Checkbox aria-label={"jednogłośnie"} name={"recorderUnanimously"} defaultChecked
                                       value={values.amountProfitOrLossVotingUnanimously} onChange={handleChange}
@@ -452,24 +451,144 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         </div>
                         {values.amountProfitOrLossVotingUnanimously === false && <div><p>Oddane głosy:</p>
                             <MyTextField
-                                name={"recorderVotingFor"}
+                                name={"amountProfitOrLossVotingFor"}
                                 type="number"
                                 value={values.amountProfitOrLossVotingFor}
                                 label="głosów za:"
                                 as={TextField}
                             /><MyTextField
-                                name={"recorderVotingAgainst"}
+                                name={"amountProfitOrLossVotingAgainst"}
                                 type="number"
                                 value={values.amountProfitOrLossVotingAgainst}
                                 label="głosów przeciw:"
                                 as={TextField}
                             /><MyTextField
-                                name={"recorderVotingAgainst"}
+                                name={"amountProfitOrLossVotingAbstentions"}
                                 type="number"
                                 value={values.amountProfitOrLossVotingAbstentions}
                                 label="głosów wstrzymujących się:"
                                 as={TextField}
                             /></div>}
+                        <Box>
+                            <p>Głosowanie nad absolutorium członkom Zarządu</p>
+                            <p>Wskaż wszystkich członków zarządu oraz okresy sprawowania przez nich funkcji</p>
+
+                            {company.boardMembers.length > 0 && company.boardMembers.map((member, index) => {
+                                if (values[`board${member.lastNameI}${index}`] !== false) {
+                                    return <Card><FormControl>
+                                        <p key={`displayedName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}
+                                            <span
+                                                key={`${member.function}${index}`}>{member.function.toLowerCase()}</span>
+                                        </p>
+                                        <FormControlLabel
+                                            control={<Checkbox key={`board${member.lastNameI}${index}`} defaultChecked
+                                                               name={`board${member.lastNameI}${index}`}
+                                                               onChange={handleChange}
+                                                               value={true}/>}
+                                            label="Cały okres sprawozdawczy"/>
+                                    </FormControl>
+                                    </Card>
+                                } else if (values[`board${member.lastNameI}${index}`] === false) {
+                                    return <Card><FormControl>
+                                        <p key={`displayedName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}
+                                            <span
+                                                key={`${member.function}${index}`}>{member.function.toLowerCase()}</span>
+                                        </p>
+                                        <FormControlLabel
+                                            control={<Checkbox key={`board${member.lastNameI}${index}`} defaultChecked
+                                                               name={`board${member.lastNameI}${index}`}
+                                                               onChange={handleChange}
+                                                               value={true}/>}
+                                            label="Cały okres sprawozdawczy"/>
+                                    </FormControl>
+                                        <div>Początek sprawowania funkcji w roku sprawozdawczym</div>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DatePicker
+                                                label="data początkowa..."
+                                                name={`board${member.lastNameI}${index}beginDate`}
+                                                value={values[`board${member.lastNameI}${index}beginDate`]}
+                                                inputFormat="dd/MM/yyyy"
+                                                onChange={(value => setFieldValue(`board${member.lastNameI}${index}beginDate`, value))}
+                                                renderInput={(params) => (
+                                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                                )}
+                                            />
+                                        </LocalizationProvider>
+                                        <div>Koniec sprawowania funkcji w roku sprawozdawczym</div>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DatePicker
+                                                label="data końcowa..."
+                                                name={`board${member.lastNameI}${index}endDate`}
+                                                value={values[`board${member.lastNameI}${index}endDate`]}
+                                                inputFormat="dd/MM/yyyy"
+                                                onChange={(value => setFieldValue(`board${member.lastNameI}${index}endDate`, value))}
+                                                renderInput={(params) => (
+                                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                                )}
+                                            />
+                                        </LocalizationProvider>
+                                    </Card>
+                                }
+                            })}
+                        </Box>
+                        {company.boardOfDirectors.length > 0 && <Box>
+                            <p>Głosowanie nad absolutorium członków Rady Nadzorczej</p>
+                            <p>Wskaż wszystkich członków rady nadzorczej oraz okresy sprawowania przez nich funkcji</p>
+
+                            {company.boardOfDirectors.length > 0 && company.boardOfDirectors.map((member, index) => {
+                                if (values[`director${member.lastNameI}${index}`] !== false) {
+                                    return <Card><FormControl>
+                                        <p key={`displayedDirectorName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}</p>
+                                        <FormControlLabel
+                                            control={<Checkbox key={`director${member.lastNameI}${index}`} defaultChecked
+                                                               name={`director${member.lastNameI}${index}`}
+                                                               onChange={handleChange}
+                                                               value={true}/>}
+                                            label="Cały okres sprawozdawczy"/>
+                                    </FormControl>
+                                    </Card>
+                                } else if (values[`director${member.lastNameI}${index}`] === false) {
+                                    return <Card><FormControl>
+                                        <p key={`displayedName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}</p>
+                                        <FormControlLabel
+                                            control={<Checkbox key={`director${member.lastNameI}${index}`} defaultChecked
+                                                               name={`director${member.lastNameI}${index}`}
+                                                               onChange={handleChange}
+                                                               value={true}/>}
+                                            label="Cały okres sprawozdawczy"/>
+                                    </FormControl>
+                                        <div>Początek sprawowania funkcji w roku sprawozdawczym</div>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DatePicker
+                                                label="data początkowa..."
+                                                name={`director${member.lastNameI}${index}beginDate`}
+                                                value={values[`director${member.lastNameI}${index}beginDate`]}
+                                                inputFormat="dd/MM/yyyy"
+                                                onChange={(value => setFieldValue(`director${member.lastNameI}${index}beginDate`, value))}
+                                                renderInput={(params) => (
+                                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                                )}
+                                            />
+                                        </LocalizationProvider>
+                                        <div>Koniec sprawowania funkcji w roku sprawozdawczym</div>
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DatePicker
+                                                label="data końcowa..."
+                                                name={`director${member.lastNameI}${index}endDate`}
+                                                value={values[`director${member.lastNameI}${index}endDate`]}
+                                                inputFormat="dd/MM/yyyy"
+                                                onChange={(value => setFieldValue(`director${member.lastNameI}${index}endDate`, value))}
+                                                renderInput={(params) => (
+                                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                                )}
+                                            />
+                                        </LocalizationProvider>
+                                    </Card>
+                                }
+                            })}
+                        </Box>}
+                    </div>
+                    <div>
                     </div>
                     <Button type="submit" disabled={isSubmitting}> Zapisz</Button>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
