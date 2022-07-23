@@ -94,7 +94,6 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         amountProfitOrLoss: 0
 
     };
-    console.log(company.boardMembers)
     if (company.partners.partnerCompanies !== null && partnerCompanies.length === 0) {
         for (let i = 0; i < company.partners.partnerCompanies.length; i++) {
             partnerCompanies.push({"id": company.partners.partnerCompanies[i].id, isPresent: true})
@@ -445,9 +444,10 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         <p>{values.amountProfitOrLoss > 0 && "Głosowanie nad przeznaczeniem zysku"}</p>
                         <p>{values.amountProfitOrLoss < 0 && "Głosowanie nad sposobem pokryciem straty"}</p>
                         <div>
-                            <Checkbox aria-label={"jednogłośnie"} name={"recorderUnanimously"} defaultChecked
-                                      value={values.amountProfitOrLossVotingUnanimously} onChange={handleChange}
-                                      color="secondary"/>
+                            {values.amountProfitOrLoss !== 0 && <Checkbox aria-label={"jednogłośnie"} name={"amountProfitOrLossVotingUnanimously"}
+                                       defaultChecked
+                                       value={values.amountProfitOrLossVotingUnanimously} onChange={handleChange}
+                                       color="secondary"/>}
                         </div>
                         {values.amountProfitOrLossVotingUnanimously === false && <div><p>Oddane głosy:</p>
                             <MyTextField
@@ -593,9 +593,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                     <Button type="submit" disabled={isSubmitting}> Zapisz</Button>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
                 </Form>
-            )
-            }
-
+            )}
         </Formik>
     </Box>
 }
