@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import {Box, Typography} from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { selectCompanyInfoById } from "../../handlers/CompanyDataHandler";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@mui/material';
@@ -8,11 +8,20 @@ function CompanyMembers () {
 
     let {companyId} = useParams();
 
+    const cardStyle = {
+        textAlign: "center",
+        justifyContent: "center"
+    };
+
+    const tableStyle = {
+        width: "100%",
+    }
+
     const CreateCard = ({name, selectedData, headers}) => {
         return (
-            <Card>
+            <Card style={cardStyle}>
                 <Typography variant="h4">{name}</Typography>
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} style={tableStyle}>
                     <CreateHeaders headers={headers} />
                     <CreateTableData selectedData={selectedData} />
                 </TableContainer>
@@ -56,24 +65,28 @@ function CompanyMembers () {
         return items;
     }
 
+    const boxStyle = {
+        margin: "5px"
+    }
+
     return (
-        <>
+        <Box style={boxStyle}>
             <CreateCard
                 name="Członkowie Rady"
                 selectedData="boardMembers"
-                headers={["Pełne imię", "Adres", "Rola"]}
+                headers={["Imię", "Nazwisko", "Adres", "Rola"]}
             />
             <CreateCard
                 name="Dyrektorzy czy coś"
                 selectedData="boardOfDirectors"
-                headers={["Pełne imię", "Adres"]}
+                headers={["Imię", "Nazwisko", "Adres"]}
             />
             <CreateCard
                 name="Wspólnicy"
                 selectedData="partners"
                 headers={["Pełna nazwa", "Adres", "Łączna wartość akcji", "Ilość akcji"]}
             />
-        </>
+        </Box>
     )
 }
 
