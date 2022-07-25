@@ -13,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
     AppUser findByUserEmail(String userEmail);
+    AppUser findByUserId(UUID id);
     @Modifying
     @Query("UPDATE AppUser u SET u.applicationRoles = ?1 WHERE u.userId = ?2")
     void updateRolesByUserId(Set<? extends GrantedAuthority> roles, UUID userId);
