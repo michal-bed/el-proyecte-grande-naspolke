@@ -9,7 +9,8 @@ import {Box} from "@mui/material";
 import CompanyContextProvider from "./companyForm/CompanyContext";
 
 
-const AddCompany = ()=>{
+const AddCompany = () => {
+
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
     const [hideKrsInput, setHideKrsInput] = useState("block")
 

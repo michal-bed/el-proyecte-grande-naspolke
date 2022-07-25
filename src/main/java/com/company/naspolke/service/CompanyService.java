@@ -10,7 +10,8 @@ import java.util.UUID;
 public interface CompanyService {
     Optional<Company> getCompanyByKrsNumber(Long krsNumber);
     Optional<Company> getCompanyByCompanyId(UUID companyId);
-    ResponseEntity<Company> getCompanyData(String krsNumber);
+//    ResponseEntity<Company> getCompanyData(String krsNumber);
+    ResponseEntity<Company> getCompanyDtoFromKrsApi(String krsNumber);
     boolean checkForDuplicate(Long krsNumber);
     Company saveCompany(Company company);
     ResponseEntity<String> buildSaveResponse(Company company);

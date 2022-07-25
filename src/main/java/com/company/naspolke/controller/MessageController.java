@@ -56,13 +56,9 @@ public class MessageController {
         Optional<List<Message>> appUserNotification = Optional.ofNullable(Optional.ofNullable(
                 appUserService.findUserByUserId(UUID.fromString(objectNode.get("loggedUserId").asText())))
                 .get().getUserMessages());
-        if (appUserNotification.isPresent()) {
-            return appUserNotification.get().stream()
+        return appUserNotification.get().stream()
                     .sorted(Comparator.comparing(Message::getMessageDate).reversed())
                     .collect(Collectors.toList());
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find appUser");
-        }
     }
 
     @PostMapping(value = "/send-decision-about-membership")

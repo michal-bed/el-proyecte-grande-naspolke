@@ -9,6 +9,7 @@ import {useEffect, useState} from "react";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Subpage from "./Subpage";
+import RequestForMembership from "../../../requestToCompany/RequestForMembership";
 
 
 
@@ -21,6 +22,7 @@ function Page ({classes}) {
                 {/* jeśli route ma routy pod nim, trzeba dodać "/*"  */}
                 <Route path="/" element={<Subpage component={<MainCockpitPage/>}/>}/>
                 <Route path="/test" element={<Subpage component={<TestPage/>}/>}/>
+                <Route path="/request-for-membership" element={<RequestForMembership/>}/>
                 <Route path="/:companyId/*">
                     <Route path="" element={<Subpage component={<CompanyInfo />}/>}/>
                 </Route>
