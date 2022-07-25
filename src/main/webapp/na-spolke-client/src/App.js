@@ -1,6 +1,7 @@
 import './App.css';
 
-import SignIn from "./mkFiles/pageComponents/SignIn";
+import SignIn from "./componentsInUse/login/index";
+import RegistrationBasic from "./mkFiles/pageComponents/Registration"
 import Layout from './componentsInUse/Layout';
 import Logout from './componentsInUse/Logout';
 import Login from './componentsInUse/login/Login';
@@ -29,8 +30,8 @@ function App() {
                 {/* public routes */}
                 <Route path="/" element={<Presentation site="index"/> }/>
                 <Route path="faq" element={<Presentation site="faq"/>}/>
-                <Route path="log" element={<SignIn />}/>
-                <Route path="login" element={<Login/>}/>
+                <Route path="login" element={<SignIn />}/>
+                <Route path="reg" element={<RegistrationBasic />}/>
                 <Route path="logout" element={<Logout/>}/>
                 <Route path="register" element={<Registration/>}/>
                 <Route path="unauthorized" element={<Unauthorized />} />
