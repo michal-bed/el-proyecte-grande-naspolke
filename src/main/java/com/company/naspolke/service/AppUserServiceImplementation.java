@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class AppUserServiceImplementation implements AppUserService {
@@ -74,5 +78,10 @@ public class AppUserServiceImplementation implements AppUserService {
         }
         return companyOwners;
     }
+
+//    @Override
+//    public Optional<AppUser> findUserByUserId(UUID id) {
+//        return Optional.ofNullable(appUserRepository.findByUserId(id));
+//    }
 
 }

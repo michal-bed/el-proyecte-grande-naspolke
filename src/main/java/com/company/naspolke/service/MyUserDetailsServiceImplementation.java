@@ -12,10 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service("userDetailsService")
 @Transactional
-public class MyUserDetailsServiceImplementation implements MyUserDetailService, UserDetailsService {
+public class MyUserDetailsServiceImplementation implements MyUserDetailService {
 
     private final AppUserRepository appUserRepository;
 
@@ -25,9 +26,13 @@ public class MyUserDetailsServiceImplementation implements MyUserDetailService, 
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(// String userEmail
+                                           String uuid
+    ) throws UsernameNotFoundException {
         String login = "";
-        Optional<AppUser> user = Optional.ofNullable(appUserRepository.findByUserEmail(userEmail));
+         Optional<AppUser> user = Optional.ofNullable(appUserRepository
+         .findByUserId(UUID.fromString(uuid)));
+//        Optional<AppUser> user = Optional.ofNullable(appUserRepository.findByUserEmail(userEmail));
 
 
         if (user.isEmpty()) {
@@ -37,8 +42,10 @@ public class MyUserDetailsServiceImplementation implements MyUserDetailService, 
         }
 
         return new org.springframework.security.core.userdetails.User(
-                login != null ? login : user.get().getUserEmail(), user.get().getUserPassword(),
+               //  login != null ? login : user.get().getUserEmail(),
+                user.get().getUserId().toString(),
+                user.get().getUserPassword(),
                 user.get().isEnabled(), true, true, true,
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                user.get().getApplicationRoles());
     }
 }

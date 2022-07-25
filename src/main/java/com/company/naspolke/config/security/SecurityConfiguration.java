@@ -56,17 +56,15 @@ public class SecurityConfiguration {
         http.authorizeRequests()
                 .mvcMatchers("/").permitAll()
                 .mvcMatchers("/auth").permitAll()
-                //.anyRequest().denyAll()
-                .anyRequest().permitAll();
+                .mvcMatchers("/refresh").permitAll()
+                // .anyRequest().denyAll()
+                // .anyRequest().permitAll();
+                .anyRequest().authenticated();
         http.exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.cors();
         http.csrf().disable();
         http.logout().logoutUrl("/logout").permitAll();
-        http.logout().logoutSuccessUrl("/");
-//        customLogoutSuccessHandler.setTargetUrlParameter("http://www.google.com");
-//        customLogoutSuccessHandler.setDefaultTargetUrl("http://www.google.com");
-//        customLogoutSuccessHandler.setAlwaysUseDefaultTargetUrl(true);
         http.logout().logoutSuccessHandler(customLogoutSuccessHandler);
         http.authenticationManager(authenticationManager());
         http.addFilterAfter(jwtRequestFilter, AnonymousAuthenticationFilter.class);

@@ -18,11 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 //@Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    List<String> EXCLUDED_PATHS = Arrays.asList("/", "/login", "/auth", "/logout");
+    List<String> EXCLUDED_PATHS = Arrays.asList("/", "/login", "/auth", "/logout", "/refresh");
 
     private MyUserDetailsServiceImplementation userDetailsService;
     private JwtUtil jwtUtil;
@@ -50,14 +51,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
-        final String authorizationHeader = request.getHeader("Authorization");
+        final String authorizationHeader = jwtUtil.getAuthorizationHeader(request);
 
         String username = null;
         String jwt = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-            username = jwtUtil.extractUsername(jwt);
+            jwt = jwtUtil.getJwt(authorizationHeader);
+            username = jwtUtil.extractUsername(jwt); // uuid
         }
 
         if (username != null && (SecurityContextHolder.getContext().getAuthentication()
@@ -79,4 +80,29 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
+
+//    private String getJwt(String authorizationHeader) {
+//        String jwt;
+//        jwt = authorizationHeader.substring(7);
+//        return jwt;
+//    }
+//
+//    private String getAuthorizationHeader(HttpServletRequest request) {
+//        return request.getHeader("Authorization");
+//    }
+//
+//    public UUID getUserId(HttpServletRequest request)
+//    {
+//        final String authorizationHeader = getAuthorizationHeader(request);
+//
+//        String username = null;
+//        String jwt = null;
+//
+//        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+//            jwt = getJwt(authorizationHeader);
+//            username = jwtUtil.extractUsername(jwt); // uuid
+//            return UUID.fromString(username);
+//        }
+//        return null;
+//    }
 }
