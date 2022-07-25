@@ -14,7 +14,7 @@ class FontStyleGenerator {
         switch (fontStyles){
             case PROTOCOL_HEADER -> {
                 font.setSize(17);
-//                font.isBold();
+                font.isBold();
             }
             case PROTOCOL_PLANE_TEXT, PROTOCOL_RESOLUTION_TEXT -> font.setSize(14);
             case PROTOCOL_RESOLUTION_HEADER -> {
@@ -24,5 +24,4 @@ class FontStyleGenerator {
         }
         return font;
     }
-
 }

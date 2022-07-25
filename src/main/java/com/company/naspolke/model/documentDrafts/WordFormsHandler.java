@@ -92,7 +92,7 @@ public class WordFormsHandler {
         } else if (placeName.toUpperCase().contains("UL.")) {
             return correctLetterCases(placeName);
         } else if (placeName.toUpperCase().contains("UL")) {
-            correctedPlaceName = placeName.toUpperCase().replace("UL", "Ul.");
+            correctedPlaceName = placeName.toUpperCase().replace("UL", "ul.");
             return correctLetterCases(correctedPlaceName);
         } else if ((placeName.toUpperCase().contains("OS "))) {
             correctedPlaceName = placeName.toUpperCase().replace("OS", "Os.");
@@ -106,7 +106,7 @@ public class WordFormsHandler {
         } else if (placeName.toUpperCase().contains("PL.")) {
             return correctLetterCases(placeName);
         } else if (placeName.toUpperCase().contains("PL ")) {
-            correctedPlaceName = placeName.toUpperCase().replace("PL", "PL.");
+            correctedPlaceName = placeName.toUpperCase().replace("PL", "pl.");
             return correctLetterCases(correctedPlaceName);
         } else if (placeName.toUpperCase().contains("AL.")) {
             return correctLetterCases(placeName);
@@ -119,6 +119,7 @@ public class WordFormsHandler {
         }
         return "ul. ".concat(correctLetterCases(placeName));
     }
+    //TODO wyrzucić if
 
     static String correctLetterCases(String text) {
         if (text.trim().contains(" ")) {

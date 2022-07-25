@@ -370,6 +370,52 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         </div>
                     </Card>
                     <Card>
+                        <div><p>Porządek obrad:</p>
+                            <ol>
+                                <li>otwarcie Zwyczajnego Zgromadzenia;</li>
+                                <li>wybór Przewodniczącego Zgromadzenia i Protokolanta;</li>
+                                <li>stwierdzenie prawidłowości zwołania Zgromadzenia;</li>
+                                <li>podjęcie uchwały w przedmiocie rozpatrzenia i zatwierdzenie sprawozdania finansowego
+                                    Spółki oraz sprawozdania Zarządu;
+                                </li>
+                                <li>{values.amountProfitOrLoss > 0 && "podjęcie uchwały w przedmiocie sposobu podziału zysku;"}
+                                    {values.amountProfitOrLoss < 0 && "podjęcie uchwały w przedmiocie sposobu pokrycia straty;"}</li>
+                                <li>podjęcie uchwały w przedmiocie udzielenia absolutorium organom spółki;</li>
+                                <li>wolne głosy i wnioski;</li>
+                                <li>zamknięcie obrad Zgromadzenia;</li>
+                            </ol>
+                            <div>
+                                <p>Głosowanie nad przyjęciem porządku obrad</p>
+                                <div>
+                                    <Checkbox aria-label={"jednogłośnie"} name={"agendaUnanimously"} defaultChecked
+                                              value={values.agendaUnanimously} onChange={handleChange}
+                                              color="secondary"/>
+                                </div>
+                                {values.agendaUnanimously === false && <div><p>Oddane głosy:</p>
+                                    <MyTextField
+                                        name={"agendaVotingFor"}
+                                        type="number"
+                                        value={values.agendaVotingFor}
+                                        label="głosów za:"
+                                        as={TextField}
+                                    /><MyTextField
+                                        name={"agendaVotingAgainst"}
+                                        type="number"
+                                        value={values.agendaVotingFor}
+                                        label="głosów przeciw:"
+                                        as={TextField}
+                                    /><MyTextField
+                                        name={"agendaVotingAgainst"}
+                                        type="number"
+                                        value={values.agendaVotingAbstentions}
+                                        label="głosów wstrzymujących się:"
+                                        as={TextField}
+                                    /></div>
+                                }
+                            </div>
+                        </div>
+                    </Card>
+                    <Card>
                         <p>Sprawozdanie finansowe</p>
                         <p>Początek rozliczanego okresu sprawozdawczego</p>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -444,10 +490,11 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         <p>{values.amountProfitOrLoss > 0 && "Głosowanie nad przeznaczeniem zysku"}</p>
                         <p>{values.amountProfitOrLoss < 0 && "Głosowanie nad sposobem pokryciem straty"}</p>
                         <div>
-                            {values.amountProfitOrLoss !== 0 && <Checkbox aria-label={"jednogłośnie"} name={"amountProfitOrLossVotingUnanimously"}
-                                       defaultChecked
-                                       value={values.amountProfitOrLossVotingUnanimously} onChange={handleChange}
-                                       color="secondary"/>}
+                            {values.amountProfitOrLoss !== 0 &&
+                                <Checkbox aria-label={"jednogłośnie"} name={"amountProfitOrLossVotingUnanimously"}
+                                          defaultChecked
+                                          value={values.amountProfitOrLossVotingUnanimously} onChange={handleChange}
+                                          color="secondary"/>}
                         </div>
                         {values.amountProfitOrLossVotingUnanimously === false && <div><p>Oddane głosy:</p>
                             <MyTextField
@@ -487,6 +534,38 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                                                value={true}/>}
                                             label="Cały okres sprawozdawczy"/>
                                     </FormControl>
+                                        <div>
+                                            <p>Głosowanie nad udzieleniem absolutorium</p>
+                                            <div>
+                                                <Checkbox aria-label={"jednogłośnie"}
+                                                          name={`bardUnanimously${member.firstName}${index}`}
+                                                          defaultChecked
+                                                          value={values[`bardUnanimously${member.firstName}${index}`]}
+                                                          onChange={handleChange}
+                                                          color="secondary"/>
+                                            </div>
+                                            {values[`bardUnanimously${member.firstName}${index}`] === false &&
+                                                <div><p>Oddane głosy:</p>
+                                                    <MyTextField
+                                                        name={`bardUnanimously${member.firstName}${index}VotingFor`}
+                                                        type="number"
+                                                        value={values[`bardUnanimously${member.firstName}${index}VotingFor`]}
+                                                        label="głosów za:"
+                                                        as={TextField}
+                                                    /><MyTextField
+                                                        name={`bardUnanimously${member.firstName}${index}VotingAgainst`}
+                                                        type="number"
+                                                        value={values[`bardUnanimously${member.firstName}${index}VotingAgainst`]}
+                                                        label="głosów przeciw:"
+                                                        as={TextField}
+                                                    /><MyTextField
+                                                        name={`bardUnanimously${member.firstName}${index}VotingAbstentions`}
+                                                        type="number"
+                                                        value={values[`bardUnanimously${member.firstName}${index}VotingAbstentions`]}
+                                                        label="głosów wstrzymujących się:"
+                                                        as={TextField}
+                                                    /></div>}
+                                        </div>
                                     </Card>
                                 } else if (values[`board${member.lastNameI}${index}`] === false) {
                                     return <Card><FormControl>
@@ -510,7 +589,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                                 inputFormat="dd/MM/yyyy"
                                                 onChange={(value => setFieldValue(`board${member.lastNameI}${index}beginDate`, value))}
                                                 renderInput={(params) => (
-                                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                                    <TextField {...params}
+                                                               helperText={params?.inputProps?.placeholder}/>
                                                 )}
                                             />
                                         </LocalizationProvider>
@@ -523,10 +603,43 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                                 inputFormat="dd/MM/yyyy"
                                                 onChange={(value => setFieldValue(`board${member.lastNameI}${index}endDate`, value))}
                                                 renderInput={(params) => (
-                                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                                    <TextField {...params}
+                                                               helperText={params?.inputProps?.placeholder}/>
                                                 )}
                                             />
                                         </LocalizationProvider>
+                                        <div>
+                                            <p>Głosowanie nad udzieleniem absolutorium </p>
+                                            <div>
+                                                <Checkbox aria-label={"jednogłośnie"}
+                                                          name={`bardUnanimously${member.firstName}${index}`}
+                                                          defaultChecked
+                                                          value={values[`bardUnanimously${member.firstName}${index}`]}
+                                                          onChange={handleChange}
+                                                          color="secondary"/>
+                                            </div>
+                                            {values[`bardUnanimously${member.firstName}${index}`] === false &&
+                                                <div><p>Oddane głosy:</p>
+                                                    <MyTextField
+                                                        name={`bardUnanimously${member.firstName}${index}VotingFor`}
+                                                        type="number"
+                                                        value={values[`bardUnanimously${member.firstName}${index}VotingFor`]}
+                                                        label="głosów za:"
+                                                        as={TextField}
+                                                    /><MyTextField
+                                                        name={`bardUnanimously${member.firstName}${index}VotingAgainst`}
+                                                        type="number"
+                                                        value={values[`bardUnanimously${member.firstName}${index}VotingAgainst`]}
+                                                        label="głosów przeciw:"
+                                                        as={TextField}
+                                                    /><MyTextField
+                                                        name={`bardUnanimously${member.firstName}${index}VotingAbstentions`}
+                                                        type="number"
+                                                        value={values[`bardUnanimously${member.firstName}${index}VotingAbstentions`]}
+                                                        label="głosów wstrzymujących się:"
+                                                        as={TextField}
+                                                    /></div>}
+                                        </div>
                                     </Card>
                                 }
                             })}
@@ -534,24 +647,57 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         {company.boardOfDirectors.length > 0 && <Box>
                             <p>Głosowanie nad absolutorium członków Rady Nadzorczej</p>
                             <p>Wskaż wszystkich członków rady nadzorczej oraz okresy sprawowania przez nich funkcji</p>
-
                             {company.boardOfDirectors.length > 0 && company.boardOfDirectors.map((member, index) => {
                                 if (values[`director${member.lastNameI}${index}`] !== false) {
                                     return <Card><FormControl>
                                         <p key={`displayedDirectorName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}</p>
                                         <FormControlLabel
-                                            control={<Checkbox key={`director${member.lastNameI}${index}`} defaultChecked
+                                            control={<Checkbox key={`director${member.lastNameI}${index}`}
+                                                               defaultChecked
                                                                name={`director${member.lastNameI}${index}`}
                                                                onChange={handleChange}
                                                                value={true}/>}
                                             label="Cały okres sprawozdawczy"/>
                                     </FormControl>
+                                        <div>
+                                            <p>Głosowanie nad udzieleniem absolutorium</p>
+                                            <div>
+                                                <Checkbox aria-label={"jednogłośnie"}
+                                                          name={`directorUnanimously${member.firstName}${index}`}
+                                                          defaultChecked
+                                                          value={values[`directorUnanimously${member.firstName}${index}`]}
+                                                          onChange={handleChange}
+                                                          color="secondary"/>
+                                            </div>
+                                            {values[`directorUnanimously${member.firstName}${index}`] === false &&
+                                                <div><p>Oddane głosy:</p>
+                                                    <MyTextField
+                                                        name={`directorUnanimously${member.firstName}${index}VotingFor`}
+                                                        type="number"
+                                                        value={values[`directorUnanimously${member.firstName}${index}VotingFor`]}
+                                                        label="głosów za:"
+                                                        as={TextField}
+                                                    /><MyTextField
+                                                        name={`directorUnanimously${member.firstName}${index}VotingAgainst`}
+                                                        type="number"
+                                                        value={values[`directorUnanimously${member.firstName}${index}VotingAgainst`]}
+                                                        label="głosów przeciw:"
+                                                        as={TextField}
+                                                    /><MyTextField
+                                                        name={`directorUnanimously${member.firstName}${index}VotingAbstentions`}
+                                                        type="number"
+                                                        value={values[`directorUnanimously${member.firstName}${index}VotingAbstentions`]}
+                                                        label="głosów wstrzymujących się:"
+                                                        as={TextField}
+                                                    /></div>}
+                                        </div>
                                     </Card>
                                 } else if (values[`director${member.lastNameI}${index}`] === false) {
                                     return <Card><FormControl>
                                         <p key={`displayedName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}</p>
                                         <FormControlLabel
-                                            control={<Checkbox key={`director${member.lastNameI}${index}`} defaultChecked
+                                            control={<Checkbox key={`director${member.lastNameI}${index}`}
+                                                               defaultChecked
                                                                name={`director${member.lastNameI}${index}`}
                                                                onChange={handleChange}
                                                                value={true}/>}
@@ -566,7 +712,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                                 inputFormat="dd/MM/yyyy"
                                                 onChange={(value => setFieldValue(`director${member.lastNameI}${index}beginDate`, value))}
                                                 renderInput={(params) => (
-                                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                                    <TextField {...params}
+                                                               helperText={params?.inputProps?.placeholder}/>
                                                 )}
                                             />
                                         </LocalizationProvider>
@@ -579,16 +726,47 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                                 inputFormat="dd/MM/yyyy"
                                                 onChange={(value => setFieldValue(`director${member.lastNameI}${index}endDate`, value))}
                                                 renderInput={(params) => (
-                                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                                    <TextField {...params}
+                                                               helperText={params?.inputProps?.placeholder}/>
                                                 )}
                                             />
                                         </LocalizationProvider>
+                                        <div>
+                                            <p>Głosowanie nad udzieleniem absolutorium</p>
+                                            <div>
+                                                <Checkbox aria-label={"jednogłośnie"}
+                                                          name={`directorUnanimously${member.firstName}${index}`}
+                                                          defaultChecked
+                                                          value={values[`directorUnanimously${member.firstName}${index}`]}
+                                                          onChange={handleChange}
+                                                          color="secondary"/>
+                                            </div>
+                                            {values[`directorUnanimously${member.firstName}${index}`] === false &&
+                                                <div><p>Oddane głosy:</p>
+                                                    <MyTextField
+                                                        name={`directorUnanimously${member.firstName}${index}VotingFor`}
+                                                        type="number"
+                                                        value={values[`directorUnanimously${member.firstName}${index}VotingFor`]}
+                                                        label="głosów za:"
+                                                        as={TextField}
+                                                    /><MyTextField
+                                                        name={`directorUnanimously${member.firstName}${index}VotingAgainst`}
+                                                        type="number"
+                                                        value={values[`directorUnanimously${member.firstName}${index}VotingAgainst`]}
+                                                        label="głosów przeciw:"
+                                                        as={TextField}
+                                                    /><MyTextField
+                                                        name={`directorUnanimously${member.firstName}${index}VotingAbstentions`}
+                                                        type="number"
+                                                        value={values[`directorUnanimously${member.firstName}${index}VotingAbstentions`]}
+                                                        label="głosów wstrzymujących się:"
+                                                        as={TextField}
+                                                    /></div>}
+                                        </div>
                                     </Card>
                                 }
                             })}
                         </Box>}
-                    </div>
-                    <div>
                     </div>
                     <Button type="submit" disabled={isSubmitting}> Zapisz</Button>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
@@ -597,45 +775,3 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         </Formik>
     </Box>
 }
-
-// <p>Porządek obrad</p>
-// <ol>
-//     <li>otwarcie Zwyczajnego Zgromadzenia</li>
-//     <li>wybór Przewodniczącego Zgromadzenia i Protokolanta</li>
-//     <li>stwierdzenie prawidłowości zwołania Zgromadzenia,</li>
-//     <li>podjęcie uchwały w przedmiocie rozpatrzenia i zatwierdzenie sprawozdania finansowego
-//         Spółki oraz sprawozdania Zarządu</li>
-//     <li>podjęcie uchwały w przedmiocie podziału zysku / pokrycia straty</li>
-//     <li>podjęcie uchwały w przedmiocie udzielenia absolutorium organom spółki</li>
-//     <li>wolne głosy i wnioski</li>
-//     <li>zamknięcie obrad Zgromadzenia</li>
-// </ol>
-// <div>
-//     <p>Głosowanie na przyjęciem porządku obrad</p>
-//     <div>
-//         <Checkbox aria-label={"jednogłośnie"} name={"recorderUnanimously"} defaultChecked
-//                   value={values.agendaUnanimously} onChange={handleChange}
-//                   color="secondary"/>
-//     </div>
-//     {values.recorderUnanimously === false && <div><p>Oddane głosy:</p>
-//         <MyTextField
-//             name={"recorderVotingFor"}
-//             type="number"
-//             value={values.agendaVotingFor}
-//             label="głosów za:"
-//             as={TextField}
-//         /><MyTextField
-//             name={"recorderVotingAgainst"}
-//             type="number"
-//             value={values.agendaVotingFor}
-//             label="głosów przeciw:"
-//             as={TextField}
-//         /><MyTextField
-//             name={"recorderVotingAgainst"}
-//             type="number"
-//             value={values.agendaVotingAbstentions}
-//             label="głosów wstrzymujących się:"
-//             as={TextField}
-//         /></div>
-//     }
-// </div>

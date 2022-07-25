@@ -104,7 +104,8 @@ public class FinancialStatementProtocolGenerator {
                 "meetingYear", String.valueOf(financialStatementsProtocol.getDateOfTheShareholdersMeeting().getYear()),
                 "meetingMonthInWords", WordFormsHandler.getMonthInWord(financialStatementsProtocol.getDateOfTheShareholdersMeeting().getMonthValue()),
                 "city", WordFormsHandler.placeConjugated(company.getAddress().getCity()),
-                "meetingPlace", financialStatementsProtocol.getMeetingPlace()));
+                "meetingPlace", financialStatementsProtocol.getMeetingPlace(),
+                ".", "."));
 
         if (!financialStatementsProtocol.isMeetingPlaceInHeadquarters()) {
             definition.put("meetingPlace", correctLetterCases(financialStatementsProtocol.getMeetingPlace()));
