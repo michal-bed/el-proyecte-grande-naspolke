@@ -14,6 +14,8 @@ import useAuth from "../../../../hooks/useAuth";
 import CompanyInvitePage from "../../content/companyContent/CompanyInvitePage";
 import InviteSuccess from "../../content/companyContent/inviteResult/InviteSuccess";
 import InviteFail from "../../content/companyContent/inviteResult/InviteFail";
+import GenerateDocument from "../../content/companyContent/generateDocument/GenerateDocument";
+
 
 
 
@@ -37,6 +39,7 @@ function Page ({classes}) {
                         <Route path="success" element={<Subpage component={<InviteSuccess/>}/>}/>
                         <Route path="fail" element={<Subpage component={<InviteFail/>}/>}/>
                     </Route>
+                    <Route path="generate" element={<Subpage component={<GenerateDocument/>}/>}/>
                 </Route>
             </Routes>
         </Box>

@@ -44,10 +44,7 @@ export default function Sidebar () {
                         Zaproś do Spółki <Link to={"/userpanel/company/" + companyId + "/invite"}/>
                     </MenuItem>
                     <MenuItem icon={<DraftsIcon/>}>
-                        {companyId} <Link to={"/userpanel/company/" + companyId}/>
-                    </MenuItem>
-                    <MenuItem icon={<DraftsIcon/>}>
-                        {companyId} <Link to={"/userpanel/company/" + companyId}/>
+                        Wygeneruj Dokument <Link to={"/userpanel/company/" + companyId + "/generate"}/>
                     </MenuItem>
                     <MenuItem icon={<DraftsIcon/>}>
                         {companyId} <Link to={"/userpanel/company/" + companyId}/>
@@ -56,9 +53,9 @@ export default function Sidebar () {
             );
         } else {
             return (
-                <MenuItem>
+                <SidebarHeader>
                     Wybierz Spółkę
-                </MenuItem>
+                </SidebarHeader>
             );
         }
     }

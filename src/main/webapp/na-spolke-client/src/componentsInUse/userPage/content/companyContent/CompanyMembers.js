@@ -15,6 +15,7 @@ function CompanyMembers () {
 
     const tableStyle = {
         width: "100%",
+        display: "table",
     }
 
     const CreateCard = ({name, selectedData, headers}) => {
