@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Service("userDetailsService")
 @Transactional
-public class MyUserDetailsServiceImplementation implements MyUserDetailService, UserDetailsService {
+public class MyUserDetailsServiceImplementation implements MyUserDetailService {
 
     private final AppUserRepository appUserRepository;
 
@@ -46,6 +46,6 @@ public class MyUserDetailsServiceImplementation implements MyUserDetailService, 
                 user.get().getUserId().toString(),
                 user.get().getUserPassword(),
                 user.get().isEnabled(), true, true, true,
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                user.get().getApplicationRoles());
     }
 }

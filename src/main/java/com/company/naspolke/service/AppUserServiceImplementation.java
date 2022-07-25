@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class AppUserServiceImplementation implements AppUserService {
@@ -33,5 +34,10 @@ public class AppUserServiceImplementation implements AppUserService {
     @Override
     public Optional<AppUser> findUserByUserEmail(String userEmail) {
         return Optional.ofNullable(appUserRepository.findByUserEmail(userEmail));
+    }
+
+    @Override
+    public Optional<AppUser> findUserByUserId(UUID id) {
+        return Optional.ofNullable(appUserRepository.findByUserId(id));
     }
 }
