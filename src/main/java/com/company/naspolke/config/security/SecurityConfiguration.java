@@ -56,6 +56,8 @@ public class SecurityConfiguration {
         http.authorizeRequests()
                 .mvcMatchers("/").permitAll()
                 .mvcMatchers("/auth").permitAll()
+                .mvcMatchers("/refresh").permitAll()
+
                 // .anyRequest().denyAll()
                 // .anyRequest().permitAll();
                 .anyRequest().authenticated();
