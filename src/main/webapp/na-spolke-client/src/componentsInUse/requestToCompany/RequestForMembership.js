@@ -2,8 +2,11 @@ import React, {useState} from "react";
 import styles from './RequestToCompany.module.css';
 import CompanyInfo from "./CompanyInfo";
 import ModalTop from "../modal/ModalTop";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const RequestForMembership = () => {
+
+    const axiosPrivate = useAxiosPrivate();
 
     const successfullyRequestMessage = {
         title: "Nie znaleziono spółki",
@@ -19,12 +22,10 @@ const RequestForMembership = () => {
 
     const findCompany = (e) => {
         e.preventDefault();
-        fetch(`http://localhost:8080/find-company-to-membership-request/${krsNumber}`)
+        axiosPrivate.get(`/find-company-to-membership-request/${krsNumber}`)
             .then(response => {
             if (response.status === 200) {
-                response.json()
-                    .then(data => {setCompanyData(data);
-                })
+                setCompanyData(response.data);
                 setShowMembershipComponent(true);
             } else {
                 setCompanyNotFound(true);

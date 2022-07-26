@@ -53,11 +53,6 @@ public class AppUserServiceImplementation implements AppUserService {
         return Optional.ofNullable(appUserRepository.findByUserEmail(userEmail));
     }
 
-//    @Override
-//    public AppUser findUserByUserId(UUID userId) {
-//        return appUserRepository.findAppUserByUserId(userId);
-//    }
-
     @Override
     @Transactional
     public void updateAppUser(AppUser appUser) {

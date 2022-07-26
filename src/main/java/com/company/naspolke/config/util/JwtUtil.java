@@ -44,8 +44,7 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails, int expirationTime) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername()
-                 , expirationTime);
+        return createToken(claims, userDetails.getUsername(), expirationTime);
     }
 
     private String createToken(Map<String, Object> claims, String subject, int expirationTime) {
@@ -61,9 +60,7 @@ public class JwtUtil {
     }
 
     public String getJwt(String authorizationHeader) {
-        String jwt;
-        jwt = authorizationHeader.substring(7);
-        return jwt;
+        return authorizationHeader.substring(7);
     }
 
     public String getAuthorizationHeader(HttpServletRequest request) {

@@ -1,15 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import KrsUserInput from "./krsInput/KrsUserInput";
 import CompanyForm from "./companyForm/CompanyForm";
-import {useState} from "react";
 import {ModalErrorMessage} from "./companyForm/ModalFormKrsInputError";
 import {Company} from "../../classes/company/Company";
-import Axios from "axios";
 import {Box} from "@mui/material";
 import CompanyContextProvider from "./companyForm/CompanyContext";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 
 const AddCompany = () => {
+
+    const axiosPrivate = useAxiosPrivate();
 
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
     const [hideKrsInput, setHideKrsInput] = useState("block")
@@ -48,13 +49,13 @@ const AddCompany = () => {
 
     function saveDataIntoDb(data){
 
-        Axios.post("http://localhost:8080/add-company/",data)
-            .then(response=> {
-                if (response.status===201) {
+        axiosPrivate.post("/add-company/", data)
+            .then((response) => {
+                if (response.status === 201) {
                     alert(`Spółka ${response.data} została pomyślnie dodana`)
                 }
             })
-            .catch(error=>{
+            .catch((error) => {
                 console.log(error)
                 alert(`Wystąpił błąd.. spółka nie została dodana. Spróbuj ponownie później.`)
             })

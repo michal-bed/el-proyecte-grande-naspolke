@@ -18,7 +18,6 @@ import java.util.UUID;
 public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
     AppUser findByUserEmail(String userEmail);
     AppUser findByUserId(UUID id);
-    //AppUser findAppUserByUserId(UUID userId);
     @Modifying
     @Query("UPDATE AppUser u SET u.applicationRoles = ?1 WHERE u.userId = ?2")
     void updateRolesByUserId(Set<? extends GrantedAuthority> roles, UUID userId);

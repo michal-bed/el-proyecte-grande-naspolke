@@ -1,8 +1,11 @@
 import {Button, Container, Form} from "react-bootstrap";
 import React, {useState} from "react";
 import ModalTop from "../modal/ModalTop";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const AddMember = () => {
+
+    const axiosPrivate = useAxiosPrivate();
 
     const memberAdded = {
         title: "Użytkownik dodany",
@@ -19,20 +22,17 @@ const AddMember = () => {
     const Add = (e) => {
         e.preventDefault();
         const userData = {companyId, userEmail, roleType};
-        fetch("http://localhost:8080/add-member-to-company", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(userData)
-        }).then(response => {
+        axiosPrivate.post("/add-member-to-company", userData
+        ).then(response => {
             if (response.status === 200) {
                 setIsOpenForAdded(true);
                 setTimeout(backToPreviousAddedState, 4000);
-                return response.blob();
+                return response.data;
             } else {
                 throw new Error("Can't save new member!");
             }
-        }).catch(() => {
-            console.log("Something went wrong!")
+        }).catch((error) => {
+            console.log(error)
         });
     }
 

@@ -1,5 +1,6 @@
 package com.company.naspolke.controller;
 
+import com.company.naspolke.config.util.JwtUtil;
 import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.Role;
 import com.company.naspolke.model.company.Company;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,21 +28,24 @@ public class CompanyController {
 
     private CompanyService companyService;
     private AppUserService appUserService;
+    private JwtUtil jwtUtil;
     private RoleService roleService;
     private CompanyUserRoleService companyUserRoleService;
 
     @Autowired
-    public CompanyController(CompanyService companyService, AppUserService appUserService,
+    public CompanyController(CompanyService companyService, AppUserService appUserService, JwtUtil jwtUtil,
                              RoleService roleService, CompanyUserRoleService companyUserRoleService) {
         this.companyService = companyService;
         this.appUserService = appUserService;
+        this.jwtUtil = jwtUtil;
         this.roleService = roleService;
         this.companyUserRoleService = companyUserRoleService;
     }
 
     @PostMapping(value = "/add-company")
-    public ResponseEntity<String> addNewCompany(@RequestBody Company newCompany) {
-        Optional<AppUser> appUser = appUserService.findUserByUserEmail("test@test.com");
+    public ResponseEntity<String> addNewCompany(HttpServletRequest request, @RequestBody Company newCompany) {
+        UUID loggedUserId = jwtUtil.getUserId(request);
+        Optional<AppUser> appUser = appUserService.findUserByUserId(loggedUserId);
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.OWNER);
         if (appUser.isPresent() && role.isPresent()) {
             Company savedCompany = companyService.saveCompany(newCompany);
