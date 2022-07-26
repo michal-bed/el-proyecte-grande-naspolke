@@ -10,8 +10,8 @@ import java.util.UUID;
 public interface AppUserService {
     void registerUser(AppUser appUser);
     Optional<AppUser> findUserByUserEmail(String userEmail);
-    //Optional<AppUser> findUserByUserId(UUID id);
-    AppUser findUserByUserId(UUID userId);
+    Optional<AppUser> findUserByUserId(UUID id);
+//    AppUser findUserByUserId(UUID userId);
     void updateAppUser(AppUser appUser);
     List<AppUser> getCompanyOwners(Long krsNumber);
 }

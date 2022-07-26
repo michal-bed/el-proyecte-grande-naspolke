@@ -1,48 +1,21 @@
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-const DeleteNotificationButton = ({messageId, loggedUserId}) => {
+const DeleteNotificationButton = ({messageId}) => {
 
     const axiosPrivate = useAxiosPrivate();
 
-    // const deleteNotification = (e) => {
-    //     e.preventDefault();
-    //     console.log(messageId)
-    //     console.log(loggedUserId)
-    //     const userData = {messageId, loggedUserId};
-    //     fetch(`http://localhost:8080/delete-message-from-notification`, {
-    //         method: "DELETE",
-    //         headers: {"Content-Type": "application/json"},
-    //         body: JSON.stringify(userData)
-    //     }).then(response => {
-    //         if (response.status === 200) {
-    //             let parentNode = document.getElementById(`message${messageId}`);
-    //             console.log(parentNode);
-    //             parentNode.remove();
-    //             return response.blob();
-    //         } else {
-    //             throw new Error('Send request failed!');
-    //         }
-    //     }).catch(() => console.log("Error!"));
-    // }
-
     const deleteNotification = (e) => {
         e.preventDefault();
-        console.log(messageId)
-        console.log(loggedUserId)
-        const userData = {messageId};
-        axiosPrivate.delete(`/delete-message-from-notification`, {
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(userData)
-        }).then(response => {
+        axiosPrivate.delete(`/delete-message-from-notification/${messageId}`
+        ).then(response => {
             if (response.status === 200) {
                 let parentNode = document.getElementById(`message${messageId}`);
-                console.log(parentNode);
                 parentNode.remove();
                 return response.data;
             } else {
                 throw new Error('Send request failed!');
             }
-        }).catch(() => console.log("Error!"));
+        }).catch((error) => console.log(error));
     }
 
     return (

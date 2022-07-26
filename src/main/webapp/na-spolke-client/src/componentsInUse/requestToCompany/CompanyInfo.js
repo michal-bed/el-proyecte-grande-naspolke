@@ -24,47 +24,18 @@ const CompanyInfo = ({ companyData, krsNumber }) => {
     const backToPreviousSuccessfullyState = () => setSuccessfullyRequest(false);
     const backToPreviousErrorState = () => setErrorRequest(false);
 
-    // //TODO: get User Id from session
-    // let [loggedUserId, setLoggedUserId] = useState("");
-    // //TODO
     let [messageText, setMessageText] = useState("");
 
     function handleStatusChange() {
-        // setLoggedUserId(loggedUserId = "5bd0f8e1-adf1-4c4d-ac6f-119ece595f3d");
         setMessageText(messageText = "Użytkownik o podanym adresie email wysłał prośbę o dołączenie do spółki");
     }
-
-    // const sendRequest = (e) => {
-    //     handleStatusChange();
-    //     e.preventDefault();
-    //     const userData = {loggedUserId, messageText};
-    //     console.log(userData)
-    //     fetch(`http://localhost:8080/send-request-for-membership/${krsNumber}`, {
-    //         method: "POST",
-    //         headers: {"Content-Type": "application/json"},
-    //         body: JSON.stringify(userData)
-    //     }).then(response => {
-    //         if (response.status === 200) {
-    //             setSuccessfullyRequest(true);
-    //             setTimeout(backToPreviousSuccessfullyState, 4000);
-    //             return response.blob();
-    //         } else {
-    //             setErrorRequest(true);
-    //             setTimeout(backToPreviousErrorState, 4000);
-    //             throw new Error('Send request failed!');
-    //         }
-    //     }).catch(() => {console.log("Something went wrong!")})
-    // }
 
     const sendRequest = (e) => {
         handleStatusChange();
         e.preventDefault();
         const userData = {messageText};
-        console.log(userData)
-        axiosPrivate.post(`/send-request-for-membership/${krsNumber}`, {
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(userData)
-        }).then(response => {
+        axiosPrivate.post(`/send-request-for-membership/${krsNumber}`, userData
+        ).then(response => {
             if (response.status === 200) {
                 setSuccessfullyRequest(true);
                 setTimeout(backToPreviousSuccessfullyState, 4000);
@@ -74,7 +45,7 @@ const CompanyInfo = ({ companyData, krsNumber }) => {
                 setTimeout(backToPreviousErrorState, 4000);
                 throw new Error('Send request failed!');
             }
-        }).catch(() => {console.log("Something went wrong!")})
+        }).catch((error) => {console.log(error)})
     }
 
     return (

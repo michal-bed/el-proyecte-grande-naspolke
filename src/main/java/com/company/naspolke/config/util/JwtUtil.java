@@ -70,8 +70,7 @@ public class JwtUtil {
         return request.getHeader("Authorization");
     }
 
-    public UUID getUserId(HttpServletRequest request)
-    {
+    public UUID getUserId(HttpServletRequest request) {
         final String authorizationHeader = getAuthorizationHeader(request);
 
         String username = null;

@@ -53,10 +53,10 @@ public class AppUserServiceImplementation implements AppUserService {
         return Optional.ofNullable(appUserRepository.findByUserEmail(userEmail));
     }
 
-    @Override
-    public AppUser findUserByUserId(UUID userId) {
-        return appUserRepository.findAppUserByUserId(userId);
-    }
+//    @Override
+//    public AppUser findUserByUserId(UUID userId) {
+//        return appUserRepository.findAppUserByUserId(userId);
+//    }
 
     @Override
     @Transactional
@@ -73,15 +73,15 @@ public class AppUserServiceImplementation implements AppUserService {
             List<CompanyUserRole> companyOwnersIds = companyUserRoleRepository.findAppUserByCompanyAndByRole(
                     company.get().getCompanyId(), role.get().getRoleId());
             for (CompanyUserRole _companyUserRole : companyOwnersIds) {
-                companyOwners.add(appUserRepository.findAppUserByUserId(_companyUserRole.getPrimaryKey().getAppUser().getUserId()));
+                companyOwners.add(appUserRepository.findByUserId(_companyUserRole.getPrimaryKey().getAppUser().getUserId()));
             }
         }
         return companyOwners;
     }
 
-//    @Override
-//    public Optional<AppUser> findUserByUserId(UUID id) {
-//        return Optional.ofNullable(appUserRepository.findByUserId(id));
-//    }
+    @Override
+    public Optional<AppUser> findUserByUserId(UUID id) {
+        return Optional.ofNullable(appUserRepository.findByUserId(id));
+    }
 
 }

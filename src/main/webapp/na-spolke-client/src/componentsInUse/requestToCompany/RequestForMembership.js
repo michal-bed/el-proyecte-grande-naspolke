@@ -24,14 +24,14 @@ const RequestForMembership = () => {
             if (response.status === 200) {
                 response.json()
                     .then(data => {setCompanyData(data);
-                    console.log(data)})
+                })
                 setShowMembershipComponent(true);
             } else {
                 setCompanyNotFound(true);
                 setTimeout(backToPreviousState, 4000);
                 throw new Error("Can't find company");
             }
-        }).catch(() => console.log("Error!"));
+        }).catch((error) => console.log(error));
     }
 
     return (
