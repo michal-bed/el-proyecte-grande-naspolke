@@ -26,8 +26,6 @@ export default function Sidebar () {
         window.addEventListener('resize', handleResize);
     })
 
-
-
     function PopulateNavbar () {
         const {companyId} = useParams();
 

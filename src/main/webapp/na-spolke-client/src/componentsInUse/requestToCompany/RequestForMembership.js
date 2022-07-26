@@ -3,6 +3,8 @@ import styles from './RequestToCompany.module.css';
 import CompanyInfo from "./CompanyInfo";
 import ModalTop from "../modal/ModalTop";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import {Grid, TextField, Typography} from "@mui/material";
+import Button from "@mui/material/Button";
 
 const RequestForMembership = () => {
 
@@ -36,20 +38,26 @@ const RequestForMembership = () => {
     }
 
     return (
-        <div className="request-form-container">
-            <h3 className={styles.requestFormHeadline}>Dołącz do spółki</h3>
+        <div className="request-form-container"><hr/>
+            <Typography className="request-form-container">
                 <div className={styles.requestFormBox}>
                     <form onSubmit={findCompany}>
-                        <label className="form-label">Podaj numer KRS spółki:</label>
-                            <input className="form-input" type="text" value={krsNumber} required={true}
-                              onChange={(e) => setKrsNumber(e.target.value)}/>
-                        <button type="submit" className="btn btn-success">Znajdź spółkę</button>
+                        <h3 className="form-label">Podaj numer KRS spółki:</h3><hr/>
+                        <Grid style={{display: "flex"}}>
+                            <TextField id="outlined-number" label="Number" type="number" InputLabelProps={{shrink: true}}
+                                       className="form-input" value={krsNumber} required={true}
+                                onChange={(e) => setKrsNumber(e.target.value)}/>
+                            <Button type="submit">Znajdź spółkę</Button>
+                        </Grid>
                     </form>
                 </div>
-            <div className="request-form-modal">
-                {showMembershipComponent && <CompanyInfo companyData={companyData} krsNumber={krsNumber}/>}
-                {companyNotFound && <ModalTop info={successfullyRequestMessage}/>}
-            </div>
+            </Typography><hr/>
+            <Typography className="company-info-container">
+                <div className="request-form-modal">
+                    {showMembershipComponent && <CompanyInfo companyData={companyData} krsNumber={krsNumber}/>}
+                    {companyNotFound && <ModalTop info={successfullyRequestMessage}/>}
+                </div>
+            </Typography>
         </div>
     )
 }

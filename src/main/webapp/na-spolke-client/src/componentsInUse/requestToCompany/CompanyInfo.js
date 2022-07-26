@@ -1,4 +1,4 @@
-import {Container} from "@mui/material";
+import {Button, Container, Grid} from "@mui/material";
 import "./RequestToCompany.module.css";
 import ModalTop from "../modal/ModalTop";
 import React, {useState} from "react";
@@ -50,10 +50,12 @@ const CompanyInfo = ({ companyData, krsNumber }) => {
 
     return (
         <Container className="request-form-container">
-            <h3>{companyData.companyName}</h3>
-            <button className="btn btn-success" onClick={sendRequest}>Wyślij prośbę</button>
-            {successfullyRequest && <ModalTop info={successfullyRequestMessage} />}
-            {errorRequest && <ModalTop info={errorRequestMessage} />}
+            <Grid style={{display: "flex"}}>
+                <h6><b>{companyData.companyName}</b></h6>
+                <Button onClick={sendRequest}>Wyślij prośbę</Button>
+                {successfullyRequest && <ModalTop info={successfullyRequestMessage} />}
+                {errorRequest && <ModalTop info={errorRequestMessage} />}
+            </Grid><hr/>
         </Container>
     )
 }
