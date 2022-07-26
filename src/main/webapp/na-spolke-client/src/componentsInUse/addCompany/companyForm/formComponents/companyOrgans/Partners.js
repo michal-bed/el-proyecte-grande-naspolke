@@ -1,10 +1,10 @@
 import styles from "./Partners.module.css";
 import {Button} from "@material-ui/core";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {useContext, useEffect, useReducer} from "react";
 import {populateList} from "../../../../../classes/company/Utils";
 import {IndividualPartner, PartnerCompany} from "../../../../../classes/persons/Partners";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TextField from '@mui/material/TextField';
 import validatePartners from "./ValidationCompanyOrgans";
 import {

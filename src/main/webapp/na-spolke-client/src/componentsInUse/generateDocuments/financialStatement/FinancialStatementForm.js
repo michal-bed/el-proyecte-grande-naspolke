@@ -1,30 +1,23 @@
 import {useEffect} from "react";
 import {Form, Formik, useField, useFormikContext} from "formik";
-import {
-    Box,
-    Button,
-    FormControlLabel,
-    FormHelperText,
-    InputLabel,
-    MenuItem,
-    Radio,
-    Select,
-    Stack,
-    Switch
-} from "@mui/material";
+import {Box, FormControlLabel, FormHelperText, InputLabel, MenuItem, Radio, Select, Stack, Switch } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import {validationSchema} from "./FinancialStatementFormLogic";
 import {FinancialStatementProtocol} from "../../../classes/company/FinancialStatementProtocol";
 import {saveFinancialStatement} from "../../../api/axiosPosts";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
-import {DatePicker} from "@mui/x-date-pickers";
+import {DatePicker, DesktopDatePicker} from "@mui/x-date-pickers";
 import Card from "@mui/material/Card";
 import styles from "./PartnersAbsents/PartnersAbsents.module.css";
 import Typography from "@mui/material/Typography";
 import {styled} from "@mui/material/styles";
 import {FormControl} from "@chakra-ui/react";
 import {Checkbox} from "@material-ui/core";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import {BoardOfDirector} from "../../../classes/persons/BoardOfDirector";
+import {Button} from "@material-ui/core";
+import {useNow} from "@mui/x-date-pickers/internals/hooks/useUtils";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
     const AntSwitch = styled(Switch)(({theme}) => ({
@@ -91,24 +84,50 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         formalConvening: false,
         president: "",
         presidentUnanimously: true,
-        amountProfitOrLoss: 0
+        recorder: "",
+        recorderUnanimously : true,
+        amountProfitOrLoss: 0,
+        agendaUnanimously: true,
+        beginningReportingPeriodNo1: new Date(`${new Date().getFullYear()-1}-01-01`),
+        endReportingPeriodNo1: new Date(`${new Date().getFullYear()-1}-12-31`),
+        amountProfitOrLossVotingUnanimously: true,
+        sumOfAssetsAndLiabilities: 0
+
 
     };
+    if (company.partners.individualPartners !== null && individualPartners.length === 0) {
+        for (let i = 0; i < company.partners.individualPartners.length; i++) {
+            individualPartners.push({"id": company.partners.individualPartners[i].id, isPresent: true})
+            initialValues[`individualPartner${individualPartners[i].id}IsPresent`] = true;
+            if (initialValues.president === ""){
+                initialValues.president = `${company.partners.individualPartners[i].firstName} ${company.partners.individualPartners[i].lastNameI}`
+                initialValues.recorder = `${company.partners.individualPartners[i].firstName} ${company.partners.individualPartners[i].lastNameI}`
+            }
+        }
+    }
     if (company.partners.partnerCompanies !== null && partnerCompanies.length === 0) {
         for (let i = 0; i < company.partners.partnerCompanies.length; i++) {
             partnerCompanies.push({"id": company.partners.partnerCompanies[i].id, isPresent: true})
             initialValues[`partnerCompany${partnerCompanies[i].id}IsPresent`] = true;
             initialValues[`representative${partnerCompanies[i].id}name`] = company.partners.partnerCompanies.representativeFirstname;
             initialValues[`representative${partnerCompanies[i].id}lastname`] = company.partners.partnerCompanies.representativeFirstname;
-        }
-    }
-    if (company.partners.individualPartners !== null && individualPartners.length === 0) {
-        for (let i = 0; i < company.partners.individualPartners.length; i++) {
-            individualPartners.push({"id": company.partners.individualPartners[i].id, isPresent: true})
-            initialValues[`individualPartner${individualPartners[i].id}IsPresent`] = true;
+            if (initialValues.president === ""){
+                initialValues.president = `${company.partners.partnerCompanies.representativeFirstname} ${company.partners.partnerCompanies.representativeFirstname}`
+                initialValues.recorder = `${company.partners.partnerCompanies.representativeFirstname} ${company.partners.partnerCompanies.representativeFirstname}`
+            }
         }
     }
 
+    if (company.boardMembers.length > 0){
+        for (let i = 0; i < company.boardMembers.length; i++) {
+            initialValues[`board${company.boardMembers[i].lastNameI}${i}`] = true;
+        }
+    }
+    if (company.boardOfDirectors.length > 0){
+        for (let i = 0; i < company.boardOfDirectors.length; i++) {
+            initialValues[`board${company.boardOfDirectors[i].lastNameI}${i}`] = true;
+        }
+    }
     const MyTextFieldOptionalMeetingPlace = ({placeholder, ...props}) => {
         const {
             values: {meetingPlaceInHeadquarters, ...values},
@@ -378,8 +397,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                 <li>podjęcie uchwały w przedmiocie rozpatrzenia i zatwierdzenie sprawozdania finansowego
                                     Spółki oraz sprawozdania Zarządu;
                                 </li>
-                                <li>{values.amountProfitOrLoss > 0 && "podjęcie uchwały w przedmiocie sposobu podziału zysku;"}
-                                    {values.amountProfitOrLoss < 0 && "podjęcie uchwały w przedmiocie sposobu pokrycia straty;"}</li>
+                                {values.amountProfitOrLoss > 0 && <li>podjęcie uchwały w przedmiocie sposobu podziału zysku;</li>}
+                                {values.amountProfitOrLoss < 0 && <li>podjęcie uchwały w przedmiocie sposobu pokrycia straty;</li>}
                                 <li>podjęcie uchwały w przedmiocie udzielenia absolutorium organom spółki;</li>
                                 <li>wolne głosy i wnioski;</li>
                                 <li>zamknięcie obrad Zgromadzenia;</li>
@@ -419,11 +438,12 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         <p>Sprawozdanie finansowe</p>
                         <p>Początek rozliczanego okresu sprawozdawczego</p>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DatePicker
+                            <DesktopDatePicker
                                 label="Początek okresu sprawozdawczego"
                                 name="beginningReportingPeriodNo1"
                                 value={values.beginningReportingPeriodNo1}
                                 inputFormat="dd/MM/yyyy"
+                                openTo="year"
                                 onChange={(value => setFieldValue("beginningReportingPeriodNo1", value))}
                                 renderInput={(params) => (
                                     <TextField {...params} helperText={params?.inputProps?.placeholder}/>
@@ -432,11 +452,12 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         </LocalizationProvider>
                         <p>Koniec rozliczanego okresu sprawozdawczego</p>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DatePicker
+                            <DesktopDatePicker
                                 label="koniec okresu sprawozdawczego"
                                 name="endReportingPeriodNo1"
                                 value={values.endReportingPeriodNo1}
-                                inputFormat="dd/MM/yyyy"
+                                inputFormat="dd-MM-yyyy"
+                                openTo="year"
                                 onChange={(value => setFieldValue("endReportingPeriodNo1", value))}
                                 renderInput={(params) => (
                                     <TextField {...params} helperText={params?.inputProps?.placeholder}/>
@@ -761,7 +782,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                                         value={values[`directorUnanimously${member.firstName}${index}VotingAbstentions`]}
                                                         label="głosów wstrzymujących się:"
                                                         as={TextField}
-                                                    /></div>}
+                                                    />
+                                                </div>}
                                         </div>
                                     </Card>
                                 }

@@ -1,16 +1,18 @@
 import {Person} from "./Person";
 
 export class BoardMember{
-    firstName;
-    secondName;
-    lastNameI;
-    lastNameII;
-    function;
+    firstName = " ";
+    secondName = " ";
+    lastNameI = " ";
+    lastNameII = " ";
+    function = "Członek Zarządu";
     constructor(memberData) {
-        this.firstName = memberData.firstName;
-        this.secondName = memberData.secondName;
-        this.lastNameI = memberData.lastNameI;
-        this.lastNameII = memberData.lastNameII;
-        this.function = memberData.function;
+        if (memberData) {
+            this.firstName = memberData.firstName;
+            this.secondName = memberData.secondName;
+            this.lastNameI = memberData.lastNameI;
+            this.lastNameII = memberData.lastNameII;
+            this.function = memberData.function;
+        }
     }
 }
