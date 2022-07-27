@@ -2,8 +2,8 @@ import MKBox from "../../mkFiles/components/MKBox";
 
 
 function Statute () {
-    return <MKBox>
-            <article><h1 className="page-title text-center">Regulamin serwisu</h1><h2>I. Pojęcia ogólne</h2>
+    return <MKBox px={3} pt={2}>
+            <article><h2>I. Pojęcia ogólne</h2>
                 <ul>
                     <li><strong>Regulamin</strong> – niniejszy regulamin</li>
                     <li><strong>Serwis</strong> – serwis internetowych &quot;Na spółkę&quot;, działających pod adresem

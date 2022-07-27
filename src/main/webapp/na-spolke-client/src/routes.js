@@ -134,6 +134,10 @@ function Routes(){
           name: "FAQ",
           route: "/faq",
         },
+        {
+          name: "Regulamin",
+          route: "/statute",
+        },
       ],
     },
   ];

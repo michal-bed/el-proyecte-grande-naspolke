@@ -63,6 +63,7 @@ function Presentation(props) {
                 return(<FaqPage />)
             case "statute":
                 title = "Regulamin strony"
+                titleDescription = "Regulamin korzystania ze strony i oferowanych usług"
                 return (<Statute />)
         }
     }
