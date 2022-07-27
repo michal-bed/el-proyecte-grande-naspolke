@@ -51,6 +51,7 @@ function Routes(){
     let userRoutes = []
     const auth = useAuth()
     const obj = auth[Object.keys(auth)[0]]
+  console.log(obj)
     const objArr = Object.values(obj)
     if (Object.values(obj).length === 0) {
       userRoutes =

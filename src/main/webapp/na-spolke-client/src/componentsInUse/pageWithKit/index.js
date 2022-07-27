@@ -27,14 +27,11 @@ import MKSocialButton from "../../mkFiles/components/MKSocialButton";
 import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
 
 
-
 import MainPage from "../mainPage/mainPage";
 import FaqPage from "../faqPage/FaqPage";
 import Footer from "../footer/Footer";
-import useAuth from "../../hooks/useAuth";
+import Statute from "../statute/Statute"
 // Presentation page components
-import BuiltByDevelopers from "../kitComponentSection/KitComponentSection";
-
 
 
 // Routes
@@ -43,8 +40,6 @@ import Routes from "../../routes";
 
 // Images
 import index_photo3 from "../../assets/photos/index_photo3.jpg";
-
-
 
 
 function Presentation(props) {
@@ -66,6 +61,9 @@ function Presentation(props) {
                 titleDescription = "Zebraliśmy najczęściej pojawiające się pytania i " +
                     "posatraliśmy się w jak najlepszy sposób na nie odpowiedzieć."
                 return(<FaqPage />)
+            case "statute":
+                title = "Regulamin strony"
+                return (<Statute />)
         }
     }
 
