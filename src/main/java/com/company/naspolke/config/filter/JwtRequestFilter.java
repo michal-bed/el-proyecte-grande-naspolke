@@ -1,14 +1,13 @@
 package com.company.naspolke.config.filter;
 
-import com.company.naspolke.service.MyUserDetailsServiceImplementation;
 import com.company.naspolke.config.util.JwtUtil;
+import com.company.naspolke.service.MyUserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 //@Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -81,28 +79,4 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-//    private String getJwt(String authorizationHeader) {
-//        String jwt;
-//        jwt = authorizationHeader.substring(7);
-//        return jwt;
-//    }
-//
-//    private String getAuthorizationHeader(HttpServletRequest request) {
-//        return request.getHeader("Authorization");
-//    }
-//
-//    public UUID getUserId(HttpServletRequest request)
-//    {
-//        final String authorizationHeader = getAuthorizationHeader(request);
-//
-//        String username = null;
-//        String jwt = null;
-//
-//        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-//            jwt = getJwt(authorizationHeader);
-//            username = jwtUtil.extractUsername(jwt); // uuid
-//            return UUID.fromString(username);
-//        }
-//        return null;
-//    }
 }

@@ -5,7 +5,7 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({});
-    // console.log("authPersist", localStorage.getItem("persist"));
+
     const [persist, setPersist] = useState(localStorage.getItem("persist") === "undefined" || localStorage.getItem("persist") == null
                                             ? false
                                             : JSON.parse(localStorage.getItem("persist")));
@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
         ? "nie wybrano"
         : AESDecrypt(localStorage.getItem("currentCompany"))
     );
+
 
     return (
         <AuthContext.Provider value={{ auth, setAuth, persist, setPersist,

@@ -56,7 +56,6 @@ public class Company {
     @Column(name = "company_user_role")
     private Set<CompanyUserRole> companyUserRole = new HashSet<>();
 
-
     @Builder
     public Company(String companyName,
                    Long krsNumber,

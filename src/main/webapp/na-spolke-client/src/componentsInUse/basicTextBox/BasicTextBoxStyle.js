@@ -22,4 +22,5 @@ export const BasicTextBoxStyle ={
         width: "18em",
         fontSize: "1.2em"
     }
+
 }

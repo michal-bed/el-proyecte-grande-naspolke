@@ -13,9 +13,11 @@ import DeleteMember from "./componentsInUse/ownerPanel/DeleteMember";
 import ChangeRole from "./componentsInUse/ownerPanel/ChangeRole";
 import AddCompany from "./componentsInUse/addCompany/AddCompany";
 import Cockpit from './componentsInUse/userPage/cockpit';
+import RequestForMembership from "./componentsInUse/requestToCompany/RequestForMembership";
 import RequireAuth from "./componentsInUse/login/RequireAuth";
 import Unauthorized from "./componentsInUse/login/Unaurthorized";
 import PersistLogin from "./componentsInUse/login/PersistLogin";
+
 
 function App() {
     return (<ThemeProvider theme={theme}>
@@ -23,10 +25,11 @@ function App() {
         <Routes>
             <Route path="/" element={<Layout/>}>
                 {/* public routes */}
-                <Route path="/" element={<Presentation/>}/>
+                <Route path="/" element={<Presentation site="index"/> }/>
+                <Route path="faq" element={<Presentation site="faq"/>}/>
                 <Route path="login" element={<Login/>}/>
                 <Route path="logout" element={<Logout/>}/>
-                <Route path="register" element={<Registration/>}/>
+                <Route path="registration" element={<Registration/>}/>
                 <Route path="unauthorized" element={<Unauthorized />} />
 
                 {/* we want to protect these routes */}
@@ -37,10 +40,13 @@ function App() {
                         <Route path="change-role" element={<ChangeRole/>}/>
                         <Route path="add-company" element={<AddCompany/>}/>
                         <Route path="userpanel/*" element={<Cockpit/>}/>
+                        <Route path="request-for-membership" element={<RequestForMembership/>}/>
+
                     </Route>
                 </Route>
             </Route>
         </Routes>
     </ThemeProvider>)
 }
- export default App;
+
+export default App;

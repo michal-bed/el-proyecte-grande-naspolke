@@ -11,10 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
@@ -41,6 +38,9 @@ public class AppUser {
     private boolean enabled;
     @Column(name = "token_expired")
     private boolean tokenExpired;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name = "user_messages")
+    private List<Message> userMessages;
     @ElementCollection
     @Column(name = "application_roles")
     private Set<SimpleGrantedAuthority> applicationRoles = new HashSet<>();
@@ -64,5 +64,9 @@ public class AppUser {
 
     public void addCompanyUserRole(CompanyUserRole companyUserRole) {
         this.companyUserRole.add(companyUserRole);
+    }
+
+    public void addMessage(Message message) {
+        this.userMessages.add(message);
     }
 }

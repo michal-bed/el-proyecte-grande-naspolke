@@ -5,20 +5,15 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.UUID;
 
 public interface CompanyService {
-
-
     Optional<Company> getCompanyByKrsNumber(Long krsNumber);
-
-    public ResponseEntity<Company> getCompanyDtoFromKrsApi(String krsNumber);
-
-    public boolean checkForDuplicate(Long krsNumber);
-
-    public Company saveCompany(Company company);
-
+    Optional<Company> getCompanyByCompanyId(UUID companyId);
+//    ResponseEntity<Company> getCompanyData(String krsNumber);
+    ResponseEntity<Company> getCompanyDtoFromKrsApi(String krsNumber);
+    boolean checkForDuplicate(Long krsNumber);
+    Company saveCompany(Company company);
     ResponseEntity<String> buildSaveResponse(Company company);
-
-    public List<Company> findAll();
+    List<Company> findAll();
 }

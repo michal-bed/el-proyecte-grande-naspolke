@@ -57,6 +57,7 @@ public class SecurityConfiguration {
                 .mvcMatchers("/").permitAll()
                 .mvcMatchers("/auth").permitAll()
                 .mvcMatchers("/refresh").permitAll()
+                .mvcMatchers("/send-request-for-membership/**").permitAll()
                 // .anyRequest().denyAll()
                  .anyRequest().permitAll();
 //                .anyRequest().authenticated();
