@@ -81,9 +81,9 @@ SimpleFooter.defaultProps = {
     company: { href: "/", name: "Na spółkę" },
     links: [
         { href: "/", name: "Na spółkę" },
-        { href: "/", name: "O nas" },
-        { href: "/", name: "FAQ" },
-        { href: "https://www.creative-tim.com/license", name: "License" },
+        { href: "/#onas", name: "O nas" },
+        { href: "/faq", name: "FAQ" },
+        { href: "/statute", name: "Regulamin" },
     ],
     light: false,
 };

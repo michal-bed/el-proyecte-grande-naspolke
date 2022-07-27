@@ -17,7 +17,7 @@ import RequestForMembership from "./componentsInUse/requestToCompany/RequestForM
 import RequireAuth from "./componentsInUse/login/RequireAuth";
 import Unauthorized from "./componentsInUse/login/Unaurthorized";
 import PersistLogin from "./componentsInUse/login/PersistLogin";
-
+import Statute from "./componentsInUse/statute/Statute"
 
 function App() {
     return (<ThemeProvider theme={theme}>
@@ -27,6 +27,7 @@ function App() {
                 {/* public routes */}
                 <Route path="/" element={<Presentation site="index"/> }/>
                 <Route path="faq" element={<Presentation site="faq"/>}/>
+                <Route path="statute" element={<Presentation site="statute"/>}/>
                 <Route path="login" element={<SignIn />}/>
                 <Route path="logout" element={<Logout/>}/>
                 <Route path="register" element={<RegistrationBasic/>}/>

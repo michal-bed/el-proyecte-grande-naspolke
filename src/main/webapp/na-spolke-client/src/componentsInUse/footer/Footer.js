@@ -36,13 +36,18 @@ export default function Footer() {
                             </Link>
                         </Box>
                         <Box>
+                            <Link href="/#cennik">
+                                <WhiteTextTypography>Cennik</WhiteTextTypography>
+                            </Link>
+                        </Box>
+                        <Box>
                             <Link href="/faq">
                                 <WhiteTextTypography>FAQ</WhiteTextTypography>
                             </Link>
                         </Box>
                         <Box>
-                            <Link href="/#cennik">
-                                <WhiteTextTypography>Cennik</WhiteTextTypography>
+                            <Link href="/statute">
+                                <WhiteTextTypography>Regulamin</WhiteTextTypography>
                             </Link>
                         </Box>
                     </Grid>

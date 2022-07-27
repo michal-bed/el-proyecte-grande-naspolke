@@ -1,17 +1,17 @@
 import {useRef, useState} from 'react';
 import useAuth from '../../hooks/useAuth';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
-import {Formik, useFormik} from "formik";
+import {useFormik} from "formik";
 import Checkbox from "@mui/material/Checkbox";
 import * as Yup from 'yup'
 import axios from '../../api/axios';
 import AESEncrypt from "../../util/AESEncrypt";
+
 // @mui material components
 import Card from "@mui/material/Card";
-import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
-
-// @mui icons
+import {FormControlLabel, IconButton, InputAdornment} from "@mui/material";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 // Material Kit 2 React components
 import MKBox from "../../mkFiles/components/MKBox";
@@ -19,16 +19,13 @@ import MKTypography from "../../mkFiles/components/MKTypography";
 import MKInput from "../../mkFiles/components/MKInput";
 import MKButton from "../../mkFiles/components/MKButton";
 
-// Material Kit 2 React example components
-import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
-
-// Material Kit 2 React page layout routes
 // Images
 import bgImage from "../../assets/images/bg-sign-in-basic.jpeg"
+
+// React page layout routes
 import Routes from "../../routes";
 import SimpleFooter from "../footer/SimpleFooter";
-import {FormControlLabel, IconButton, InputAdornment} from "@mui/material";
-import {Visibility, VisibilityOff} from "@material-ui/icons";
+import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
 
 
 function SignInBasic() {
@@ -44,14 +41,11 @@ function SignInBasic() {
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
-
-    // const userRef = useRef();
     const errRef = useRef();
 
     const [errMsg, setErrMsg] = useState('');
 
     const customHandleSubmit = async (values) => {
-        // e.preventDefault();
 
         try {
             const response = await axios.post(LOGIN_URL,
@@ -61,23 +55,20 @@ function SignInBasic() {
                     withCredentials: true
                 }
             );
-            // console.log(JSON.stringify(response?.data));
+
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
             const email = response?.data?.email;
             setAuth({ user: values.email,
-                // pwd: values.password,
                 roles, accessToken });
-            // console.log(email)
+
             localStorage.setItem("user", AESEncrypt(email));
-            // console.log(localStorage.getItem("user"));
             setUser(email);
-            // console.log(user);
+
             togglePersist(formik.values.trustDevice);
             navigate(from, { replace: true });
         } catch (err) {
             console.log(err)
-            // console.log(err);
             if (!err?.response) {
                 setErrMsg('Brak odpowiedzi serwera');
             } else if (err.response?.status === 400) {
@@ -87,23 +78,15 @@ function SignInBasic() {
             } else {
                 setErrMsg('Błędne dane logowania');
             }
-            errRef.current.focus();
         }
     }
 
     const togglePersist = (checked) => {
-        // console.log("toggle ", target.checked);
         localStorage.setItem("persist", checked);
         setPersist(checked);
         console.log(persist);
     }
 
-    let toggleFocus = (e) => {
-        // document.querySelector("#email").focus();
-        // console.log(e.target)
-        e.target.focus();
-        // email.setAttribute('focus', "true");
-    }
 
     const RefCheckbox = ({ innerRef, ...props }) => (
         <Checkbox ref={innerRef} {...props} />
@@ -116,7 +99,6 @@ function SignInBasic() {
             .string().required('Wymagane pole'),
         password: Yup
             .string().required("Wymagane pole")
-            // .min(8, 'Hasło musi miec przynajmniej osiem znaków')
     })
 
 
@@ -129,7 +111,6 @@ function SignInBasic() {
         validationSchema: validationSchema,
         onSubmit: (values, actions) => {
         customHandleSubmit(values).then(() =>  {
-            // actions.resetForm({values: ''})
             actions.setSubmitting(false);
         }).catch(console.log);
     }
@@ -233,7 +214,6 @@ function SignInBasic() {
                               <Checkbox
                                   id="trustDevice"
                                   name="trustDevice"
-                                  label="Zapamiętaj mnie"
                                   checked={formik.values.trustDevice}
                                   as={RefCheckbox}
                                   innerRef={(el) => (checkboxRef.current = el)}

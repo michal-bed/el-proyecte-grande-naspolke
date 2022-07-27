@@ -123,7 +123,6 @@ function RegistrationBasic() {
         validationSchema: validationSchema,
         onSubmit: (values, actions) => {
             customHandleSubmit(values).then(() =>  {
-                // actions.resetForm({values: ''})
                 actions.setSubmitting(false);
             }).catch(console.log);
         }
@@ -168,7 +167,7 @@ function RegistrationBasic() {
                               textAlign="center"
                           >
                               <MKTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-                                  Logowanie
+                                  Rejestracja
                               </MKTypography>
                           </MKBox>
                           <MKBox pt={4} pb={3} px={3}>
@@ -221,7 +220,7 @@ function RegistrationBasic() {
                                       </MKBox>
                                       <MKBox mb={2}>
                                           <MKInput type={showPassword ? "text" : "password"}
-                                                   label="Password"
+                                                   label="Hasło"
                                                    fullWidth
                                                    id="password"
                                                    name="password"
@@ -281,18 +280,31 @@ function RegistrationBasic() {
                                                   id="agreed"
                                                   name="agreed"
                                                   checked={agreed}
-                                                  color="text"
+                                                  color="primary"
 
                                                   onChange={(e) => {
                                                       formik.handleChange(e)
                                                       handleClickAgreed()
                                                   }}
-                                                  sx={{cursor: "pointer", userSelect: "none", ml: -1}}
+                                                  sx={{cursor: "pointer",
+                                                      userSelect: "none",
+                                                      ml: -1,
+                                                      }}
                                               />}
                                           label={<MKTypography
                                               sx={{fontSize: "1em"}}
                                               variant="overline">
-                                              Przeczytałem i akceptuje regulamin strony
+                                              Przeczytałem i akceptuje <MKTypography
+                                              component={Link}
+                                              target="_blank"
+                                              to="/statute"
+                                              variant="button"
+                                              color="info"
+                                              fontWeight="medium"
+                                              textGradient
+                                          >
+                                              regulamin strony
+                                          </MKTypography>
                                           </MKTypography>}
                                           labelPlacement="end"
 
