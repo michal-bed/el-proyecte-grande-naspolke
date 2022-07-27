@@ -1,4 +1,7 @@
-const companies =  [
+import {axiosPrivate} from "../../../api/axios";
+import {useState} from "react";
+
+let companies =  [
         {'companyId':'fajeif04i1', 'companyName':"spółka 1", 'krsNumber': '0000123456',
             'address':'goleniowska 1 goleniów', 'nip':'123451245512', 'regon':'1231513',
             'shareCapital':50000, 'shareValue': 50, 'sharesCount': 1000,
@@ -33,29 +36,46 @@ const companies =  [
             ],
             'companyUserRole': []
         },
-
     ]
 
-function getCompanies () {
-    return companies;
-}
+    sessionStorage.setItem("companies", "[]");
 
-function getCompanyById (id) {
-    for (let i in companies) {
-        if (companies[i]['companyId'] == id) {
-            return companies[i];
-        }
-    }
-    return null;
-}
 
-function selectCompanyInfoById (id, info) {
-    for (let i in companies) {
-        if (companies[i]['companyId'] == id) {
-            return companies[i][info];
-        }
+    function getCompanies () {
+        axiosPrivate.post('/get-companies')
+            .then(res =>{
+                if(res.data.length > JSON.parse(sessionStorage.getItem("companies")).length) {
+                    let compTable = [];
+                    let keys = Object.keys(res.data);
+                    keys.forEach(key => {
+                        console.log(res.data[key]);
+                        compTable.push(res.data[key]);
+                    })
+                    sessionStorage.setItem("companies", JSON.stringify(compTable));
+                    console.log(JSON.parse(sessionStorage.getItem("companies")));
+                    return sessionStorage.getItem("companies");
+                }
+                return sessionStorage.getItem("companies");
+            })
+        return ["lol"];
     }
-    return null;
-}
+
+    function getCompanyById (id) {
+        for (let i in companies) {
+            if (JSON.parse(sessionStorage.getItem("companies"))[i]['companyId'] === id) {
+                return JSON.parse(sessionStorage.getItem("companies"))[i]['companyId'] === id[i];
+            }
+        }
+        return null;
+    }
+
+    function selectCompanyInfoById (id, info) {
+        for (let i in companies) {
+            if (JSON.parse(sessionStorage.getItem("companies"))[i]['companyId'] === id) {
+                return JSON.parse(sessionStorage.getItem("companies"))[i]['companyId'] === id[i][info];
+            }
+        }
+        return null;
+    }
 
 export {getCompanies, getCompanyById, selectCompanyInfoById};
