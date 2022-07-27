@@ -64,8 +64,9 @@ const Login = () => {
 
             navigate(from, { replace: true });
         } catch (err) {
-            // console.log(err);
+            console.log(err);
             if (!err?.response) {
+                console.log(err);
                 setErrMsg('Brak odpowiedzi serwera');
             } else if (err.response?.status === 400) {
                 setErrMsg('Nie podano adresu e-mail lub hasła');

@@ -11,10 +11,9 @@ import theme from "./assets/theme";
 import AddMember from "./componentsInUse/ownerPanel/AddMember";
 import DeleteMember from "./componentsInUse/ownerPanel/DeleteMember";
 import ChangeRole from "./componentsInUse/ownerPanel/ChangeRole";
-
 import AddCompany from "./componentsInUse/addCompany/AddCompany";
 import Cockpit from './componentsInUse/userPage/cockpit';
-
+import RequestForMembership from "./componentsInUse/requestToCompany/RequestForMembership";
 import RequireAuth from "./componentsInUse/login/RequireAuth";
 import Unauthorized from "./componentsInUse/login/Unaurthorized";
 import PersistLogin from "./componentsInUse/login/PersistLogin";
@@ -31,6 +30,7 @@ function App() {
                 <Route path="login" element={<SignIn />}/>
                 <Route path="logout" element={<Logout/>}/>
                 <Route path="register" element={<RegistrationBasic/>}/>
+
                 <Route path="unauthorized" element={<Unauthorized />} />
 
                 {/* we want to protect these routes */}
@@ -41,8 +41,9 @@ function App() {
                         <Route path="change-role" element={<ChangeRole/>}/>
                         <Route path="add-company" element={<AddCompany/>}/>
                         <Route path="userpanel/*" element={<Cockpit/>}/>
-                    </Route>
+                        <Route path="request-for-membership" element={<RequestForMembership/>}/>
 
+                    </Route>
                 </Route>
             </Route>
         </Routes>
@@ -50,4 +51,3 @@ function App() {
 }
 
 export default App;
-

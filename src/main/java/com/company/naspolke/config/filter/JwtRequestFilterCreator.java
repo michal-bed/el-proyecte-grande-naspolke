@@ -13,12 +13,12 @@ public class JwtRequestFilterCreator {
     private MyUserDetailsServiceImplementation userDetailsService;
     private JwtUtil jwtUtil;
 
+    @Autowired
     public JwtRequestFilterCreator(MyUserDetailsServiceImplementation userDetailsService, JwtUtil jwtUtil) {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
     }
 
-    @Autowired
     public JwtRequestFilterCreator() {}
 
     @Bean
