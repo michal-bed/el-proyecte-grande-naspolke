@@ -25,3 +25,4 @@ yarn-error.log*
 pom.xml
 mvnw.cmd
 application.properties
+.env
