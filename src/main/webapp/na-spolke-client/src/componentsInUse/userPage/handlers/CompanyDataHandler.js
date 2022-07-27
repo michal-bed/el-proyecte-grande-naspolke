@@ -51,6 +51,7 @@ let companies =  [
                         console.log(res.data[key]);
                         compTable.push(res.data[key]);
                     })
+                    console.log(JSON.stringify(compTable))
                     sessionStorage.setItem("companies", JSON.stringify(compTable));
                     console.log(JSON.parse(sessionStorage.getItem("companies")));
                     return sessionStorage.getItem("companies");
@@ -63,7 +64,7 @@ let companies =  [
     function getCompanyById (id) {
         for (let i in companies) {
             if (JSON.parse(sessionStorage.getItem("companies"))[i]['companyId'] === id) {
-                return JSON.parse(sessionStorage.getItem("companies"))[i]['companyId'] === id[i];
+                return JSON.parse(sessionStorage.getItem("companies"))[i];
             }
         }
         return null;

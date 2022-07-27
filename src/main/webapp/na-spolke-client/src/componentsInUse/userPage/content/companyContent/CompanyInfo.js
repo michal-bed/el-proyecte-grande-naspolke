@@ -16,12 +16,18 @@ function CompanyInfo () {
     let {companyId} = useParams();
 
     let company = getCompanyById(companyId);
-    company.streetName = company.address.streetName;
-    company.streetNumber = company.address.streetNumber;
-    company.localNumber = company.address.localNumber;
-    company.city = company.address.city;
-    company.zipCode = company.address.zipCode;
-    company.postOffice = company.address.postOffice;
+    console.log(company)
+
+    if (company.address != null)
+    {
+        company.streetName = company.address.streetName;
+        company.streetNumber = company.address.streetNumber;
+        company.localNumber = company.address.localNumber;
+        company.city = company.address.city;
+        company.zipCode = company.address.zipCode;
+        company.postOffice = company.address.postOffice;
+    }
+
 
     const titleCardStyle = {
         marginLeft: "25%",

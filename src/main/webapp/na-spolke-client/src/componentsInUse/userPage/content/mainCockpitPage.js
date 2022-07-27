@@ -27,16 +27,17 @@ function MainCockpitPage () {
 
         console.log("useEffect");
         const getData = async () => {
-            if (!isDoneLoading) {
                 return await getCompanies();
-            }
+
         };
         const setData = async () => {
             try {
-                const companies = await getData();
-                setCompanies(companies);
-                setCompanies(JSON.parse(sessionStorage.getItem("companies")))
-                setIsDoneLoading(true);
+                if (!isDoneLoading) {
+                    const companies = await getData();
+                    setCompanies(companies);
+                    setCompanies(JSON.parse(sessionStorage.getItem("companies")))
+                    setIsDoneLoading(true);
+                }
             }
             catch (e)
             {
@@ -46,7 +47,8 @@ function MainCockpitPage () {
 
         setData().then(r => {console.log(`Successful fetch. isDoneLoading: ${isDoneLoading}`)});
 
-    }, [isDoneLoading]);
+    }, [isDoneLoading]
+    );
 
 
 
@@ -95,7 +97,7 @@ function MainCockpitPage () {
                             {
                                 companies !== undefined &&
                                     companies.map((company) =>
-                                        (<Link to={"/userpanel/company/" + company['companyId']}>
+                                        (<Link to={"/userpanel/company/" + company['companyId']} key={company['companyId']}>
                                             <Card style={cardStyle}>
                                                 <CardHeader
                                                     title={company['companyName']}
