@@ -1,11 +1,11 @@
 import './App.css';
 
+import SignIn from "./componentsInUse/login/index";
+import RegistrationBasic from "./componentsInUse/registration/index"
 import Layout from './componentsInUse/Layout';
 import Logout from './componentsInUse/Logout';
-import Login from './componentsInUse/login/Login';
 import Presentation from "./componentsInUse/pageWithKit"
 import {Route, Routes} from "react-router-dom";
-import Registration from "./componentsInUse/registration/Registration";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import theme from "./assets/theme";
 import AddMember from "./componentsInUse/ownerPanel/AddMember";
@@ -27,9 +27,10 @@ function App() {
                 {/* public routes */}
                 <Route path="/" element={<Presentation site="index"/> }/>
                 <Route path="faq" element={<Presentation site="faq"/>}/>
-                <Route path="login" element={<Login/>}/>
+                <Route path="login" element={<SignIn />}/>
                 <Route path="logout" element={<Logout/>}/>
-                <Route path="registration" element={<Registration/>}/>
+                <Route path="register" element={<RegistrationBasic/>}/>
+
                 <Route path="unauthorized" element={<Unauthorized />} />
 
                 {/* we want to protect these routes */}

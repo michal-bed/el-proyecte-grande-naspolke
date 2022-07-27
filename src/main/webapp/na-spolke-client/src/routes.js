@@ -59,12 +59,12 @@ function Routes(){
           collapse: [
             {
               name: "Logowanie",
-              route: "/log-in",
+              route: "/login",
               component: <Login/>
             },
             {
               name: "Rejestracja",
-              route: "/registration",
+              route: "/register",
               component: <Registration/>
             },
           ],
@@ -88,7 +88,7 @@ function Routes(){
             },
             {
               name: "Wyloguj",
-              route: "/log-out",
+              route: "/logout",
               component: <Login/>
             }
           ],
@@ -123,7 +123,7 @@ function Routes(){
         },
         {
           name: "Cennik",
-          href: "/cennik"
+          href: "/#cennik"
         },
         {
           name: "Dodaj spółkę",
