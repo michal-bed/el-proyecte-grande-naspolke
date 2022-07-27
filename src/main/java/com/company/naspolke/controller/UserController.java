@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.util.Optional;
 
+
+
 @RestController
 @CrossOrigin("http://localhost:3000")
 public class UserController {
@@ -36,7 +38,7 @@ public class UserController {
             appUser.setUserPassword(encodedPassword);
             appUserService.registerUser(appUser);
             emailService.sendEmail(appUser.getUserEmail(),
-                    ".\\src\\main\\resources\\email\\registration-email.txt",
+                    "./src/main/resources/email/registration-email.txt",
                     "Witaj w naszym gronie " + appUser.getUserName());
         }
     }
