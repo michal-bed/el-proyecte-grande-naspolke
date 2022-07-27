@@ -58,9 +58,11 @@ public class SecurityConfiguration {
                 .mvcMatchers("/auth").permitAll()
                 .mvcMatchers("/refresh").permitAll()
                 .mvcMatchers("/registration").permitAll()
+                .mvcMatchers("/send-request-for-membership/**").permitAll()
+
                 // .anyRequest().denyAll()
-                // .anyRequest().permitAll();
-                .anyRequest().authenticated();
+                 .anyRequest().permitAll();
+//                .anyRequest().authenticated();
         http.exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.cors();
