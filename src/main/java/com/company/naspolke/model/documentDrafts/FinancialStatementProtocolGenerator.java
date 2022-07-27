@@ -117,3 +117,4 @@ public class FinancialStatementProtocolGenerator {
         return Rythm.render(text, definition);
     }
 }
+//TODO zamienić na String.format z array

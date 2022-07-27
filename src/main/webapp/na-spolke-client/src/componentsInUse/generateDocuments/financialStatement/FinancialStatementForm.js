@@ -3,7 +3,7 @@ import {Form, Formik, useField, useFormikContext} from "formik";
 import {Box, FormControlLabel, FormHelperText, InputLabel, MenuItem, Radio, Select, Stack, Switch } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import {validationSchema} from "./FinancialStatementFormLogic";
-import {FinancialStatementProtocol} from "../../../classes/company/FinancialStatementProtocol";
+import {FinancialStatementProtocol} from "../../../classes/financialStatementProtocol/FinancialStatementProtocol";
 import {saveFinancialStatement} from "../../../api/axiosPosts";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
@@ -92,8 +92,6 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         endReportingPeriodNo1: new Date(`${new Date().getFullYear()-1}-12-31`),
         amountProfitOrLossVotingUnanimously: true,
         sumOfAssetsAndLiabilities: 0
-
-
     };
     if (company.partners.individualPartners !== null && individualPartners.length === 0) {
         for (let i = 0; i < company.partners.individualPartners.length; i++) {
@@ -125,7 +123,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
     }
     if (company.boardOfDirectors.length > 0){
         for (let i = 0; i < company.boardOfDirectors.length; i++) {
-            initialValues[`board${company.boardOfDirectors[i].lastNameI}${i}`] = true;
+            initialValues[`director${company.boardOfDirectors[i].lastNameI}${i}`] = true;
         }
     }
     const MyTextFieldOptionalMeetingPlace = ({placeholder, ...props}) => {
@@ -538,7 +536,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                 as={TextField}
                             /></div>}
                         <Box>
-                            <p>Głosowanie nad absolutorium członkom Zarządu</p>
+                            <p>Głosowanie nad absolutorium Zarządu</p>
                             <p>Wskaż wszystkich członków zarządu oraz okresy sprawowania przez nich funkcji</p>
 
                             {company.boardMembers.length > 0 && company.boardMembers.map((member, index) => {
