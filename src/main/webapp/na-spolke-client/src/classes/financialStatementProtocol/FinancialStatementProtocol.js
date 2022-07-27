@@ -1,5 +1,5 @@
 import {Address} from "../company/Address";
-import {Resolution} from "./Resolution";
+import {ResolutionElection} from "./ResolutionElection";
 
 export class FinancialStatementProtocol {
 
@@ -9,10 +9,10 @@ export class FinancialStatementProtocol {
     meetingPlace;
     address;
     formalConvening;
-    listIdPresentIndividualPartners = []; //Id wspólników
-    listIdPresentsCompanyPartners = []; //Id wspólników
-    president; //imię, nazwisko, jednomyslnie, głosy
-    recorder; //imię, nazwisko, jednomyslnie, głosy
+    listIdPresentIndividualPartners = [];
+    listIdPresentsCompanyPartners = [];
+    president;
+    recorder;
     absolutoriaBM; //[id, jednomyslnie, głosy, kadencja poczatek + koniec]
     absolutoriaBoD; //[id, jednomyslnie, głosy, kadencja poczatek + koniec]
 
@@ -32,8 +32,8 @@ export class FinancialStatementProtocol {
         this.formalConvening = data.formalConvening;
         this.listIdPresentIndividualPartners = this.setPresentPartners(data, company.partners.individualPartners, "individualPartner")
         this.listIdPresentsCompanyPartners = this.setPresentPartners(data, company.partners.partnerCompanies, "partnerCompany")
-        this.president = new Resolution(data, "president", "secret")
-        this.recorder = new Resolution(data, "recorder", "secret")
+        this.president = new ResolutionElection(data, "president", "secret")
+        this.recorder = new ResolutionElection(data, "recorder", "secret")
     }
 
     setPresentPartners(data, partner, listType) {

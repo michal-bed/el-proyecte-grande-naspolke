@@ -1,5 +1,5 @@
 
-export class Resolution {
+export class ResolutionElection {
 
     firstName;
     lastName;

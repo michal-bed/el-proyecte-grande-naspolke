@@ -91,7 +91,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         beginningReportingPeriodNo1: new Date(`${new Date().getFullYear()-1}-01-01`),
         endReportingPeriodNo1: new Date(`${new Date().getFullYear()-1}-12-31`),
         amountProfitOrLossVotingUnanimously: true,
-        sumOfAssetsAndLiabilities: 0
+        sumOfAssetsAndLiabilities: 0,
+        financialStatementUnanimously: true
     };
     if (company.partners.individualPartners !== null && individualPartners.length === 0) {
         for (let i = 0; i < company.partners.individualPartners.length; i++) {
@@ -471,6 +472,35 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                             label="wysokość aktywów i pasywów (w PLN)"
                             as={TextField}
                         />
+                        <div>
+                            <p>Głosowanie nad przyjęciem sprawozdania finansowego i sprawozdania zarządu</p>
+                            <div>
+                                <Checkbox aria-label={"jednogłośnie"} name={"financialStatementUnanimously"}
+                                          defaultChecked
+                                          value={values.financialStatementUnanimously} onChange={handleChange}
+                                          color="secondary"/>
+                            </div>
+                            {values.financialStatementUnanimously === false && <div><p>Oddane głosy:</p>
+                                <MyTextField
+                                    name={"financialStatementVotingFor"}
+                                    type="number"
+                                    value={values.financialStatementVotingFor}
+                                    label="głosów za:"
+                                    as={TextField}
+                                /><MyTextField
+                                    name={"financialStatementVotingAgainst"}
+                                    type="number"
+                                    value={values.financialStatementVotingAgainst}
+                                    label="głosów przeciw:"
+                                    as={TextField}
+                                /><MyTextField
+                                    name={"financialStatementVotingAbstentions"}
+                                    type="number"
+                                    value={values.financialStatementVotingAbstentions}
+                                    label="głosów wstrzymujących się:"
+                                    as={TextField}
+                                /></div>}
+                        </div>
                         <p>Wysokość zysku lub straty netto którą wykazuje rachunek zysków i strat</p>
                         <MyTextField
                             name={"amountProfitOrLoss"}
