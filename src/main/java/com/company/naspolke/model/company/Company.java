@@ -42,8 +42,10 @@ public class Company {
     private Integer sharesCount;
     @OneToMany(cascade = CascadeType.ALL)
     private Set<BoardMember> boardMembers = new HashSet<>();
+    private Integer boardMembersTerm = 0;
     @OneToMany(cascade = CascadeType.ALL)
     private Set<BoardOfDirector> boardOfDirectors = new HashSet<>();
+    private Integer boardOfDirectorsTerm = 0;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "partners_id")
     private Partners partners;
@@ -56,7 +58,18 @@ public class Company {
 
 
     @Builder
-    public Company(String companyName, Long krsNumber, Address address, String nip, String regon, BigDecimal shareCapital, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners, boolean manySharesAllowed) {
+    public Company(String companyName,
+                   Long krsNumber,
+                   Address address,
+                   String nip,
+                   String regon,
+                   BigDecimal shareCapital,
+                   Set<BoardMember> boardMembers,
+                   Set<BoardOfDirector> boardOfDirectors,
+                   Partners partners,
+                   boolean manySharesAllowed,
+                   int boardMembersTerm,
+                   int boardOfDirectorsTerm) {
         this.companyName = companyName;
         this.krsNumber = krsNumber;
         this.address = address;
@@ -64,7 +77,9 @@ public class Company {
         this.regon = regon;
         this.shareCapital = shareCapital;
         this.boardMembers = boardMembers;
+        this.boardMembersTerm = boardMembersTerm;
         this.boardOfDirectors = boardOfDirectors;
+        this.boardOfDirectorsTerm = boardOfDirectorsTerm;
         this.partners = partners;
         this.partnersRevealed = checkIfAllPartnersAreRevealed();
         this.manySharesAllowed = manySharesAllowed;
