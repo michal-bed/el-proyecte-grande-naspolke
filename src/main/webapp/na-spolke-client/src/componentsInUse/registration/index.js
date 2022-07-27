@@ -294,7 +294,17 @@ function RegistrationBasic() {
                                           label={<MKTypography
                                               sx={{fontSize: "1em"}}
                                               variant="overline">
-                                              Przeczytałem i akceptuje regulamin strony
+                                              Przeczytałem i akceptuje <MKTypography
+                                              component={Link}
+                                              target="_blank"
+                                              to="/statute"
+                                              variant="button"
+                                              color="info"
+                                              fontWeight="medium"
+                                              textGradient
+                                          >
+                                              regulamin strony
+                                          </MKTypography>
                                           </MKTypography>}
                                           labelPlacement="end"
 
