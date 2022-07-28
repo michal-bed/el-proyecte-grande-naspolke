@@ -38,7 +38,7 @@ let companies =  [
         },
     ]
 
-    sessionStorage.setItem("companies", "[]");
+    // sessionStorage.setItem("companies", "[]");
 
 
     function getCompanies () {

@@ -7,26 +7,52 @@ import Input from "@material-ui/core/Input";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 
 
 function CompanyInfo () {
 
+    const [company, setCompany] = useState(null);
+    const [rows, setRows] = useState(null)
     let {companyId} = useParams();
+    useEffect(() => {
+        if (companyId != null) {
+            let tempCompany = getCompanyById(companyId);
+            setCompany(tempCompany);
+            console.log("Initializing")
+            console.log(company)
+        }
+    }, [companyId])
 
-    let company = getCompanyById(companyId);
-    console.log(company)
+    useEffect(() => {
 
-    if (company.address != null)
-    {
-        company.streetName = company.address.streetName;
-        company.streetNumber = company.address.streetNumber;
-        company.localNumber = company.address.localNumber;
-        company.city = company.address.city;
-        company.zipCode = company.address.zipCode;
-        company.postOffice = company.address.postOffice;
-    }
+        if (company != null && company.address != null)
+        {
+            company.streetName = company.address.streetName;
+            company.streetNumber = company.address.streetNumber;
+            company.localNumber = company.address.localNumber;
+            company.city = company.address.city;
+            company.zipCode = company.address.zipCode;
+            company.postOffice = company.address.postOffice;
+
+            setRows([
+                createData("companyName"),
+                createData("shareCapital"),
+                createData("boardMembersTerm"),
+                createData("boardOfDirectorsTerm"),
+                createData("address"),
+                createData("streetName"),
+                createData("streetNumber"),
+                createData("localNumber"),
+                createData("city"),
+                createData("zipCode"),
+                createData("postOffice"),
+                createData("shareValue"),
+                createData("manySharesAllowed"),
+            ]);
+        }
+    }, [company])
 
 
     const titleCardStyle = {
@@ -102,22 +128,6 @@ function CompanyInfo () {
             </TableCell>
         );
     };
-
-    const [rows, setRows] = useState([
-        createData("companyName"),
-        createData("shareCapital"),
-        createData("boardMembersTerm"),
-        createData("boardOfDirectorsTerm"),
-        createData("address"),
-        createData("streetName"),
-        createData("streetNumber"),
-        createData("localNumber"),
-        createData("city"),
-        createData("zipCode"),
-        createData("postOffice"),
-        createData("shareValue"),
-        createData("manySharesAllowed"),
-    ]);
 
     const [previous, setPrevious] = useState({});
 
@@ -195,7 +205,8 @@ function CompanyInfo () {
             ));
 
     return (
-        <>
+        company != null && rows != null &&
+            <>
             <Card style={titleCardStyle}>
                 <Typography variant="h2" align="center">
                     {company['companyName']}<br />
@@ -332,7 +343,7 @@ function CompanyInfo () {
                                 </TableRow>
                                 {/*rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"] == null ||*/}
                                 {   rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"] == null ||
-                                    rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"] === true ?
+                                rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"] === true ?
                                     <TableRow>
                                         <TableCell>
                                             Wartość udziału (PLN): {rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"]}
