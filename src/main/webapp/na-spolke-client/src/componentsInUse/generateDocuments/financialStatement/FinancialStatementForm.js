@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {Form, Formik, useField, useFormikContext} from "formik";
+import {Field, Form, Formik, useField, useFormikContext} from "formik";
 import {Box, FormControlLabel, FormHelperText, InputLabel, MenuItem, Radio, Select, Stack, Switch } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import {validationSchema} from "./FinancialStatementFormLogic";
@@ -119,12 +119,14 @@ export default function FinancialStatementForm({company, companyIdMac}) {
 
     if (company.boardMembers.length > 0){
         for (let i = 0; i < company.boardMembers.length; i++) {
-            initialValues[`board${company.boardMembers[i].lastNameI}${i}`] = true;
+            initialValues[`boardWholeReportingPeriod${company.boardMembers[i].boardMemberId}`] = true;
+            initialValues[`boardUnanimously${company.boardMembers[i].boardMemberId}`] = true;
         }
     }
     if (company.boardOfDirectors.length > 0){
         for (let i = 0; i < company.boardOfDirectors.length; i++) {
-            initialValues[`director${company.boardOfDirectors[i].lastNameI}${i}`] = true;
+            initialValues[`directorWholeReportingPeriod${company.boardOfDirectors[i].boardOfDirectorId}`] = true;
+            initialValues[`directorUnanimously${company.boardOfDirectors[i].boardOfDirectorId}`] = true;
         }
     }
     const MyTextFieldOptionalMeetingPlace = ({placeholder, ...props}) => {
@@ -570,15 +572,16 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                             <p>Wskaż wszystkich członków zarządu oraz okresy sprawowania przez nich funkcji</p>
 
                             {company.boardMembers.length > 0 && company.boardMembers.map((member, index) => {
-                                if (values[`board${member.lastNameI}${index}`] !== false) {
-                                    return <Card><FormControl>
+                                if (values[`boardWholeReportingPeriod${member.boardMemberId}`] !== false) {
+                                    return <Card>
+                                        <FormControl>
                                         <p key={`displayedName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}
                                             <span
                                                 key={`${member.function}${index}`}>{member.function.toLowerCase()}</span>
                                         </p>
                                         <FormControlLabel
-                                            control={<Checkbox key={`board${member.lastNameI}${index}`} defaultChecked
-                                                               name={`board${member.lastNameI}${index}`}
+                                            control={<Checkbox key={`boardWholeReportingPeriod${member.boardMemberId}`} defaultChecked
+                                                               name={`boardWholeReportingPeriod${member.boardMemberId}`}
                                                                onChange={handleChange}
                                                                value={true}/>}
                                             label="Cały okres sprawozdawczy"/>
@@ -587,44 +590,44 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                             <p>Głosowanie nad udzieleniem absolutorium</p>
                                             <div>
                                                 <Checkbox aria-label={"jednogłośnie"}
-                                                          name={`bardUnanimously${member.firstName}${index}`}
+                                                          name={`bardUnanimously${member.boardMemberId}`}
                                                           defaultChecked
-                                                          value={values[`bardUnanimously${member.firstName}${index}`]}
+                                                          value={values[`bardUnanimously${member.boardMemberId}`]}
                                                           onChange={handleChange}
                                                           color="secondary"/>
                                             </div>
-                                            {values[`bardUnanimously${member.firstName}${index}`] === false &&
+                                            {values[`bardUnanimously${member.boardMemberId}`] === false &&
                                                 <div><p>Oddane głosy:</p>
                                                     <MyTextField
-                                                        name={`bardUnanimously${member.firstName}${index}VotingFor`}
+                                                        name={`bard${member.boardMemberId}VotingFor`}
                                                         type="number"
-                                                        value={values[`bardUnanimously${member.firstName}${index}VotingFor`]}
+                                                        value={values[`bard${member.boardMemberId}VotingFor`]}
                                                         label="głosów za:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`bardUnanimously${member.firstName}${index}VotingAgainst`}
+                                                        name={`bard${member.boardMemberId}VotingAgainst`}
                                                         type="number"
-                                                        value={values[`bardUnanimously${member.firstName}${index}VotingAgainst`]}
+                                                        value={values[`bard${member.boardMemberId}VotingAgainst`]}
                                                         label="głosów przeciw:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`bardUnanimously${member.firstName}${index}VotingAbstentions`}
+                                                        name={`bard${member.boardMemberId}VotingAbstentions`}
                                                         type="number"
-                                                        value={values[`bardUnanimously${member.firstName}${index}VotingAbstentions`]}
+                                                        value={values[`bard${member.boardMemberId}VotingAbstentions`]}
                                                         label="głosów wstrzymujących się:"
                                                         as={TextField}
                                                     /></div>}
                                         </div>
                                     </Card>
-                                } else if (values[`board${member.lastNameI}${index}`] === false) {
+                                } else if (values[`boardWholeReportingPeriod${member.boardMemberId}`] === false) {
                                     return <Card><FormControl>
                                         <p key={`displayedName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}
                                             <span
-                                                key={`${member.function}${index}`}>{member.function.toLowerCase()}</span>
+                                                key={`${member.function}${member.boardMemberId}`}>{member.function.toLowerCase()}</span>
                                         </p>
                                         <FormControlLabel
-                                            control={<Checkbox key={`board${member.lastNameI}${index}`} defaultChecked
-                                                               name={`board${member.lastNameI}${index}`}
+                                            control={<Checkbox key={`boardWholeReportingPeriod${member.boardMemberId}`} defaultChecked
+                                                               name={`boardWholeReportingPeriod${member.boardMemberId}`}
                                                                onChange={handleChange}
                                                                value={true}/>}
                                             label="Cały okres sprawozdawczy"/>
@@ -633,10 +636,10 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                                             <DatePicker
                                                 label="data początkowa..."
-                                                name={`board${member.lastNameI}${index}beginDate`}
-                                                value={values[`board${member.lastNameI}${index}beginDate`]}
+                                                name={`boardBeginning${member.boardMemberId}`}
+                                                value={values[`boardBeginning${member.boardMemberId}`]}
                                                 inputFormat="dd/MM/yyyy"
-                                                onChange={(value => setFieldValue(`board${member.lastNameI}${index}beginDate`, value))}
+                                                onChange={(value => setFieldValue(`boardBeginning${member.boardMemberId}`, value))}
                                                 renderInput={(params) => (
                                                     <TextField {...params}
                                                                helperText={params?.inputProps?.placeholder}/>
@@ -647,10 +650,10 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                                             <DatePicker
                                                 label="data końcowa..."
-                                                name={`board${member.lastNameI}${index}endDate`}
-                                                value={values[`board${member.lastNameI}${index}endDate`]}
+                                                name={`boardEnd${member.boardMemberId}`}
+                                                value={values[`boardEnd${member.boardMemberId}`]}
                                                 inputFormat="dd/MM/yyyy"
-                                                onChange={(value => setFieldValue(`board${member.lastNameI}${index}endDate`, value))}
+                                                onChange={(value => setFieldValue(`boardEnd${member.boardMemberId}`, value))}
                                                 renderInput={(params) => (
                                                     <TextField {...params}
                                                                helperText={params?.inputProps?.placeholder}/>
@@ -658,36 +661,37 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                             />
                                         </LocalizationProvider>
                                         <div>
-                                            <p>Głosowanie nad udzieleniem absolutorium </p>
+                                            <p>Głosowanie nad udzieleniem absolutorium</p>
                                             <div>
                                                 <Checkbox aria-label={"jednogłośnie"}
-                                                          name={`bardUnanimously${member.firstName}${index}`}
+                                                          name={`bardUnanimously${member.boardMemberId}`}
                                                           defaultChecked
-                                                          value={values[`bardUnanimously${member.firstName}${index}`]}
+                                                          value={values[`bardUnanimously${member.boardMemberId}`]}
                                                           onChange={handleChange}
                                                           color="secondary"/>
                                             </div>
-                                            {values[`bardUnanimously${member.firstName}${index}`] === false &&
+                                            {values[`bardUnanimously${member.boardMemberId}`] === false &&
                                                 <div><p>Oddane głosy:</p>
                                                     <MyTextField
-                                                        name={`bardUnanimously${member.firstName}${index}VotingFor`}
+                                                        name={`bard${member.boardMemberId}VotingFor`}
                                                         type="number"
-                                                        value={values[`bardUnanimously${member.firstName}${index}VotingFor`]}
+                                                        value={values[`bard${member.boardMemberId}VotingFor`]}
                                                         label="głosów za:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`bardUnanimously${member.firstName}${index}VotingAgainst`}
+                                                        name={`bard${member.boardMemberId}VotingAgainst`}
                                                         type="number"
-                                                        value={values[`bardUnanimously${member.firstName}${index}VotingAgainst`]}
+                                                        value={values[`bard${member.boardMemberId}VotingAgainst`]}
                                                         label="głosów przeciw:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`bardUnanimously${member.firstName}${index}VotingAbstentions`}
+                                                        name={`bard${member.boardMemberId}VotingAbstentions`}
                                                         type="number"
-                                                        value={values[`bardUnanimously${member.firstName}${index}VotingAbstentions`]}
+                                                        value={values[`bard${member.boardMemberId}VotingAbstentions`]}
                                                         label="głosów wstrzymujących się:"
                                                         as={TextField}
-                                                    /></div>}
+                                                    />
+                                                </div>}
                                         </div>
                                     </Card>
                                 }
@@ -696,14 +700,15 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         {company.boardOfDirectors.length > 0 && <Box>
                             <p>Głosowanie nad absolutorium członków Rady Nadzorczej</p>
                             <p>Wskaż wszystkich członków rady nadzorczej oraz okresy sprawowania przez nich funkcji</p>
+
                             {company.boardOfDirectors.length > 0 && company.boardOfDirectors.map((member, index) => {
-                                if (values[`director${member.lastNameI}${index}`] !== false) {
+                                if (values[`directorWholeReportingPeriod${member.boardOfDirectorId}`] !== false) {
                                     return <Card><FormControl>
                                         <p key={`displayedDirectorName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}</p>
                                         <FormControlLabel
-                                            control={<Checkbox key={`director${member.lastNameI}${index}`}
+                                            control={<Checkbox key={`directorWholeReportingPeriod${member.boardOfDirectorId}`}
                                                                defaultChecked
-                                                               name={`director${member.lastNameI}${index}`}
+                                                               name={`directorWholeReportingPeriod${member.boardOfDirectorId}`}
                                                                onChange={handleChange}
                                                                value={true}/>}
                                             label="Cały okres sprawozdawczy"/>
@@ -712,42 +717,42 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                             <p>Głosowanie nad udzieleniem absolutorium</p>
                                             <div>
                                                 <Checkbox aria-label={"jednogłośnie"}
-                                                          name={`directorUnanimously${member.firstName}${index}`}
+                                                          name={`directorUnanimously${member.boardOfDirectorId}`}
                                                           defaultChecked
-                                                          value={values[`directorUnanimously${member.firstName}${index}`]}
+                                                          value={values[`directorUnanimously${member.boardOfDirectorId}`]}
                                                           onChange={handleChange}
                                                           color="secondary"/>
                                             </div>
-                                            {values[`directorUnanimously${member.firstName}${index}`] === false &&
+                                            {values[`directorUnanimously${member.boardOfDirectorId}`] === false &&
                                                 <div><p>Oddane głosy:</p>
                                                     <MyTextField
-                                                        name={`directorUnanimously${member.firstName}${index}VotingFor`}
+                                                        name={`director${member.boardOfDirectorId}VotingFor`}
                                                         type="number"
-                                                        value={values[`directorUnanimously${member.firstName}${index}VotingFor`]}
+                                                        value={values[`directorUnanimously${member.boardOfDirectorId}VotingFor`]}
                                                         label="głosów za:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`directorUnanimously${member.firstName}${index}VotingAgainst`}
+                                                        name={`director${member.boardOfDirectorId}VotingAgainst`}
                                                         type="number"
-                                                        value={values[`directorUnanimously${member.firstName}${index}VotingAgainst`]}
+                                                        value={values[`director${member.boardOfDirectorId}VotingAgainst`]}
                                                         label="głosów przeciw:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`directorUnanimously${member.firstName}${index}VotingAbstentions`}
+                                                        name={`director${member.boardOfDirectorId}VotingAbstentions`}
                                                         type="number"
-                                                        value={values[`directorUnanimously${member.firstName}${index}VotingAbstentions`]}
+                                                        value={values[`director${member.boardOfDirectorId}VotingAbstentions`]}
                                                         label="głosów wstrzymujących się:"
                                                         as={TextField}
                                                     /></div>}
                                         </div>
                                     </Card>
-                                } else if (values[`director${member.lastNameI}${index}`] === false) {
+                                } else if (values[`directorWholeReportingPeriod${member.boardOfDirectorId}`] === false) {
                                     return <Card><FormControl>
                                         <p key={`displayedName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}</p>
                                         <FormControlLabel
-                                            control={<Checkbox key={`director${member.lastNameI}${index}`}
+                                            control={<Checkbox key={`directorWholeReportingPeriod${member.boardOfDirectorId}`}
                                                                defaultChecked
-                                                               name={`director${member.lastNameI}${index}`}
+                                                               name={`directorWholeReportingPeriod${member.boardOfDirectorId}`}
                                                                onChange={handleChange}
                                                                value={true}/>}
                                             label="Cały okres sprawozdawczy"/>
@@ -756,10 +761,10 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                                             <DatePicker
                                                 label="data początkowa..."
-                                                name={`director${member.lastNameI}${index}beginDate`}
-                                                value={values[`director${member.lastNameI}${index}beginDate`]}
+                                                name={`directorBeginning${member.boardOfDirectorId}`}
+                                                value={values[`directorBeginning${member.boardOfDirectorId}`]}
                                                 inputFormat="dd/MM/yyyy"
-                                                onChange={(value => setFieldValue(`director${member.lastNameI}${index}beginDate`, value))}
+                                                onChange={(value => setFieldValue(`directorBeginning${member.boardOfDirectorId}`, value))}
                                                 renderInput={(params) => (
                                                     <TextField {...params}
                                                                helperText={params?.inputProps?.placeholder}/>
@@ -770,10 +775,10 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                                             <DatePicker
                                                 label="data końcowa..."
-                                                name={`director${member.lastNameI}${index}endDate`}
-                                                value={values[`director${member.lastNameI}${index}endDate`]}
+                                                name={`directorEnd${member.boardOfDirectorId}`}
+                                                value={values[`directorEnd${member.boardOfDirectorId}`]}
                                                 inputFormat="dd/MM/yyyy"
-                                                onChange={(value => setFieldValue(`director${member.lastNameI}${index}endDate`, value))}
+                                                onChange={(value => setFieldValue(`directorEnd${member.boardOfDirectorId}`, value))}
                                                 renderInput={(params) => (
                                                     <TextField {...params}
                                                                helperText={params?.inputProps?.placeholder}/>
@@ -784,30 +789,30 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                             <p>Głosowanie nad udzieleniem absolutorium</p>
                                             <div>
                                                 <Checkbox aria-label={"jednogłośnie"}
-                                                          name={`directorUnanimously${member.firstName}${index}`}
+                                                          name={`directorUnanimously${member.boardOfDirectorId}`}
                                                           defaultChecked
-                                                          value={values[`directorUnanimously${member.firstName}${index}`]}
+                                                          value={values[`directorUnanimously${member.boardOfDirectorId}`]}
                                                           onChange={handleChange}
                                                           color="secondary"/>
                                             </div>
-                                            {values[`directorUnanimously${member.firstName}${index}`] === false &&
+                                            {values[`directorUnanimously${member.boardOfDirectorId}`] === false &&
                                                 <div><p>Oddane głosy:</p>
                                                     <MyTextField
-                                                        name={`directorUnanimously${member.firstName}${index}VotingFor`}
+                                                        name={`directorUnanimously${member.boardOfDirectorId}VotingFor`}
                                                         type="number"
-                                                        value={values[`directorUnanimously${member.firstName}${index}VotingFor`]}
+                                                        value={values[`directorUnanimously${member.boardOfDirectorId}VotingFor`]}
                                                         label="głosów za:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`directorUnanimously${member.firstName}${index}VotingAgainst`}
+                                                        name={`directorUnanimously${member.boardOfDirectorId}VotingAgainst`}
                                                         type="number"
-                                                        value={values[`directorUnanimously${member.firstName}${index}VotingAgainst`]}
+                                                        value={values[`directorUnanimously${member.boardOfDirectorId}VotingAgainst`]}
                                                         label="głosów przeciw:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`directorUnanimously${member.firstName}${index}VotingAbstentions`}
+                                                        name={`directorUnanimously${member.boardOfDirectorId}VotingAbstentions`}
                                                         type="number"
-                                                        value={values[`directorUnanimously${member.firstName}${index}VotingAbstentions`]}
+                                                        value={values[`directorUnanimously${member.boardOfDirectorId}VotingAbstentions`]}
                                                         label="głosów wstrzymujących się:"
                                                         as={TextField}
                                                     />
