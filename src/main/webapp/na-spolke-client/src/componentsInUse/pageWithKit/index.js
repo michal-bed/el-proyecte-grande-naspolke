@@ -27,14 +27,11 @@ import MKSocialButton from "../../mkFiles/components/MKSocialButton";
 import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
 
 
-
 import MainPage from "../mainPage/mainPage";
 import FaqPage from "../faqPage/FaqPage";
 import Footer from "../footer/Footer";
-import useAuth from "../../hooks/useAuth";
+import Statute from "../statute/Statute"
 // Presentation page components
-import BuiltByDevelopers from "../kitComponentSection/KitComponentSection";
-
 
 
 // Routes
@@ -43,8 +40,6 @@ import Routes from "../../routes";
 
 // Images
 import index_photo3 from "../../assets/photos/index_photo3.jpg";
-
-
 
 
 function Presentation(props) {
@@ -66,6 +61,10 @@ function Presentation(props) {
                 titleDescription = "Zebraliśmy najczęściej pojawiające się pytania i " +
                     "posatraliśmy się w jak najlepszy sposób na nie odpowiedzieć."
                 return(<FaqPage />)
+            case "statute":
+                title = "Regulamin strony"
+                titleDescription = "Regulamin korzystania ze strony i oferowanych usług"
+                return (<Statute />)
         }
     }
 
@@ -129,58 +128,6 @@ function Presentation(props) {
       >
           {component}
 
-        <MKBox pt={18} pb={6}>
-          <Container>
-            <Grid container spacing={3}>
-              <Grid item xs={12} lg={5} ml="auto" sx={{ textAlign: { xs: "center", lg: "left" } }}>
-                <MKTypography variant="h4" fontWeight="bold" mb={0.5}>
-                  Thank you for your support!
-                </MKTypography>
-                <MKTypography variant="body1" color="text">
-                  We deliver the best web products
-                </MKTypography>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                lg={5}
-                my={{ xs: 5, lg: "auto" }}
-                mr={{ xs: 0, lg: "auto" }}
-                sx={{ textAlign: { xs: "center", lg: "right" } }}
-              >
-                <MKSocialButton
-                  component="a"
-                  href="https://twitter.com/intent/tweet?text=Check%20Material%20Design%20System%20made%20by%20%40CreativeTim%20%23webdesign%20%23designsystem%20%23mui5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fmaterial-kit-react"
-                  target="_blank"
-                  color="twitter"
-                  sx={{ mr: 1 }}
-                >
-                  <i className="fab fa-twitter" />
-                  &nbsp;Tweet
-                </MKSocialButton>
-                <MKSocialButton
-                  component="a"
-                  href="https://www.facebook.com/sharer/sharer.php?u=https://www.creative-tim.com/product/material-kit-react"
-                  target="_blank"
-                  color="facebook"
-                  sx={{ mr: 1 }}
-                >
-                  <i className="fab fa-facebook" />
-                  &nbsp;Share
-                </MKSocialButton>
-                <MKSocialButton
-                  component="a"
-                  href="https://www.pinterest.com/pin/create/button/?url=https://www.creative-tim.com/product/material-kit-react"
-                  target="_blank"
-                  color="pinterest"
-                >
-                  <i className="fab fa-pinterest" />
-                  &nbsp;Pin it
-                </MKSocialButton>
-              </Grid>
-            </Grid>
-          </Container>
-        </MKBox>
       </Card>
         <Footer/>
     </>

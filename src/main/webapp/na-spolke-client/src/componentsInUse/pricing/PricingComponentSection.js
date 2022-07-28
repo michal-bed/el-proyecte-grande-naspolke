@@ -17,7 +17,7 @@ function PricingComponentSection(props){
     return  <Grid container sx={{display: 'inline'}} py={1}>
         <Card sx={{padding: "1em", width: "100%" }} xs={12} >
             <KitComponentSection textContent={props.textContent}
-                                 id={'uslugi'}
+                                 id={'cennik'}
                                  title='Cennik usług'
                                  position="positionR"
                                  photoPath={props.photoPath}/>

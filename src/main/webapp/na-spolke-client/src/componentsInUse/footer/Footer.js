@@ -10,7 +10,7 @@ const WhiteTextTypography = withStyles({
 
 export default function Footer() {
     return <footer>
-        <Box px={{ xs: 3, sm: 10 }} py={{ xs: 5, sm: 10 }}  bgcolor="text.secondary">
+        <Box px={{ xs: 2, sm: 4 }} py={{ xs: 2, sm: 4 }}  bgcolor="text.secondary">
 
             <Container maxWidth="lg">
                 <Grid container spacing={5}>
@@ -36,13 +36,23 @@ export default function Footer() {
                             </Link>
                         </Box>
                         <Box>
+                            <Link href="/#cennik">
+                                <WhiteTextTypography>Cennik</WhiteTextTypography>
+                            </Link>
+                        </Box>
+                        <Box>
                             <Link href="/faq">
                                 <WhiteTextTypography>FAQ</WhiteTextTypography>
                             </Link>
                         </Box>
+                        <Box>
+                            <Link href="/statute">
+                                <WhiteTextTypography>Regulamin</WhiteTextTypography>
+                            </Link>
+                        </Box>
                     </Grid>
                 </Grid>
-                <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
+                <Box textAlign="center" pt={{ xs: 3, sm: 10 }} pb={{ xs: 3, sm: 0 }}>
                     <WhiteTextTypography> Na spółkę &reg; {new Date().getFullYear()}</WhiteTextTypography>
                 </Box>
             </Container>
