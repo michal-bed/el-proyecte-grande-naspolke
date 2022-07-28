@@ -90,7 +90,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         agendaUnanimously: true,
         beginningReportingPeriodNo1: new Date(`${new Date().getFullYear()-1}-01-01`),
         endReportingPeriodNo1: new Date(`${new Date().getFullYear()-1}-12-31`),
-        amountProfitOrLossVotingUnanimously: true,
+        amountProfitOrLossUnanimously: true,
         sumOfAssetsAndLiabilities: 0,
         financialStatementUnanimously: true
     };
@@ -174,11 +174,12 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                 validationSchema={validationSchema}
                 onSubmit={(data, {setSubmitting}) => {
                     setSubmitting(true);
-                    const financialStatement = new FinancialStatementProtocol(data);
+                    const financialStatement = new FinancialStatementProtocol(data, company);
                     if (data.meetingPlaceInHeadquarters === "true") {
                         financialStatement.meetingPlace = "siedzibie spółki";
                     }
-                    saveFinancialStatement(financialStatement, companyIdMac);
+                    console.log(financialStatement)
+                    // saveFinancialStatement(financialStatement, companyIdMac);
                     setSubmitting(false)
                 }}>
             {({values, isSubmitting, handleChange, handleBlur, handleSubmit, setFieldValue}) => (
@@ -331,7 +332,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                         label="głosów przeciw:"
                                         as={TextField}
                                     /><MyTextField
-                                        name={"presidentVotingAgainst"}
+                                        name={"presidentVotingAbstentions"}
                                         type="number"
                                         value={values.presidentVotingAbstentions}
                                         label="głosów wstrzymujących się:"
@@ -380,7 +381,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                         label="głosów przeciw:"
                                         as={TextField}
                                     /><MyTextField
-                                        name={"recorderVotingAgainst"}
+                                        name={"recorderVotingAbstentions"}
                                         type="number"
                                         value={values.recorderVotingAbstentions}
                                         label="głosów wstrzymujących się:"
@@ -425,7 +426,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                         label="głosów przeciw:"
                                         as={TextField}
                                     /><MyTextField
-                                        name={"agendaVotingAgainst"}
+                                        name={"agendaVotingAbstentions"}
                                         type="number"
                                         value={values.agendaVotingAbstentions}
                                         label="głosów wstrzymujących się:"
@@ -542,12 +543,12 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         <p>{values.amountProfitOrLoss < 0 && "Głosowanie nad sposobem pokryciem straty"}</p>
                         <div>
                             {values.amountProfitOrLoss !== 0 &&
-                                <Checkbox aria-label={"jednogłośnie"} name={"amountProfitOrLossVotingUnanimously"}
+                                <Checkbox aria-label={"jednogłośnie"} name={"amountProfitOrLossUnanimously"}
                                           defaultChecked
-                                          value={values.amountProfitOrLossVotingUnanimously} onChange={handleChange}
+                                          value={values.amountProfitOrLossUnanimously} onChange={handleChange}
                                           color="secondary"/>}
                         </div>
-                        {values.amountProfitOrLossVotingUnanimously === false && <div><p>Oddane głosy:</p>
+                        {values.amountProfitOrLossUnanimously === false && <div><p>Oddane głosy:</p>
                             <MyTextField
                                 name={"amountProfitOrLossVotingFor"}
                                 type="number"
@@ -590,30 +591,30 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                             <p>Głosowanie nad udzieleniem absolutorium</p>
                                             <div>
                                                 <Checkbox aria-label={"jednogłośnie"}
-                                                          name={`bardUnanimously${member.boardMemberId}`}
+                                                          name={`boardUnanimously${member.boardMemberId}`}
                                                           defaultChecked
-                                                          value={values[`bardUnanimously${member.boardMemberId}`]}
+                                                          value={values[`boardUnanimously${member.boardMemberId}`]}
                                                           onChange={handleChange}
                                                           color="secondary"/>
                                             </div>
-                                            {values[`bardUnanimously${member.boardMemberId}`] === false &&
+                                            {values[`boardUnanimously${member.boardMemberId}`] === false &&
                                                 <div><p>Oddane głosy:</p>
                                                     <MyTextField
-                                                        name={`bard${member.boardMemberId}VotingFor`}
+                                                        name={`board${member.boardMemberId}VotingFor`}
                                                         type="number"
-                                                        value={values[`bard${member.boardMemberId}VotingFor`]}
+                                                        value={values[`board${member.boardMemberId}VotingFor`]}
                                                         label="głosów za:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`bard${member.boardMemberId}VotingAgainst`}
+                                                        name={`board${member.boardMemberId}VotingAgainst`}
                                                         type="number"
-                                                        value={values[`bard${member.boardMemberId}VotingAgainst`]}
+                                                        value={values[`board${member.boardMemberId}VotingAgainst`]}
                                                         label="głosów przeciw:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`bard${member.boardMemberId}VotingAbstentions`}
+                                                        name={`board${member.boardMemberId}VotingAbstentions`}
                                                         type="number"
-                                                        value={values[`bard${member.boardMemberId}VotingAbstentions`]}
+                                                        value={values[`board${member.boardMemberId}VotingAbstentions`]}
                                                         label="głosów wstrzymujących się:"
                                                         as={TextField}
                                                     /></div>}
@@ -664,30 +665,30 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                             <p>Głosowanie nad udzieleniem absolutorium</p>
                                             <div>
                                                 <Checkbox aria-label={"jednogłośnie"}
-                                                          name={`bardUnanimously${member.boardMemberId}`}
+                                                          name={`boardUnanimously${member.boardMemberId}`}
                                                           defaultChecked
-                                                          value={values[`bardUnanimously${member.boardMemberId}`]}
+                                                          value={values[`boardUnanimously${member.boardMemberId}`]}
                                                           onChange={handleChange}
                                                           color="secondary"/>
                                             </div>
-                                            {values[`bardUnanimously${member.boardMemberId}`] === false &&
+                                            {values[`boardUnanimously${member.boardMemberId}`] === false &&
                                                 <div><p>Oddane głosy:</p>
                                                     <MyTextField
-                                                        name={`bard${member.boardMemberId}VotingFor`}
+                                                        name={`board${member.boardMemberId}VotingFor`}
                                                         type="number"
-                                                        value={values[`bard${member.boardMemberId}VotingFor`]}
+                                                        value={values[`board${member.boardMemberId}VotingFor`]}
                                                         label="głosów za:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`bard${member.boardMemberId}VotingAgainst`}
+                                                        name={`board${member.boardMemberId}VotingAgainst`}
                                                         type="number"
-                                                        value={values[`bard${member.boardMemberId}VotingAgainst`]}
+                                                        value={values[`board${member.boardMemberId}VotingAgainst`]}
                                                         label="głosów przeciw:"
                                                         as={TextField}
                                                     /><MyTextField
-                                                        name={`bard${member.boardMemberId}VotingAbstentions`}
+                                                        name={`board${member.boardMemberId}VotingAbstentions`}
                                                         type="number"
-                                                        value={values[`bard${member.boardMemberId}VotingAbstentions`]}
+                                                        value={values[`board${member.boardMemberId}VotingAbstentions`]}
                                                         label="głosów wstrzymujących się:"
                                                         as={TextField}
                                                     />

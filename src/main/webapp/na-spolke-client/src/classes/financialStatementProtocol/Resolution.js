@@ -11,7 +11,7 @@ export class Resolution {
         this.votingType = votingType;
         this.unanimously = data[`${key}Unanimously${id}`];
         if(this.unanimously===false){
-            this.votesFor = data[`${key}VotingFor`];
+            this.votesFor = data[`${key}${id}VotingFor`];
             this.votesAgainst = data[`${key}${id}VotingAgainst`];
             this.votesAbstentions = data[`${key}${id}VotingAbstentions`];
         }
