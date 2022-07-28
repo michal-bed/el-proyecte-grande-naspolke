@@ -59,7 +59,7 @@ function Routes(){
           collapse: [
             {
               name: "Logowanie",
-              route: "/log-in",
+              route: "/login",
               component: <Login/>
             },
             {
