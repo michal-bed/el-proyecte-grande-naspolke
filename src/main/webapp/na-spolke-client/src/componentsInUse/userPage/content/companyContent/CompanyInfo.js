@@ -8,6 +8,7 @@ import EditIcon from "@material-ui/icons/EditOutlined";
 import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import {useEffect, useState} from "react";
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 
 
 
@@ -16,6 +17,8 @@ function CompanyInfo () {
     const [company, setCompany] = useState(null);
     const [rows, setRows] = useState(null)
     let {companyId} = useParams();
+    const axiosPrivate = useAxiosPrivate();
+
     useEffect(() => {
         if (companyId != null) {
             getCompanyById(companyId).then(res => {setCompany(res.data)});
@@ -133,6 +136,49 @@ function CompanyInfo () {
     const onDoneEditMode = id => {
         onToggleEditMode(id);
         setPrevious(state => ({ ...state, [id]: rows.find(row => row.id === id) }));
+        if (id === "streetName" || id === "streetNumber" || id === "localNumber"
+            || id === "city" || id === "zipCode" || id === "postOffice")
+        {
+            axiosPrivate.patch("/update-company-address",
+                {[id]: rows.find(row => row.id === id)[id],
+                      "companyId": companyId})
+                .then(() => {console.log("Updated address")});
+        }
+        else if (id === "companyName")
+        {
+            axiosPrivate.get(`/companies/search/updateCompanyName?companyName=`
+                +`${rows.find(row => row.id === id)[id]}&companyId=${companyId}`)
+                .then(() => {
+                    console.log("updated company name")}).catch(console.log);
+        }
+        else if (id === "shareCapital")
+        {
+            axiosPrivate.get(`/companies/search/updateShareCapital?shareCapital=`
+                +`${rows.find(row => row.id === id)[id]}&companyId=${companyId}`)
+                .then(() => {
+                    console.log("updated share capital")}).catch(console.log);
+        }
+        else if (id === "boardOfDirectorsTerm")
+        {
+            axiosPrivate.get(`/companies/search/updateBoardOfDirectorsTerm?boardOfDirectorsTerm=`
+                +`${rows.find(row => row.id === id)[id]}&companyId=${companyId}`)
+                .then(() => {
+                    console.log("updated board of directors term")}).catch(console.log);
+        }
+        else if (id === "boardMembersTerm")
+        {
+            axiosPrivate.get(`/companies/search/updateBoardMembersTerm?boardMembersTerm=`
+                +`${rows.find(row => row.id === id)[id]}&companyId=${companyId}`)
+                .then(() => {
+                    console.log("updated board members term")}).catch(console.log);
+        }
+        else if (id === "shareValue")
+        {
+            axiosPrivate.get(`/companies/search/updateShareValue?shareValue=`
+                +`${rows.find(row => row.id === id)[id]}&companyId=${companyId}`)
+                .then(() => {
+                    console.log("updated share value")}).catch(console.log);
+        }
         company[id] = rows.find(row => row.id === id)[id];
     }
     const onToggleEditMode = id => {

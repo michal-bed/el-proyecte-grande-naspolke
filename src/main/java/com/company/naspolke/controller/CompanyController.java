@@ -111,42 +111,38 @@ public class CompanyController {
     public void updateAddressInCompany(@RequestBody ObjectNode objectNode) {
         UUID companyId = UUID.fromString(objectNode.get("companyId").asText());
         Address companyAddress = companyService.getCompanyByCompanyId(companyId).get().getAddress();
-        var streetName = objectNode.get("streetName").asText();
+        var streetName = objectNode.get("streetName");
         if (streetName != null)
         {
-            companyAddress.setStreetName(streetName);
-            companyService.updateAddressById(companyAddress, companyId);
+            companyAddress.setStreetName(streetName.asText());
+
         }
-        var streetNumber = objectNode.get("streetNumber").asText();
+        var streetNumber = objectNode.get("streetNumber");
         if (streetNumber != null)
         {
-            companyAddress.setStreetNumber(streetNumber);
-            companyService.updateAddressById(companyAddress, companyId);
+            companyAddress.setStreetNumber(streetNumber.asText());
         }
-        var localNumber = objectNode.get("localNumber").asText();
+        var localNumber = objectNode.get("localNumber");
         if (localNumber != null)
         {
-            companyAddress.setLocalNumber(localNumber);
-            companyService.updateAddressById(companyAddress, companyId);
+            companyAddress.setLocalNumber(localNumber.asText());
         }
-        var city = objectNode.get("city").asText();
+        var city = objectNode.get("city");
         if (city != null)
         {
-            companyAddress.setCity(city);
-            companyService.updateAddressById(companyAddress, companyId);
+            companyAddress.setCity(city.asText());
         }
-        var zipCode = objectNode.get("zipCode").asText();
+        var zipCode = objectNode.get("zipCode");
         if (zipCode != null)
         {
-            companyAddress.setZipCode(zipCode);
-            companyService.updateAddressById(companyAddress, companyId);
+            companyAddress.setZipCode(zipCode.asText());
         }
-        var postOffice = objectNode.get("postOffice").asText();
+        var postOffice = objectNode.get("postOffice");
         if (postOffice != null)
         {
-            companyAddress.setPostOffice(postOffice);
-            companyService.updateAddressById(companyAddress, companyId);
+            companyAddress.setPostOffice(postOffice.asText());
         }
 
+        companyService.updateAddressById(companyAddress, companyId);
     }
 }
