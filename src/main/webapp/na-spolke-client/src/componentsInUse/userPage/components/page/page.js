@@ -24,7 +24,7 @@ import RequestForMembership from "../../../requestToCompany/RequestForMembership
 
 function Page ({classes}) {
     const { auth } = useAuth();
-    console.log(auth.accessToken);
+    // console.log(auth.accessToken);
     return (
         <Box style={{display: "flex", flexDirection: "column", height: '100%', width: '100%', contain: 'paint', overflow: "auto"} }>
 
