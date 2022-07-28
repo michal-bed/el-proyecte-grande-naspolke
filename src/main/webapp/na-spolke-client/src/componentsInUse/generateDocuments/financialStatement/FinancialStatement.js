@@ -7,8 +7,8 @@ import FinancialStatementForm from "./FinancialStatementForm";
 
 export default function FinancialStatement() {
     const companyIdMac= "19b39ee0-6093-4745-9fb2-c4734badccae"
-    const companyIdEASY= "b923aaa8-5c0a-4090-b125-48e8d7a45e0e"
-    const companyIdPC= "88eac81a-0163-4bc5-ae47-d6a135af6ae1"
+    const companyIdEASY= "392a1d1c-e8d6-43d2-9c60-2f1eaf0cc41c"
+    const companyIdPC= "88625384-d35b-46fd-ba40-11f1af5c8dd3"
     const [company, setCompany] = useState(new Company())
 
     if (!!!company.krsNumber) {
