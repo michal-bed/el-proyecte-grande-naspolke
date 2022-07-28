@@ -392,7 +392,7 @@ function CompanyInfo () {
                                 rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"] === true ?
                                     <TableRow>
                                         <TableCell>
-                                            Wartość udziału (PLN): {rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"]}
+                                            Wartość udziału (PLN):
                                         </TableCell>
                                         {/*<TableCell>*/}
                                         {/*    {company["address"]}*/}
