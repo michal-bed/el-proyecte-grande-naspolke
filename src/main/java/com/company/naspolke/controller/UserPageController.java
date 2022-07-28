@@ -4,16 +4,11 @@ import com.company.naspolke.model.company.Company;
 import com.company.naspolke.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -29,11 +24,16 @@ public class UserPageController {
         this.companyService = companyService;
     }
 
-    @PostMapping(value = "/get-companies")
+    @GetMapping(value = "/get-companies")
     public List<Company> getUserCompanies(HttpServletRequest request) {
         UUID loggedUserId = jwtUtil.getUserId(request);
 
-
         return companyService.findAll();
+    }
+
+    @GetMapping(value = "/get-company-by-id/{companyId}")
+    public Optional<Company> getCompanyById(@PathVariable UUID companyId) {
+        //autoryzacja?
+        return companyService.getCompanyByCompanyId(companyId);
     }
 }

@@ -40,34 +40,33 @@ let companies =  [
 
     // sessionStorage.setItem("companies", "[]");
 
-
-    function getCompanies () {
-        return axiosPrivate.post('/get-companies')
-            .then(res =>{
-                if(res.data.length > JSON.parse(sessionStorage.getItem("companies")).length) {
-                    let compTable = [];
-                    let keys = Object.keys(res.data);
-                    keys.forEach(key => {
-                        console.log(res.data[key]);
-                        compTable.push(res.data[key]);
-                    })
-                    console.log(JSON.stringify(compTable))
-                    sessionStorage.setItem("companies", JSON.stringify(compTable));
-                    console.log(JSON.parse(sessionStorage.getItem("companies")));
-                    return sessionStorage.getItem("companies");
-                }
-                return sessionStorage.getItem("companies");
-            })
-        // return ["lol"];
+    async function getCompaniesFromDb () {
+        return axiosPrivate.get('/get-companies');
     }
 
-    function getCompanyById (id) {
-        for (let i in companies) {
-            if (JSON.parse(sessionStorage.getItem("companies"))[i]['companyId'] === id) {
-                return JSON.parse(sessionStorage.getItem("companies"))[i];
-            }
-        }
-        return null;
+
+    // function getCompanies () {
+    //     return axiosPrivate.post('/get-companies')
+    //         .then(res =>{
+    //             if(res.data.length > JSON.parse(sessionStorage.getItem("companies")).length) {
+    //                 let compTable = [];
+    //                 let keys = Object.keys(res.data);
+    //                 keys.forEach(key => {
+    //                     console.log(res.data[key]);
+    //                     compTable.push(res.data[key]);
+    //                 })
+    //                 console.log(JSON.stringify(compTable))
+    //                 sessionStorage.setItem("companies", JSON.stringify(compTable));
+    //                 console.log(JSON.parse(sessionStorage.getItem("companies")));
+    //                 return sessionStorage.getItem("companies");
+    //             }
+    //             return sessionStorage.getItem("companies");
+    //         })
+    //     // return ["lol"];
+    // }
+
+    async function getCompanyById (id) {
+        return axiosPrivate.get("/get-company-by-id/"+id)
     }
 
     function selectCompanyInfoById (id, info) {
@@ -79,4 +78,4 @@ let companies =  [
         return null;
     }
 
-export {getCompanies, getCompanyById, selectCompanyInfoById};
+export {getCompaniesFromDb, getCompanyById, selectCompanyInfoById};

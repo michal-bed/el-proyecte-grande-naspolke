@@ -18,8 +18,7 @@ function CompanyInfo () {
     let {companyId} = useParams();
     useEffect(() => {
         if (companyId != null) {
-            let tempCompany = getCompanyById(companyId);
-            setCompany(tempCompany);
+            getCompanyById(companyId).then(res => {setCompany(res.data)});
             console.log("Initializing")
             console.log(company)
         }
@@ -56,9 +55,9 @@ function CompanyInfo () {
 
 
     const titleCardStyle = {
-        marginLeft: "25%",
-        marginRight: "25%",
-        minWidth: "300px",
+        marginLeft: "10%",
+        marginRight: "10%",
+        minWidth: "500px",
         marginTop: "30px",
         marginBottom: "80px"
     };
@@ -208,7 +207,7 @@ function CompanyInfo () {
         company != null && rows != null &&
             <>
             <Card style={titleCardStyle}>
-                <Typography variant="h2" align="center">
+                <Typography variant="h4" align="center">
                     {company['companyName']}<br />
                 </Typography>
             </Card>

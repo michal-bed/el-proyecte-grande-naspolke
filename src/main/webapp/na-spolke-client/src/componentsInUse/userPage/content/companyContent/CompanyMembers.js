@@ -1,8 +1,10 @@
 import {Box, Typography} from "@material-ui/core";
 import { useParams } from "react-router-dom";
-import { selectCompanyInfoById } from "../../handlers/CompanyDataHandler";
+import {getCompanyById, selectCompanyInfoById} from "../../handlers/CompanyDataHandler";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@mui/material';
 import Card from "@mui/material/Card";
+import {useEffect, useState} from "react";
+import {map} from "react-bootstrap/ElementChildren";
 
 function CompanyMembers () {
 
@@ -18,16 +20,32 @@ function CompanyMembers () {
         display: "table",
     }
 
+    const [company, setCompany] = useState(null);
+
+    useEffect(() => {
+        getCompanyById(companyId)
+            .then(res => {
+                console.log(companyId);
+                setCompany(res.data)})
+                console.log(company)
+    }, [])
+
+    function selectInfo (selectedData) {
+        return company[selectedData];
+    }
+
     const CreateCard = ({name, selectedData, headers}) => {
-        return (
-            <Card style={cardStyle}>
-                <Typography variant="h4">{name}</Typography>
-                <TableContainer component={Paper} style={tableStyle}>
-                    <CreateHeaders headers={headers} />
-                    <CreateTableData selectedData={selectedData} />
-                </TableContainer>
-            </Card>
-        )
+        if (company) {
+            return (
+                <Card style={cardStyle}>
+                    <Typography variant="h4">{name}</Typography>
+                    <TableContainer component={Paper} style={tableStyle}>
+                        <CreateHeaders headers={headers}/>
+                        <CreateTableData selectedData={selectedData}/>
+                    </TableContainer>
+                </Card>
+            )
+        }
     }
 
     const CreateHeaders = ({headers}) => {
@@ -42,27 +60,21 @@ function CompanyMembers () {
 
     const CreateTableData = ({selectedData}) => {
         const items = [];
-        console.log(selectedData)
-        const data = selectCompanyInfoById(companyId, selectedData);
+
+        const data = selectInfo(selectedData);
+
         console.log(data);
-        data.forEach(row => {
-            console.log(row);
-            items.push(
-                <TableRow>
-                    <PopulateRow row={row} />
-                </TableRow>
-            )
-        })
+        if (data) {
+
+        }
+
         return items;
     }
 
     const PopulateRow = ({row}) => {
         const items = [];
-        Object.keys(row).forEach(key => {
-            items.push(
-                <TableCell>{row[key]}</TableCell>
-            );
-        })
+
+
         return items;
     }
 
