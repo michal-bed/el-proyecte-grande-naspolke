@@ -48,6 +48,7 @@ public class RefreshTokenController {
         if (foundCookie.isPresent()) {
             Cookie cookie = foundCookie.get();
             String jwt = cookie.getValue();
+            System.out.println(jwt);
             RefreshToken foundToken = refreshTokenService.findByJwt(jwt);
 
             if (foundToken != null) {
@@ -55,17 +56,19 @@ public class RefreshTokenController {
                 UserDetails userDetails = new org.springframework.security.core.userdetails.User(
                         jwtUtil.extractUsername(jwt), foundAppUser.getUserPassword(), foundAppUser.isEnabled(),
                         true, true, true,
-                        List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                        foundAppUser.getApplicationRoles());
                 Boolean isTokenValid = jwtUtil.validateToken(jwt, userDetails);
 
-                if (isTokenValid && (Objects.equals(foundAppUser.getUserEmail(), jwtUtil.extractUsername(jwt)) ||
-                        Objects.equals(foundAppUser.getUserEmail(), jwtUtil.extractUsername(jwt)))) {
+                if (isTokenValid && Objects.equals(foundAppUser.getUserId().toString(), jwtUtil.extractUsername(jwt))) {
                     final String accessToken = jwtUtil.generateToken(userDetails, 1000 * 60 * 15);
-                    return ResponseEntity.ok().body(new AuthenticationResponse(accessToken, List.of("ROLE_USER")));
+                    return ResponseEntity.ok().body(new AuthenticationResponse(accessToken, List.of("ROLE_USER"),
+                            foundAppUser.getUserEmail()));
                 } else {
+                    System.out.println("Error 1");
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
                 }
             } else {
+                System.out.println("Error 2");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
         } else {

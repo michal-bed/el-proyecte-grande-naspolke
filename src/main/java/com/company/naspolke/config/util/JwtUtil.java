@@ -8,9 +8,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 
@@ -55,5 +57,27 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public String getJwt(String authorizationHeader) {
+        return authorizationHeader.substring(7);
+    }
+
+    public String getAuthorizationHeader(HttpServletRequest request) {
+        return request.getHeader("Authorization");
+    }
+
+    public UUID getUserId(HttpServletRequest request) {
+        final String authorizationHeader = getAuthorizationHeader(request);
+
+        String username = null;
+        String jwt = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = getJwt(authorizationHeader);
+            username = extractUsername(jwt); // uuid
+            return UUID.fromString(username);
+        }
+        return null;
     }
 }

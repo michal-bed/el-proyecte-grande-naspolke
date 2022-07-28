@@ -58,7 +58,6 @@ public class Company {
     private Set<FinancialStatementProtocol> financialStatementProtocols;
 
 
-
     @Builder
     public Company(String companyName, String krsNumber, Address address, String nip, String regon, BigDecimal shareCapital, Set<BoardMember> boardMembers, Set<BoardOfDirector> boardOfDirectors, Partners partners, boolean manySharesAllowed) {
         this.companyName = companyName;

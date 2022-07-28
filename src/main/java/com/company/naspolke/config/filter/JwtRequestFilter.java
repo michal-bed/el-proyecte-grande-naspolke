@@ -1,14 +1,13 @@
 package com.company.naspolke.config.filter;
 
-import com.company.naspolke.service.MyUserDetailsServiceImplementation;
 import com.company.naspolke.config.util.JwtUtil;
+import com.company.naspolke.service.MyUserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,7 +21,7 @@ import java.util.List;
 //@Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    List<String> EXCLUDED_PATHS = Arrays.asList("/login", "/auth");
+    List<String> EXCLUDED_PATHS = Arrays.asList("/", "/login", "/auth", "/logout", "/refresh");
 
     private MyUserDetailsServiceImplementation userDetailsService;
     private JwtUtil jwtUtil;
@@ -50,14 +49,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
-        final String authorizationHeader = request.getHeader("Authorization");
+        final String authorizationHeader = jwtUtil.getAuthorizationHeader(request);
 
         String username = null;
         String jwt = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-            username = jwtUtil.extractUsername(jwt);
+            jwt = jwtUtil.getJwt(authorizationHeader);
+            username = jwtUtil.extractUsername(jwt); // uuid
         }
 
         if (username != null && (SecurityContextHolder.getContext().getAuthentication()
@@ -79,4 +78,5 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
+
 }

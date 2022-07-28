@@ -14,5 +14,5 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     RefreshToken findByAppUser(AppUser appUser);
     @Modifying
     @Query("UPDATE RefreshToken rt SET rt.jwt = ?1 WHERE rt.appUser = ?2")
-    void updateJwtByUser(String jwt, AppUser appUser);
+    void updateJwtByAppUser(String jwt, AppUser appUser);
 }

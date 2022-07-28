@@ -12,13 +12,13 @@ const ChangeRole = () => {
     const [isOpenForChanged, setIsOpenForChanged] = useState(false);
     const backToPreviousChangedState = () => setIsOpenForChanged(false);
 
-    const [KRSNumber, setKRSNumber] = useState('');
+    const [companyId, setCompanyId] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [roleType, setRoleType] = useState('');
 
     const Change = (e) => {
         e.preventDefault();
-        const userData = {KRSNumber, userEmail, roleType};
+        const userData = {companyId, userEmail, roleType};
         fetch("http://localhost:8080/change-role", {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
@@ -40,8 +40,8 @@ const ChangeRole = () => {
         <div className="add-new-member-to-company-div">
             <Container className="add-new-member">
                 <form className="form-control" onSubmit={Change}>
-                    <Form.Control className="krs-input" type="text" placeholder="Numer KRS..." value={KRSNumber} required={true}
-                                  onChange={(e) => setKRSNumber(e.target.value)}/>
+                    <Form.Control className="id-input" type="text" placeholder="Id spółki..." value={companyId} required={true}
+                                  onChange={(e) => setCompanyId(e.target.value)}/>
                     <Form.Control className="email-input" type="text" placeholder="Email..." value={userEmail} required={true}
                                   onChange={(e) => setUserEmail(e.target.value)}/>
                     <input type="radio" name="role-type" value="OWNER" checked={roleType === "OWNER"}

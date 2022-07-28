@@ -3,13 +3,15 @@ import DraftsIcon from "@mui/icons-material/Drafts";
 import {Link, matchPath, useLocation, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
+import { Typography, Box } from "@material-ui/core";
+
 
 
 
 export default function Sidebar () {
 
     const [windowWidth, setWindowWidth] = useState(undefined);
-    const [windowWidthCheck, setWindowWidthCheck] = useState(true);
+    const [windowWidthCheck, setWindowWidthCheck] = useState(false);
 
     useEffect(() => {
         function handleResize() {
@@ -24,25 +26,35 @@ export default function Sidebar () {
         window.addEventListener('resize', handleResize);
     })
 
-
-
     function PopulateNavbar () {
-        const location = useLocation();
-        const match = matchPath(location.pathname, "/userpanel")
-
         const {companyId} = useParams();
-        console.log(companyId + " fkoawekfo");
 
-        if (match == null) {
+        if (companyId != null) {
             return (
-                <SubMenu title="komponent 1" icon={<DocumentScannerIcon/>}>
+                <>
                     <MenuItem icon={<DraftsIcon/>}>
-                        {companyId} <Link to={"/userpanel/" + companyId}/>
+                        Twoja Spółka <Link to={"/userpanel/company/" + companyId}/>
                     </MenuItem>
-                </SubMenu>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        Ludzie Spółki <Link to={"/userpanel/company/" + companyId + "/members"}/>
+                    </MenuItem>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        Zaproś do Spółki <Link to={"/userpanel/company/" + companyId + "/invite"}/>
+                    </MenuItem>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        Wygeneruj Dokument <Link to={"/userpanel/company/" + companyId + "/generate"}/>
+                    </MenuItem>
+                    <MenuItem icon={<DraftsIcon/>}>
+                        {companyId} <Link to={"/userpanel/company/" + companyId}/>
+                    </MenuItem>
+                </>
             );
         } else {
-            return null;
+            return (
+                <SidebarHeader>
+                    Wybierz Spółkę
+                </SidebarHeader>
+            );
         }
     }
 
@@ -50,7 +62,9 @@ export default function Sidebar () {
         <ProSidebar collapsed={windowWidthCheck}>
 
             <SidebarHeader>
-                naspolke
+                <Typography align="center" variant="h4">
+                    naspolke
+                </Typography>
             </SidebarHeader>
 
             <SidebarContent>
@@ -58,6 +72,14 @@ export default function Sidebar () {
 
                     <MenuItem icon={<DraftsIcon/>}>
                         Wybór Spółki <Link to={"/userpanel"}/>
+                    </MenuItem>
+
+                    <MenuItem icon={<DraftsIcon/>}>
+                        Dołącz do Spółki <Link to={"/userpanel/join"}/>
+                    </MenuItem>
+
+                    <MenuItem icon={<DraftsIcon/>}>
+                        Dodaj Spółkę <Link to={"/userpanel/add"}/>
                     </MenuItem>
 
                     <hr />
@@ -68,7 +90,7 @@ export default function Sidebar () {
             </SidebarContent>
 
             <SidebarFooter>
-                krzysiek
+                naspolke.com
             </SidebarFooter>
         </ProSidebar>
     )

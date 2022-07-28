@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-/** 
+/**
   All of the routes for the Material Kit 2 React React are added here,
   You can add a new route, customize the routes and delete the routes here.
 
@@ -39,200 +39,109 @@ Coded by www.creative-tim.com
 // @mui material components
 import Icon from "@mui/material/Icon";
 
-// @mui icons
-import GitHubIcon from "@mui/icons-material/GitHub";
-
-import KitComponentSection from "./componentsInUse/kitComponentSection/KitComponentSection";
+// website components
 import Registration from "./componentsInUse/registration/Registration";
 import Login from "./componentsInUse/login/Login";
+import Cockpit from "./componentsInUse/userPage/cockpit";
+import useAuth from "./hooks/useAuth";
 
-// Sections
+
+function Routes(){
+
+    let userRoutes = []
+    const auth = useAuth()
+    const obj = auth[Object.keys(auth)[0]]
+  console.log(obj)
+    const objArr = Object.values(obj)
+    if (Object.values(obj).length === 0) {
+      userRoutes =
+        {
+          name: "Konto",
+          collapse: [
+            {
+              name: "Logowanie",
+              route: "/login",
+              component: <Login/>
+            },
+            {
+              name: "Rejestracja",
+              route: "/register",
+              component: <Registration/>
+            },
+          ],
+        }
+
+    }
+
+    else {
+      userRoutes =
+        {
+          name: "Konto",
+          collapse: [
+            {
+              name : `Zalogowany jako: ${objArr[0]}`
+            },
+            {
+              name: "Kokpit",
+              description: `Zalogowany jako ${objArr[0]}`,
+              route: "/userpanel",
+              component: <Cockpit/>
+            },
+            {
+              name: "Wyloguj",
+              route: "/logout",
+              component: <Login/>
+            }
+          ],
+        }
+    }
 
 
-const routes = [
-  {
-    name: "Użytkownik",
-    icon: <Icon>account_circle</Icon>,
-    columns: 1,
-    rowsPerColumn: 2,
-    collapse: [
+  return [
+    {
+      name: "Użytkownik",
+      icon: <Icon>account_circle</Icon>,
+      columns: 1,
+      rowsPerColumn: 3,
+      collapse: [userRoutes]
+    },
+    {
+      name: "Informacje",
+      icon: <Icon>help</Icon>,
+      collapse: [
+        {
+          name: "O nas",
+          href: "/#o_nas",
 
-      {
-        name: "Konto",
-        collapse: [
-          {
-            name: "Logowanie",
-            route: "/login",
-            component: <Login />
-          },
-          {
-            name: "Rejestracja",
-            route: "/registration",
-            component: <Registration />
-          }
-        ],
-      },
-    ],
-  },
-  {
-    name: "sections",
-    icon: <Icon>help</Icon>,
-    collapse: [
-          {
-            name: "O nas",
-            href: "#o_nas",
+        },
+        {
+          name: "Usługi",
+          href: "/#uslugi",
+        },
+        {
+          name: "Oferta",
+          href: "/#oferta",
+        },
+        {
+          name: "Cennik",
+          href: "/#cennik"
+        },
+        {
+          name: "Dodaj spółkę",
+          href: "/add-company",
+        },
+        {
+          name: "FAQ",
+          route: "/faq",
+        },
+        {
+          name: "Regulamin",
+          route: "/statute",
+        },
+      ],
+    },
+  ];
+}
 
-          },
-          {
-            name: "Usługi",
-            href: "#uslugi",
 
-      },
-      {
-        name: "Dodaj spółkę",
-        href: "/add-company",
-
-      },
-      {
-        name: "navigation",
-        description: "See all navigations",
-        dropdown: true,
-        collapse: [
-          {
-            name: "navbars",
-            route: "/sections/navigation/navbars",
-
-          },
-          {
-            name: "nav tabs",
-            route: "/sections/navigation/nav-tabs",
-
-          },
-          {
-            name: "pagination",
-            route: "/sections/navigation/pagination",
-
-          },
-        ],
-      },
-      {
-        name: "input areas",
-        description: "See all input areas",
-        dropdown: true,
-        collapse: [
-          {
-            name: "inputs",
-            route: "/sections/input-areas/inputs",
-
-          },
-          {
-            name: "forms",
-            route: "/sections/input-areas/forms",
-
-          },
-        ],
-      },
-      {
-        name: "attention catchers",
-        description: "See all examples",
-        dropdown: true,
-        collapse: [
-          {
-            name: "alerts",
-            route: "/sections/attention-catchers/alerts",
-
-          },
-          {
-            name: "modals",
-            route: "/sections/attention-catchers/modals",
-
-          },
-          {
-            name: "tooltips & popovers",
-            route: "/sections/attention-catchers/tooltips-popovers",
-
-          },
-        ],
-      },
-      {
-        name: "elements",
-        description: "See all 32 examples",
-        dropdown: true,
-        collapse: [
-          {
-            name: "avatars",
-            route: "/sections/elements/avatars",
-
-          },
-          {
-            name: "badges",
-            route: "/sections/elements/badges",
-
-          },
-          {
-            name: "breadcrumbs",
-            route: "/sections/elements/breadcrumbs",
-
-          },
-          {
-            name: "buttons",
-            route: "/sections/elements/buttons",
-
-          },
-          {
-            name: "dropdowns",
-            route: "/sections/elements/dropdowns",
-
-          },
-          {
-            name: "progress bars",
-            route: "/sections/elements/progress-bars",
-
-          },
-          {
-            name: "toggles",
-            route: "/sections/elements/toggles",
-
-          },
-          {
-            name: "typography",
-            route: "/sections/elements/typography",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    name: "docs",
-    icon: <Icon>article</Icon>,
-    collapse: [
-      {
-        name: "getting started",
-        description: "All about overview, quick start, license and contents",
-        href: "https://www.creative-tim.com/learning-lab/react/quick-start/material-kit/",
-      },
-      {
-        name: "foundation",
-        description: "See our colors, icons and typography",
-        href: "https://www.creative-tim.com/learning-lab/react/colors/material-kit/",
-      },
-      {
-        name: "components",
-        description: "Explore our collection of fully designed components",
-        href: "https://www.creative-tim.com/learning-lab/react/alerts/material-kit/",
-      },
-      {
-        name: "plugins",
-        description: "Check how you can integrate our plugins",
-        href: "https://www.creative-tim.com/learning-lab/react/datepicker/material-kit/",
-      },
-    ],
-  },
-  {
-    name: "github",
-    icon: <GitHubIcon />,
-    href: "https://www.github.com/creativetimofficial/material-kit-react",
-  },
-];
-
-export default routes;
+export default Routes

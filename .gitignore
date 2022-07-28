@@ -34,7 +34,9 @@ build/
 !/src/main/resources/application.properties
 
 src/main/resources/application.properties
-/node_modules/
+
+src/main/webapp/na-spolke-client/.env
+
 /node_modules/
 /src/main/webapp/na-spolke-client/.env
 /src/main/resources/drafts/financialStatements/iTextHelloWorld.pdf

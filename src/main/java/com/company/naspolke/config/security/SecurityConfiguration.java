@@ -2,8 +2,11 @@ package com.company.naspolke.config.security;
 
 import com.company.naspolke.config.filter.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,9 +19,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -33,6 +38,8 @@ public class SecurityConfiguration {
     private UserDetailsService userDetailsService;
     @Resource
     private AuthenticationManagerBuilder auth;
+    @Autowired
+    private CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     @Autowired
     public SecurityConfiguration(JwtRequestFilter jwtRequestFilter) {
@@ -49,12 +56,19 @@ public class SecurityConfiguration {
         http.authorizeRequests()
                 .mvcMatchers("/").permitAll()
                 .mvcMatchers("/auth").permitAll()
-                //.anyRequest().denyAll()
-                .anyRequest().permitAll();
+                .mvcMatchers("/refresh").permitAll()
+                .mvcMatchers("/registration").permitAll()
+                .mvcMatchers("/send-request-for-membership/**").permitAll()
+
+                // .anyRequest().denyAll()
+                 .anyRequest().permitAll();
+//                .anyRequest().authenticated();
         http.exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.cors();
         http.csrf().disable();
+        http.logout().logoutUrl("/logout").permitAll();
+        http.logout().logoutSuccessHandler(customLogoutSuccessHandler);
         http.authenticationManager(authenticationManager());
         http.addFilterAfter(jwtRequestFilter, AnonymousAuthenticationFilter.class);
         return http.getOrBuild();
@@ -79,17 +93,26 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public // FilterRegistrationBean<CorsFilter>
+        CorsConfigurationSource
+    corsConfigurationSource() {
         final CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001",
+                "http://localhost:3000/", "http://localhost:3001/", "http://localhost:8080/",
+                "http://localhost:8080/logout"));
+//        config.setAllowedOrigins("*");
         config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
         config.setAllowCredentials(true);
-        config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type",
+                "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
+//        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
+//        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+//        return bean;
         return source;
     }
 }

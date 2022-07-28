@@ -1,10 +1,11 @@
 import './App.css';
 
+import SignIn from "./componentsInUse/login/index";
+import RegistrationBasic from "./componentsInUse/registration/index"
 import Layout from './componentsInUse/Layout';
-import Login from './componentsInUse/login/Login';
+import Logout from './componentsInUse/Logout';
 import Presentation from "./componentsInUse/pageWithKit"
 import {Route, Routes} from "react-router-dom";
-import Registration from "./componentsInUse/registration/Registration";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import theme from "./assets/theme";
 import AddMember from "./componentsInUse/ownerPanel/AddMember";
@@ -12,29 +13,43 @@ import DeleteMember from "./componentsInUse/ownerPanel/DeleteMember";
 import ChangeRole from "./componentsInUse/ownerPanel/ChangeRole";
 import AddCompany from "./componentsInUse/addCompany/AddCompany";
 import Cockpit from './componentsInUse/userPage/cockpit';
+import RequestForMembership from "./componentsInUse/requestToCompany/RequestForMembership";
+import RequireAuth from "./componentsInUse/login/RequireAuth";
+import Unauthorized from "./componentsInUse/login/Unaurthorized";
+import PersistLogin from "./componentsInUse/login/PersistLogin";
+import Statute from "./componentsInUse/statute/Statute"
 import FinancialStatement from "./componentsInUse/generateDocuments/financialStatement/FinancialStatement";
 
 
 function App() {
+    return (<ThemeProvider theme={theme}>
+        <CssBaseline/>
+        <Routes>
+            <Route path="/" element={<Layout/>}>
+                {/* public routes */}
+                <Route path="/" element={<Presentation site="index"/> }/>
+                <Route path="faq" element={<Presentation site="faq"/>}/>
+                <Route path="statute" element={<Presentation site="statute"/>}/>
+                <Route path="login" element={<SignIn />}/>
+                <Route path="logout" element={<Logout/>}/>
+                <Route path="register" element={<RegistrationBasic/>}/>
 
-    return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <Routes>
-                <Route path="/" element={<Layout/>}>
-                    {/* public routes */}
-                    <Route path="/" element={<Presentation/>}/>
-                    <Route path="login" element={<Login/>}/>
-                    <Route path="register" element={<Registration/>}/>
-                    <Route path="add-member" element={<AddMember/>}/>
-                    <Route path="delete-member" element={<DeleteMember/>}/>
-                    <Route path="change-role" element={<ChangeRole/>}/>
-                    <Route path="add-company" element={<AddCompany/>}/>
-                    <Route path="userpanel/*" element={<Cockpit />} />
-                    <Route path="generate/financial-statements" element={<FinancialStatement />} />
+                <Route path="unauthorized" element={<Unauthorized />} />
+
+                {/* we want to protect these routes */}
+                <Route element={<PersistLogin/>}>
+                    <Route element={<RequireAuth allowedRoles={["ROLE_USER"]}/>}>
+                        <Route path="add-member" element={<AddMember/>}/>
+                        <Route path="delete-member" element={<DeleteMember/>}/>
+                        <Route path="change-role" element={<ChangeRole/>}/>
+                        <Route path="add-company" element={<AddCompany/>}/>
+                        <Route path="userpanel/*" element={<Cockpit/>}/>
+                        <Route path="generate/financial-statements" element={<FinancialStatement />} />
+                    </Route>
                 </Route>
-            </Routes>
-        </ThemeProvider>);
+            </Route>
+        </Routes>
+    </ThemeProvider>)
 }
 
 export default App;

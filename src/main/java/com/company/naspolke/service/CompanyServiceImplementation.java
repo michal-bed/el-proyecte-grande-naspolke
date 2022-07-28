@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -94,6 +95,13 @@ public class CompanyServiceImplementation implements CompanyService {
     public Optional<Company> getCompanyByKrsNumber(String krsNumber) {
         return Optional.ofNullable(companyRepository.findByKrsNumber(krsNumber));
     }
+    @Override
+    public Optional<Company> getCompanyByCompanyId(UUID companyId) {
+        return Optional.ofNullable(companyRepository.findByCompanyId(companyId));
+    }
 
-
+    @Override
+    public List<Company> findAll() {
+        return companyRepository.findAll();
+    }
 }
