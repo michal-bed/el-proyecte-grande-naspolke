@@ -7,11 +7,16 @@ import {Company} from "../../classes/company/Company";
 import Axios from "axios";
 import {Box} from "@mui/material";
 import CompanyContextProvider from "./companyForm/CompanyContext";
+import {useLocation, useNavigate} from "react-router-dom";
 
 
 const AddCompany = ()=>{
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
     const [hideKrsInput, setHideKrsInput] = useState("block")
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/userpanel";
+
 
     const hideModal = () => {
       setCompanyDataForm(<div/>);
@@ -49,7 +54,10 @@ const AddCompany = ()=>{
         Axios.post("http://localhost:8080/add-company/",data)
             .then(response=> {
                 if (response.status===201) {
-                    alert(`Spółka ${response.data} została pomyślnie dodana`)
+                    alert(`Spółka ${response.data} została pomyślnie dodana`);
+                    setTimeout(()=> {
+                        navigate(from, { replace:true })
+                    }, 1000)
                 }
             })
             .catch(error=>{

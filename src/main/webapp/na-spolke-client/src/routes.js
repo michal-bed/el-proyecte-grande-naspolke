@@ -62,7 +62,7 @@ const routes = [
         collapse: [
           {
             name: "Logowanie",
-            route: "/log-in",
+            route: "/login",
             component: <Login />
           },
           {
