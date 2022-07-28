@@ -34,7 +34,7 @@ function PricingContent() {
                     Cennik
                 </Typography>
                 <Typography variant="h5" align="center" color="text.secondary" component="p">
-                    Przedstawione ponieżej kwoty przedstawiają opłatę pobieraną co miesiąc za korzystanie z usługi
+                    Przedstawione ponieżej kwoty przedstawiają opłatę pobieraną co miesiąc za korzystanie z naszej usługi.
                 </Typography>
             </Container>
             {/* End hero unit */}

@@ -33,15 +33,14 @@ function Page ({classes}) {
                 <Route path="/" element={<Subpage component={<MainCockpitPage/>}/>}/>
                 <Route path="/join" element={<Subpage component={<RequestJoin/>}/>}/>
                 <Route path="/add" element={<Subpage component={<AddCompany/>}/>}/>
-                {/*<Route path="/request-for-membership" element={<RequestForMembership/>}/>*/}
                 <Route path="/company/:companyId/*">
                     <Route path="" element={<Subpage component={<CompanyInfo />}/>}/>
                     <Route path="members" element={<Subpage component={<CompanyMembers/>}/>}/>
-                    <Route path="invite/*">
-                        <Route path="" element={<Subpage component={<CompanyInvitePage/>}/>}/>
-                        <Route path="success" element={<Subpage component={<InviteSuccess/>}/>}/>
-                        <Route path="fail" element={<Subpage component={<InviteFail/>}/>}/>
-                    </Route>
+                    {/*<Route path="invite" >*/}
+                    <Route path="invite" element={<Subpage component={<CompanyInvitePage/>}/>}/>
+                        {/*<Route path="success" element={<Subpage component={<InviteSuccess/>}/>}/>*/}
+                        {/*<Route path="fail" element={<Subpage component={<InviteFail/>}/>}/>*/}
+                    {/*</Route>*/}
                     <Route path="generate" element={<Subpage component={<GenerateDocument/>}/>}/>
                 </Route>
             </Routes>

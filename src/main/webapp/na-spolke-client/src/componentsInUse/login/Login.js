@@ -61,6 +61,7 @@ const Login = () => {
             setUser(email);
             // console.log(user);
             togglePersist(checkboxRef.current);
+
             navigate(from, { replace: true });
         } catch (err) {
             console.log(err);

@@ -57,6 +57,7 @@ public class SecurityConfiguration {
                 .mvcMatchers("/").permitAll()
                 .mvcMatchers("/auth").permitAll()
                 .mvcMatchers("/refresh").permitAll()
+                .mvcMatchers("/registration").permitAll()
                 .mvcMatchers("/send-request-for-membership/**").permitAll()
                 .mvcMatchers("/update-company-address").authenticated()
                 .mvcMatchers("/companies/search/updateCompanyName").authenticated()

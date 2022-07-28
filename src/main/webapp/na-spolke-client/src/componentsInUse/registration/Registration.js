@@ -51,9 +51,11 @@ const Registration = () => {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(userData)
             }).then(response => {
+                console.log(userData)
             if (response.status === 200) {
                 setIsOpenForCreatedUser(true);
                 navigate(from, { replace: true });
+                console.log(response.blob())
                 return response.blob();
             } else {
                 setIsOpenForUser(true);

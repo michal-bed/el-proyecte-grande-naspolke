@@ -10,11 +10,13 @@ const Notification = ({ messages }) => {
                 <div id={`message${message.messageId}`} key={index}>
                     <h5>Otrzymana od {message.emailSender}</h5>
                     <p>{message.messageText} {message.companyId}</p>
-                    {message.hasRead === true && <DeleteNotificationButton messageId={message.messageId}
-                        emailSender={message.emailSender} krsNumber={message.krsNumber}/>}
+                    {message.hasRead === true && <DeleteNotificationButton messageId={message.messageId}/>}
+                    {(message.hasRead === false && message.membershipRequest === false && message.membershipInvitation === false) &&
+                        <DeleteNotificationButton messageId={message.messageId}/>}
                     {(message.hasRead === false && message.membershipRequest === true) &&
-                        <AcceptDenyRequestButton messageId={message.messageId}
-                        emailSender={message.emailSender} krsNumber={message.krsNumber}/>}
+                        <AcceptDenyRequestButton message={message}/>}
+                    {(message.hasRead === false && message.membershipInvitation === true) &&
+                        <AcceptDenyRequestButton message={message}/>}
                 </div>))}
         </div>
     )
