@@ -1,7 +1,7 @@
 import {Card, Grid, Typography} from '@material-ui/core';
 import {Box, CardHeader} from "@mui/material";
 import {Link} from "react-router-dom";
-import {getCompanies} from "../handlers/CompanyDataHandler";
+import {getCompanies, getCompaniesFromDb} from "../handlers/CompanyDataHandler";
 import {useEffect, useState} from "react";
 
 function MainCockpitPage () {
@@ -24,30 +24,8 @@ function MainCockpitPage () {
 
 
     useEffect(() => {
-
-        console.log("useEffect");
-        const getData = async () => {
-                return await getCompanies();
-
-        };
-        const setData = async () => {
-            try {
-                if (!isDoneLoading) {
-                    const companies = await getData();
-                    setCompanies(companies);
-                    setCompanies(JSON.parse(sessionStorage.getItem("companies")))
-                    setIsDoneLoading(true);
-                }
-            }
-            catch (e)
-            {
-                console.log("Error: " + e);
-            }
-        }
-
-        setData().then(r => {console.log(`Successful fetch. isDoneLoading: ${isDoneLoading}`)});
-
-    }, [isDoneLoading]
+        getCompaniesFromDb().then(res => (setCompanies(res.data)))
+    }, []
     );
 
 
@@ -73,7 +51,6 @@ function MainCockpitPage () {
             })
             return items;
         }
-        console.log("olololool" + items)
         return items;
     }
 
@@ -94,20 +71,7 @@ function MainCockpitPage () {
                     </Box>
                     <Box sx={{p: 3}}>
                         <Grid container spacing={5} justifyContent="center">
-                            {
-                                companies !== undefined &&
-                                    companies.map((company) =>
-                                        (<Link to={"/userpanel/company/" + company['companyId']} key={company['companyId']}>
-                                            <Card style={cardStyle}>
-                                                <CardHeader
-                                                    title={company['companyName']}
-                                                />
-                                                <Typography align='left' style={descriptionStyle}>
-                                                    KRS: {company['krsNumber']}
-                                                </Typography>
-                                            </Card>
-                                        </Link>))
-                                }
+                            <PlaceCompanyCards />
                         </Grid>
                     </Box>
                 </Box>
