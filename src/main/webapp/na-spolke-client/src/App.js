@@ -40,8 +40,6 @@ function App() {
                         <Route path="change-role" element={<ChangeRole/>}/>
                         <Route path="add-company" element={<AddCompany/>}/>
                         <Route path="userpanel/*" element={<Cockpit/>}/>
-                        <Route path="request-for-membership" element={<RequestForMembership/>}/>
-
                     </Route>
                 </Route>
             </Route>

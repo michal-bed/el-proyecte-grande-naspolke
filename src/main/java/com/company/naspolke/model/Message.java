@@ -27,6 +27,7 @@ public class Message {
     private LocalDateTime messageDate;
     private boolean hasRead;
     private boolean membershipRequest;
+    private boolean membershipInvitation;
     @ManyToOne
     private AppUser appUser;
 
