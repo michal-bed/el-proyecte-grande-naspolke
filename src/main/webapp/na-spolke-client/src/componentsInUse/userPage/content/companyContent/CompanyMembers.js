@@ -81,15 +81,15 @@ function CompanyMembers () {
         const items = [];
         const test = [];
         Object.keys(row).forEach(key => {
-            if (key !== "boardMemberId" && key !== "id" ) {
+            if (key !== "boardMemberId" && key !== "id" && key !== "boardOfDirectorId") {
                 test.push(key);
                 items.push(
                     <TableCell>{row[key] ?? "[Brak]"}</TableCell>
                 );
-
             }
-            //
         })
+        console.log(row)
+        console.log(test)
         return items;
     }
 
@@ -100,14 +100,14 @@ function CompanyMembers () {
     return (
         <Box style={boxStyle}>
             <CreateCard
-                name="Członkowie Rady"
+                name="Członkowie Rady Nadzorczej"
                 selectedData="boardMembers"
                 headers={["Imię", "Drugie imię", "Nazwisko", "Drugie nazwisko", "Rola"]}
             />
             <CreateCard
-                name="Dyrektorzy"
+                name="Członkowie Zarządu"
                 selectedData="boardOfDirectors"
-                headers={["Imię", "Nazwisko", "Adres"]}
+                headers={["Imię", "Drugie Imię", "Nazwisko", "Drugie Nazwisko"]}
             />
             <CreateCard
                 name="Wspólnicy (Osoby)"
