@@ -1,4 +1,4 @@
-import {useRef, useState} from 'react';
+import {useLayoutEffect, useRef, useState} from 'react';
 import useAuth from '../../hooks/useAuth';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {useFormik} from "formik";
@@ -10,7 +10,7 @@ import AESEncrypt from "../../util/AESEncrypt";
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import {FormControlLabel, IconButton, InputAdornment} from "@mui/material";
+import {CircularProgress, FormControlLabel, IconButton, InputAdornment} from "@mui/material";
 import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 // Material Kit 2 React components
@@ -44,9 +44,19 @@ function SignInBasic() {
     const errRef = useRef();
 
     const [errMsg, setErrMsg] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    useLayoutEffect(() => {
+        let registrationForm = document.getElementById("user-login-form");
+        if (isLoading) {
+            registrationForm.style.opacity = "0.5";
+        }
+        if (!isLoading) {
+            registrationForm.style.opacity = "1";
+        }
+    }, [isLoading]);
 
     const customHandleSubmit = async (values) => {
-
+        setIsLoading(true);
         try {
             const response = await axios.post(LOGIN_URL,
                 JSON.stringify({ username: values.email, password: values.password }),
@@ -64,11 +74,12 @@ function SignInBasic() {
 
             localStorage.setItem("user", AESEncrypt(email));
             setUser(email);
-
+            setIsLoading(false);
             togglePersist(formik.values.trustDevice);
             navigate(from, { replace: true });
         } catch (err) {
             console.log(err)
+            setIsLoading(false);
             if (!err?.response) {
                 setErrMsg('Brak odpowiedzi serwera');
             } else if (err.response?.status === 400) {
@@ -166,7 +177,7 @@ function SignInBasic() {
                       {errMsg}
                   </MKTypography>
 
-                <MKBox >
+                <MKBox id="user-login-form">
                     <form onSubmit={formik.handleSubmit}>
                   <MKBox mb={2}>
                     <MKInput
@@ -230,9 +241,11 @@ function SignInBasic() {
 
                   </MKBox>
                   <MKBox mt={4} mb={1}>
+                      {isLoading ?
+                          <CircularProgress style={{ position: 'absolute', top: '45%', left: '45%'}} color="black"/> :
                     <MKButton type="submit" variant="gradient" color="info" fullWidth>
                       Zaloguj się
-                    </MKButton>
+                    </MKButton>}
                   </MKBox>
                   <MKBox mt={3} mb={1} textAlign="center">
                     <MKTypography variant="button" color="text">

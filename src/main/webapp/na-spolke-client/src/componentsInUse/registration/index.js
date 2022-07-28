@@ -1,4 +1,4 @@
-import {useRef, useState} from "react";
+import {useLayoutEffect, useRef, useState} from "react";
 
 // react-router-dom components
 import {Link, useLocation, useNavigate} from "react-router-dom";
@@ -26,7 +26,7 @@ import Routes from "../../routes";
 // Images
 import bgImage from "../../assets/images/bg-sign-in-basic.jpeg"
 import axios from "../../api/axios";
-import {FormControlLabel, IconButton, InputAdornment} from "@mui/material";
+import {Box, CircularProgress, FormControlLabel, IconButton, InputAdornment, LinearProgress} from "@mui/material";
 import * as Yup from "yup";
 import {useFormik} from "formik";
 import {Visibility, VisibilityOff} from "@material-ui/icons";
@@ -52,10 +52,21 @@ function RegistrationBasic() {
     const errRef = useRef();
     const [errMsg, setErrMsg] = useState('');
 
+    const [isLoading, setIsLoading] = useState(false);
+    useLayoutEffect(() => {
+        let registrationForm = document.getElementById("new-user-register-form");
+        if (isLoading) {
+            registrationForm.style.opacity = "0.5";
+        }
+        if (!isLoading) {
+            registrationForm.style.opacity = "1";
+        }
+    }, [isLoading]);
 
     const customHandleSubmit = async (values) => {
-
+        setIsLoading(true);
         try {
+
             let userData = { userName: values.name, userSurname: values.surname, userEmail: values.email, userPassword: values.password, statute: values.agreed };
             console.log(userData)
 
@@ -66,14 +77,13 @@ function RegistrationBasic() {
                     withCredentials: true
                 }
             );
-
+            setIsLoading(false);
             navigate(from, { replace: true });
         } catch (err) {
             console.log(err)
-
+            setIsLoading(false);
             if (!err?.response) {
                 setErrMsg('Brak odpowiedzi serwera');
-
             } else if (err.response?.status === 401) {
                 setErrMsg('Brak dostępu');
             } else if (err.response?.status === 400) {
@@ -177,7 +187,7 @@ function RegistrationBasic() {
                                   {errMsg}
                               </MKTypography>
 
-                              <MKBox >
+                              <MKBox id="new-user-register-form">
                                   <form onSubmit={formik.handleSubmit}>
                                       <MKBox mb={2}>
                                           <MKInput
@@ -311,11 +321,13 @@ function RegistrationBasic() {
                                       />
                                           <MKTypography color="error" variant="caption"> {formik.touched.agreed && formik.errors.agreed}</MKTypography>
                                       </MKBox>
+                                      {isLoading ?
+                                            <CircularProgress style={{ position: 'absolute', top: '45%', left: '45%'}} color="black"/> :
                                       <MKBox mt={4} mb={1}>
-                                          <MKButton type="submit" variant="gradient" color="info" fullWidth>
+                                          <MKButton type="submit" variant="gradient" color="info" fullWidth disabled={isLoading}>
                                               Zarejestruj się
                                           </MKButton>
-                                      </MKBox>
+                                      </MKBox>}
                                       <MKBox mt={3} mb={1} textAlign="center">
                                           <MKTypography variant="button" color="text">
                                               Masz konto?{" "}
