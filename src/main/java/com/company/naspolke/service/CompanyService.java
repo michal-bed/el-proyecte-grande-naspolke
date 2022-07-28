@@ -1,5 +1,6 @@
 package com.company.naspolke.service;
 
+import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
 import org.springframework.http.ResponseEntity;
 
@@ -16,4 +17,6 @@ public interface CompanyService {
     Company saveCompany(Company company);
     ResponseEntity<String> buildSaveResponse(Company company);
     List<Company> findAll();
+    void updateAddressById(Address address, UUID companyId);
+
 }

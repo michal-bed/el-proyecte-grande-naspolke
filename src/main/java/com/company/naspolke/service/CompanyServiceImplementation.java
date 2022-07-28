@@ -1,6 +1,7 @@
 package com.company.naspolke.service;
 
 import com.company.naspolke.helpers.adapters.MonoStringToCompanyAdapter;
+import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.repository.CompanyRepository;
 import com.company.naspolke.webclient.krs.KrsClient;
@@ -65,7 +66,9 @@ public class CompanyServiceImplementation implements CompanyService {
                     .regon(company.getRegon())
                     .shareCapital(company.getShareCapital())
                     .boardMembers(company.getBoardMembers())
+                    .boardMembersTerm(company.getBoardMembersTerm())
                     .boardOfDirectors(company.getBoardOfDirectors())
+                    .boardOfDirectorsTerm(company.getBoardOfDirectorsTerm())
                     .partners(company.getPartners())
                     .manySharesAllowed(company.isManySharesAllowed())
                     .build();
@@ -98,4 +101,10 @@ public class CompanyServiceImplementation implements CompanyService {
     public List<Company> findAll() {
         return companyRepository.findAll();
     }
+
+    @Override
+    public void updateAddressById(Address address, UUID companyId) {
+        companyRepository.updateAddressById(address, companyId);
+    }
+
 }

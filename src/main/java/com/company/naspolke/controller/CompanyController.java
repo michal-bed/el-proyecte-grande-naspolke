@@ -3,6 +3,7 @@ package com.company.naspolke.controller;
 import com.company.naspolke.config.util.JwtUtil;
 import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.Role;
+import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.types.RoleType;
 import com.company.naspolke.service.AppUserService;
@@ -104,5 +105,48 @@ public class CompanyController {
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company");
         }
+    }
+
+    @PatchMapping(value = "/update-company-address")
+    public void updateAddressInCompany(@RequestBody ObjectNode objectNode) {
+        UUID companyId = UUID.fromString(objectNode.get("companyId").asText());
+        Address companyAddress = companyService.getCompanyByCompanyId(companyId).get().getAddress();
+        var streetName = objectNode.get("streetName").asText();
+        if (streetName != null)
+        {
+            companyAddress.setStreetName(streetName);
+            companyService.updateAddressById(companyAddress, companyId);
+        }
+        var streetNumber = objectNode.get("streetNumber").asText();
+        if (streetNumber != null)
+        {
+            companyAddress.setStreetNumber(streetNumber);
+            companyService.updateAddressById(companyAddress, companyId);
+        }
+        var localNumber = objectNode.get("localNumber").asText();
+        if (localNumber != null)
+        {
+            companyAddress.setLocalNumber(localNumber);
+            companyService.updateAddressById(companyAddress, companyId);
+        }
+        var city = objectNode.get("city").asText();
+        if (city != null)
+        {
+            companyAddress.setCity(city);
+            companyService.updateAddressById(companyAddress, companyId);
+        }
+        var zipCode = objectNode.get("zipCode").asText();
+        if (zipCode != null)
+        {
+            companyAddress.setZipCode(zipCode);
+            companyService.updateAddressById(companyAddress, companyId);
+        }
+        var postOffice = objectNode.get("postOffice").asText();
+        if (postOffice != null)
+        {
+            companyAddress.setPostOffice(postOffice);
+            companyService.updateAddressById(companyAddress, companyId);
+        }
+
     }
 }

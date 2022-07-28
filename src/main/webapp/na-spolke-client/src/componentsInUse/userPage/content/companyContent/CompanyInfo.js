@@ -342,7 +342,8 @@ function CompanyInfo () {
                                     {generateIcons(rows.find(row => row.id === "shareCapital"))}
                                 </TableRow>
                                 {/*rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"] == null ||*/}
-                                {   rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"] == null ||
+                                {
+                                    // rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"] == null ||
                                 rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"] === true ?
                                     <TableRow>
                                         <TableCell>
