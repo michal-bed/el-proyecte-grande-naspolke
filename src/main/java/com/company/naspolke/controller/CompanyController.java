@@ -96,7 +96,7 @@ public class CompanyController {
 
     @GetMapping(value = "/find-company-to-membership-request/{krsNumber}", produces = {"application/json"})
     public ResponseEntity<Company> getCompanyDetails(@PathVariable String krsNumber) {
-        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(krsNumber));
+        Optional<Company> company = companyService.getCompanyByKrsNumber(krsNumber);
         if (company.isPresent()) {
             return ResponseEntity.ok(company.get());
         } else {

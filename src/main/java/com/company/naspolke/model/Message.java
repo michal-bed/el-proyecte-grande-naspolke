@@ -21,7 +21,7 @@ public class Message {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID messageId;
-    private Long krsNumber;
+    private String krsNumber;
     private String emailSender;
     private String messageText;
     private LocalDateTime messageDate;

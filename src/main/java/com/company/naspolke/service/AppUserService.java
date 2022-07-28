@@ -12,5 +12,5 @@ public interface AppUserService {
     Optional<AppUser> findUserByUserEmail(String userEmail);
     Optional<AppUser> findUserByUserId(UUID id);
     void updateAppUser(AppUser appUser);
-    List<AppUser> getCompanyOwners(Long krsNumber);
+    List<AppUser> getCompanyOwners(String krsNumber);
 }
