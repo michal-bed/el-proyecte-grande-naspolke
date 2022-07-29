@@ -51,6 +51,7 @@ function Routes(){
     let userRoutes = []
     const auth = useAuth()
     const obj = auth[Object.keys(auth)[0]]
+  console.log(obj)
     const objArr = Object.values(obj)
     if (Object.values(obj).length === 0) {
       userRoutes =
@@ -64,7 +65,7 @@ function Routes(){
             },
             {
               name: "Rejestracja",
-              route: "/registration",
+              route: "/register",
               component: <Registration/>
             },
           ],
@@ -88,7 +89,7 @@ function Routes(){
             },
             {
               name: "Wyloguj",
-              route: "/log-out",
+              route: "/logout",
               component: <Login/>
             }
           ],
@@ -123,7 +124,7 @@ function Routes(){
         },
         {
           name: "Cennik",
-          href: "/cennik"
+          href: "/#cennik"
         },
         {
           name: "Dodaj spółkę",
@@ -132,6 +133,10 @@ function Routes(){
         {
           name: "FAQ",
           route: "/faq",
+        },
+        {
+          name: "Regulamin",
+          route: "/statute",
         },
       ],
     },

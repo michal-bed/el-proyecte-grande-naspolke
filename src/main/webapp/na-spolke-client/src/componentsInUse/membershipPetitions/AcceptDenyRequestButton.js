@@ -2,9 +2,12 @@ import {useState} from "react";
 import DeleteNotificationButton from "./DeleteNotificationButton";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-const AcceptDenyRequestButton = ({ emailSender, krsNumber, messageId }) => {
+const AcceptDenyRequestButton = ({ message }) => {
 
     const axiosPrivate = useAxiosPrivate();
+    const krsNumber = message.krsNumber;
+    const emailSender = message.emailSender;
+    const messageId = message.messageId;
 
     let [decision, setDecision] = useState("");
     let [messageText, setMessageText] = useState("");
@@ -12,19 +15,44 @@ const AcceptDenyRequestButton = ({ emailSender, krsNumber, messageId }) => {
     const [showDenyButton, setShowDenyButton] = useState(true);
     const [showDecisionInfo, setShowDecisionInfo] = useState(false);
 
-    const acceptRequest = () => {
+    const accept = () => {
         setDecision(decision = "accept");
-        setMessageText(messageText = "Twoja prośba o członkostwo została zaakceptowana.")
-        sendDecision();
+        if (message.membershipRequest === true) {
+            setMessageText(messageText = "Twoja prośba o członkostwo została zaakceptowana.")
+            sendRequestDecision();
+        } else if (message.membershipInvitation === true) {
+            setMessageText(messageText = "Użytkownik zaakceptował Twoje zaproszenie.")
+            sendInvitationDecision();
+        }
     }
 
-    const denyRequest = () => {
+    const deny = () => {
         setDecision(decision = "deny");
-        setMessageText(messageText = "Twoja prośba o członkostwo została odrzucona.")
-        sendDecision();
+        if (message.membershipRequest === true) {
+            setMessageText(messageText = "Twoja prośba o członkostwo została odrzucona.")
+            sendRequestDecision();
+        } else if (message.membershipInvitation === true) {
+            setMessageText(messageText = "Użytkownik odrzucił Twoje zaproszenie.")
+            sendInvitationDecision();
+        }
     }
 
-    const sendDecision = () => {
+    const sendInvitationDecision = () => {
+        const userData = {decision, krsNumber, emailSender, messageText, messageId};
+        axiosPrivate.post(`/send-decision-about-invitation`, userData
+        ).then(response => {
+            if (response.status === 200) {
+                setShowAcceptButton(false);
+                setShowDenyButton(false);
+                setShowDecisionInfo(true);
+                return response.data;
+            } else {
+                throw new Error('Send request failed!');
+            }
+        }).catch((error) => console.log(error));
+    }
+
+    const sendRequestDecision = () => {
         const userData = {decision, krsNumber, emailSender, messageText, messageId};
         axiosPrivate.post(`/send-decision-about-membership`, userData
         ).then(response => {
@@ -41,8 +69,8 @@ const AcceptDenyRequestButton = ({ emailSender, krsNumber, messageId }) => {
 
     return (
         <div className="decision-button">
-            {showAcceptButton && <button className="btn btn-success" onClick={acceptRequest}>Zaakceptuj prośbę</button>}
-            {showDenyButton && <button className="btn btn-danger" onClick={denyRequest}>Odrzuć prośbę</button>}
+            {showAcceptButton && <button className="btn btn-success" onClick={accept}>Zaakceptuj</button>}
+            {showDenyButton && <button className="btn btn-danger" onClick={deny}>Odrzuć</button>}
             {showDecisionInfo && <DeleteNotificationButton messageId={messageId}/>}
         </div>
     )

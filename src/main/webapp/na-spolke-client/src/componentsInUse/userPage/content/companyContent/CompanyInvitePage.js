@@ -1,13 +1,41 @@
-import {Box, Button, Card, CardHeader, Typography} from "@material-ui/core";
+import {Box, Card, CardHeader, Typography} from "@material-ui/core";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {getCompanyById} from "../../handlers/CompanyDataHandler";
-
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
+import {Grid, TextField} from "@mui/material";
+import React, {useState} from "react";
+import Button from "@mui/material/Button";
+import ModalTop from "../../../modal/ModalTop";
 
 function CompanyInvitePage () {
 
-    let {companyId} = useParams();
+    const successfullyInvitationMessage = {
+        title: "Wysłano zaproszenie",
+        text: "Użytkownik o podanym przez Ciebie adresie e-mail otrzymał zaproszenie do spółki."
+    }
 
+    const failedInvitationMessage = {
+        title: "Coś poszło nie tak",
+        text: "Nie udało się wysłać zaproszenia do wskazanego przez Ciebie użytkownika."
+    }
+
+    function handleStatusChange() {
+        setMessageText(messageText = "Zostałeś zaproszony do spółki przez użytkownika o podanym adresie email");
+    }
+
+    const [successInvitationInfo, setSuccessInvitationInfo] = useState(false);
+    const [failedInvitationInfo, setFailedInvitationInfo] = useState(false);
+    const backToPreviousState = () => {
+        setSuccessInvitationInfo(false);
+        setFailedInvitationInfo(false);
+    }
+
+    const axiosPrivate = useAxiosPrivate();
+    let {companyId} = useParams();
+    // const companyIdTest = "ba983b2a-cb4b-4875-932e-c692a49cd969";
     let company = getCompanyById(companyId);
+    let [messageText, setMessageText] = useState("");
+    const [emailAddress, setEmailAddress] = useState("");
 
     const titleCardStyle = {
         marginLeft: "25%",
@@ -34,34 +62,44 @@ function CompanyInvitePage () {
         flexWrap: "wrap",
         justifyContent: "center",
         marginLeft: "auto",
-        marginRight: "auto"
+        marginRight: "auto",
+        width: 400,
+        mx: "auto"
     }
 
     const inputStyle = {
-        marginLeft: "5px",
+        marginLeft: "120px",
+        align:'center'
     }
 
     const formStyle = {
-        textAlign: "center"
+        textAlign: "center",
+        marginLeft: "60px",
+        width: 500,
+        mx: "auto"
     }
 
-    function checkIfEmailSent() {
-        return true;
-    }
+    // const location = useLocation();
+    // const navigate = useNavigate();
 
-    const location = useLocation();
-    const navigate = useNavigate();
-
-    function handleSubmit (e) {
-        let checkEmailSent = checkIfEmailSent();
-        if (checkEmailSent === true) {
-            console.log("wysłano");
-            navigate(location.pathname + "/success");
-        } else if (checkEmailSent === false) {
-            console.log("coś poszło nie tak");
-            console.log(e)
-            navigate(location.pathname + "/fail");
-        }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleStatusChange();
+        const data = {companyId, emailAddress, messageText};
+        axiosPrivate.post('/send-invitation-to-company', data)
+            .then(response => {
+                if(response.status === 200) {
+                    console.log("wysłano");
+                    setSuccessInvitationInfo(true);
+                    setTimeout(backToPreviousState, 4000);
+                    // navigate(location.pathname + "/success");
+                }
+            }).catch((error) => {
+            console.log(error);
+            setFailedInvitationInfo(true);
+            setTimeout(backToPreviousState, 4000);
+            // navigate(location.pathname + "/fail");
+        })
     }
 
     return(
@@ -71,20 +109,21 @@ function CompanyInvitePage () {
                     {company['companyName']}<br />
                 </Typography>
             </Card>
-
             <Box style={gridStyle}>
-                <Card style={infoCardStyle}>
-                    <CardHeader
-                        title="Zaproś do Spółki"
-                        titleTypographyProps={{align:'center'}}
-                    />
+                <Card style={infoCardStyle}><hr/>
+                    <h2 style={inputStyle}>Zaproś do spółki:</h2><hr/>
                     <form style={formStyle} onSubmit={handleSubmit}>
-                        <label for="email">Adres E-Mail:   </label>
-                        <input type="text" id="email" style={inputStyle} /><br /><br /><br />
-                        <Button variant="contained" type="submit">Wyślij zaproszenie</Button>
-                    </form>
+                        <Grid style={{display: "flex"}}>
+                            <TextField id="outlined-search" label="Adres e-mail" type="search"
+                                className="form-input" value={emailAddress} required={true}
+                                onChange={(e) => setEmailAddress(e.target.value)}/>
+                            <Button type="submit">Wyślij zaproszenie</Button>
+                        </Grid>
+                    </form><hr/>
                 </Card>
             </Box>
+            {successInvitationInfo && <ModalTop info={successfullyInvitationMessage}/>}
+            {failedInvitationInfo && <ModalTop info={failedInvitationMessage}/>}
         </>
     )
 }

@@ -22,7 +22,7 @@ let text2= 'Jesteśmy małą firmą z wielkimi ambicjami. Stale rozwijamy się a
 let text3= "Nasze kompleksowe rozwiązanie biznesowe kierujemy zarówno dla spółek każdej wielkośći jak i kancelarii prawnych."
 
 let pricingDescription = "Przygotowaliśmy oferty cenowe naszej usługi skrojone pod każdą kieszeń i " +
-    "pootrzeby naszych klientów."
+    "potrzeby naszych klientów."
 
 const MainPage = ()=> {
     return<>

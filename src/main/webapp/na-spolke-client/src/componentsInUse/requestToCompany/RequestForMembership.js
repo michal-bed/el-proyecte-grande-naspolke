@@ -10,7 +10,7 @@ const RequestForMembership = () => {
 
     const axiosPrivate = useAxiosPrivate();
 
-    const successfullyRequestMessage = {
+    const unsuccessfullyRequestMessage = {
         title: "Nie znaleziono spółki",
         text: "Spółka o podanym przez Ciebie numerze KRS nie figuruje w naszej bazie danych."
     }
@@ -26,25 +26,26 @@ const RequestForMembership = () => {
         e.preventDefault();
         axiosPrivate.get(`/find-company-to-membership-request/${krsNumber}`)
             .then(response => {
+                console.log(response.data);
             if (response.status === 200) {
                 setCompanyData(response.data);
                 setShowMembershipComponent(true);
-            } else {
-                setCompanyNotFound(true);
-                setTimeout(backToPreviousState, 4000);
-                throw new Error("Can't find company");
             }
-        }).catch((error) => console.log(error));
+        }).catch((error) => {
+            console.log(error);
+            setCompanyNotFound(true);
+            setTimeout(backToPreviousState, 4000);
+        });
     }
 
     return (
         <div className="request-form-container"><hr/>
-            <Typography className="request-form-container">
+            <Typography className="form-label-container">
                 <div className={styles.requestFormBox}>
                     <form onSubmit={findCompany}>
-                        <h3 className="form-label">Podaj numer KRS spółki:</h3><hr/>
+                        <h2>Podaj numer KRS spółki:</h2><hr/>
                         <Grid style={{display: "flex"}}>
-                            <TextField id="outlined-number" label="Number" type="number" InputLabelProps={{shrink: true}}
+                            <TextField id="outlined-number" label="Numer KRS" type="number" InputLabelProps={{shrink: true}}
                                        className="form-input" value={krsNumber} required={true}
                                 onChange={(e) => setKrsNumber(e.target.value)}/>
                             <Button type="submit">Znajdź spółkę</Button>
@@ -55,7 +56,7 @@ const RequestForMembership = () => {
             <Typography className="company-info-container">
                 <div className="request-form-modal">
                     {showMembershipComponent && <CompanyInfo companyData={companyData} krsNumber={krsNumber}/>}
-                    {companyNotFound && <ModalTop info={successfullyRequestMessage}/>}
+                    {companyNotFound && <ModalTop info={unsuccessfullyRequestMessage}/>}
                 </div>
             </Typography>
         </div>

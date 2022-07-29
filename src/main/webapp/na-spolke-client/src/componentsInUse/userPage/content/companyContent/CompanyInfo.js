@@ -1,3 +1,4 @@
+
 import {Card, Typography, Box, Button, Grid, Paper,} from "@material-ui/core";
 import { Link, useParams } from "react-router-dom";
 import { getCompanyById } from "../../handlers/CompanyDataHandler";
@@ -9,6 +10,13 @@ import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import {useEffect, useState} from "react";
 
+
+
+import {Box, Button, Card, Paper, Typography,} from "@material-ui/core";
+import {Link, useParams} from "react-router-dom";
+import {getCompanyById} from "../../handlers/CompanyDataHandler";
+import {CardHeader, Table, TableBody, TableCell, TableContainer, TableRow} from "@mui/material";
+import EventsCalendar from "../../../calendar/EventsCalendar";
 
 
 function CompanyInfo () {
@@ -397,6 +405,11 @@ function CompanyInfo () {
                         </ul>
                     </Typography>
                 </Card>
+
+                <Card style={memberCardStyle}>
+                    <EventsCalendar />
+                </Card>
+
             </Box>
         </>
     )
