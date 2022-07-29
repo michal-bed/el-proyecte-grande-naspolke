@@ -4,7 +4,6 @@ import {getCompanyById, selectCompanyInfoById} from "../../handlers/CompanyDataH
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@mui/material';
 import Card from "@mui/material/Card";
 import {useEffect, useState} from "react";
-import {map} from "react-bootstrap/ElementChildren";
 
 function CompanyMembers () {
 
@@ -25,9 +24,7 @@ function CompanyMembers () {
     useEffect(() => {
         getCompanyById(companyId)
             .then(res => {
-                console.log(companyId);
                 setCompany(res.data)})
-                console.log(company)
     }, [])
 
     function selectInfo (selectedData) {
@@ -60,12 +57,21 @@ function CompanyMembers () {
 
     const CreateTableData = ({selectedData}) => {
         const items = [];
+        let data;
+        if (selectedData !== "individualPartners" && selectedData !== "partnerCompanies") {
+            data = selectInfo(selectedData);
+        } else {
+            data = selectInfo("partners")[selectedData];
+        }
 
-        const data = selectInfo(selectedData);
-
-        console.log(data);
         if (data) {
-
+            data.forEach((row) => {
+                items.push(
+                    <TableRow>
+                        <PopulateRow row={row}/>
+                    </TableRow>
+                )
+            })
         }
 
         return items;
@@ -73,8 +79,17 @@ function CompanyMembers () {
 
     const PopulateRow = ({row}) => {
         const items = [];
-
-
+        const test = [];
+        Object.keys(row).forEach(key => {
+            if (key !== "boardMemberId" && key !== "id" && key !== "boardOfDirectorId") {
+                test.push(key);
+                items.push(
+                    <TableCell>{row[key] ?? "[Brak]"}</TableCell>
+                );
+            }
+        })
+        console.log(row)
+        console.log(test)
         return items;
     }
 
@@ -85,19 +100,24 @@ function CompanyMembers () {
     return (
         <Box style={boxStyle}>
             <CreateCard
-                name="Członkowie Rady"
+                name="Zarząd"
                 selectedData="boardMembers"
-                headers={["Imię", "Nazwisko", "Adres", "Rola"]}
+                headers={["Imię", "Drugie imię", "Nazwisko", "Drugie nazwisko", "Rola"]}
             />
             <CreateCard
-                name="Dyrektorzy czy coś"
+                name="Rada nadzorcza"
                 selectedData="boardOfDirectors"
-                headers={["Imię", "Nazwisko", "Adres"]}
+                headers={["Imię", "Drugie Imię", "Nazwisko", "Drugie Nazwisko"]}
             />
             <CreateCard
-                name="Wspólnicy"
-                selectedData="partners"
-                headers={["Pełna nazwa", "Adres", "Łączna wartość akcji", "Ilość akcji"]}
+                name="Wspólnicy (Osoby)"
+                selectedData="individualPartners"
+                headers={["Imię", "Drugie imię", "Nazwisko", "Drugie nazwisko", "Adres", "Łączna wartość akcji", "Ilość akcji"]}
+            />
+            <CreateCard
+                name="Wspólnicy (Spółki)"
+                selectedData="partnerCompanies"
+                headers={["Pełna nazwa", "Łączna wartość akcji", "Ilość akcji", "Adres"]}
             />
         </Box>
     )

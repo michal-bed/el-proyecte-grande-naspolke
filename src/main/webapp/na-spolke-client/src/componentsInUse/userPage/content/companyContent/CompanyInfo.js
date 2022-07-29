@@ -1,7 +1,8 @@
-import {Box, Button, Card, Paper, Typography,} from "@material-ui/core";
 import {Link, useParams} from "react-router-dom";
 import {getCompanyById} from "../../handlers/CompanyDataHandler";
 import {CardHeader, IconButton, Table, TableBody, TableCell, TableContainer, TableRow, Grid} from "@mui/material";
+import {Card, Typography, Button, Paper,} from "@material-ui/core";
+
 import Input from "@material-ui/core/Input";
 // Icons
 import EditIcon from "@material-ui/icons/EditOutlined";
@@ -10,7 +11,6 @@ import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import {useEffect, useState} from "react";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import EventsCalendar from "../../../calendar/EventsCalendar";
-
 
 function CompanyInfo() {
 
