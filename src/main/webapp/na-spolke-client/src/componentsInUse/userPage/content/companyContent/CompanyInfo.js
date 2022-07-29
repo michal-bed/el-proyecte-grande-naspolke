@@ -9,7 +9,7 @@ import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import {useEffect, useState} from "react";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
-
+import EventsCalendar from "../../../calendar/EventsCalendar";
 
 
 function CompanyInfo() {
@@ -83,6 +83,13 @@ function CompanyInfo() {
         marginRight: "3%",
         textAlign: "center"
     };
+    const calendar = {
+        minWidth: "460px",
+        minHeight: "285px",
+        marginLeft: "3%",
+        marginRight: "3%",
+        textAlign: "center"
+    };
 
     const buttonStyle = {
         backgroundColor: "#5555ff",
@@ -132,7 +139,6 @@ function CompanyInfo() {
     };
 
     const [previous, setPrevious] = useState({});
-
     const onDoneEditMode = id => {
         onToggleEditMode(id);
         setPrevious(state => ({...state, [id]: rows.find(row => row.id === id)}));
@@ -266,7 +272,8 @@ function CompanyInfo() {
                                 gap: 3,
                                 gridTemplateRows: 'auto',
                                 gridTemplateAreas: `"header address"
-                                                    "info members"`,
+                                                    "info calendar"
+                                                    "members ."`,
                             }}>
                                 <Card style={infoCardStyle} sx={{gridArea: 'header'}}>
                                     <CardHeader
@@ -435,6 +442,9 @@ function CompanyInfo() {
                                         </ul>
                                     </Typography>
                                 </Card>
+                                <Card style={calendar} sx={{gridArea: 'calendar'}}>
+                                    <EventsCalendar />
+                                </Card>
                             </Grid>
                         {/*</Box>*/}
                         </div>
@@ -443,8 +453,7 @@ function CompanyInfo() {
     </TableContainer>
     {/*</Box>*/}
     {/*</div>*/}
-</>
-)
+</>)
 }
 
 export default CompanyInfo;
