@@ -20,6 +20,7 @@ import {Button} from "@material-ui/core";
 import {useNow} from "@mui/x-date-pickers/internals/hooks/useUtils";
 import {VotingNoUnanimously} from "./VotingNoUnanimously";
 import style from "./FinancialStatementForm.module.css"
+import {MeetingPlace} from "./MeetingPlace";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
     const AntSwitch = styled(Switch)(({theme}) => ({
@@ -203,29 +204,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                             )}
                         />
                     </LocalizationProvider>
-                    <div style={{marginLeft: "2vh"}}>
-                        <MyRadio name="meetingPlaceInHeadquarters" type="radio" value="true"
-                                 onChange={(values => {
-                                     setFieldValue("meetingPlaceInHeadquarters", null);
-                                 })}
-                                 label="w siedzibie spółki"/>
-                        <MyRadio name="meetingPlaceInHeadquarters" type="radio" value="false"
-                                 onChange={(values => {
-                                     setFieldValue("meetingPlaceInHeadquarters", values);
-                                 })}
-                                 label="w innym miejscu"/>
-                    </div>
-                    <div style={{display: values.meetingPlaceInHeadquarters === "true" && "none"}}>
-                        <MyTextFieldOptionalMeetingPlace label="Zgromadzenie odbyło się w:" name="meetingPlace"
-                                                         placeholder="Kancelarii Notarialnej Ireny Kamińskiej"/>
-                        <div><MyTextFieldOptionalMeetingPlace label="ulica" name="streetName"/>
-                            <MyTextFieldOptionalMeetingPlace label="nr" name="streetNumber"/>
-                            <MyTextFieldOptionalMeetingPlace label="nr lokalu" name="localNumber" type="number"
-                                                             InputProps={{inputProps: {max: 10000, min: 1}}}/>
-                            <MyTextFieldOptionalMeetingPlace label="miasto" name="city"/>
-                            <MyTextFieldOptionalMeetingPlace label="kod pocztowy" name="zipCode" placeholder="xx-xxx"/>
-                        </div>
-                    </div>
+                    <MeetingPlace values={values} handleChange={handleChange}/>
+
                     <Card className={style[`cardStyle`]}>
                         {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map((partner, index) => (
                             <Card key={`indCard${partner.id}`}>
