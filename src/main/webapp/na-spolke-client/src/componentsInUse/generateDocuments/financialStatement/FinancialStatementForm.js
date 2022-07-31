@@ -22,6 +22,7 @@ import {VotingNoUnanimously} from "./VotingNoUnanimously";
 import style from "./FinancialStatementForm.module.css"
 import {MeetingPlace} from "./MeetingPlace";
 import {PartnersAttendanceList} from "./PartnersAttendanceList";
+import {SwitchComponent} from "./SwitchComponent";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
     const AntSwitch = styled(Switch)(({theme}) => ({
@@ -190,20 +191,12 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                     </Card>
 
                     <Card>
-                        <div className={styles[`Absent`]}><p>Tryb zwołania Zgromadzenie Wspólników</p>
-                            <Stack direction="row" spacing={3} alignItems="center">
-                                <Typography>Bez formalnego zwołania (wszyscy wspólnicy muszą być obecni)</Typography>
-                                <AntSwitch name={"formalConvening"}
-                                           value={values.formalConvening}
-                                           checked={values.formalConvening}
-                                           onChange={(event) => {
-                                               setFieldValue("formalConvening",
-                                                   values.formalConvening ? values.formalConvening = false : values.formalConvening = true);
-                                           }}
-                                />
-                                <Typography>Formalne zwołanie</Typography>
-                            </Stack>
-                        </div>
+                        <SwitchComponent values={values}
+                                         switchTrueText={"Bez formalnego zwołania (wszyscy wspólnicy muszą być obecni)"}
+                                         switchFalseText={"Formalne zwołanie"}
+                                         title={"Tryb zwołania Zgromadzenie Wspólników"}
+                                         name={"formalConvening"}
+                                         setFieldValue={setFieldValue}/>
                     </Card>
                     <Card>
                         <p>Przewodniczący Zgromadzenia:</p>
@@ -217,11 +210,11 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                     label="Przewodniczący Zgromadzenia"
                                     onChange={handleChange}
                                 >
-                                    {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map((partner, index) => (
-                                        <MenuItem key={`select${index}`}
+                                    {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map(partner => (
+                                        <MenuItem key={`select${partner.id}`}
                                                   value={`${partner.firstName} ${partner.lastNameI}`}>{partner.firstName + " " + partner.lastNameI}</MenuItem>))}
-                                    {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map((partner, index) => (
-                                        <MenuItem key={`selectCompanyPartner${index}`}
+                                    {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map(partner => (
+                                        <MenuItem key={`selectCompanyPartner${partner.id}`}
                                                   value={partner.representativeFirstname + " " + partner.representativeLastname}>{partner.representativeFirstname + " " + partner.representativeLastname}</MenuItem>))}
                                 </Select>
                                 <FormHelperText>Wybierz przewodniczącego</FormHelperText>
