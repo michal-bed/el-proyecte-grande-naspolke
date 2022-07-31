@@ -24,6 +24,7 @@ import {MeetingPlace} from "./MeetingPlace";
 import {PartnersAttendanceList} from "./PartnersAttendanceList";
 import {SwitchComponent} from "./SwitchComponent";
 import {AttendanceList} from "./AttendanceList";
+import {MeetingOrganElection} from "./MeetingOrganElection";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
     const AntSwitch = styled(Switch)(({theme}) => ({
@@ -83,8 +84,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         city: "",
         zipCode: "",
         formalConvening: false,
-        president: "",
-        presidentUnanimously: true,
+        chairperson: "",
+        chairpersonUnanimously: true,
         recorder: "",
         recorderUnanimously : true,
         amountProfitOrLoss: 0,
@@ -99,8 +100,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         for (let i = 0; i < company.partners.individualPartners.length; i++) {
             individualPartners.push({"id": company.partners.individualPartners[i].id, isPresent: true})
             initialValues[`individual${individualPartners[i].id}IsPresent`] = true;
-            if (initialValues.president === ""){
-                initialValues.president = `${company.partners.individualPartners[i].firstName} ${company.partners.individualPartners[i].lastNameI}`
+            if (initialValues.chairperson === ""){
+                initialValues.chairperson = `${company.partners.individualPartners[i].firstName} ${company.partners.individualPartners[i].lastNameI}`
                 initialValues.recorder = `${company.partners.individualPartners[i].firstName} ${company.partners.individualPartners[i].lastNameI}`
             }
         }
@@ -111,8 +112,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
             initialValues[`company${partnerCompanies[i].id}IsPresent`] = true;
             initialValues[`representative${partnerCompanies[i].id}name`] = company.partners.partnerCompanies.representativeFirstname;
             initialValues[`representative${partnerCompanies[i].id}lastname`] = company.partners.partnerCompanies.representativeFirstname;
-            if (initialValues.president === ""){
-                initialValues.president = `${company.partners.partnerCompanies.representativeFirstname} ${company.partners.partnerCompanies.representativeFirstname}`
+            if (initialValues.chairperson === ""){
+                initialValues.chairperson = `${company.partners.partnerCompanies.representativeFirstname} ${company.partners.partnerCompanies.representativeFirstname}`
                 initialValues.recorder = `${company.partners.partnerCompanies.representativeFirstname} ${company.partners.partnerCompanies.representativeFirstname}`
             }
         }
@@ -178,6 +179,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                 <TextField {...params} helperText={params?.inputProps?.placeholder}/>
                             )}
                         />
+
                     </LocalizationProvider>
 
                     <MeetingPlace values={values} handleChange={handleChange}/>
@@ -192,71 +194,18 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                          name={"formalConvening"}
                                          setFieldValue={setFieldValue}/>
                     </Card>
-                    <Card>
-                        <p>Przewodniczący Zgromadzenia:</p>
-                        <div>
-                            <FormControl sx={{m: 1, minWidth: 120}}>
-                                <InputLabel id="demo-simple-select-helper-label">Przewodniczący
-                                    Zgromadzenia</InputLabel>
-                                <Select
-                                    name={"president"}
-                                    value={values.president}
-                                    label="Przewodniczący Zgromadzenia"
-                                    onChange={handleChange}
-                                >
-                                    {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map(partner => (
-                                        <MenuItem key={`select${partner.id}`}
-                                                  value={`${partner.firstName} ${partner.lastNameI}`}>{partner.firstName + " " + partner.lastNameI}</MenuItem>))}
-                                    {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map(partner => (
-                                        <MenuItem key={`selectCompanyPartner${partner.id}`}
-                                                  value={partner.representativeFirstname + " " + partner.representativeLastname}>{partner.representativeFirstname + " " + partner.representativeLastname}</MenuItem>))}
-                                </Select>
-                                <FormHelperText>Wybierz przewodniczącego</FormHelperText>
-                            </FormControl>
-                            <div>
-                                <p>Głosowanie</p>
-                                <div>
-                                    <Checkbox aria-label={"jednogłośnie"} name={"presidentUnanimously"} defaultChecked
-                                              value={values.presidentUnanimously} onChange={handleChange}
-                                              color="secondary"/>
-                                </div>
-                                {values.presidentUnanimously === false &&
-                                <VotingNoUnanimously votingType={"president"} values={values}/>
-                                }
-                            </div>
-                        </div>
-                    </Card>
-                    <Card>
-                        <p>Uchwała w sprawie wyboru protokolanta:</p>
-                        <div>
-                            <FormControl sx={{m: 1, minWidth: 120}}>
-                                <InputLabel id="demo-simple-select-helper-label">Protokolant</InputLabel>
-                                <Select
-                                    name={"recorder"}
-                                    value={values.recorder}
-                                    label="Protokolant"
-                                    onChange={handleChange}
-                                >
-                                    {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map((partner, index) => (
-                                        <MenuItem key={`selectRecorder${index}`}
-                                                  value={`${partner.firstName} ${partner.lastNameI}`}>{partner.firstName + " " + partner.lastNameI}</MenuItem>))}
-                                    {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map((partner, index) => (
-                                        <MenuItem key={`selectRecorderCompanyPartner${index}`}
-                                                  value={partner.representativeFirstname + " " + partner.representativeLastname}>{partner.representativeFirstname + " " + partner.representativeLastname}</MenuItem>))}
-                                </Select>
-                            </FormControl>
-                            <div>
-                                <p>Głosowanie</p>
-                                <div>
-                                    <Checkbox aria-label={"jednogłośnie"} name={"recorderUnanimously"} defaultChecked
-                                              value={values.recorderUnanimously} onChange={handleChange}
-                                              color="secondary"/>
-                                </div>
-                                {values.recorderUnanimously === false &&
-                                    <VotingNoUnanimously votingType={"recorder"} values={values}/> }
-                            </div>
-                        </div>
-                    </Card>
+
+                    <MeetingOrganElection values={values} company={company} type={"chairperson"}
+                                          setFieldValue={setFieldValue}
+                                          headerText={"Wybór Przewodniczącego"}
+                                          helperText={"Wybierz przewodniczącego"}
+                                          handleChange={handleChange}/>
+                    <MeetingOrganElection values={values} company={company} type={"recorder"}
+                                          setFieldValue={setFieldValue}
+                                          headerText={"Wybór Protokolanta"}
+                                          helperText={"Wybierz protokolanta"}
+                                          handleChange={handleChange}/>
+
                     <Card>
                         <div><p>Porządek obrad:</p>
                             <ol>
