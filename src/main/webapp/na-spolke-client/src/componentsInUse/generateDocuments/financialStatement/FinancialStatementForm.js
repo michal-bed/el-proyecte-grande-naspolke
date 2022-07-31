@@ -14,61 +14,16 @@ import Typography from "@mui/material/Typography";
 import {styled} from "@mui/material/styles";
 import {FormControl} from "@chakra-ui/react";
 import {Checkbox} from "@material-ui/core";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import {BoardOfDirector} from "../../../classes/persons/BoardOfDirector";
 import {Button} from "@material-ui/core";
-import {useNow} from "@mui/x-date-pickers/internals/hooks/useUtils";
 import {VotingNoUnanimously} from "./VotingNoUnanimously";
-import style from "./AttendanceList.module.css"
 import {MeetingPlace} from "./MeetingPlace";
-import {PartnersAttendanceList} from "./PartnersAttendanceList";
 import {SwitchComponent} from "./SwitchComponent";
 import {AttendanceList} from "./AttendanceList";
 import {MeetingOrganElection} from "./MeetingOrganElection";
 import {MeetingAgenda} from "./MeetingAgenda";
+import {FinancialStatementInfo} from "./financialStatementInfo/FinancialStatementInfo";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
-    const AntSwitch = styled(Switch)(({theme}) => ({
-        width: 28,
-        height: 16,
-        padding: 0,
-        display: 'flex',
-        '&:active': {
-            '& .MuiSwitch-thumb': {
-                width: 15,
-            },
-            '& .MuiSwitch-switchBase.Mui-checked': {
-                transform: 'translateX(9px)',
-            },
-        },
-        '& .MuiSwitch-switchBase': {
-            padding: 2,
-            '&.Mui-checked': {
-                transform: 'translateX(12px)',
-                color: '#17dc8a',
-                '& + .MuiSwitch-track': {
-                    opacity: 1,
-                    backgroundColor: theme.palette.mode === 'dark' ? '#17dc8a' : '#316348',
-                },
-            },
-        },
-        '& .MuiSwitch-thumb': {
-            boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
-            width: 12,
-            height: 12,
-            borderRadius: 6,
-            transition: theme.transitions.create(['width'], {
-                duration: 200,
-            }),
-        },
-        '& .MuiSwitch-track': {
-            borderRadius: 16 / 2,
-            opacity: 1,
-            backgroundColor:
-                theme.palette.mode === 'dark' ? 'rgb(38,211,111)' : 'rgb(180,7,7)',
-            boxSizing: 'border-box',
-        },
-    }));
 
     let coverageOfLossPosibility = ["Z zysków lat przyszłych", "inne..."]
     let profitAllocation = ["Na kapitał zapasowy", "pokrycie straty z lat przeszłych", "Na kapitał zapasowy oraz na pokrycie starty z lat przeszłych", "wypłata dywidendy", "inne..."]
@@ -201,109 +156,16 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                           headerText={"Wybór Przewodniczącego"}
                                           helperText={"Wybierz przewodniczącego"}
                                           handleChange={handleChange}/>
+
                     <MeetingOrganElection values={values} company={company} type={"recorder"}
                                           setFieldValue={setFieldValue}
                                           headerText={"Wybór Protokolanta"}
                                           helperText={"Wybierz protokolanta"}
                                           handleChange={handleChange}/>
+
                     <MeetingAgenda values={values} handleChange={handleChange}/>
 
-                    <Card>
-                        <p>Sprawozdanie finansowe</p>
-                        <p>Początek rozliczanego okresu sprawozdawczego</p>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DesktopDatePicker
-                                label="Początek okresu sprawozdawczego"
-                                name="beginningReportingPeriodNo1"
-                                value={values.beginningReportingPeriodNo1}
-                                inputFormat="dd/MM/yyyy"
-                                openTo="year"
-                                onChange={(value => setFieldValue("beginningReportingPeriodNo1", value))}
-                                renderInput={(params) => (
-                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
-                                )}
-                            />
-                        </LocalizationProvider>
-                        <p>Koniec rozliczanego okresu sprawozdawczego</p>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DesktopDatePicker
-                                label="koniec okresu sprawozdawczego"
-                                name="endReportingPeriodNo1"
-                                value={values.endReportingPeriodNo1}
-                                inputFormat="dd-MM-yyyy"
-                                openTo="year"
-                                onChange={(value => setFieldValue("endReportingPeriodNo1", value))}
-                                renderInput={(params) => (
-                                    <TextField {...params} helperText={params?.inputProps?.placeholder}/>
-                                )}
-                            />
-                        </LocalizationProvider>
-                        <p>Kwota którą wykazuje bilans po stronie aktywów i pasywów</p>
-                        <MyTextField
-                            name={"sumOfAssetsAndLiabilities"}
-                            type="number"
-                            value={values.sumOfAssetsAndLiabilities}
-                            onChange={handleChange}
-                            label="wysokość aktywów i pasywów (w PLN)"
-                            as={TextField}
-                        />
-                        <div>
-                            <p>Głosowanie nad przyjęciem sprawozdania finansowego i sprawozdania zarządu</p>
-                            <div>
-                                <Checkbox aria-label={"jednogłośnie"} name={"financialStatementUnanimously"}
-                                          defaultChecked
-                                          value={values.financialStatementUnanimously} onChange={handleChange}
-                                          color="secondary"/>
-                            </div>
-                            {values.financialStatementUnanimously === false &&
-                                <VotingNoUnanimously votingType={"financialStatement"} values={values}/> }
-                        </div>
-                        <p>Wysokość zysku lub straty netto którą wykazuje rachunek zysków i strat</p>
-                        <MyTextField
-                            name={"amountProfitOrLoss"}
-                            type="number"
-                            value={values.amountProfitOrLoss}
-                            onChange={handleChange}
-                            label="Wysokość zysku lub straty (w PLN)"
-                            as={TextField}
-                        />
-                        {values.amountProfitOrLoss !== 0 && <FormControl sx={{m: 1, minWidth: 120}}>
-                            <InputLabel
-                                id="demo-simple-select-helper-label">{values.amountProfitOrLoss > 0 ? "Przeznaczenie zysku" : "Sposób pokrycia straty"}</InputLabel>
-                            <Select
-                                name={"coverageOfLossOrProfitAllocation"}
-                                value={values.coverageOfLossOrProfitAllocation}
-                                onChange={handleChange}
-                            >
-                                {values.amountProfitOrLoss > 0 && profitAllocation.map((possibility, index) => (
-                                    <MenuItem key={possibility}
-                                              value={possibility}>{possibility}</MenuItem>))}
-                                {values.amountProfitOrLoss < 0 && coverageOfLossPosibility.map((possibility, index) => (
-                                    <MenuItem key={possibility}
-                                              value={possibility}>{possibility}</MenuItem>))}
-                            </Select>
-                        </FormControl>}
-                        {values.coverageOfLossOrProfitAllocation === "inne..." &&
-                            <MyTextField
-                                name={"coverageOfLossOrProfitAllocationDifferentWay"}
-                                value={values.coverageOfLossOrProfitAllocationDifferentWay}
-                                onChange={handleChange}
-                                label={values.amountProfitOrLoss > 0 ? "Zgromadzenie Wspólników postanawia przeznaczyć zysk w następujący sposób:" : "Zgromadzenie Wspólników postanawia pokryć stratę w następujący sposób:"}
-                                as={TextField}
-                            />}
-                    </Card>
-                    <div>
-                        <p>{values.amountProfitOrLoss > 0 && "Głosowanie nad przeznaczeniem zysku"}</p>
-                        <p>{values.amountProfitOrLoss < 0 && "Głosowanie nad sposobem pokryciem straty"}</p>
-                        <div>
-                            {values.amountProfitOrLoss !== 0 &&
-                                <Checkbox aria-label={"jednogłośnie"} name={"amountProfitOrLossUnanimously"}
-                                          defaultChecked
-                                          value={values.amountProfitOrLossUnanimously} onChange={handleChange}
-                                          color="secondary"/>}
-                        </div>
-                        {values.amountProfitOrLossUnanimously === false &&
-                            <VotingNoUnanimously votingType={"amountProfitOrLoss"} values={values}/> }
+                    <FinancialStatementInfo setFieldValue={setFieldValue} values={values} handleChange={handleChange}/>
 
                         <Box>
                             <p>Głosowanie nad absolutorium Zarządu</p>
@@ -455,7 +317,6 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                                 <VotingNoUnanimously votingType={`director${member.boardOfDirectorId}`} values={values}/> }
                                     </Card>})}
                         </Box>}
-                    </div>
                     <Button type="submit" disabled={isSubmitting}> Zapisz</Button>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
                 </Form>
