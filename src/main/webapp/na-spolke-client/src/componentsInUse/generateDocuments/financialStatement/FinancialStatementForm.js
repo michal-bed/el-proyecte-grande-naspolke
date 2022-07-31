@@ -22,11 +22,11 @@ import {AttendanceList} from "./AttendanceList";
 import {MeetingOrganElection} from "./MeetingOrganElection";
 import {MeetingAgenda} from "./MeetingAgenda";
 import {FinancialStatementInfo} from "./financialStatementInfo/FinancialStatementInfo";
+import {ApprovalBodyMember} from "./ApprovalBodyMember";
+import {ApprovalBodyMemberSection} from "./ApprovalBodyMemberSection";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
 
-    let coverageOfLossPosibility = ["Z zysków lat przyszłych", "inne..."]
-    let profitAllocation = ["Na kapitał zapasowy", "pokrycie straty z lat przeszłych", "Na kapitał zapasowy oraz na pokrycie starty z lat przeszłych", "wypłata dywidendy", "inne..."]
     let individualPartners = [];
     let partnerCompanies = [];
     let initialValues = {
@@ -77,14 +77,14 @@ export default function FinancialStatementForm({company, companyIdMac}) {
 
     if (company.boardMembers.length > 0){
         for (let i = 0; i < company.boardMembers.length; i++) {
-            initialValues[`boardWholeReportingPeriod${company.boardMembers[i].boardMemberId}`] = true;
-            initialValues[`boardUnanimously${company.boardMembers[i].boardMemberId}`] = true;
+            initialValues[`board${company.boardMembers[i].boardMemberId}WholeReportingPeriod`] = true;
+            initialValues[`board${company.boardMembers[i].boardMemberId}Unanimously`] = true;
         }
     }
     if (company.boardOfDirectors.length > 0){
         for (let i = 0; i < company.boardOfDirectors.length; i++) {
-            initialValues[`directorWholeReportingPeriod${company.boardOfDirectors[i].boardOfDirectorId}`] = true;
-            initialValues[`directorUnanimously${company.boardOfDirectors[i].boardOfDirectorId}`] = true;
+            initialValues[`director${company.boardOfDirectors[i].boardOfDirectorId}WholeReportingPeriod`] = true;
+            initialValues[`director${company.boardOfDirectors[i].boardOfDirectorId}Unanimously`] = true;
         }
     }
 
@@ -119,6 +119,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                 }}>
             {({values, isSubmitting, handleChange, handleBlur, handleSubmit, setFieldValue}) => (
                 <Form>
+
                     <MyTextField
                         name="protocolNumber"
                         type="number"
@@ -135,7 +136,6 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                 <TextField {...params} helperText={params?.inputProps?.placeholder}/>
                             )}
                         />
-
                     </LocalizationProvider>
 
                     <MeetingPlace values={values} handleChange={handleChange}/>
@@ -167,156 +167,9 @@ export default function FinancialStatementForm({company, companyIdMac}) {
 
                     <FinancialStatementInfo setFieldValue={setFieldValue} values={values} handleChange={handleChange}/>
 
-                        <Box>
-                            <p>Głosowanie nad absolutorium Zarządu</p>
-                            <p>Wskaż wszystkich członków zarządu oraz okresy sprawowania przez nich funkcji</p>
+                    <ApprovalBodyMemberSection values={values} handleChange={handleChange} setFieldValue={setFieldValue}
+                                               company={company} />
 
-                            {company.boardMembers.length > 0 && company.boardMembers.map((member, index) => {
-                                if (values[`boardWholeReportingPeriod${member.boardMemberId}`] !== false) {
-                                    return <Card>
-                                        <FormControl>
-                                        <p key={`displayedName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}
-                                            <span
-                                                key={`${member.function}${index}`}>{member.function.toLowerCase()}</span>
-                                        </p>
-                                        <FormControlLabel
-                                            control={<Checkbox key={`boardWholeReportingPeriod${member.boardMemberId}`} defaultChecked
-                                                               name={`boardWholeReportingPeriod${member.boardMemberId}`}
-                                                               onChange={handleChange}
-                                                               value={true}/>}
-                                            label="Cały okres sprawozdawczy"/>
-                                    </FormControl>
-                                        <div>
-                                            <p>Głosowanie nad udzieleniem absolutorium</p>
-                                            <div>
-                                                <Checkbox aria-label={"jednogłośnie"}
-                                                          name={`boardUnanimously${member.boardMemberId}`}
-                                                          defaultChecked
-                                                          value={values[`boardUnanimously${member.boardMemberId}`]}
-                                                          onChange={handleChange}
-                                                          color="secondary"/>
-                                            </div>
-                                            {values[`boardUnanimously${member.boardMemberId}`] === false &&
-                                                <VotingNoUnanimously votingType={`board${member.boardMemberId}`} values={values}/> }
-                                        </div>
-                                    </Card>
-                                } else if (values[`boardWholeReportingPeriod${member.boardMemberId}`] === false) {
-                                    return <Card><FormControl>
-                                        <p key={`displayedName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}
-                                            <span
-                                                key={`${member.function}${member.boardMemberId}`}>{member.function.toLowerCase()}</span>
-                                        </p>
-                                        <FormControlLabel
-                                            control={<Checkbox key={`boardWholeReportingPeriod${member.boardMemberId}`} defaultChecked
-                                                               name={`boardWholeReportingPeriod${member.boardMemberId}`}
-                                                               onChange={handleChange}
-                                                               value={true}/>}
-                                            label="Cały okres sprawozdawczy"/>
-                                    </FormControl>
-                                        <div>Początek sprawowania funkcji w roku sprawozdawczym</div>
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <DatePicker
-                                                label="data początkowa..."
-                                                name={`boardBeginning${member.boardMemberId}`}
-                                                value={values[`boardBeginning${member.boardMemberId}`]}
-                                                inputFormat="dd/MM/yyyy"
-                                                onChange={(value => setFieldValue(`boardBeginning${member.boardMemberId}`, value))}
-                                                renderInput={(params) => (
-                                                    <TextField {...params}
-                                                               helperText={params?.inputProps?.placeholder}/>
-                                                )}
-                                            />
-                                        </LocalizationProvider>
-                                        <div>Koniec sprawowania funkcji w roku sprawozdawczym</div>
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <DatePicker
-                                                label="data końcowa..."
-                                                name={`boardEnd${member.boardMemberId}`}
-                                                value={values[`boardEnd${member.boardMemberId}`]}
-                                                inputFormat="dd/MM/yyyy"
-                                                onChange={(value => setFieldValue(`boardEnd${member.boardMemberId}`, value))}
-                                                renderInput={(params) => (
-                                                    <TextField {...params}
-                                                               helperText={params?.inputProps?.placeholder}/>
-                                                )}
-                                            />
-                                        </LocalizationProvider>
-                                        <div>
-                                            <p>Głosowanie nad udzieleniem absolutorium</p>
-                                            <div>
-                                                <Checkbox aria-label={"jednogłośnie"}
-                                                          name={`boardUnanimously${member.boardMemberId}`}
-                                                          defaultChecked
-                                                          value={values[`boardUnanimously${member.boardMemberId}`]}
-                                                          onChange={handleChange}
-                                                          color="secondary"/>
-                                            </div>
-                                            {values[`boardUnanimously${member.boardMemberId}`] === false &&
-                                                <VotingNoUnanimously votingType={`board${member.boardMemberId}`} values={values}/> }
-                                        </div>
-                                    </Card>
-                                }
-                            })}
-                        </Box>
-                        {company.boardOfDirectors.length > 0 && <Box>
-                            <p>Głosowanie nad absolutorium członków Rady Nadzorczej</p>
-                            <p>Wskaż wszystkich członków rady nadzorczej oraz okresy sprawowania przez nich funkcji</p>
-
-                            {company.boardOfDirectors.length > 0 && company.boardOfDirectors.map((member, index) => {
-                                return <Card>
-                                        <FormControl>
-                                            <p key={`displayedDirectorName${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}</p>
-                                            <FormControlLabel
-                                                control={<Checkbox key={`directorWholeReportingPeriod${member.boardOfDirectorId}`}
-                                                                   defaultChecked
-                                                                   name={`directorWholeReportingPeriod${member.boardOfDirectorId}`}
-                                                                   onChange={handleChange}
-                                                                   value={true}/>}
-                                                label="Cały okres sprawozdawczy"/>
-                                        </FormControl>
-                                    { values[`directorWholeReportingPeriod${member.boardOfDirectorId}`] === false &&
-                                        <div>
-                                            <div>Początek sprawowania funkcji w roku sprawozdawczym</div>
-                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                <DatePicker
-                                                    label="data początkowa..."
-                                                    name={`directorBeginning${member.boardOfDirectorId}`}
-                                                    value={values[`directorBeginning${member.boardOfDirectorId}`]}
-                                                    inputFormat="dd/MM/yyyy"
-                                                    onChange={(value => setFieldValue(`directorBeginning${member.boardOfDirectorId}`, value))}
-                                                    renderInput={(params) => (
-                                                        <TextField {...params}
-                                                                   helperText={params?.inputProps?.placeholder}/>
-                                                    )}
-                                                />
-                                            </LocalizationProvider>
-                                            <div>Koniec sprawowania funkcji w roku sprawozdawczym</div>
-                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                <DatePicker
-                                                    label="data końcowa..."
-                                                    name={`directorEnd${member.boardOfDirectorId}`}
-                                                    value={values[`directorEnd${member.boardOfDirectorId}`]}
-                                                    inputFormat="dd/MM/yyyy"
-                                                    onChange={(value => setFieldValue(`directorEnd${member.boardOfDirectorId}`, value))}
-                                                    renderInput={(params) => (
-                                                        <TextField {...params}
-                                                                   helperText={params?.inputProps?.placeholder}/>
-                                                    )}
-                                                />
-                                            </LocalizationProvider></div> }
-                                            <p>Głosowanie nad udzieleniem absolutorium</p>
-                                            <div>
-                                                <Checkbox aria-label={"jednogłośnie"}
-                                                          name={`directorUnanimously${member.boardOfDirectorId}`}
-                                                          defaultChecked
-                                                          value={values[`directorUnanimously${member.boardOfDirectorId}`]}
-                                                          onChange={handleChange}
-                                                          color="secondary"/>
-                                            </div>
-                                            { values[`directorUnanimously${member.boardOfDirectorId}`] === false &&
-                                                <VotingNoUnanimously votingType={`director${member.boardOfDirectorId}`} values={values}/> }
-                                    </Card>})}
-                        </Box>}
                     <Button type="submit" disabled={isSubmitting}> Zapisz</Button>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
                 </Form>
