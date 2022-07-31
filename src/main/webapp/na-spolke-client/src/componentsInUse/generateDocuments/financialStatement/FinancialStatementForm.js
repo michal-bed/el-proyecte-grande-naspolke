@@ -21,6 +21,7 @@ import {useNow} from "@mui/x-date-pickers/internals/hooks/useUtils";
 import {VotingNoUnanimously} from "./VotingNoUnanimously";
 import style from "./FinancialStatementForm.module.css"
 import {MeetingPlace} from "./MeetingPlace";
+import {PartnersAttendanceList} from "./PartnersAttendanceList";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
     const AntSwitch = styled(Switch)(({theme}) => ({
@@ -64,12 +65,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
             boxSizing: 'border-box',
         },
     }));
-    const MyRadio = ({label, ...props}) => {
-        const [field] = useField(props);
-        return (
-            <FormControlLabel {...field} control={<Radio/>} label={label}/>
-        )
-    }
+
     let coverageOfLossPosibility = ["Z zysków lat przyszłych", "inne..."]
     let profitAllocation = ["Na kapitał zapasowy", "pokrycie straty z lat przeszłych", "Na kapitał zapasowy oraz na pokrycie starty z lat przeszłych", "wypłata dywidendy", "inne..."]
     let individualPartners = [];
@@ -100,7 +96,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
     if (company.partners.individualPartners !== null && individualPartners.length === 0) {
         for (let i = 0; i < company.partners.individualPartners.length; i++) {
             individualPartners.push({"id": company.partners.individualPartners[i].id, isPresent: true})
-            initialValues[`individualPartner${individualPartners[i].id}IsPresent`] = true;
+            initialValues[`individual${individualPartners[i].id}IsPresent`] = true;
             if (initialValues.president === ""){
                 initialValues.president = `${company.partners.individualPartners[i].firstName} ${company.partners.individualPartners[i].lastNameI}`
                 initialValues.recorder = `${company.partners.individualPartners[i].firstName} ${company.partners.individualPartners[i].lastNameI}`
@@ -110,7 +106,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
     if (company.partners.partnerCompanies !== null && partnerCompanies.length === 0) {
         for (let i = 0; i < company.partners.partnerCompanies.length; i++) {
             partnerCompanies.push({"id": company.partners.partnerCompanies[i].id, isPresent: true})
-            initialValues[`partnerCompany${partnerCompanies[i].id}IsPresent`] = true;
+            initialValues[`company${partnerCompanies[i].id}IsPresent`] = true;
             initialValues[`representative${partnerCompanies[i].id}name`] = company.partners.partnerCompanies.representativeFirstname;
             initialValues[`representative${partnerCompanies[i].id}lastname`] = company.partners.partnerCompanies.representativeFirstname;
             if (initialValues.president === ""){
@@ -131,29 +127,6 @@ export default function FinancialStatementForm({company, companyIdMac}) {
             initialValues[`directorWholeReportingPeriod${company.boardOfDirectors[i].boardOfDirectorId}`] = true;
             initialValues[`directorUnanimously${company.boardOfDirectors[i].boardOfDirectorId}`] = true;
         }
-    }
-    const MyTextFieldOptionalMeetingPlace = ({placeholder, ...props}) => {
-        const {
-            values: {meetingPlaceInHeadquarters, ...values},
-            setFieldValue,
-        } = useFormikContext();
-        const [field, meta] = useField(props);
-        const errorText = meta.error ? meta.error : "";
-
-        useEffect(() => {
-            setFieldValue(props.name, "")
-        }, [meetingPlaceInHeadquarters])
-
-        return (
-            <TextField
-                placeholder={placeholder}
-                {...field}
-                label={props.label}
-                helperText={errorText}
-                error={!!errorText}
-                type={props.type}
-            />
-        );
     }
 
     const MyTextField = ({placeholder, ...props}) => {
@@ -204,64 +177,20 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                             )}
                         />
                     </LocalizationProvider>
+
                     <MeetingPlace values={values} handleChange={handleChange}/>
 
                     <Card className={style[`cardStyle`]}>
-                        {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map((partner, index) => (
-                            <Card key={`indCard${partner.id}`}>
-                                <div className={styles[`Absent`]} key={`indDiv${partner.id}`}><p
-                                    key={`indName${partner.id}`}>{partner.firstName + " " + partner.lastNameI}</p>
-                                    <Stack direction="row" spacing={1} alignItems="center"
-                                           key={`IndStack${partner.id}`}>
-                                        <Typography key={`indNieobecny${partner.id}`}>Nieobecny</Typography>
-                                        <AntSwitch name={`individualPartner${individualPartners[index].id}IsPresent`}
-                                                   value={individualPartners[index].isPresent}
-                                                   checked={individualPartners[index].isPresent === true}
-                                                   onChange={(event) => {
-                                                       setFieldValue(`individualPartner${individualPartners[index].id}IsPresent`,
-                                                           individualPartners[index].isPresent ? individualPartners[index].isPresent = false : individualPartners[index].isPresent = true);
-                                                   }}
-                                                   key={`indSwitch${index}`}/>
-                                        <Typography key={`indObecny${partner.id}`}>Obecny</Typography>
-                                    </Stack>
-                                </div>
-                            </Card>))
-                        }
-                        {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map((partner, index) => (
-                            <Card key={`card${partner.id}`}>
-                                <div className={styles[`Absent`]} key={`div${partner.id}`}><p
-                                    key={`partnerName${partner.id}`}>{partner.name}</p>
-                                    <Stack direction="row" spacing={1} alignItems="center" key={`stack${partner.id}`}>
-                                        <Typography key={`nieobecny${partner.id}`}>Nieobecny</Typography>
-                                        <AntSwitch name={`partnerCompanies${partnerCompanies[index].id}IsPresent`}
-                                                   value={partnerCompanies[index].isPresent}
-                                                   checked={partnerCompanies[index].isPresent === true}
-                                                   onChange={(event) => {
-                                                       setFieldValue(`partnerCompanies${partnerCompanies[index].id}IsPresent`,
-                                                           partnerCompanies[index].isPresent ? partnerCompanies[index].isPresent = false : partnerCompanies[index].isPresent = true);
-                                                   }}
-                                                   key={index}/>
-                                        <Typography key={`obecny${partner.id}`}>Obecny</Typography>
-                                    </Stack>
-                                </div>
-                            </Card>))
-                        }
+                        <p>Lista obecności:</p>
+                        {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map((partner) => (
+                            <PartnersAttendanceList values={values} partner={partner} type={"individual"} setFieldValue={setFieldValue}/>))}
+
+                        {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map((partner) => (
+                            <PartnersAttendanceList values={values} partner={partner} type={"company"} setFieldValue={setFieldValue}/>))}
                     </Card>
-                                    {/*<MyTextField*/}
-                                    {/*    name={partner.representativeFirstname}*/}
-                                    {/*    value={partner.representativeFirstname}*/}
-                                    {/*    key={`representative${partner.id}name`}*/}
-                                    {/*    label="Imię przedstawiciela wspólnika"*/}
-                                    {/*    as={TextField}/>*/}
-                                    {/*<MyTextField*/}
-                                    {/*    name={partner.representativeLastname}*/}
-                                    {/*    key={partner.representativeLastname}*/}
-                                    {/*    value={partner.representativeLastname}*/}
-                                    {/*    label="Nazwisko przedstawiciela wspólnika"*/}
-                                    {/*    as={TextField}*/}
-                                    {/*/>*/}
+
                     <Card>
-                        <div className={styles[`Absent`]}><p>W jakim trybie zwołano Zgromadzenie Wspólników</p>
+                        <div className={styles[`Absent`]}><p>Tryb zwołania Zgromadzenie Wspólników</p>
                             <Stack direction="row" spacing={3} alignItems="center">
                                 <Typography>Bez formalnego zwołania (wszyscy wspólnicy muszą być obecni)</Typography>
                                 <AntSwitch name={"formalConvening"}
