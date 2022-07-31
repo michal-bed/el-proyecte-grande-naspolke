@@ -19,10 +19,11 @@ import {BoardOfDirector} from "../../../classes/persons/BoardOfDirector";
 import {Button} from "@material-ui/core";
 import {useNow} from "@mui/x-date-pickers/internals/hooks/useUtils";
 import {VotingNoUnanimously} from "./VotingNoUnanimously";
-import style from "./FinancialStatementForm.module.css"
+import style from "./AttendanceList.module.css"
 import {MeetingPlace} from "./MeetingPlace";
 import {PartnersAttendanceList} from "./PartnersAttendanceList";
 import {SwitchComponent} from "./SwitchComponent";
+import {AttendanceList} from "./AttendanceList";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
     const AntSwitch = styled(Switch)(({theme}) => ({
@@ -181,14 +182,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
 
                     <MeetingPlace values={values} handleChange={handleChange}/>
 
-                    <Card className={style[`cardStyle`]}>
-                        <p>Lista obecności:</p>
-                        {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map((partner) => (
-                            <PartnersAttendanceList values={values} partner={partner} type={"individual"} setFieldValue={setFieldValue}/>))}
-
-                        {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map((partner) => (
-                            <PartnersAttendanceList values={values} partner={partner} type={"company"} setFieldValue={setFieldValue}/>))}
-                    </Card>
+                    <AttendanceList values={values} company={company} setFieldValue={setFieldValue}/>
 
                     <Card>
                         <SwitchComponent values={values}
