@@ -91,7 +91,7 @@ public class WordFormsHandler {
             return correctLetterCases(placeName);
         } else if (placeName.toUpperCase().contains("UL.")) {
             return correctLetterCases(placeName);
-        } else if (placeName.toUpperCase().contains("UL")) {
+        } else if (placeName.toUpperCase().contains("UL ")) {
             correctedPlaceName = placeName.toUpperCase().replace("UL", "ul.");
             return correctLetterCases(correctedPlaceName);
         } else if ((placeName.toUpperCase().contains("OS "))) {

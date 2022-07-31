@@ -37,6 +37,5 @@ export default function validateBaseInfo(values){
     } else if (parseInt(values.shareCapitalInput) < 5000){
         errors.shareCapitalInput = "kapitał zakładowy musi być większy niż 5000 zł"
     }
-
     return errors;
 }

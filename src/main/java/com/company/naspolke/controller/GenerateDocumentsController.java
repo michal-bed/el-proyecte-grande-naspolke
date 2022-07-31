@@ -1,13 +1,19 @@
 package com.company.naspolke.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.company.naspolke.service.FinancialStatementService;
 import com.company.naspolke.service.FinancialStatementServiceImplementation;
+import com.fasterxml.jackson.core.io.JsonStringEncoder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -24,7 +30,8 @@ public class GenerateDocumentsController {
 
     @ResponseStatus
     @PostMapping("/save/financial/{companyId}")
-    public void saveFinancialStatement(@PathVariable("companyId") String companyId, @RequestBody FinancialStatementProtocol protocol ) {
+    public void saveFinancialStatement(@PathVariable("companyId") String companyId, @RequestBody Map<String, Object> protocol ) {
+
         financialStatementService.saveFinancialStatement(protocol, UUID.fromString(companyId));
 
     }

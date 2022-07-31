@@ -7,6 +7,7 @@ export default axios.create({
 });
 
 export const saveFinancialStatement=(data, companyId) =>{
+    console.log(data);
     Axios.post(`${BASE_URL}/save/financial/${companyId}/`, data)
         .then((response)=> console.log(response.data))
         .catch((error)=>console.log(error))

@@ -1,5 +1,6 @@
 package com.company.naspolke.service;
 
+import com.company.naspolke.helpers.adapters.JsonFinancialStatementProtocolToJavaClass;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.company.naspolke.model.documentDrafts.FinancialStatementProtocolGenerator;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,19 +31,19 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
 
 
     @Override
-    public FinancialStatementProtocol saveFinancialStatement(FinancialStatementProtocol financialStatementsProtocol, UUID companyId){
-        Optional<Company> company = companyRepository.findById(companyId);
-        if (company.isPresent()) {
+    public FinancialStatementProtocol saveFinancialStatement(Map<String, Object> financialStatementsProtocolData, UUID companyId){
+        Optional<Company> companyOptional = companyRepository.findById(companyId);
+        if (companyOptional.isPresent()) {
 //            company.get().addFinancialStatement(financialStatementsProtocol);
 //            companyRepository.save(company.get());
-            Company company1 = company.get();
+            Company company = companyOptional.get();
             try {
-
-                financialStatementProtocolGenerator.generatePdfDocument(company1, financialStatementsProtocol);
+                FinancialStatementProtocol financialStatementsProtocol = JsonFinancialStatementProtocolToJavaClass.getProtocolFromFormData(financialStatementsProtocolData, company);
+                financialStatementProtocolGenerator.generatePdfDocument(company, financialStatementsProtocol);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return financialStatementsProtocol;
+            return null;
         }
         return null;
     }
