@@ -1,6 +1,7 @@
 import Card from "@mui/material/Card";
 import {Checkbox} from "@material-ui/core";
 import {VotingNoUnanimously} from "./VotingNoUnanimously";
+import {Voting} from "./Voting";
 
 
 export function MeetingAgenda({values, handleChange}) {
@@ -19,16 +20,8 @@ export function MeetingAgenda({values, handleChange}) {
                 <li>wolne głosy i wnioski;</li>
                 <li>zamknięcie obrad Zgromadzenia;</li>
             </ol>
-            <div>
-                <p>Głosowanie nad przyjęciem porządku obrad</p>
-                <div>
-                    <Checkbox aria-label={"jednogłośnie"} name={"agendaUnanimously"} defaultChecked
-                              value={values.agendaUnanimously} onChange={handleChange}
-                              color="secondary"/>
-                </div>
-                {values.agendaUnanimously === false &&
-                    <VotingNoUnanimously votingType={"agenda"} values={values}/> }
-            </div>
+            <Voting values={values} handleChange={handleChange} votingMatter={"agenda"}
+                    votingTitle={"Głosowanie nad przyjęciem porządku obrad"}/>
         </div>
     </Card>
 }

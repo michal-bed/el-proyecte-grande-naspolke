@@ -1,14 +1,9 @@
 import {FormControl} from "@chakra-ui/react";
 import {FormControlLabel} from "@mui/material";
 import {Checkbox} from "@material-ui/core";
-import {VotingNoUnanimously} from "./VotingNoUnanimously";
 import Card from "@mui/material/Card";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
-import {DatePicker} from "@mui/x-date-pickers";
-import TextField from "@mui/material/TextField";
-import {DatePickerComponent} from "./DatePickerComponent";
-import {Voting} from "./Voting";
+import {DatePickerComponent} from "../DatePickerComponent";
+import {Voting} from "../Voting";
 
 export function ApprovalBodyMember({values, setFieldValue, member, handleChange, memberType}) {
 

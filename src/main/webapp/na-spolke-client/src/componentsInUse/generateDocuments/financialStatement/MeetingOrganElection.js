@@ -3,6 +3,7 @@ import {FormHelperText, InputLabel, MenuItem, Select} from "@mui/material";
 import {Checkbox} from "@material-ui/core";
 import {VotingNoUnanimously} from "./VotingNoUnanimously";
 import Card from "@mui/material/Card";
+import {Voting} from "./Voting";
 
 
 export function MeetingOrganElection({values, company, setFieldValue, headerText, type, handleChange, helperText}) {
@@ -27,17 +28,8 @@ export function MeetingOrganElection({values, company, setFieldValue, headerText
                 </Select>
                 <FormHelperText>{helperText}</FormHelperText>
             </FormControl>
-            <div>
-                <p>Głosowanie</p>
-                <div>
-                    <Checkbox aria-label={"jednogłośnie"} name={`${type}Unanimously`} defaultChecked
-                              value={values[`${type}Unanimously`]}
-                              color="secondary" onChange={handleChange}/>
-                </div>
-                {values[`${type}Unanimously`] === false &&
-                    <VotingNoUnanimously votingType={type} values={values}/>
-                }
-            </div>
+            <Voting handleChange={handleChange} values={values} votingMatter={type}
+                    votingTitle={`Głosowanie nad wyborem ${type==="recorder"? "protokolant" : "Przewodniczącego"}`}/>
         </div>
     </Card>
 }
