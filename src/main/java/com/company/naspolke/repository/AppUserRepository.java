@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.beans.Transient;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,4 +22,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
     @Modifying
     @Query("UPDATE AppUser u SET u.applicationRoles = ?1 WHERE u.userId = ?2")
     void updateRolesByUserId(Set<? extends GrantedAuthority> roles, UUID userId);
+    @Query("SELECT u FROM AppUser u WHERE u.verificationCode = ?1")
+    Optional<AppUser> findByVerificationCode(String code);
 }

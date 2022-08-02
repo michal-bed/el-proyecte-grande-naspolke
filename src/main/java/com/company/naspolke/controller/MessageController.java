@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
@@ -110,7 +111,7 @@ public class MessageController {
     }
 
     @PostMapping(value = "/send-invitation-to-company")
-    public void sendInvitationForNewMember(HttpServletRequest request, @RequestBody ObjectNode objectNode) throws IOException {
+    public void sendInvitationForNewMember(HttpServletRequest request, @RequestBody ObjectNode objectNode) throws IOException, MessagingException {
         UUID loggedUserId = jwtUtil.getUserId(request);
         Optional<AppUser> loggedUser = appUserService.findUserByUserId(loggedUserId);
         Optional<Company> company = companyService.getCompanyByCompanyId(UUID.fromString(objectNode.get("companyId").asText()));

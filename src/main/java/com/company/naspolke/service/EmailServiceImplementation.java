@@ -1,5 +1,6 @@
 package com.company.naspolke.service;
 
+import com.company.naspolke.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
@@ -7,15 +8,18 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.util.Properties;
 
 @Service
 public class EmailServiceImplementation implements EmailService {
 
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
     @Autowired
     public EmailServiceImplementation(@Lazy JavaMailSender javaMailSender) {
@@ -41,7 +45,7 @@ public class EmailServiceImplementation implements EmailService {
     }
 
     @Override
-    public void sendEmail(String user, String text, String topic) throws MailException, IOException {
+    public void sendEmail(String user, String text, String topic) throws MailException, IOException, MessagingException {
 
         String line;
         StringBuilder emailBody = new StringBuilder();
@@ -51,12 +55,37 @@ public class EmailServiceImplementation implements EmailService {
             emailBody.append(line);
         }
 
-        SimpleMailMessage emailMessage = new SimpleMailMessage();
-        emailMessage.setFrom("naspolke.organizacja@gmail.com");
-        emailMessage.setTo(user);
-        emailMessage.setSubject(topic);
-        emailMessage.setText(emailBody.toString());
-        javaMailSender.send(emailMessage);
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("naspolke.organizacja@gmail.com", "Na spółkę");
+        helper.setTo(user);
+        helper.setSubject(topic);
+        helper.setText(emailBody.toString());
+        javaMailSender.send(message);
         System.out.println("Email send successfully");
+    }
+
+    @Override
+    public void sendVerificationEmail(AppUser appUser) throws MessagingException, UnsupportedEncodingException {
+        String content = "Witaj [[name]],<br>"
+                + "Jesteś o krok od zarejestrowania się w portalu <strong>naspolke.com</strong><br>"
+                + "Kliknij w poniższy link aby aktywować swoje konto:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">Zweryfikuj</a></h3>"
+                + "Dziękujemy,<br>"
+                + "Zespół <em>Na spółkę</em>";
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setFrom("naspolke.organizacja@gmail.com", "Na spółkę");
+        helper.setTo(appUser.getUserEmail());
+        helper.setSubject("Użytkowniku, zweryfikuj swoją rejestrację");
+        content = content.replace("[[name]]", appUser.getUserName() + " " + appUser.getUserSurname());
+        String verifyURL = "http://localhost:3000/verify?code=" + appUser.getVerificationCode();
+        content = content.replace("[[URL]]", verifyURL);
+        helper.setText(content, true);
+
+        javaMailSender.send(message);
+
     }
 }
