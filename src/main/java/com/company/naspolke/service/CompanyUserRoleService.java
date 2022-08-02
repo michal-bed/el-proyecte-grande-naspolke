@@ -15,4 +15,6 @@ public interface CompanyUserRoleService {
     void changeMemberRoleInCompany(Company company, AppUser appUser, Role role);
     void deleteMemberFromCompany(Company company, AppUser appUser);
     List<CompanyUserRole> getAllAppUserByCompanyAndByRole(UUID companyId, int role);
+
+    List<CompanyUserRole> getAllAppUserByCompanyId(UUID companyId);
 }

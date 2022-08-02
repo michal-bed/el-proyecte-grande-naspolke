@@ -134,4 +134,10 @@ public class CompanyUserRoleServiceImplementation implements CompanyUserRoleServ
     public List<CompanyUserRole> getAllAppUserByCompanyAndByRole(UUID companyId, int role) {
         return companyUserRoleRepository.findAppUserByCompanyAndByRole(companyId, role);
     }
+
+    @Override
+    public List<CompanyUserRole> getAllAppUserByCompanyId(UUID companyId) {
+        return null;
+    }
+
 }

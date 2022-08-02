@@ -27,6 +27,8 @@ function CompanyMembers () {
                 setCompany(res.data)})
     }, [])
 
+    console.log(company)
+
     function selectInfo (selectedData) {
         return company[selectedData];
     }
