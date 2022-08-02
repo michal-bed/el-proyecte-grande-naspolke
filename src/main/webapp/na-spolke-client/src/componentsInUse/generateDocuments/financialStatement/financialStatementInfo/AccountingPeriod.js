@@ -1,8 +1,4 @@
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
-import {DesktopDatePicker} from "@mui/x-date-pickers";
-import TextField from "@mui/material/TextField";
-import {DatePickerComponent} from "../DatePickerComponent";
+import {DatePickerComponent} from "../formUtils/DatePickerComponent";
 
 export function AccountingPeriod({values, setFieldValue}) {
 

@@ -1,9 +1,8 @@
 import {FormControl} from "@chakra-ui/react";
 import {FormHelperText, InputLabel, MenuItem, Select} from "@mui/material";
 import {Checkbox} from "@material-ui/core";
-import {VotingNoUnanimously} from "./VotingNoUnanimously";
 import Card from "@mui/material/Card";
-import {Voting} from "./Voting";
+import {Voting} from "../voting/Voting";
 
 
 export function MeetingOrganElection({values, company, setFieldValue, headerText, type, handleChange, helperText}) {

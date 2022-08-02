@@ -2,7 +2,7 @@ import TextField from "@mui/material/TextField";
 import {FormControl} from "@chakra-ui/react";
 import {InputLabel, MenuItem, Select} from "@mui/material";
 import {Field} from "formik";
-import {Voting} from "../Voting";
+import {Voting} from "../voting/Voting";
 
 export function AmountProfitOrLoss({values, valueName, resolutionHeader, handleChange}) {
     let coverageOfLossPossibility = ["Z zysków lat przyszłych", "inne..."]

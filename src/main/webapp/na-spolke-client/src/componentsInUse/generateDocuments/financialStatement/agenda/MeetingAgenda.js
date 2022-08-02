@@ -1,7 +1,5 @@
 import Card from "@mui/material/Card";
-import {Checkbox} from "@material-ui/core";
-import {VotingNoUnanimously} from "./VotingNoUnanimously";
-import {Voting} from "./Voting";
+import {Voting} from "../voting/Voting";
 
 
 export function MeetingAgenda({values, handleChange}) {

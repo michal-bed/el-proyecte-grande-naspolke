@@ -1,4 +1,4 @@
-import styles from "./PartnersAbsents/PartnersAbsents.module.css";
+import styles from "./SwitchComponent.module.css";
 import {Stack, Switch} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {styled} from "@mui/material/styles";
@@ -45,12 +45,12 @@ export const AntSwitch = styled(Switch)(({theme}) => ({
     },
 }));
 
-export function SwitchComponent({values, switchTrueText, switchFalseText, name, setFieldValue, title}) {
+export function SwitchComponent({values, switchTrueText, switchFalseText, name, setFieldValue, title, spacing=3}) {
 
     return<div>
         <div className={styles[`Absent`]}><p>{title}</p>
-            <Stack direction="row" spacing={3} alignItems="center">
-                <Typography>{switchTrueText}</Typography>
+            <Stack direction="row" spacing={spacing} alignItems="center">
+                <Typography>{switchFalseText}</Typography>
                 <AntSwitch name={name}
                            value={values[name]}
                            checked={values[name]}
@@ -59,7 +59,7 @@ export function SwitchComponent({values, switchTrueText, switchFalseText, name, 
                                    values[name] ? values[name] = false : values[name] = true);
                            }}
                 />
-                <Typography>{switchFalseText}</Typography>
+                <Typography>{switchTrueText}</Typography>
             </Stack>
         </div>
     </div>

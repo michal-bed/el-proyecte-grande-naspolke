@@ -1,8 +1,6 @@
 import {Field} from "formik";
 import TextField from "@mui/material/TextField";
-import {Checkbox} from "@material-ui/core";
-import {VotingNoUnanimously} from "../VotingNoUnanimously";
-import {Voting} from "../Voting";
+import {Voting} from "../voting/Voting";
 
 export function SumOfAssetsAndLiabilities({resolutionHeader, values, handleChange, valueName, label}) {
     return <div>

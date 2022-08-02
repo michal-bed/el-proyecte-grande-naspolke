@@ -1,7 +1,7 @@
 import {Field, Form, Formik, useField, useFormikContext} from "formik";
 import {Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import {validationSchema} from "./FinancialStatementFormLogic";
+import {validationSchema} from "./formUtils/FinancialStatementFormLogic";
 import {FinancialStatementProtocol} from "../../../classes/financialStatementProtocol/FinancialStatementProtocol";
 import {saveFinancialStatement} from "../../../api/axiosPosts";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
@@ -9,14 +9,14 @@ import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {DatePicker} from "@mui/x-date-pickers";
 import Card from "@mui/material/Card";
 import {Button} from "@material-ui/core";
-import {MeetingPlace} from "./MeetingPlace";
-import {SwitchComponent} from "./SwitchComponent";
-import {AttendanceList} from "./AttendanceList";
-import {MeetingOrganElection} from "./MeetingOrganElection";
-import {MeetingAgenda} from "./MeetingAgenda";
+import {MeetingPlace} from "./meetingPlace/MeetingPlace";
+import {SwitchComponent} from "./formUtils/SwitchComponent";
+import {AttendanceList} from "./attendance/AttendanceList";
+import {MeetingOrganElection} from "./meetingOrganElection/MeetingOrganElection";
+import {MeetingAgenda} from "./agenda/MeetingAgenda";
 import {FinancialStatementInfo} from "./financialStatementInfo/FinancialStatementInfo";
 import {ApprovalBodyMemberSection} from "./approvalBodyMember/ApprovalBodyMemberSection";
-import {SetupInitialFormValues} from "./SetupInitialFormValues";
+import {SetupInitialFormValues} from "./formUtils/SetupInitialFormValues";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
 
@@ -78,8 +78,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
 
                     <Card>
                         <SwitchComponent values={values}
-                                         switchTrueText={"Bez formalnego zwołania (wszyscy wspólnicy muszą być obecni)"}
-                                         switchFalseText={"Formalne zwołanie"}
+                                         switchTrueText={"Formalne zwołanie"}
+                                         switchFalseText={"Bez formalnego zwołania (wszyscy wspólnicy muszą być obecni)"}
                                          title={"Tryb zwołania Zgromadzenie Wspólników"}
                                          name={"formalConvening"}
                                          setFieldValue={setFieldValue}/>

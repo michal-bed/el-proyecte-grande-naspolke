@@ -2,8 +2,8 @@ import {FormControl} from "@chakra-ui/react";
 import {FormControlLabel} from "@mui/material";
 import {Checkbox} from "@material-ui/core";
 import Card from "@mui/material/Card";
-import {DatePickerComponent} from "../DatePickerComponent";
-import {Voting} from "../Voting";
+import {DatePickerComponent} from "../formUtils/DatePickerComponent";
+import {Voting} from "../voting/Voting";
 
 export function ApprovalBodyMember({values, setFieldValue, member, handleChange, memberType}) {
 
