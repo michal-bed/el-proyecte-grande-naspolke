@@ -121,7 +121,7 @@ public class MessageController {
             invitedUser.get().addMessage(message);
             appUserService.updateAppUser(invitedUser.get());
             emailService.sendEmail(invitedUser.get().getUserEmail(),
-                    ".\\src\\main\\resources\\email\\invitation-to-company.txt",
+                    "./src/main/resources/email/invitation-to-company.txt",
                     invitedUser.get().getUserName() + ", otrzymałeś zaproszenie do spółki " + company.get().getCompanyName());
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find user in database");

@@ -16,4 +16,5 @@ public interface CompanyService {
     Company saveCompany(Company company);
     ResponseEntity<String> buildSaveResponse(Company company);
     List<Company> findAll();
+    void updateCompany(Company company);
 }

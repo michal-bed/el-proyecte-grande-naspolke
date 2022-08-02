@@ -73,9 +73,9 @@ function CompanyInfo () {
     };
 
     const memberCardStyle = {
-        width: "300px",
-        height: "300px",
-        minWidth: "150px",
+        width: "320px",
+        height: "400px",
+        minWidth: "250px",
         marginLeft: "3%",
         marginRight: "3%",
         textAlign: "center"
@@ -385,22 +385,24 @@ function CompanyInfo () {
                     </TableContainer>
                 </Card>
 
-                <Card style={memberCardStyle}>
-                    <Link to={"invite"}><Button style={buttonStyle}>Zaproś do Spółki</Button></Link>
-                    <Typography>
-                        Osoby zarejestrowane w spółce:
+                <Box>
+                    <Card style={memberCardStyle}>
+                        <Link to={"invite"}><Button style={buttonStyle}>Zaproś do Spółki</Button></Link>
+                        <Typography>
+                            Osoby zarejestrowane w spółce:
 
-                        <ul style={tableStyle}>
-                            <li>
-                                do wypełnienia
-                            </li>
-                        </ul>
-                    </Typography>
-                </Card>
+                            <ul style={tableStyle}>
+                                <li>
+                                    do wypełnienia
+                                </li>
+                            </ul>
+                        </Typography>
+                    </Card><br/>
 
-                <Card style={memberCardStyle}>
-                    <EventsCalendar />
-                </Card>
+                    <Box style={memberCardStyle}>
+                        <EventsCalendar />
+                    </Box>
+                </Box>
 
             </Box>
         </>

@@ -32,7 +32,6 @@ function CompanyInvitePage () {
 
     const axiosPrivate = useAxiosPrivate();
     let {companyId} = useParams();
-    // const companyIdTest = "ba983b2a-cb4b-4875-932e-c692a49cd969";
     let company = getCompanyById(companyId);
     let [messageText, setMessageText] = useState("");
     const [emailAddress, setEmailAddress] = useState("");

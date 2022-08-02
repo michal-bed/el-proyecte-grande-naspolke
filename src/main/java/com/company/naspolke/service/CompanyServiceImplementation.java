@@ -98,4 +98,9 @@ public class CompanyServiceImplementation implements CompanyService {
     public List<Company> findAll() {
         return companyRepository.findAll();
     }
+
+    @Override
+    public void updateCompany(Company company) {
+        companyRepository.save(company);
+    }
 }
