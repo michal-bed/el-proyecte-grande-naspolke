@@ -24,35 +24,49 @@ public class MonoStringToCompanyAdapter {
     private final String EASYSOLAR = MocksData.EASYSOLAR;
 
     public Company getCompany(String apiResponse) {
+        boolean isValid = checkForProperCompanyLegalForm(apiResponse);
         String data = new String(apiResponse);
-//        String data = SWLEX;
-        String largerSharesInfo = "WIĘKSZĄ LICZBĘ UDZIAŁÓW";
-        Configuration conf = Configuration.defaultConfiguration()
-                .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(data);
-        String nip = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.nip");
-        String regon = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.regon");
-        String krsNumber = JsonPath.read(document, "$.odpis.naglowekA.numerKRS");
-        String companyName = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
-        BigDecimal shareCapital = getShareCapitalFromApi(document);
-        Partners partners = createCompanyPartners(document);
-        Address address = getCompanyAddressFromApi(document);
-        Set<BoardMember> boardMembers = getBoardMembersFromApi(document, conf);
-        Set<BoardOfDirector> boardOfDirectors = getBoardOfDirectorsFromApi(document, conf);
-        boolean largerAmountOfSharesAllowed = JsonPath.read(document, "$.odpis.dane.dzial1.pozostaleInformacje.informacjaOLiczbieUdzialow").equals(largerSharesInfo);
+        if (isValid) {
+//        String data = SWLEX;
+            String largerSharesInfo = "WIĘKSZĄ LICZBĘ UDZIAŁÓW";
+            Configuration conf = Configuration.defaultConfiguration()
+                    .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
+            String nip = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.nip");
+            String regon = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.regon");
+            String krsNumber = JsonPath.read(document, "$.odpis.naglowekA.numerKRS");
+            String companyName = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
+            BigDecimal shareCapital = getShareCapitalFromApi(document);
+            Partners partners = createCompanyPartners(document);
+            Address address = getCompanyAddressFromApi(document);
+            Set<BoardMember> boardMembers = getBoardMembersFromApi(document, conf);
+            Set<BoardOfDirector> boardOfDirectors = getBoardOfDirectorsFromApi(document, conf);
+            boolean largerAmountOfSharesAllowed = JsonPath.read(document, "$.odpis.dane.dzial1.pozostaleInformacje.informacjaOLiczbieUdzialow").equals(largerSharesInfo);
 
-        return Company.builder()
-                .companyName(companyName)
-                .krsNumber(krsNumber)
-                .nip(nip)
-                .regon(regon)
-                .shareCapital(shareCapital)
-                .address(address)
-                .partners(partners)
-                .boardMembers(boardMembers)
-                .boardOfDirectors(boardOfDirectors)
-                .manySharesAllowed(largerAmountOfSharesAllowed)
+            return Company.builder()
+                    .companyName(companyName)
+                    .krsNumber(krsNumber)
+                    .nip(nip)
+                    .regon(regon)
+                    .shareCapital(shareCapital)
+                    .address(address)
+                    .partners(partners)
+                    .boardMembers(boardMembers)
+                    .boardOfDirectors(boardOfDirectors)
+                    .manySharesAllowed(largerAmountOfSharesAllowed)
+                    .build();
+        }
+        String name = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
+        Company a = Company.builder()
+                .companyName(name)
                 .build();
+        return a;
+    }
+
+    private boolean checkForProperCompanyLegalForm(String apiResponse) {
+        String path = "$.odpis.dane.dzial1.danePodmiotu.formaPrawna";
+        Object document = Configuration.defaultConfiguration().jsonProvider().parse(apiResponse);
+        return JsonPath.read(document, path) == "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ";
     }
 
 
@@ -132,7 +146,7 @@ public class MonoStringToCompanyAdapter {
     private NaturalPerson getNaturalPersonPartner(Object document, String path) {
         PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, path);
         SharePackage sharePackage = getShareInfo(document, path);
-        return new NaturalPerson().builder()
+        return NaturalPerson.builder()
                 .firstName(personNameAndSurname.getFirstName())
                 .secondName(personNameAndSurname.getSecondName())
                 .lastNameI(personNameAndSurname.getLastNameI())

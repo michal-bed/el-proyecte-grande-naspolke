@@ -69,10 +69,12 @@ public class Company {
         this.boardMembers = boardMembers;
         this.boardOfDirectors = boardOfDirectors;
         this.partners = partners;
-        this.partnersRevealed = checkIfAllPartnersAreRevealed();
         this.manySharesAllowed = manySharesAllowed;
-        this.shareValue = checkForShareValue();
-        this.sharesCount = checkForShareCount();
+        if(partners!= null) {
+            this.partnersRevealed = checkIfAllPartnersAreRevealed();
+            this.shareValue = checkForShareValue();
+            this.sharesCount = checkForShareCount();
+        }
     }
 
     private Integer checkForShareCount() {

@@ -36,7 +36,12 @@ const KrsUserInput = (props)=>{
             props.addCompanyData(response);
             console.log(response.status)
         }).catch(error=>{
-            props.addCompanyData(error.response.status);
+            console.log(error.response.data.companyName)
+            if(error.response.status===422){
+                props.addCompanyData(error.response.status, error.response.data.companyName);
+            } else {
+                props.addCompanyData(error.response.status);
+            }
         });
     }
 
