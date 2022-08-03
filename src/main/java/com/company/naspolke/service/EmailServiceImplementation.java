@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -61,19 +60,25 @@ public class EmailServiceImplementation implements EmailService {
         helper.setFrom("naspolke.organizacja@gmail.com", "Na spółkę");
         helper.setTo(user);
         helper.setSubject(topic);
-        helper.setText(emailBody.toString());
+        helper.setText(emailBody.toString(), true);
+
         javaMailSender.send(message);
-        System.out.println("Email send successfully");
     }
 
     @Override
-    public void sendVerificationEmail(AppUser appUser) throws MessagingException, UnsupportedEncodingException {
-        String content = "Witaj [[name]],<br>"
-                + "Jesteś o krok od zarejestrowania się w portalu <strong>naspolke.com</strong><br>"
-                + "Kliknij w poniższy link aby aktywować swoje konto:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">Zweryfikuj</a></h3>"
-                + "Dziękujemy,<br>"
-                + "Zespół <em>Na spółkę</em>";
+    public void sendVerificationEmail(AppUser appUser) throws MessagingException, IOException {
+
+        String text = ".\\src\\main\\resources\\email\\verify-email.txt";
+
+        String line;
+        StringBuilder emailBody = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new FileReader(text));
+        while ((line = br.readLine()) != null) {
+            emailBody.append(line);
+        }
+
+        String content = emailBody.toString();
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -86,6 +91,5 @@ public class EmailServiceImplementation implements EmailService {
         helper.setText(content, true);
 
         javaMailSender.send(message);
-
     }
 }

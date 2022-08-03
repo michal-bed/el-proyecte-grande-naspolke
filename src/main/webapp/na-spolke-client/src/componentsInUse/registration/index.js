@@ -381,7 +381,7 @@ function RegistrationBasic() {
                   <DialogContent>
                       <DialogContentText id="alert-dialog-description">
                           Wysłaliśmy do Ciebie maila z linkiem aktywacyjnym. Aby się zalogować, sprawdź
-                          pocztę i kliknij 'Zweryfikuj'. Zostaniesz automatycznie przeniesiony do naszego
+                          pocztę i kliknij 𝙕𝙬𝙚𝙧𝙮𝙛𝙞𝙠𝙪𝙟 𝙨𝙬𝙤𝙟𝙚 𝙠𝙤𝙣𝙩𝙤. Zostaniesz automatycznie przeniesiony do naszego
                           portalu.
                       </DialogContentText>
                   </DialogContent>
