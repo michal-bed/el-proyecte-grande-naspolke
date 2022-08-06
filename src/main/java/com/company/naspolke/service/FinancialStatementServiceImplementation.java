@@ -31,14 +31,15 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
 
 
     @Override
-    public FinancialStatementProtocol saveFinancialStatement(Map<String, Object> financialStatementsProtocolData, UUID companyId){
+    public FinancialStatementProtocol saveFinancialStatement(FinancialStatementProtocol financialStatementsProtocol, UUID companyId){
         Optional<Company> companyOptional = companyRepository.findById(companyId);
         if (companyOptional.isPresent()) {
-//            company.get().addFinancialStatement(financialStatementsProtocol);
-//            companyRepository.save(company.get());
             Company company = companyOptional.get();
+            company.addFinancialStatement(financialStatementsProtocol);
+            System.out.println(company.toString());
+//            companyRepository.save(company);
             try {
-                FinancialStatementProtocol financialStatementsProtocol = JsonFinancialStatementProtocolToJavaClass.getProtocolFromFormData(financialStatementsProtocolData, company);
+//                FinancialStatementProtocol financialStatementsProtocol = JsonFinancialStatementProtocolToJavaClass.getProtocolFromFormData(financialStatementsProtocolData, company);
                 financialStatementProtocolGenerator.generatePdfDocument(company, financialStatementsProtocol);
             } catch (IOException e) {
                 throw new RuntimeException(e);

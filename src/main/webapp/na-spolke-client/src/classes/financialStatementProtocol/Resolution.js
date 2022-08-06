@@ -9,7 +9,7 @@ export class Resolution {
     constructor(data, votingType, resolutionTitle, key, id="") {
         this.resolutionTitle = resolutionTitle;
         this.votingType = votingType;
-        this.unanimously = data[`${key}Unanimously${id}`];
+        this.unanimously = data[`${key}${id}Unanimously`];
         if(this.unanimously===false){
             this.votesFor = data[`${key}${id}VotingFor`];
             this.votesAgainst = data[`${key}${id}VotingAgainst`];

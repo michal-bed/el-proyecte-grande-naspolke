@@ -1,6 +1,5 @@
 package com.company.naspolke.model.documentDrafts;
 
-
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.lowagie.text.Document;
@@ -35,7 +34,7 @@ public class FinancialStatementProtocolGenerator {
         this.financialStatementInformation = financialStatementInformation;
     }
 
-    public  void generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation) throws IOException {
+    public void generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation) throws IOException {
 
         //Create new pdf file
         Document document = new Document(PageSize.A4);
@@ -57,6 +56,7 @@ public class FinancialStatementProtocolGenerator {
         meetingPlace.setAlignment(Element.ALIGN_JUSTIFIED);
 
 
+
         //Save text to pdf file
         document.add(protocolHeader);
         document.add(meetingPlace);
@@ -64,25 +64,24 @@ public class FinancialStatementProtocolGenerator {
 
     }
 
-    private  String generateProtocolText(Company company, FinancialStatementProtocol financialStatementsProtocol){
+    private String generateProtocolText(Company company, FinancialStatementProtocol financialStatementsProtocol){
         String text = getTextFromFile(WordFormsHandler.PROTOCOL_HEADER);
         return fillTextTemplate(text, company, financialStatementsProtocol);
     }
 
-    private  String setMeetingPlaceText(Company company, FinancialStatementProtocol financialStatementsProtocol) throws IOException {
+    private String setMeetingPlaceText(Company company, FinancialStatementProtocol financialStatementsProtocol) throws IOException {
+        String text;
         if (financialStatementsProtocol.isMeetingPlaceInHeadquarters()) {
-            String text = getTextFromFile(WordFormsHandler.MEETING_PLACE_IN_HEADQUARTERS);
-            return fillTextTemplate(text, company, financialStatementsProtocol);
+            text = getTextFromFile(WordFormsHandler.MEETING_PLACE_IN_HEADQUARTERS);
 
         } else {
-            String text = getTextFromFile(WordFormsHandler.MEETING_PLACE_NOT_IN_HEADQUARTERS);
-            return fillTextTemplate(text, company, financialStatementsProtocol);
+            text = getTextFromFile(WordFormsHandler.MEETING_PLACE_NOT_IN_HEADQUARTERS);
         }
+        return fillTextTemplate(text, company, financialStatementsProtocol);
     }
 
-    private  String getTextFromFile(String path) {
+    private String getTextFromFile(String path) {
         StringBuilder contentBuilder = new StringBuilder();
-
         try (Stream<String> stream
                      = Files.lines(Paths.get(path), StandardCharsets.UTF_8)) {
             //Read the content with Stream
@@ -90,11 +89,10 @@ public class FinancialStatementProtocolGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return contentBuilder.toString();
     }
 
-    private  String fillTextTemplate(String text, Company company, FinancialStatementProtocol financialStatementsProtocol) {
+    private String fillTextTemplate(String text, Company company, FinancialStatementProtocol financialStatementsProtocol) {
         Map<String, String> definition = new java.util.HashMap<>(Map.of(
                 "protocolNumber", String.valueOf(financialStatementsProtocol.getProtocolNumber()),
                 "meetingType", "Zwyczajnego",

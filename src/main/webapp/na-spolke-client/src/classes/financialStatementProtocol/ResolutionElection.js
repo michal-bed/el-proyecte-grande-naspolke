@@ -7,7 +7,7 @@ export class ResolutionElection extends Resolution{
     constructor(data, meetingFunction,resolutionTitle, votingType) {
         super(data, votingType, resolutionTitle, meetingFunction)
         const nameAndSurname = data[`${meetingFunction}`].split(" ");
-        this.firstname = nameAndSurname[0];
+        this.firstName = nameAndSurname[0];
         this.lastName = nameAndSurname[1];
         this.meetingFunction = meetingFunction;
     }

@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -35,12 +33,12 @@ public class FinancialStatementProtocol {
     private int protocolNumber;
     private boolean formalConvening;
     @OneToMany
-    private Set<NaturalPerson> listIdPresentIndividualPartners;
+    private Set<NaturalPerson> listPresentIndividualPartners;
     @OneToMany
-    private Set<JuridicalPerson> listIdPresentsCompanyPartners;
+    private Set<JuridicalPerson> listPresentsCompanyPartners;
     @ManyToOne
     @JoinColumn
-    private ElectionResolution president;
+    private ElectionResolution chairperson;
     @ManyToOne
     @JoinColumn
     private ElectionResolution recorder;
@@ -62,16 +60,22 @@ public class FinancialStatementProtocol {
 
 
     @Builder
-    public FinancialStatementProtocol(LocalDate dateOfTheShareholdersMeeting, boolean meetingPlaceInHeadquarters, String meetingPlace, Address address, int protocolNumber, boolean formalConvening, Set<NaturalPerson> listIdPresentIndividualPartners, Set<JuridicalPerson> listIdPresentsCompanyPartners, ElectionResolution president, ElectionResolution recorder, AgendaResolution agendaResolution, ProfitOrLoss profitOrLoss, FinancialStatementResolution financialStatementResolution, Set<ResolutionApprovalBodyMember> boardMembersApproval, Set<ResolutionApprovalBodyMember> directorsMembersApproval, Company company) {
+    public FinancialStatementProtocol(LocalDate dateOfTheShareholdersMeeting, boolean meetingPlaceInHeadquarters, String meetingPlace,
+                                      Address address, int protocolNumber, boolean formalConvening,
+                                      Set<NaturalPerson> listPresentIndividualPartners, Set<JuridicalPerson> listPresentsCompanyPartners,
+                                      ElectionResolution chairperson, ElectionResolution recorder, AgendaResolution agendaResolution,
+                                      ProfitOrLoss profitOrLoss, FinancialStatementResolution financialStatementResolution,
+                                      Set<ResolutionApprovalBodyMember> boardMembersApproval, Set<ResolutionApprovalBodyMember> directorsMembersApproval,
+                                      Company company) {
         this.dateOfTheShareholdersMeeting = dateOfTheShareholdersMeeting;
         this.meetingPlaceInHeadquarters = meetingPlaceInHeadquarters;
         this.meetingPlace = meetingPlace;
         this.address = address;
         this.protocolNumber = protocolNumber;
         this.formalConvening = formalConvening;
-        this.listIdPresentIndividualPartners = listIdPresentIndividualPartners;
-        this.listIdPresentsCompanyPartners = listIdPresentsCompanyPartners;
-        this.president = president;
+        this.listPresentIndividualPartners = listPresentIndividualPartners;
+        this.listPresentsCompanyPartners = listPresentsCompanyPartners;
+        this.chairperson = chairperson;
         this.recorder = recorder;
         this.agendaResolution = agendaResolution;
         this.profitOrLoss = profitOrLoss;

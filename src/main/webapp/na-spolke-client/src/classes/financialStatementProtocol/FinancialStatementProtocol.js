@@ -13,9 +13,9 @@ export class FinancialStatementProtocol {
     meetingPlace;
     address;
     formalConvening;
-    listIdPresentIndividualPartners = [];
-    listIdPresentsCompanyPartners = [];
-    president;
+    listPresentIndividualPartners = [];
+    listPresentsCompanyPartners = [];
+    chairperson;
     recorder;
     agenda;
     profitOrLoss;
@@ -36,13 +36,13 @@ export class FinancialStatementProtocol {
             zipCode: data.zipCode
         })
         this.formalConvening = data.formalConvening;
-        this.listIdPresentIndividualPartners = this.setPresentPartners(data, company.partners.individualPartners, "individualPartner");
-        this.listIdPresentsCompanyPartners = this.setPresentPartners(data, company.partners.partnerCompanies, "partnerCompany");
-        this.president = new ResolutionElection(data, "president","presidentVoting", "secret");
+        this.listPresentIndividualPartners = this.setPresentPartners(data, company.partners.individualPartners, "individual");
+        this.listPresentsCompanyPartners = this.setPresentPartners(data, company.partners.partnerCompanies, "company");
+        this.chairperson = new ResolutionElection(data, "chairperson","chairpersonVoting", "secret");
         this.recorder = new ResolutionElection(data, "recorder", "recorderVoting", "secret");
         this.agenda = new ResolutionAgenda(data, "public", "agenda", "agenda");
         this.profitOrLoss = new ResolutionProfitLoss(data, "public", "ProfitLoss", "amountProfitOrLoss");
-        this.financialStatementResolution = new ResolutionFinancialStatement(data, "public", "financial statement", "financialStatement")
+        this.financialStatementResolution = new ResolutionFinancialStatement(data, "public", "financial statement", "financialStatement");
         this.boardMembersApproval = this.ApprovalResolutions(data, company.boardMembers, "board");
         this.directorsMembersApproval = this.ApprovalResolutions(data, company.boardOfDirectors, "director");
     }
@@ -52,7 +52,8 @@ export class FinancialStatementProtocol {
         if (partner.length > 0) {
             for (let i = 0; i < partner.length; i++) {
                 if (data[`${listType}${partner[i].id}IsPresent`] === true) {
-                    partnersPresent.push(partner[i].id)
+                    partnersPresent.push(partner[i])
+                    console.log(partner[i]);
                 }
             }
             return partnersPresent;
@@ -63,8 +64,8 @@ export class FinancialStatementProtocol {
         let resolutions = [];
         for (let i = 0; i < bodyMemberList.length; i++) {
             const resolution = new ResolutionApprovalBodyMember(data, "secret",
-                "board approval", bodyType, bodyMemberList[i][bodyType==="board" ? "boardMemberId" : "boardOfDirectorId"])
-            resolutions.push(resolution)
+                "board approval", bodyType, bodyMemberList[i])
+            resolutions.push(resolution);
         }
         return resolutions;
     }
