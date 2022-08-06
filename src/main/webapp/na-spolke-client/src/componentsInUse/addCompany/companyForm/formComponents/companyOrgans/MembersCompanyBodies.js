@@ -3,7 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import validatePartners from "./ValidationCompanyOrgans";
-import {Box, Card, CardContent, Grid} from "@mui/material";
+import {Box, Card, CardContent, Grid, InputLabel, MenuItem, Select} from "@mui/material";
 import styles from "./MembersCompanyBodies.module.css";
 import {CompanyContext} from "../../CompanyContext";
 
@@ -117,6 +117,20 @@ const MembersCompanyBodies = (props) => {
             {memberBody.map((member, index) => (
                 <div key={index}>
                     <Card sx={{minWidth: 275, width: '95%', height: '100%', margin: "auto"}}>
+                        <Box sx={{ minWidth: 120}}>
+                            <InputLabel id={`gender${index}`}>Zwrot grzecznościowy</InputLabel>
+                            <Select
+                                labelId="zwrot grzecznościowy"
+                                name="gender"
+                                id={member.gender}
+                                value={member.gender}
+                                label="gender"
+                                onChange={(event)=> handleChangeInput(index, event)}
+                            >
+                                <MenuItem value={"male"}>Pan</MenuItem>
+                                <MenuItem value={"female"}>Pani</MenuItem>
+                            </Select>
+                        </Box>
                         <CardContent>
                             <Grid sx={{
                                 display: 'grid',

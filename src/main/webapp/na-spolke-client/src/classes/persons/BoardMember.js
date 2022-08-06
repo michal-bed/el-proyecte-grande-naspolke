@@ -5,7 +5,9 @@ export class BoardMember{
     secondName = " ";
     lastNameI = " ";
     lastNameII = " ";
+    gender = "male";
     function = "Członek Zarządu";
+
     constructor(memberData) {
         if (memberData) {
             this.firstName = memberData.firstName;
@@ -13,6 +15,7 @@ export class BoardMember{
             this.lastNameI = memberData.lastNameI;
             this.lastNameII = memberData.lastNameII;
             this.function = memberData.function;
+            this.gender = memberData.hasOwnProperty("gender")? memberData.gender : "male";
         }
     }
 }
