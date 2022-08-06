@@ -66,7 +66,7 @@ public class MonoStringToCompanyAdapter {
     private boolean checkForProperCompanyLegalForm(String apiResponse) {
         String path = "$.odpis.dane.dzial1.danePodmiotu.formaPrawna";
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(apiResponse);
-        return JsonPath.read(document, path) == "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ";
+        return JsonPath.read(document, path).equals("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ");
     }
 
 
