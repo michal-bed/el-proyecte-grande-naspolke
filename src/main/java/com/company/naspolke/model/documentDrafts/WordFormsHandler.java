@@ -128,8 +128,8 @@ public class WordFormsHandler {
             for (String part : partialText) {
                 if (WordFormsHandler.NO_UPPER_CASE.contains(part.toLowerCase())) {
                     changeCase.append(part.toLowerCase());
-                } else {
-                    changeCase.append(part.substring(0, 1).toUpperCase().concat(part.substring(1).toLowerCase()));
+                } else if (!part.isBlank()){
+                    changeCase.append(part.substring(0, 1).toUpperCase().concat(part.substring(1).toLowerCase())).append(" ");
                 }
             }
             return changeCase.toString();
@@ -144,4 +144,6 @@ public class WordFormsHandler {
             return protocol.getAddress().getStreetNumber() + "/" + protocol.getAddress().getLocalNumber();
         }
     }
+
+
 }
