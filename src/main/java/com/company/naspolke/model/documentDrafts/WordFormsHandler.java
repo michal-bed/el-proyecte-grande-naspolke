@@ -111,10 +111,10 @@ public class WordFormsHandler {
         } else if (placeName.toUpperCase().contains("AL.")) {
             return correctLetterCases(placeName);
         } else if (placeName.toUpperCase().contains("ALEJA")) {
-            correctedPlaceName = placeName.toUpperCase().replace("ALEJA", "AL.");
+            correctedPlaceName = placeName.toUpperCase().replace("ALEJA", "al.");
             return correctLetterCases(correctedPlaceName);
         } else if (placeName.toUpperCase().contains("AL ")) {
-            correctedPlaceName = placeName.toUpperCase().replace("AL", "AL.");
+            correctedPlaceName = placeName.toUpperCase().replace("AL", "al.");
             return correctLetterCases(correctedPlaceName);
         }
         return "ul. ".concat(correctLetterCases(placeName));

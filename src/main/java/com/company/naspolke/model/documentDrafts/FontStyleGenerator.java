@@ -13,12 +13,12 @@ class FontStyleGenerator {
         Font font = FontFactory.getFont(fontStyles.getFontType(), BaseFont.IDENTITY_H);
         switch (fontStyles){
             case PROTOCOL_HEADER -> {
-                font.setSize(17);
+                font.setSize(15);
                 font.isBold();
             }
-            case PROTOCOL_PLANE_TEXT, PROTOCOL_RESOLUTION_TEXT -> font.setSize(14);
+            case PROTOCOL_PLANE_TEXT, PROTOCOL_RESOLUTION_TEXT -> font.setSize(12);
             case PROTOCOL_RESOLUTION_HEADER -> {
-                font.setSize(15);
+                font.setSize(14);
                 font.isBold();
             }
         }

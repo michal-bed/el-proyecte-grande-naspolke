@@ -1,6 +1,7 @@
 package com.company.naspolke.model.documentDrafts;
 
 import com.company.naspolke.model.company.Company;
+import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.lowagie.text.Document;
@@ -13,11 +14,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 import static com.company.naspolke.model.documentDrafts.ChangeDigitsIntoWords.changeDigitsIntoWords;
@@ -39,7 +39,6 @@ public class FinancialStatementProtocolGenerator {
     }
 
     public void generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation) throws IOException {
-        System.out.println(setAttendantsList(financialStatementInformation));
         //Create new pdf file
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, new FileOutputStream("src/main/resources/drafts/financialStatements/pdfTest.pdf"));
@@ -54,16 +53,27 @@ public class FinancialStatementProtocolGenerator {
         protocolHeader.setSpacingAfter(20);
 
         //Set meeting place
-        Font regularText = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
+        Font regularTextFontStyle = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
         String meetingPlaceText = setMeetingPlaceText(company, financialStatementInformation);
-        Paragraph meetingPlace = new Paragraph(meetingPlaceText, regularText);
+        Paragraph meetingPlace = new Paragraph(meetingPlaceText, regularTextFontStyle);
+        meetingPlace.setMultipliedLeading(1.5f);
         meetingPlace.setAlignment(Element.ALIGN_JUSTIFIED);
+
+        //Set attendants list
+        String attendantsListText = setAttendantsList(financialStatementInformation);
+        Paragraph attendantsList = new Paragraph(attendantsListText, regularTextFontStyle);
+        attendantsList.setAlignment(Element.ALIGN_JUSTIFIED);
+        //line spacing
+        attendantsList.setMultipliedLeading(1.5f);
+        attendantsList.setSpacingAfter(2);
+        attendantsList.setIndentationLeft(20);
 
 
 
         //Save text to pdf file
         document.add(protocolHeader);
         document.add(meetingPlace);
+        document.add(attendantsList);
         document.close();
 
     }
@@ -121,22 +131,44 @@ public class FinancialStatementProtocolGenerator {
 
     private String setAttendantsList(FinancialStatementProtocol protocol) {
         int counter = 0;
-        String partnerText = null;
+        StringBuilder stringBuilder = new StringBuilder();
         for (NaturalPerson partner : protocol.getListPresentIndividualPartners()) {
             counter++;
             String partnerName = getPartnerFullName(partner);
             String sharesProperForm = getSharesProperForm(partner.getSharesCount());
             String sharesInWords = changeDigitsIntoWords((long) partner.getSharesCount());
-            partnerText = String.format("%d. %s posiadający %d %s (słownie: %s %s) o łacznej wartości nominalnej w wysokości %s zł.\n",
-                    counter, partnerName.trim(), partner.getSharesCount(), sharesProperForm, sharesInWords, sharesProperForm, partner.getSharesValue().toString());
+            float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
+            String punctuationMark = checkForPunctuationMark(protocol, counter);
+            stringBuilder.append(String.format(Locale.ITALY, "%d. %s posiadający %d %s (słownie: %s%4$s) o łacznej wartości nominalnej w wysokości %.2f zł%s\n",
+                    counter, partnerName.trim(), partner.getSharesCount(), sharesProperForm, sharesInWords, sharesValue, punctuationMark));
         }
-        return partnerText;
-//        for (int i = 0; i < protocol.getListPresentIndividualPartners().size(); i++) {
-//            NaturalPerson partner = protocol.getListPresentIndividualPartners().
-//            String partnerName = getPartnerFullName();
-//            // 1. Bartosz Kosicki posiadający/posiadająca xxx udziały/ udziałów o łącznej wartości nominalnej w wysokości dwieście złotych (słownie)  zł
-//            stringBuilder.append();
-//        }
+        for (JuridicalPerson partner:protocol.getListPresentsCompanyPartners()) {
+            counter++;
+            String companyName = partner.getName();
+            int sharesCount = partner.getSharesCount();
+            String sharesProperForm = getSharesProperForm(partner.getSharesCount());
+            String sharesCountInWords = changeDigitsIntoWords((long) partner.getSharesCount());
+            float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
+            String representation = setProperRepresentationName(partner).strip();
+            String punctuationMark = checkForPunctuationMark(protocol, counter);
+            stringBuilder.append(String.format(Locale.ITALY, "%d. %s posiadająca %d %s (słownie: %s%4$s) o łącznej wartości nominalnej w wysokości %.2f zł, którą reprezentuje %s%s\n",
+                    counter, companyName, sharesCount,sharesProperForm, sharesCountInWords,sharesValue, representation, punctuationMark));
+        }
+        return stringBuilder.toString();
+    }
+
+    private String checkForPunctuationMark(FinancialStatementProtocol protocol, int counter) {
+        int indListLength = protocol.getListPresentIndividualPartners().size();
+        int companyListLength = protocol.getListPresentsCompanyPartners().size();
+        boolean isLastElementInList = counter == indListLength && companyListLength == 0 || counter == indListLength + companyListLength;
+        return isLastElementInList ? ".": ";";
+
+    }
+
+    private String setProperRepresentationName(JuridicalPerson partner) {
+        String firstName = correctLetterCases(partner.getRepresentativeFirstname());
+        String lastName = correctLetterCases(partner.getRepresentativeLastname());
+        return firstName.concat(" ").concat(lastName);
     }
 
     private String getSharesProperForm(int sharesCount) {
@@ -163,5 +195,5 @@ public class FinancialStatementProtocolGenerator {
         }
         return correctLetterCases(stringBuilder.toString());
     }
-}
 //TODO zamienić na String.format z array
+}
