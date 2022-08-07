@@ -65,10 +65,8 @@ public class FinancialStatementProtocolGenerator {
         attendantsList.setAlignment(Element.ALIGN_JUSTIFIED);
         //line spacing
         attendantsList.setMultipliedLeading(1.5f);
-        attendantsList.setSpacingAfter(2);
+        attendantsList.setSpacingAfter(10);
         attendantsList.setIndentationLeft(20);
-
-
 
         //Save text to pdf file
         document.add(protocolHeader);
@@ -87,7 +85,6 @@ public class FinancialStatementProtocolGenerator {
         String text;
         if (financialStatementsProtocol.isMeetingPlaceInHeadquarters()) {
             text = getTextFromFile(WordFormsHandler.MEETING_PLACE_IN_HEADQUARTERS);
-
         } else {
             text = getTextFromFile(WordFormsHandler.MEETING_PLACE_NOT_IN_HEADQUARTERS);
         }
@@ -162,7 +159,6 @@ public class FinancialStatementProtocolGenerator {
         int companyListLength = protocol.getListPresentsCompanyPartners().size();
         boolean isLastElementInList = counter == indListLength && companyListLength == 0 || counter == indListLength + companyListLength;
         return isLastElementInList ? ".": ";";
-
     }
 
     private String setProperRepresentationName(JuridicalPerson partner) {

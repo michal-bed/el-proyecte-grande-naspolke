@@ -27,8 +27,7 @@ public class LogoutController {
 
 //        System.out.println("JWTRef = " + refreshToken);
 //
-//        if (Objects.equals(refreshToken, ""))
-//        {
+//        if (Objects.equals(refreshToken, "")){
 //            // 204 - NO CONTENT
 //            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 //        }

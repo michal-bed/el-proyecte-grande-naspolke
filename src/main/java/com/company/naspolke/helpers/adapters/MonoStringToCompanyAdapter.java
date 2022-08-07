@@ -11,17 +11,21 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class MonoStringToCompanyAdapter {
 
-
+//TODO usunąć importów z *
     private final String SWLEX = MocksData.SWLEX;
     private final String EASYSOLAR = MocksData.EASYSOLAR;
+    @Value("cokolwiek")
+    private String cokolwiek;
 
     public Company getCompany(String apiResponse) {
         boolean isValid = checkForProperCompanyLegalForm(apiResponse);
@@ -57,10 +61,9 @@ public class MonoStringToCompanyAdapter {
                     .build();
         }
         String name = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
-        Company a = Company.builder()
+        return Company.builder()
                 .companyName(name)
                 .build();
-        return a;
     }
 
     private boolean checkForProperCompanyLegalForm(String apiResponse) {
@@ -68,7 +71,7 @@ public class MonoStringToCompanyAdapter {
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(apiResponse);
         return JsonPath.read(document, path).equals("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ");
     }
-
+//TODO wywalić string do inego do properties
 
     private Set<BoardOfDirector> getBoardOfDirectorsFromApi(Object document, Configuration conf) {
         String path = "$.odpis.dane.dzial2.organNadzoru";
@@ -96,6 +99,20 @@ public class MonoStringToCompanyAdapter {
         net.minidev.json.JSONArray boardMembers = JsonPath.using(conf).parse(document).read(path);
         Set<BoardMember> boardMemberSet = new HashSet<>();
         if(boardMembers != null) {
+//            Set<BoardMember> boardMembersList = boardMembers.stream()
+//                    .map(person -> {
+//                        PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path + "[%s]"));
+//                        String abs = personNameAndSurname.getFirstName();
+//                        String function = JsonPath.read(document, String.format(path + "[%s].funkcjaWOrganie"));
+//                        return BoardMember.builder()
+//                                .firstName(abs)
+//                                .secondName(personNameAndSurname.getSecondName())
+//                                .lastNameI(personNameAndSurname.getLastNameI())
+//                                .lastNameII(personNameAndSurname.getLastNameII())
+//                                .function(function)
+//                                .build();
+//                    }).collect(Collectors.toSet());
+
             for (int i = 0; i < boardMembers.size(); i++) {
                 PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path + "[%s]", i));
                 String abs = personNameAndSurname.getFirstName();
@@ -112,7 +129,7 @@ public class MonoStringToCompanyAdapter {
         }
         return boardMemberSet;
     }
-
+//TODO częściej stream niż for
     private Partners createCompanyPartners(Object document) {
         net.minidev.json.JSONArray partners = JsonPath.read(document, "$.odpis.dane.dzial1.wspolnicySpzoo");
         Set<NaturalPerson> naturalPersonSet = new HashSet<>();
@@ -190,7 +207,7 @@ public class MonoStringToCompanyAdapter {
         String sharesValueString = shares[1].replaceAll("[^\\d,]","").replaceAll("\\s+","");
         sharesValueString = sharesValueString.substring(0, sharesValueString.length()-2);
         BigDecimal sharesValueBigDecimal = BigDecimal.valueOf(Double.parseDouble(sharesValueString.replaceAll("[^\\d]", ".")));
-        return new SharePackage().builder()
+        return SharePackage.builder()
                 .shareCount(shareCount)
                 .shareValue(sharesValueBigDecimal)
                 .build();
