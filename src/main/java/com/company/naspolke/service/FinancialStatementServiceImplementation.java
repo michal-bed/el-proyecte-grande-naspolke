@@ -1,6 +1,5 @@
 package com.company.naspolke.service;
 
-import com.company.naspolke.helpers.adapters.JsonFinancialStatementProtocolToJavaClass;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.company.naspolke.model.documentDrafts.FinancialStatementProtocolGenerator;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,7 +34,6 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
         if (companyOptional.isPresent()) {
             Company company = companyOptional.get();
             company.addFinancialStatement(financialStatementsProtocol);
-            System.out.println(company.toString());
 //            companyRepository.save(company);
             try {
 //                FinancialStatementProtocol financialStatementsProtocol = JsonFinancialStatementProtocolToJavaClass.getProtocolFromFormData(financialStatementsProtocolData, company);

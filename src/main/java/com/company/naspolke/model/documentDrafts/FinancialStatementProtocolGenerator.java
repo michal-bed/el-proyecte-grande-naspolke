@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -32,6 +34,8 @@ public class FinancialStatementProtocolGenerator {
 
     private Company company;
     FinancialStatementProtocol financialStatementInformation;
+    int resolutionCount = 1;
+
 
     public FinancialStatementProtocolGenerator(Company company, FinancialStatementProtocol financialStatementInformation) {
         this.company = company;
@@ -66,12 +70,20 @@ public class FinancialStatementProtocolGenerator {
         //line spacing
         attendantsList.setMultipliedLeading(1.5f);
         attendantsList.setSpacingAfter(10);
+        attendantsList.setSpacingBefore(10);
         attendantsList.setIndentationLeft(20);
+
+        //SetChairperson
+        String chairpersonInfo = getChairmanInfo(financialStatementInformation);
+        Paragraph chairpersonText = new Paragraph(chairpersonInfo);
+        chairpersonText.setAlignment(Element.ALIGN_JUSTIFIED);
+        chairpersonText.setMultipliedLeading(1.5f);
 
         //Save text to pdf file
         document.add(protocolHeader);
         document.add(meetingPlace);
         document.add(attendantsList);
+        document.add(chairpersonText);
         document.close();
 
     }
@@ -190,16 +202,44 @@ public class FinancialStatementProtocolGenerator {
         }
         return correctLetterCases(stringBuilder.toString());
     }
-    private String getChairmanInfo(FinancialStatementProtocol protocol){
-//        String nameAndSurname = protocol.getChairperson().getFirstName().concat(" ").concat(protocol.getChairperson().getLastName());
-//        String[] maleForms = {}
-        String a = "%s Bartosz Kosicki stwierdził, iż na funkcję Przewodniczącego niniejszego Zgromadzenia zgłoszono jego kandydaturę, " +
-                "na co wyraził zgodę, wobec czego przystąpiono do głosowania nad poniższą uchwałą.";
-//        String format = String.format(a, "a")
-        return null;
+    private String getPartnerFullName(JuridicalPerson juridicalPerson){
+        String nameAndSurname = juridicalPerson.getRepresentativeFirstname() + " " +
+                juridicalPerson.getRepresentativeLastname();
+        return correctLetterCases(nameAndSurname);
     }
+
+
+    private String getChairmanInfo(FinancialStatementProtocol protocol){
+        System.out.println(protocol.getChairperson().getIndividual());
+        char genderSymbol=' ';
+        String nameAndLastname = "";
+        if(protocol.getChairperson().getCompany()== null && protocol.getChairperson().getIndividual()!=null) {
+            NaturalPerson person = protocol.getChairperson().getIndividual();
+            nameAndLastname = (getPartnerFullName(person));
+            genderSymbol = person.getGender();
+        } else if(protocol.getChairperson().getIndividual()==null && protocol.getChairperson().getCompany() != null) {
+            JuridicalPerson person = protocol.getChairperson().getCompany();
+            genderSymbol = person.getRepresentativeGender();
+            nameAndLastname = getPartnerFullName(person);
+        }
+        String gender = genderSymbol =='m' ? "Pan" : "Pani";
+        String statedForm = genderSymbol =='m' ? "stwierdził" : "stwierdziła";
+        String properPossessivePronoun = genderSymbol=='m' ? "jego" : "jej";
+        String expressedForm = genderSymbol=='m' ? "wyraził" : "wyraziła";
+        return String.format("%s %s %s, iż na funkcję Przewodniczącego niniejszego Zgromadzenia zgłoszono %s kandydaturę, " +
+                "na co %s zgodę, wobec czego przystąpiono do głosowania nad poniższą uchwałą.", gender, nameAndLastname,
+                statedForm, properPossessivePronoun, expressedForm);
+    }
+//        String[] maleForms = {}
+//        String a = "%s Bartosz Kosicki stwierdził, iż na funkcję Przewodniczącego niniejszego Zgromadzenia zgłoszono jego kandydaturę, " +
+//                "na co wyraził zgodę, wobec czego przystąpiono do głosowania nad poniższą uchwałą.";
+//        String format = String.format(a, "a")
+//        return null;
+//    }
 //    Pan Bartosz Kosicki stwierdził, iż na funkcję Przewodniczącego niniejszego Zgromadzenia zgłoszono jego kandydaturę,
 //    na co wyraził zgodę, wobec czego przystąpiono do głosowania nad poniższą uchwałą.
 
 //TODO zamienić na String.format z array
+
+
 }

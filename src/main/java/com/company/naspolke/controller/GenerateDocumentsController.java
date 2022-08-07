@@ -34,7 +34,7 @@ public class GenerateDocumentsController {
 //        FinancialStatementProtocol protocol1 = protocol;
         System.out.println(protocol);
         System.out.println(protocol);
-//        financialStatementService.saveFinancialStatement(protocol, UUID.fromString(companyId));
+        financialStatementService.saveFinancialStatement(protocol, UUID.fromString(companyId));
 
     }
 }

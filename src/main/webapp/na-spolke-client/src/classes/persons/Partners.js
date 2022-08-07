@@ -58,7 +58,7 @@ export class PartnerCompany {
             this.sharesValue = partnerData.sharesValue;
             this.representativeFirstname = partnerData.representativeFirstname;
             this.representativeLastname = partnerData.representativeLastname;
-            this.representativeGender = partnerData.hasOwnProperty("gender")?partnerData.gender : "m";
+            this.representativeGender = partnerData.hasOwnProperty("representativeGender")?partnerData.representativeGender : "m";
             this.id = partnerData.hasOwnProperty("id")?partnerData.id : null;
         }
     }
