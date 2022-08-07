@@ -53,7 +53,6 @@ export class FinancialStatementProtocol {
             for (let i = 0; i < partner.length; i++) {
                 if (data[`${listType}${partner[i].id}IsPresent`] === true) {
                     partnersPresent.push(partner[i])
-                    console.log(partner[i]);
                 }
             }
             return partnersPresent;

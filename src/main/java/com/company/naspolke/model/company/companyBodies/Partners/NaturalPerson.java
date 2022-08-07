@@ -33,10 +33,9 @@ public class NaturalPerson implements SharePossesing {
     private Integer sharesCount;
     private char gender;
 
-
     @Builder
-    public NaturalPerson(String firstName, String secondName, String lastNameI, String lastNameII, Address address,
-                         BigDecimal sharesValue, Integer sharesCount, char gender) {
+    public NaturalPerson(Long id, String firstName, String secondName, String lastNameI, String lastNameII, Address address, BigDecimal sharesValue, Integer sharesCount, char gender) {
+        this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastNameI = lastNameI;

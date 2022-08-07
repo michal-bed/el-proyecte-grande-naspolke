@@ -474,6 +474,40 @@ const Partners = (props) => {
                                 onChange={event => handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
                             /></Box>
                             {partnerSharesInfo(index, partner, actionType.DISPLAY_COMPANY_PARTNERS)}</CardContent>
+                        <Box sx={{ minWidth: 120}}>
+                            <InputLabel id={`gender${index}`}>Zwrot grzecznościowy</InputLabel>
+                            <Select
+                                labelId="zwrot grzecznościowy"
+                                name="representativeGender"
+                                id={partner.representativeGender}
+                                value={partner.representativeGender}
+                                label="gender"
+                                onChange={(event)=> handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
+                            >
+                                <MenuItem value={"m"}>Pan</MenuItem>
+                                <MenuItem value={"f"}>Pani</MenuItem>
+                            </Select>
+                        </Box>
+                        <Box sx={{gridArea: "name"}} className={styles["Box"]}><TextField
+                            fullWidth
+                            label="imię przedstawiciela *"
+                            name="representativeFirstname"
+                            variant="filled"
+                            value={partner.representativeFirstname}
+                            // error={validatePartners({representativeFirstname: partner.name}).hasOwnProperty("name")}
+                            // helperText={validatePartners({representativeFirstname: partner.name}).name}
+                            onChange={event => handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
+                        /></Box>
+                        <Box sx={{gridArea: "name"}} className={styles["Box"]}><TextField
+                            fullWidth
+                            label="nazwisko przedstawiciela *"
+                            name="representativeLastname"
+                            variant="filled"
+                            value={partner.representativeLastname}
+                            // error={validatePartners({representativeLastname: partner.representativeLastname}).hasOwnProperty("name")}
+                            // helperText={validatePartners({representativeLastname: partner.representativeLastname}).name}
+                            onChange={event => handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
+                        /></Box>
                         <div>
                             <Button variant="outlined" startIcon={<PersonRemoveIcon/>} onClick={() => {
                                 handlePartnersList(index, actionType.REMOVE_COMPANY_PARTNER, partner)

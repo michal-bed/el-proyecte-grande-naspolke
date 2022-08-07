@@ -42,7 +42,7 @@ export default function validatePartners(values){
     //company partner name validation
     if (!values.name) {
         errors.name = "Wpisz pełną nazwę spółki";
-    } else if (/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\s]/.test(values.name)) {
+    } else if (/[^a-zA-Z.ążźćółęśńŻŹĆĄŚĘŁÓŃ\d\s]/.test(values.name)) {
         errors.name = "Nazwa zawiera niedozwolone znaki";
     } else if (values.name.length < 3) {
         errors.name = "Nazwa powinna zawierać conajmniej 3 litery";

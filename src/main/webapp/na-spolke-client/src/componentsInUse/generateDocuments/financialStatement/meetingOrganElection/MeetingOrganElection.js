@@ -20,10 +20,10 @@ export function MeetingOrganElection({values, company, setFieldValue, headerText
                 >
                     {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map(partner => (
                         <MenuItem key={`select${partner.id}`}
-                                  value={`${partner.firstName} ${partner.lastNameI}`}>{partner.firstName + " " + partner.lastNameI}</MenuItem>))}
+                                  value={`i${JSON.stringify(partner)}`}>{partner.firstName + " " + partner.lastNameI}</MenuItem>))}
                     {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map(partner => (
                         <MenuItem key={`selectCompanyPartner${partner.id}`}
-                                  value={partner.representativeFirstname + " " + partner.representativeLastname}>{partner.representativeFirstname + " " + partner.representativeLastname}</MenuItem>))}
+                                  value={`c${JSON.stringify(partner)}`}>{partner.representativeFirstname + " " + partner.representativeLastname}</MenuItem>))}
                 </Select>
                 <FormHelperText>{helperText}</FormHelperText>
             </FormControl>

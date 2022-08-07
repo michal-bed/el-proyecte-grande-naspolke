@@ -1,14 +1,17 @@
 import {Resolution} from "./Resolution";
+import {IndividualPartner, PartnerCompany} from "../persons/Partners";
 
 export class ResolutionElection extends Resolution{
-    firstName;
-    lastName;
+    individual;
+    company;
     meetingFunction;
     constructor(data, meetingFunction,resolutionTitle, votingType) {
         super(data, votingType, resolutionTitle, meetingFunction)
-        const nameAndSurname = data[`${meetingFunction}`].split(" ");
-        this.firstName = nameAndSurname[0];
-        this.lastName = nameAndSurname[1];
         this.meetingFunction = meetingFunction;
+        if(data[`${meetingFunction}`].charAt(0)==="i"){
+            this.individual = new IndividualPartner(JSON.parse(data[`${meetingFunction}`].substring(1)));
+        } else if (data[`${meetingFunction}`].charAt(0)==="c"){
+            this.company = new PartnerCompany(JSON.parse(data[`${meetingFunction}`].substring(1)))
+        }
     }
 }

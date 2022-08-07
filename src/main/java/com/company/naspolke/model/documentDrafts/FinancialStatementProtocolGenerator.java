@@ -190,8 +190,16 @@ public class FinancialStatementProtocolGenerator {
         }
         return correctLetterCases(stringBuilder.toString());
     }
-    private String getChairmanInfo(){
+    private String getChairmanInfo(FinancialStatementProtocol protocol){
+//        String nameAndSurname = protocol.getChairperson().getFirstName().concat(" ").concat(protocol.getChairperson().getLastName());
+//        String[] maleForms = {}
+        String a = "%s Bartosz Kosicki stwierdził, iż na funkcję Przewodniczącego niniejszego Zgromadzenia zgłoszono jego kandydaturę, " +
+                "na co wyraził zgodę, wobec czego przystąpiono do głosowania nad poniższą uchwałą.";
+//        String format = String.format(a, "a")
         return null;
     }
+//    Pan Bartosz Kosicki stwierdził, iż na funkcję Przewodniczącego niniejszego Zgromadzenia zgłoszono jego kandydaturę,
+//    na co wyraził zgodę, wobec czego przystąpiono do głosowania nad poniższą uchwałą.
+
 //TODO zamienić na String.format z array
 }

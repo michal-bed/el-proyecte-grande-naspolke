@@ -31,10 +31,10 @@ public class GenerateDocumentsController {
     @ResponseStatus
     @PostMapping("/save/financial/{companyId}")
     public void saveFinancialStatement(@PathVariable("companyId") String companyId, @RequestBody FinancialStatementProtocol protocol ) {
-        FinancialStatementProtocol protocol1 = protocol;
+//        FinancialStatementProtocol protocol1 = protocol;
         System.out.println(protocol);
         System.out.println(protocol);
-        financialStatementService.saveFinancialStatement(protocol, UUID.fromString(companyId));
+//        financialStatementService.saveFinancialStatement(protocol, UUID.fromString(companyId));
 
     }
 }

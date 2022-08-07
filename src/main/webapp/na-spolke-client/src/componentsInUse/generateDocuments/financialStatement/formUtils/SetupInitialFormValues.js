@@ -31,8 +31,8 @@ export function SetupInitialFormValues(company) {
             individualPartners.push({"id": company.partners.individualPartners[i].id, isPresent: true})
             initialValues[`individual${individualPartners[i].id}IsPresent`] = true;
             if (initialValues.chairperson === ""){
-                initialValues.chairperson = `${company.partners.individualPartners[i].firstName} ${company.partners.individualPartners[i].lastNameI}`
-                initialValues.recorder = `${company.partners.individualPartners[i].firstName} ${company.partners.individualPartners[i].lastNameI}`
+                initialValues.chairperson = `i${JSON.stringify(company.partners.individualPartners[i])}`;
+                initialValues.recorder = `i${JSON.stringify(company.partners.individualPartners[i])}`;
             }
         }
     }
@@ -43,8 +43,8 @@ export function SetupInitialFormValues(company) {
             initialValues[`representative${partnerCompanies[i].id}name`] = company.partners.partnerCompanies.representativeFirstname;
             initialValues[`representative${partnerCompanies[i].id}lastname`] = company.partners.partnerCompanies.representativeFirstname;
             if (initialValues.chairperson === ""){
-                initialValues.chairperson = `${company.partners.partnerCompanies.representativeFirstname} ${company.partners.partnerCompanies.representativeFirstname}`
-                initialValues.recorder = `${company.partners.partnerCompanies.representativeFirstname} ${company.partners.partnerCompanies.representativeFirstname}`
+                initialValues.chairperson = `c${JSON.stringify(company.partners.partnerCompanies[i])}`
+                initialValues.recorder = `c${JSON.stringify(company.partners.partnerCompanies[i])}`;
             }
         }
     }

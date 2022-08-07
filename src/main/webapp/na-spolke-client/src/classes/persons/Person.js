@@ -1,5 +1,6 @@
 
 export class Person{
+    id = " ";
     firstName = " ";
     secondName = " ";
     lastNameI = " ";
@@ -12,6 +13,8 @@ export class Person{
             this.lastNameI = personData.lastNameI;
             this.lastNameII = personData.lastNameII;
             this.gender = personData.hasOwnProperty("gender")? personData.gender : "m";
+            this.id = personData.hasOwnProperty("id")? personData.id : null;
+
         }
     }
 }

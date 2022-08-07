@@ -1,6 +1,7 @@
 import {Person} from "./Person";
 
 export class BoardMember{
+    id;
     firstName = " ";
     secondName = " ";
     lastNameI = " ";
@@ -10,6 +11,9 @@ export class BoardMember{
 
     constructor(memberData) {
         if (memberData) {
+            if(memberData.hasOwnProperty("id")){
+                this.id = memberData.id;
+            }
             this.firstName = memberData.firstName;
             this.secondName = memberData.secondName;
             this.lastNameI = memberData.lastNameI;
