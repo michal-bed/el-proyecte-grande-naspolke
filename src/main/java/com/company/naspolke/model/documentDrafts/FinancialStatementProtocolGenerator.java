@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -47,9 +45,11 @@ public class FinancialStatementProtocolGenerator {
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, new FileOutputStream("src/main/resources/drafts/financialStatements/pdfTest.pdf"));
         document.open();
+        Font headerFont = setFontStyle(FontStyles.PROTOCOL_HEADER);
+        Font regularTextFontStyle = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
+        Font resolutionHeader = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_HEADER);
 
         // Set protocol Header
-        Font headerFont = setFontStyle(FontStyles.PROTOCOL_HEADER);
         String header = generateProtocolText(company, financialStatementInformation);
         Paragraph protocolHeader = new Paragraph(header, headerFont);
         protocolHeader.setAlignment(Paragraph.ALIGN_CENTER);
@@ -57,7 +57,6 @@ public class FinancialStatementProtocolGenerator {
         protocolHeader.setSpacingAfter(20);
 
         //Set meeting place
-        Font regularTextFontStyle = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
         String meetingPlaceText = setMeetingPlaceText(company, financialStatementInformation);
         Paragraph meetingPlace = new Paragraph(meetingPlaceText, regularTextFontStyle);
         meetingPlace.setMultipliedLeading(1.5f);
@@ -73,17 +72,26 @@ public class FinancialStatementProtocolGenerator {
         attendantsList.setSpacingBefore(10);
         attendantsList.setIndentationLeft(20);
 
-        //SetChairperson
+        //Set Chairperson text
         String chairpersonInfo = getChairmanInfo(financialStatementInformation);
-        Paragraph chairpersonText = new Paragraph(chairpersonInfo);
+        Paragraph chairpersonText = new Paragraph(chairpersonInfo, regularTextFontStyle);
         chairpersonText.setAlignment(Element.ALIGN_JUSTIFIED);
         chairpersonText.setMultipliedLeading(1.5f);
+
+        //Set chairperson resolution header
+        String resolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getChairperson().getResolutionTitle());
+        Paragraph chairpersonResolutionHeader = new Paragraph(resolutionTitle, resolutionHeader);
+        chairpersonResolutionHeader.setAlignment(Element.ALIGN_CENTER);
+        chairpersonResolutionHeader.setSpacingAfter(1.5f);
+        chairpersonResolutionHeader.setMultipliedLeading(1.5f);
+
 
         //Save text to pdf file
         document.add(protocolHeader);
         document.add(meetingPlace);
         document.add(attendantsList);
         document.add(chairpersonText);
+        document.add(chairpersonResolutionHeader);
         document.close();
 
     }
@@ -208,7 +216,6 @@ public class FinancialStatementProtocolGenerator {
         return correctLetterCases(nameAndSurname);
     }
 
-
     private String getChairmanInfo(FinancialStatementProtocol protocol){
         System.out.println(protocol.getChairperson().getIndividual());
         char genderSymbol=' ';
@@ -230,16 +237,36 @@ public class FinancialStatementProtocolGenerator {
                 "na co %s zgodę, wobec czego przystąpiono do głosowania nad poniższą uchwałą.", gender, nameAndLastname,
                 statedForm, properPossessivePronoun, expressedForm);
     }
-//        String[] maleForms = {}
-//        String a = "%s Bartosz Kosicki stwierdził, iż na funkcję Przewodniczącego niniejszego Zgromadzenia zgłoszono jego kandydaturę, " +
-//                "na co wyraził zgodę, wobec czego przystąpiono do głosowania nad poniższą uchwałą.";
-//        String format = String.format(a, "a")
-//        return null;
-//    }
-//    Pan Bartosz Kosicki stwierdził, iż na funkcję Przewodniczącego niniejszego Zgromadzenia zgłoszono jego kandydaturę,
-//    na co wyraził zgodę, wobec czego przystąpiono do głosowania nad poniższą uchwałą.
 
+    private String getResolutionTitle(Company company, FinancialStatementProtocol protocol, String title){
+        String minutesType = "Zwyczajnego";
+        String resolutionNumber = setResolutionNumber(protocol);
+        String resolutionDate = setResolutionDate(protocol);
+        return String.format("Uchwała nr %s \n" +
+                "%s  Zgromadzenia Wspólników %s %s\n" +
+                "z dnia %s \n" +
+                "w sprawie %s\n",resolutionNumber, minutesType, company.getCompanyName(), placeConjugated(company.getAddress().getCity()),  resolutionDate, title);
+    }
+
+    private String setResolutionDate(FinancialStatementProtocol protocol) {
+        String day = String.valueOf(protocol.getDateOfTheShareholdersMeeting().getDayOfMonth());
+        String monthInWord = getMonthInWord(protocol.getDateOfTheShareholdersMeeting().getMonthValue());
+        String year = String.valueOf(protocol.getDateOfTheShareholdersMeeting().getYear());
+        return String.format("%s %s %s r.", day, monthInWord, year);
+    }
+
+    private String setResolutionNumber(FinancialStatementProtocol protocol) {
+        String number = String.valueOf(resolutionCount);
+        resolutionCount++;
+        String day = String.valueOf(protocol.getDateOfTheShareholdersMeeting().getDayOfMonth());
+        String month = String.valueOf(protocol.getDateOfTheShareholdersMeeting().getMonthValue());
+        String year = String.valueOf(protocol.getDateOfTheShareholdersMeeting().getYear());
+        return String.format("%s/%s/%s/%s", number, day,month,year);
+    }
 //TODO zamienić na String.format z array
-
+//Uchwała nr %s \n" +
+//            "%s  Zgromadzenia Wspólników %s %s\n" +
+//            "z dnia %s \n" +
+//            "w sprawie %s\n";
 
 }

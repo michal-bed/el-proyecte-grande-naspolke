@@ -9,17 +9,22 @@ import org.springframework.stereotype.Component;
 class FontStyleGenerator {
 
     static Font setFontStyle(FontStyles fontStyles) {
-        FontFactory.register("src/main/resources/drafts/fonts/natoSans/"+fontStyles.getFontType());
+        if(!FontFactory.isRegistered(fontStyles.getFontType())) {
+            FontFactory.registerDirectory("src/main/resources/drafts/fonts/natoSans/");
+        }
+//        FontFactory.register("src/main/resources/drafts/fonts/natoSans/"+fontStyles.getFontType());
+//        FontFactory.register("src/main/resources/drafts/fonts/natoSans/NotoSans-Bold.ttf", "NatoSans-Bold");
         Font font = FontFactory.getFont(fontStyles.getFontType(), BaseFont.IDENTITY_H);
+
         switch (fontStyles){
             case PROTOCOL_HEADER -> {
                 font.setSize(15);
-                font.isBold();
             }
             case PROTOCOL_PLANE_TEXT, PROTOCOL_RESOLUTION_TEXT -> font.setSize(12);
             case PROTOCOL_RESOLUTION_HEADER -> {
-                font.setSize(14);
-                font.isBold();
+                font.setSize(13);
+//                font.setFamily("NatoSans-Bold");
+//                System.out.println(font.isBold());
             }
         }
         return font;

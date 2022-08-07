@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public enum FontStyles {
-    PROTOCOL_HEADER("NotoSans-Black.ttf"),
+    PROTOCOL_HEADER("NotoSans-Bold.ttf"),
     PROTOCOL_PLANE_TEXT("NotoSans-Regular.ttf"),
     PROTOCOL_RESOLUTION_HEADER("NotoSans-Bold.ttf"),
     PROTOCOL_RESOLUTION_TEXT("NotoSans-Italic.ttf");
