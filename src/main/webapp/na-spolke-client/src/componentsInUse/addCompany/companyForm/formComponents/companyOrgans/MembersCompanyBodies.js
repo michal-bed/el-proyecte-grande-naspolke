@@ -127,8 +127,8 @@ const MembersCompanyBodies = (props) => {
                                 label="gender"
                                 onChange={(event)=> handleChangeInput(index, event)}
                             >
-                                <MenuItem value={"male"}>Pan</MenuItem>
-                                <MenuItem value={"female"}>Pani</MenuItem>
+                                <MenuItem value={"m"}>Pan</MenuItem>
+                                <MenuItem value={"f"}>Pani</MenuItem>
                             </Select>
                         </Box>
                         <CardContent>

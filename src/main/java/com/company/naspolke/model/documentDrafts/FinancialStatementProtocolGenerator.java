@@ -153,7 +153,6 @@ public class FinancialStatementProtocolGenerator {
         }
         return stringBuilder.toString();
     }
-
     private String checkForPunctuationMark(FinancialStatementProtocol protocol, int counter) {
         int indListLength = protocol.getListPresentIndividualPartners().size();
         int companyListLength = protocol.getListPresentsCompanyPartners().size();
@@ -190,6 +189,9 @@ public class FinancialStatementProtocolGenerator {
             stringBuilder.append(partner.getLastNameII()).append(" ");
         }
         return correctLetterCases(stringBuilder.toString());
+    }
+    private String getChairmanInfo(){
+        return null;
     }
 //TODO zamienić na String.format z array
 }

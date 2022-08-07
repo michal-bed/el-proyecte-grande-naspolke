@@ -22,10 +22,10 @@ public class BoardOfDirector {
     private String secondName;
     private String lastNameI;
     private String lastNameII;
-    private String gender;
+    private char gender;
 
     @Builder
-    public BoardOfDirector(String firstName, String secondName, String lastNameI, String lastNameII, String gender) {
+    public BoardOfDirector(String firstName, String secondName, String lastNameI, String lastNameII, char gender) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastNameI = lastNameI;

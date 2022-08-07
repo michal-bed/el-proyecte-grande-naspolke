@@ -24,10 +24,10 @@ public class JuridicalPerson implements SharePossesing {
     private Address address;
     private String representativeFirstname;
     private String representativeLastname;
-    private String representativeGender;
+    private char representativeGender;
 
     @Builder
-    public JuridicalPerson(Long id, String name, BigDecimal sharesValue, Integer sharesCount, Address address, String representativeFirstname, String representativeLastname, String representativeGender) {
+    public JuridicalPerson(Long id, String name, BigDecimal sharesValue, Integer sharesCount, Address address, String representativeFirstname, String representativeLastname, char representativeGender) {
         this.id = id;
         this.name = name;
         this.sharesValue = sharesValue;

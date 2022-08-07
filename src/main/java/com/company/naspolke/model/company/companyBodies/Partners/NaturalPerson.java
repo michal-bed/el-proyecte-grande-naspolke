@@ -31,12 +31,12 @@ public class NaturalPerson implements SharePossesing {
     private Address address;
     private BigDecimal sharesValue;
     private Integer sharesCount;
-    private String gender;
+    private char gender;
 
 
     @Builder
     public NaturalPerson(String firstName, String secondName, String lastNameI, String lastNameII, Address address,
-                         BigDecimal sharesValue, Integer sharesCount, String gender) {
+                         BigDecimal sharesValue, Integer sharesCount, char gender) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastNameI = lastNameI;

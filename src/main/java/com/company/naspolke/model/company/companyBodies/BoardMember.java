@@ -21,11 +21,11 @@ public class BoardMember {
     private String secondName;
     private String lastNameI;
     private String lastNameII;
-    private String gender;
+    private char gender;
     private String function;
 
     @Builder
-    public BoardMember(String firstName, String secondName, String lastNameI, String lastNameII, String function, String gender) {
+    public BoardMember(String firstName, String secondName, String lastNameI, String lastNameII, String function, char gender) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastNameI = lastNameI;

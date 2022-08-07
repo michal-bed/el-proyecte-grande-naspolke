@@ -23,7 +23,7 @@ export class IndividualPartner{
     lastNameII = null;
     sharesCount = null;
     sharesValue = null;
-    gender = "male";
+    gender = "m";
 
     constructor(partnerData) {
         if (partnerData) {
@@ -33,7 +33,7 @@ export class IndividualPartner{
             this.lastNameII = partnerData.lastNameII;
             this.sharesCount = partnerData.sharesCount;
             this.sharesValue = partnerData.sharesValue;
-            this.gender = partnerData.hasOwnProperty("gender")? partnerData.gender : "male";
+            this.gender = partnerData.hasOwnProperty("gender")? partnerData.gender : "m";
         }
     }
 }
@@ -54,7 +54,7 @@ export class PartnerCompany {
             this.sharesValue = partnerData.sharesValue;
             this.representativeFirstname = partnerData.representativeFirstname;
             this.representativeLastname = partnerData.representativeLastname;
-            this.representativeGender = partnerData.hasOwnProperty("gender")?partnerData.gender : "male";
+            this.representativeGender = partnerData.hasOwnProperty("gender")?partnerData.gender : "m";
         }
     }
 }
