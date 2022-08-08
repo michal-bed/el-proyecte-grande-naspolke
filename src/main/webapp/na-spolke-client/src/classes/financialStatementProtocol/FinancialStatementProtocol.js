@@ -38,8 +38,8 @@ export class FinancialStatementProtocol {
         this.formalConvening = data.formalConvening;
         this.listPresentIndividualPartners = this.setPresentPartners(data, company.partners.individualPartners, "individual");
         this.listPresentsCompanyPartners = this.setPresentPartners(data, company.partners.partnerCompanies, "company");
-        this.chairperson = new ResolutionElection(data, "chairperson","chairpersonVoting", "secret");
-        this.recorder = new ResolutionElection(data, "recorder", "recorderVoting", "secret");
+        this.chairperson = new ResolutionElection(data, "chairperson","wyboru Przewodniczącego Zgromadzenia", "secret");
+        this.recorder = new ResolutionElection(data, "recorder", "wyboru Protokolanta", "secret");
         this.agenda = new ResolutionAgenda(data, "public", "agenda", "agenda");
         this.profitOrLoss = new ResolutionProfitLoss(data, "public", "ProfitLoss", "amountProfitOrLoss");
         this.financialStatementResolution = new ResolutionFinancialStatement(data, "public", "financial statement", "financialStatement");

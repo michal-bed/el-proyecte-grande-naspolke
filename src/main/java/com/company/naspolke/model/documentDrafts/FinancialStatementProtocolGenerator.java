@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import static com.company.naspolke.model.documentDrafts.ChangeDigitsIntoWords.changeDigitsIntoWords;
@@ -46,8 +46,10 @@ public class FinancialStatementProtocolGenerator {
         PdfWriter.getInstance(document, new FileOutputStream("src/main/resources/drafts/financialStatements/pdfTest.pdf"));
         document.open();
         Font headerFont = setFontStyle(FontStyles.PROTOCOL_HEADER);
-        Font regularTextFontStyle = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
-        Font resolutionHeader = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_HEADER);
+        Font regularTextFont = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
+        Font resolutionHeaderFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_HEADER);
+        Font planeTextBoldFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT_BOLD);
+        Font resolutionTextFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT);
 
         // Set protocol Header
         String header = generateProtocolText(company, financialStatementInformation);
@@ -55,45 +57,74 @@ public class FinancialStatementProtocolGenerator {
         protocolHeader.setAlignment(Paragraph.ALIGN_CENTER);
         protocolHeader.setSpacingBefore(20);
         protocolHeader.setSpacingAfter(20);
+        document.add(protocolHeader);
 
         //Set meeting place
         String meetingPlaceText = setMeetingPlaceText(company, financialStatementInformation);
-        Paragraph meetingPlace = new Paragraph(meetingPlaceText, regularTextFontStyle);
+        Paragraph meetingPlace = new Paragraph(meetingPlaceText, regularTextFont);
         meetingPlace.setMultipliedLeading(1.5f);
         meetingPlace.setAlignment(Element.ALIGN_JUSTIFIED);
+        meetingPlace.setSpacingAfter(10);
+
+        document.add(meetingPlace);
 
         //Set attendants list
-        String attendantsListText = setAttendantsList(financialStatementInformation);
-        Paragraph attendantsList = new Paragraph(attendantsListText, regularTextFontStyle);
-        attendantsList.setAlignment(Element.ALIGN_JUSTIFIED);
-        //line spacing
-        attendantsList.setMultipliedLeading(1.5f);
-        attendantsList.setSpacingAfter(10);
-        attendantsList.setSpacingBefore(10);
-        attendantsList.setIndentationLeft(20);
+        List<Paragraph> attendantsListText = setAttendantsList(financialStatementInformation, planeTextBoldFont,regularTextFont);
+        for (Paragraph paragraph :attendantsListText) {
+            paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
+            //line spacing
+            paragraph.setMultipliedLeading(1.5f);
+            paragraph.setSpacingAfter(5);
+            paragraph.setIndentationLeft(20);
+            document.add(paragraph);
+        }
 
         //Set Chairperson text
         String chairpersonInfo = getChairmanInfo(financialStatementInformation);
-        Paragraph chairpersonText = new Paragraph(chairpersonInfo, regularTextFontStyle);
+        Paragraph chairpersonText = new Paragraph(chairpersonInfo, regularTextFont);
         chairpersonText.setAlignment(Element.ALIGN_JUSTIFIED);
         chairpersonText.setMultipliedLeading(1.5f);
+        chairpersonText.setSpacingBefore(10);
+        chairpersonText.setSpacingAfter(10);
+        document.add(chairpersonText);
 
         //Set chairperson resolution header
         String resolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getChairperson().getResolutionTitle());
-        Paragraph chairpersonResolutionHeader = new Paragraph(resolutionTitle, resolutionHeader);
+        Paragraph chairpersonResolutionHeader = new Paragraph(resolutionTitle, resolutionHeaderFont);
         chairpersonResolutionHeader.setAlignment(Element.ALIGN_CENTER);
-        chairpersonResolutionHeader.setSpacingAfter(1.5f);
+        chairpersonResolutionHeader.setSpacingAfter(10f);
         chairpersonResolutionHeader.setMultipliedLeading(1.5f);
-
-
-        //Save text to pdf file
-        document.add(protocolHeader);
-        document.add(meetingPlace);
-        document.add(attendantsList);
-        document.add(chairpersonText);
         document.add(chairpersonResolutionHeader);
-        document.close();
 
+        //Set chairperson resolution text
+        String resolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation, company, ProtocolPattern.ResolutionChairpersonText);
+        Paragraph chairpersonResolutionText = new Paragraph(resolutionText, resolutionTextFont);
+        chairpersonResolutionText.setSpacingAfter(10);
+        chairpersonResolutionText.setAlignment(Element.ALIGN_JUSTIFIED);
+        chairpersonResolutionText.setIndentationLeft(25);
+        chairpersonResolutionText.setIndentationRight(25);
+        chairpersonResolutionText.setMultipliedLeading(1.5f);
+        document.add(chairpersonResolutionText);
+
+        //close file
+        document.close();
+        resolutionCount = 1;
+    }
+
+    private String getMeetingOrganVotingResolutionText(FinancialStatementProtocol financialStatementInformation, Company company, String resolutionText) {
+        String minutesType = "Zwyczajne";
+        String companyName = company.getCompanyName();
+        String companyCity = placeConjugated(company.getAddress().getCity());
+        String gender;
+        String name;
+        if (financialStatementInformation.getChairperson().getIndividual()!=null) {
+            gender = financialStatementInformation.getChairperson().getIndividual().getGender()=='m'?"Pan":"Pani";
+            name = getPartnerFullName(financialStatementInformation.getChairperson().getIndividual()).trim();
+        } else {
+            gender = financialStatementInformation.getChairperson().getCompany().getRepresentativeGender()=='m'?"Pan":"Pani";
+            name = getPartnerFullName(financialStatementInformation.getChairperson().getCompany()).trim();
+        }
+        return String.format(resolutionText, minutesType, companyName, companyCity, gender, name);
     }
 
     private String generateProtocolText(Company company, FinancialStatementProtocol financialStatementsProtocol){
@@ -146,21 +177,29 @@ public class FinancialStatementProtocolGenerator {
         return Rythm.render(text, definition);
     }
 
-    private String setAttendantsList(FinancialStatementProtocol protocol) {
+    private List<Paragraph> setAttendantsList(FinancialStatementProtocol protocol, Font planeTextBold, Font planeText) {
         int counter = 0;
-        StringBuilder stringBuilder = new StringBuilder();
+        List<Paragraph> personList= new java.util.ArrayList<>(List.of());
         for (NaturalPerson partner : protocol.getListPresentIndividualPartners()) {
+            Paragraph paragraph = new Paragraph();
             counter++;
             String partnerName = getPartnerFullName(partner);
             String sharesProperForm = getSharesProperForm(partner.getSharesCount());
             String sharesInWords = changeDigitsIntoWords((long) partner.getSharesCount());
             float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
             String punctuationMark = checkForPunctuationMark(protocol, counter);
-            stringBuilder.append(String.format(Locale.ITALY, "%d. %s posiadający %d %s (słownie: %s%4$s) o łacznej wartości nominalnej w wysokości %.2f zł%s\n",
-                    counter, partnerName.trim(), partner.getSharesCount(), sharesProperForm, sharesInWords, sharesValue, punctuationMark));
+            String number = counter + ". ";
+            paragraph.add(number);
+            Chunk name = new Chunk(partnerName, planeTextBold);
+            paragraph.add(name);
+            Chunk restText = new Chunk(String.format( " posiadający %d %s (słownie: %s%2$s) o łacznej wartości nominalnej w wysokości %.2f zł%s\n",
+                    partner.getSharesCount(), sharesProperForm, sharesInWords, sharesValue, punctuationMark), planeText);
+            paragraph.add(restText);
+            personList.add(paragraph);
         }
         for (JuridicalPerson partner:protocol.getListPresentsCompanyPartners()) {
             counter++;
+            Paragraph paragraph = new Paragraph();
             String companyName = partner.getName();
             int sharesCount = partner.getSharesCount();
             String sharesProperForm = getSharesProperForm(partner.getSharesCount());
@@ -168,10 +207,16 @@ public class FinancialStatementProtocolGenerator {
             float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
             String representation = setProperRepresentationName(partner).strip();
             String punctuationMark = checkForPunctuationMark(protocol, counter);
-            stringBuilder.append(String.format(Locale.ITALY, "%d. %s posiadająca %d %s (słownie: %s%4$s) o łącznej wartości nominalnej w wysokości %.2f zł, którą reprezentuje %s%s\n",
-                    counter, companyName, sharesCount,sharesProperForm, sharesCountInWords,sharesValue, representation, punctuationMark));
+            String number = counter + ".";
+            paragraph.add(number);
+            Chunk name = new Chunk(companyName, planeTextBold);
+            paragraph.add(name);
+            Chunk restText = new Chunk(String.format(" posiadająca %d %s (słownie: %s%2$s) o łącznej wartości nominalnej w wysokości %.2f zł, którą reprezentuje %s%s\n",
+                    sharesCount,sharesProperForm, sharesCountInWords,sharesValue, representation, punctuationMark), planeText);
+            paragraph.add(restText);
+            personList.add(paragraph);
         }
-        return stringBuilder.toString();
+        return personList;
     }
     private String checkForPunctuationMark(FinancialStatementProtocol protocol, int counter) {
         int indListLength = protocol.getListPresentIndividualPartners().size();
@@ -242,10 +287,7 @@ public class FinancialStatementProtocolGenerator {
         String minutesType = "Zwyczajnego";
         String resolutionNumber = setResolutionNumber(protocol);
         String resolutionDate = setResolutionDate(protocol);
-        return String.format("Uchwała nr %s \n" +
-                "%s  Zgromadzenia Wspólników %s %s\n" +
-                "z dnia %s \n" +
-                "w sprawie %s\n",resolutionNumber, minutesType, company.getCompanyName(), placeConjugated(company.getAddress().getCity()),  resolutionDate, title);
+        return String.format(ProtocolPattern.ResolutionPattern,resolutionNumber, minutesType, company.getCompanyName(), placeConjugated(company.getAddress().getCity()),  resolutionDate, title);
     }
 
     private String setResolutionDate(FinancialStatementProtocol protocol) {

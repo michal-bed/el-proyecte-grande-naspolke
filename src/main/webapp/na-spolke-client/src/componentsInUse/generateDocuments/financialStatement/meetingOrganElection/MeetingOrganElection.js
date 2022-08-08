@@ -28,7 +28,7 @@ export function MeetingOrganElection({values, company, setFieldValue, headerText
                 <FormHelperText>{helperText}</FormHelperText>
             </FormControl>
             <Voting handleChange={handleChange} values={values} votingMatter={type}
-                    votingTitle={`wyboru ${type==="recorder"? "Protokolanta" : "Przewodniczącego Zgromadzenia"}`}/>
+                    votingTitle={`Głosowanie w sprawie wyboru ${type==="recorder"? "Protokolanta" : "Przewodniczącego Zgromadzenia"}`}/>
         </div>
     </Card>
 }
