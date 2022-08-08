@@ -1,19 +1,3 @@
-/* eslint-disable no-param-reassign */
-/**
-=========================================================
-* Material Kit 2 React - v2.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-kit-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { Fragment, useState, useEffect } from "react";
 
 // react-router components
@@ -32,18 +16,18 @@ import Divider from "@mui/material/Divider";
 import MuiLink from "@mui/material/Link";
 
 // Material Kit 2 React components
-import MKBox from "../../components/MKBox";
-import MKTypography from "../../components/MKTypography";
-import MKButton from "../../components/MKButton";
+import MKBox from "../../mkFiles/components/MKBox";
+import MKTypography from "../../mkFiles/components/MKTypography";
+import MKButton from "../../mkFiles/components/MKButton";
 
 // Material Kit 2 React example components
 import DefaultNavbarDropdown from "./DefaultNavbarDropdown";
 import DefaultNavbarMobile from "./DefaultNavbarMobile";
 
 // Material Kit 2 React base styles
-import breakpoints from "../../../assets/theme/base/breakpoints";
+import breakpoints from "../../assets/theme/base/breakpoints";
 
-function DefaultNavbar({ brand, routes, transparent, light, action, fixed, relative, center }) {
+function DefaultNavbar({ brand, routes, transparent, light, action, sticky, relative, center }) {
   const [dropdown, setDropdown] = useState("");
   const [dropdownEl, setDropdownEl] = useState("");
   const [dropdownName, setDropdownName] = useState("");
@@ -133,7 +117,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, fixed, relat
                       display="block"
                       variant="button"
                       fontWeight="bold"
-
+                      textTransform="capitalize"
                       py={1}
                       px={0.5}
                       mt={index !== 0 ? 2 : 0}
@@ -146,12 +130,13 @@ function DefaultNavbar({ brand, routes, transparent, light, action, fixed, relat
                         component={item.route ? Link : MuiLink}
                         to={item.route ? item.route : ""}
                         href={item.href ? item.href : (e) => e.preventDefault()}
+
                         rel={item.href ? "noreferrer" : "noreferrer"}
                         minWidth="11.25rem"
                         display="block"
                         variant="button"
                         color="text"
-
+                        textTransform="capitalize"
                         fontWeight="regular"
                         py={0.625}
                         px={2}
@@ -212,7 +197,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, fixed, relat
             justifyContent="space-between"
             alignItems="center"
             variant="button"
-
+            textTransform="capitalize"
             minWidth={item.description ? "14rem" : "12rem"}
             color={item.description ? "dark" : "text"}
             fontWeight={item.description ? "bold" : "regular"}
@@ -355,7 +340,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, fixed, relat
                     justifyContent="space-between"
                     alignItems="center"
                     variant="button"
-
+                    textTransform="capitalize"
                     minWidth={item.description ? "14rem" : "12rem"}
                     color={item.description ? "dark" : "text"}
                     fontWeight={item.description ? "bold" : "regular"}
@@ -447,9 +432,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, fixed, relat
   );
 
   return (
-      <MKBox display="flex" alignItems="center" justifyContent="center" width="100%">
-    <Container sx={fixed ? { position: "fixed", top: 0, zIndex: 20} : null}>
-
+    <Container sx={sticky ? { position: "sticky", top: 0, zIndex: 10 } : null}>
       <MKBox
         py={1}
         px={{ xs: 4, sm: transparent ? 2 : 3, lg: transparent ? 0 : 2 }}
@@ -544,7 +527,6 @@ function DefaultNavbar({ brand, routes, transparent, light, action, fixed, relat
       {dropdownMenu}
       {nestedDropdownMenu}
     </Container>
-      </MKBox>
   );
 }
 
@@ -554,7 +536,7 @@ DefaultNavbar.defaultProps = {
   transparent: false,
   light: false,
   action: false,
-  fixed: false,
+  sticky: false,
   relative: false,
   center: false,
 };
@@ -585,7 +567,7 @@ DefaultNavbar.propTypes = {
       label: PropTypes.string.isRequired,
     }),
   ]),
-  fixed: PropTypes.bool,
+  sticky: PropTypes.bool,
   relative: PropTypes.bool,
   center: PropTypes.bool,
 };

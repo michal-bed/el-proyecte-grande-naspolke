@@ -25,7 +25,7 @@ import bgImage from "../../assets/images/bg-sign-in-basic.jpeg"
 // React page layout routes
 import Routes from "../../routes";
 import SimpleFooter from "../footer/SimpleFooter";
-import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
+import DefaultNavbar from "../indexNavbar/WorkingNavbar";
 
 
 function SignInBasic() {

@@ -17,7 +17,7 @@ import MKInput from "../../mkFiles/components/MKInput";
 import MKButton from "../../mkFiles/components/MKButton";
 
 // Material Kit 2 React example components
-import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
+import DefaultNavbar from "../indexNavbar/WorkingNavbar";
 import SimpleFooter from "../footer/SimpleFooter";
 
 // Material Kit 2 React page layout routes

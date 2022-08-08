@@ -1,18 +1,3 @@
-/*
-=========================================================
-* Material Kit 2 React - v2.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-kit-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 // @mui material components
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -24,25 +9,19 @@ import MKTypography from "../../mkFiles/components/MKTypography";
 import MKSocialButton from "../../mkFiles/components/MKSocialButton";
 
 // Material Kit 2 React examples
-import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
+import DefaultNavbar from "../indexNavbar/WorkingNavbar";
 
 
 import MainPage from "../mainPage/mainPage";
 import FaqPage from "../faqPage/FaqPage";
 import Footer from "../footer/Footer";
 import Statute from "../statute/Statute"
-// Presentation page components
-
 
 // Routes
 import Routes from "../../routes";
 
-
 // Images
 import index_photo3 from "../../assets/photos/index_photo3.jpg";
-import {useState} from "react";
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
-import {Button} from "@chakra-ui/react";
 
 
 function Presentation(props) {
@@ -75,9 +54,10 @@ function Presentation(props) {
 
   return (
     <>
+        <MKBox>
       <DefaultNavbar
         routes={route}
-        fixed
+        sticky
       />
       <MKBox
         minHeight="75vh"
@@ -132,6 +112,7 @@ function Presentation(props) {
 
       </Card>
         <Footer/>
+        </MKBox>
     </>
   );
 }
