@@ -53,7 +53,6 @@ class ProtocolFactory {
         Paragraph resolutionTitleParagraph = getResolutionTitleParagraph(resolutionTitle);
         Paragraph resolutionTextParagraph = getResolutionTextParagraph(resolutionText);
         Paragraph resolutionVotingParagraph = getResolutionVotingParagraph(resolutionVoting);
-        //        resolutionParagraph.addAll(List.of(resolutionTitleParagraph, resolutionTextParagraph, resolutionVotingParagraph));
         return List.of(resolutionTitleParagraph, resolutionTextParagraph, resolutionVotingParagraph);
     }
 
@@ -67,6 +66,9 @@ class ProtocolFactory {
     public Paragraph getParagraphFromChunks(Chunk... chunks){
         Paragraph paragraph = new Paragraph();
         paragraph.addAll(Arrays.asList(chunks));
+        paragraph.setMultipliedLeading(1.5f);
+        paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
+        paragraph.setSpacingAfter(10);
         return paragraph;
     }
 

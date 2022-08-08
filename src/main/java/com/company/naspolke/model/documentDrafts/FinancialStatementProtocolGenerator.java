@@ -4,14 +4,12 @@ import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
+import com.company.naspolke.model.company.financialStatements.resolutions.ElectionResolution;
 import com.company.naspolke.model.company.financialStatements.resolutions.VotingInterface;
 import com.lowagie.text.Document;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.rythmengine.Rythm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
@@ -21,30 +19,20 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static com.company.naspolke.model.documentDrafts.ChangeDigitsIntoWords.changeDigitsIntoWords;
 
-import static com.company.naspolke.model.documentDrafts.FontStyleGenerator.setFontStyle;
 import static com.company.naspolke.model.documentDrafts.WordFormsHandler.*;
 
 @Component
-@Data
-@RequiredArgsConstructor
 public class FinancialStatementProtocolGenerator {
-
-    private Company company;
-    FinancialStatementProtocol financialStatementInformation;
-    ProtocolFactory protocolFactory;
+    Company company;
+    private final ProtocolFactory protocolFactory;
     int resolutionCount = 1;
-    @Autowired
-    public FinancialStatementProtocolGenerator(FinancialStatementProtocol financialStatementInformation, ProtocolFactory protocolFactory) {
-        this.financialStatementInformation = financialStatementInformation;
-        this.protocolFactory = protocolFactory;
-    }
+    char chairpersonGender ='m';
 
-    public FinancialStatementProtocolGenerator(Company company, FinancialStatementProtocol financialStatementInformation, ProtocolFactory protocolFactory) {
-        this.company = company;
-        this.financialStatementInformation = financialStatementInformation;
+    public FinancialStatementProtocolGenerator(ProtocolFactory protocolFactory) {
         this.protocolFactory = protocolFactory;
     }
 
@@ -76,17 +64,84 @@ public class FinancialStatementProtocolGenerator {
         Paragraph chairpersonParagraph = protocolFactory.getPlainTextAfterList(chairpersonInfo);
         document.add(chairpersonParagraph);
 
-        //Set chairperson resolution header
+        //Set chairperson resolution
         String resolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getChairperson().getResolutionTitle());
-        String resolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation, company, ProtocolPattern.ResolutionChairpersonText);
+        String resolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation.getChairperson(), company, ProtocolPattern.resolutionChairpersonText);
         String resolutionVoting = getResolutionVoting(financialStatementInformation.getChairperson(), "tajnym");
         List<Paragraph> chairpersonResolutionParagraph = protocolFactory.getResolution(resolutionTitle, resolutionText, resolutionVoting);
         chairpersonResolutionParagraph.forEach(document::add);
 
+        //Set recorder resolution
+        String recorderResolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getRecorder().getResolutionTitle());
+        String recorderResolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation.getRecorder(), company, ProtocolPattern.resolutionRecorderText);
+        String recorderResolutionVoting = getResolutionVoting(financialStatementInformation.getRecorder(), "tajnym");
+        List<Paragraph> recorderResolutionParagraph = protocolFactory.getResolution(recorderResolutionTitle, recorderResolutionText, recorderResolutionVoting);
+        recorderResolutionParagraph.forEach(document::add);
 
+        //Set protocolAttendanceInfo
+        Chunk protocolAttendanceInfo = getAttendanceInfo("Zwyczajnego");
+        Chunk protocolValidationFormula = getProtocolValidationFormula(financialStatementInformation, company);
+        Paragraph protocolAttendanceAndValidation = protocolFactory.getParagraphFromChunks(protocolAttendanceInfo, protocolValidationFormula);
+        document.add(protocolAttendanceAndValidation);
         //close file
         document.close();
         resolutionCount = 1;
+    }
+
+    private Chunk getProtocolValidationFormula(FinancialStatementProtocol financialStatementInformation, Company company) {
+        String convening;
+        String percentAttendance = "cały kapitał zakładowy";
+        String legalBasis = "238 k.s.h.";
+        String objectionsToTheResolutionsInfo="";
+        if(!financialStatementInformation.isFormalConvening()){
+            convening = ProtocolPattern.conveningUnofficialFormula;
+            legalBasis = "240 k.s.h.";
+            objectionsToTheResolutionsInfo=ProtocolPattern.objectionsToTheResolutionsInfo;
+        } else {
+            convening = ProtocolPattern.conveningFormalFormula;
+            percentAttendance = getAttendancePercentInfo(financialStatementInformation, company);
+        }
+        String sharesCount = getPresentSharesInfo(financialStatementInformation);
+        String meetingValidationFormula = String.format(ProtocolPattern.meetingValidationFormula, convening, sharesCount,
+                getSharesInfo(company.getSharesCount()), percentAttendance, legalBasis, objectionsToTheResolutionsInfo);
+        return protocolFactory.getRegularChunkOfText(meetingValidationFormula);
+    }
+
+    private String getAttendancePercentInfo(FinancialStatementProtocol protocol, Company company) {
+        int presentPartnerCount = (int) countSharesPresent(protocol);
+        int partnersInCompany = company.getSharesCount();
+        int percent = presentPartnerCount * 100 / partnersInCompany;
+        return percent +"% udziałów";
+    }
+    private String getSharesInfo(long sharesCount){
+        String sharesCountInWords = changeDigitsIntoWords(sharesCount);
+        String sharesCorrectForm = getWordCorrectForm("udział", (int) sharesCount);
+        return String.format("%d (słownie: %s) %s",sharesCount, sharesCountInWords, sharesCorrectForm);
+    }
+    private String getPresentSharesInfo(FinancialStatementProtocol protocol){
+        long sharesCount = countSharesPresent(protocol);
+        return getSharesInfo(sharesCount);
+    }
+
+    private long countSharesPresent(FinancialStatementProtocol protocol) {
+        long companyPartnersSharesCount = 0;
+        long individualPartnersSharesCount = 0;
+        if(protocol.getListPresentsCompanyPartners().size()>0) {
+            companyPartnersSharesCount = protocol.getListPresentsCompanyPartners().stream()
+                    .map(JuridicalPerson::getSharesCount)
+                    .reduce(0, Integer::sum);
+        }
+        if(protocol.getListPresentIndividualPartners().size()>0) {
+            individualPartnersSharesCount = protocol.getListPresentIndividualPartners().stream()
+                    .map(NaturalPerson::getSharesCount)
+                    .reduce(0, Integer::sum);
+        }
+        return companyPartnersSharesCount + individualPartnersSharesCount;
+    }
+
+    private Chunk getAttendanceInfo(String meetingType) {
+        String attendanceInfo = String.format(ProtocolPattern.protocolAttendanceInfo, meetingType);
+        return protocolFactory.getRegularChunkOfText(attendanceInfo);
     }
 
     private String getResolutionVoting(VotingInterface voting, String votingType) {
@@ -94,28 +149,28 @@ public class FinancialStatementProtocolGenerator {
             return String.format(ProtocolPattern.ResolutionVotingUnanimously, votingType);
         } else {
             int votesSum = voting.getVotesFor() + voting.getVotesAgainst() + voting.getVotesAbstentions();
-            String votesAllForm = getWordProperForm("głos", votesSum);
-            String votesFormFor = getWordProperForm("głos", voting.getVotesFor());
-            String votesFormAgainst = getWordProperForm("głos", voting.getVotesAgainst());
-            String votesFormAbstentions = getWordProperForm("głos", voting.getVotesAbstentions());
+            String votesAllForm = getWordCorrectForm("głos", votesSum);
+            String votesFormFor = getWordCorrectForm("głos", voting.getVotesFor());
+            String votesFormAgainst = getWordCorrectForm("głos", voting.getVotesAgainst());
+            String votesFormAbstentions = getWordCorrectForm("głos", voting.getVotesAbstentions());
             String resolutionPassed = voting.getVotesFor()>voting.getVotesAgainst()? "" : "nie ";
-            return String.format(ProtocolPattern.ResolutionVotingNotUnanimously, votingType, votesSum, votesAllForm, voting.getVotesFor(),
+            return String.format(ProtocolPattern.resolutionVotingNotUnanimously, votingType, votesSum, votesAllForm, voting.getVotesFor(),
                     votesFormFor, voting.getVotesAgainst(), votesFormAgainst, voting.getVotesAbstentions(), votesFormAbstentions, resolutionPassed);
         }
     }
 
-    private String getMeetingOrganVotingResolutionText(FinancialStatementProtocol financialStatementInformation, Company company, String resolutionText) {
+    private String getMeetingOrganVotingResolutionText(ElectionResolution resolution, Company company, String resolutionText) {
         String minutesType = "Zwyczajne";
         String companyName = company.getCompanyName();
         String companyCity = placeConjugated(company.getAddress().getCity());
         String gender;
         String name;
-        if (financialStatementInformation.getChairperson().getIndividual()!=null) {
-            gender = financialStatementInformation.getChairperson().getIndividual().getGender()=='m'?"Pan":"Pani";
-            name = getPartnerFullName(financialStatementInformation.getChairperson().getIndividual()).trim();
+        if (resolution.getIndividual()!=null) {
+            gender = resolution.getIndividual().getGender()=='m'?"Pan":"Pani";
+            name = getPartnerFullName(resolution.getIndividual()).trim();
         } else {
-            gender = financialStatementInformation.getChairperson().getCompany().getRepresentativeGender()=='m'?"Pan":"Pani";
-            name = getPartnerFullName(financialStatementInformation.getChairperson().getCompany()).trim();
+            gender = resolution.getCompany().getRepresentativeGender()=='m'?"Pan":"Pani";
+            name = getPartnerFullName(resolution.getCompany()).trim();
         }
         return String.format(resolutionText, minutesType, companyName, companyCity, gender, name);
     }
@@ -176,7 +231,7 @@ public class FinancialStatementProtocolGenerator {
         for (NaturalPerson partner : protocol.getListPresentIndividualPartners()) {
             counter++;
             String partnerName = getPartnerFullName(partner);
-            String sharesProperForm = getWordProperForm("udział", partner.getSharesCount());
+            String sharesProperForm = getWordCorrectForm("udział", partner.getSharesCount());
             String sharesInWords = changeDigitsIntoWords((long) partner.getSharesCount());
             float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
             String punctuationMark = checkForPunctuationMark(protocol, counter);
@@ -196,7 +251,7 @@ public class FinancialStatementProtocolGenerator {
             counter++;
             String companyName = partner.getName();
             int sharesCount = partner.getSharesCount();
-            String sharesProperForm = getWordProperForm("udział", partner.getSharesCount());
+            String sharesProperForm = getWordCorrectForm("udział", partner.getSharesCount());
             String sharesCountInWords = changeDigitsIntoWords((long) partner.getSharesCount());
             float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
             String representation = setProperRepresentationName(partner).strip();
@@ -226,12 +281,12 @@ public class FinancialStatementProtocolGenerator {
         return firstName.concat(" ").concat(lastName);
     }
 
-    private String getWordProperForm(String word, int sharesCount) {
-        if(sharesCount==1){
+    private String getWordCorrectForm(String word, int count) {
+        if(count==1){
             return word;
-        } else if (sharesCount > 5 && sharesCount < 22) {
+        } else if (count > 5 && count < 22) {
             return word+"ów";
-        } else if (sharesCount % 10 >= 2 & sharesCount % 10 < 5) {
+        } else if (count % 10 >= 2 & count % 10 < 5) {
             return word+"y";
         } else {
             return word+"ów";
@@ -282,7 +337,7 @@ public class FinancialStatementProtocolGenerator {
         String minutesType = "Zwyczajnego";
         String resolutionNumber = setResolutionNumber(protocol);
         String resolutionDate = setResolutionDate(protocol);
-        return String.format(ProtocolPattern.ResolutionPattern,resolutionNumber, minutesType, company.getCompanyName(), placeConjugated(company.getAddress().getCity()),  resolutionDate, title);
+        return String.format(ProtocolPattern.resolutionPattern,resolutionNumber, minutesType, company.getCompanyName(), placeConjugated(company.getAddress().getCity()),  resolutionDate, title);
     }
 
     private String setResolutionDate(FinancialStatementProtocol protocol) {
