@@ -44,6 +44,7 @@ import Registration from "./componentsInUse/registration/Registration";
 import Login from "./componentsInUse/login/Login";
 import Cockpit from "./componentsInUse/userPage/cockpit";
 import useAuth from "./hooks/useAuth";
+import RegistrationBasic from "./componentsInUse/registration";
 
 
 function Routes(){
@@ -66,7 +67,7 @@ function Routes(){
             {
               name: "Rejestracja",
               route: "/register",
-              component: <Registration/>
+              component: <RegistrationBasic/>
             },
           ],
         }
