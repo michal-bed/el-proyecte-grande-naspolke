@@ -34,6 +34,20 @@ class ProtocolPattern {
     static String conveningFormalFormula ="za formalnym zwołaniem";
 
     static String objectionsToTheResolutionsInfo =", o ile nikt z obecnych nie zgłosi sprzeciwu co do wniesienia poszczególnych spraw do porządku obrad";
+    static String informationAboutAgenda = "Wobec powyższego, przewodniczący przedstawił proponowany porządek obrad, a następnie zaproponował podjęcie uchwały w sprawie jego przyjęcia, w następującym brzmieniu:";
+    static String agendaPointsConstant = "%s. otwarcie Zwyczajnego Zgromadzenia;\n" +
+            "%s. wybór Przewodniczącego Zgromadzenia i Protokolanta;\n" +
+            "%s. stwierdzenie prawidłowości zwołania Zgromadzenia;\n" +
+            "%s. podjęcie uchwały w przedmiocie rozpatrzenia i zatwierdzenie sprawozdania finansowego Spółki oraz sprawozdania Zarządu;\n" +
+            "%s\n" +
+            "%s. podjęcie uchwały w przedmiocie udzielenia absolutorium organom spółki;\n" +
+            "%s. wolne głosy i wnioski;\n" +
+            "%s. zamknięcie obrad Zgromadzenia;";
+    static String agendaProfit = "%s. podjęcie uchwały w przedmiocie sposobu podziału zysku;";
+    static String agendaLose = "%s. podjęcie uchwały w przedmiocie sposobu pokrycia straty;";
+    static String agendaNoProfitAndNoLose = "";
+    static String agendaIntroduction = "%s Zgromadzenie Wspólników spółki postanawia przyjąć następujący porządek obrad:\n";
+
     //typZgromadzenia, formalneZwołanie, reprezentowani są wszyscy wspólnicy, łączna liczba udziałów,  słownie,
     // forma udziały, ogólna liczba udziałów, słownie, forma udziały
 //    static String chairpersonResolutionTitle = "wyboru Przewodniczącego Zgromadzenia";

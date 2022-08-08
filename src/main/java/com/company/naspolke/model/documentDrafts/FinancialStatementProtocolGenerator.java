@@ -14,12 +14,13 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static com.company.naspolke.model.documentDrafts.ChangeDigitsIntoWords.changeDigitsIntoWords;
 
@@ -83,9 +84,51 @@ public class FinancialStatementProtocolGenerator {
         Chunk protocolValidationFormula = getProtocolValidationFormula(financialStatementInformation, company);
         Paragraph protocolAttendanceAndValidation = protocolFactory.getParagraphFromChunks(protocolAttendanceInfo, protocolValidationFormula);
         document.add(protocolAttendanceAndValidation);
+
+        //Set information about agenda
+        Paragraph paragraphAboutAgenda = protocolFactory.getPlaneProtocolText(ProtocolPattern.informationAboutAgenda);
+        document.add(paragraphAboutAgenda);
+
+        //Set agenda resolution
+        String agendaResolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getAgendaResolution().getResolutionTitle());
+        List<String> agenda = getAgendaResolutionText(financialStatementInformation);
+        String agendaVoting = getResolutionVoting(financialStatementInformation.getAgendaResolution(), "jawnym");
+
+        Paragraph agendaResolutionTitleParagraph = protocolFactory.getResolutionTitleParagraph(agendaResolutionTitle);
+        Paragraph agendaResolutionIntroduction = protocolFactory.getResolutionTextParagraph(String.format(ProtocolPattern.agendaIntroduction, "Zwyczajne"));
+        List<Paragraph> agendaResolutionList = protocolFactory.getNumberedListInResolution(agenda);
+        Paragraph agendaResolutionVotingParagraph = protocolFactory.getResolutionVotingParagraph(agendaVoting);
+
+        document.add(agendaResolutionTitleParagraph);
+        document.add(agendaResolutionIntroduction);
+        agendaResolutionList.forEach(document::add);
+        document.add(agendaResolutionVotingParagraph);
+
+
         //close file
         document.close();
         resolutionCount = 1;
+    }
+
+    private List<String> getAgendaResolutionText(FinancialStatementProtocol financialStatementInformation) {
+        List<String> agendaList = new ArrayList<>(List.of(ProtocolPattern.agendaPointsConstant.split("\n")));
+        String profitLoseInformation = getProfitLoseInformation(financialStatementInformation);
+        agendaList.set(agendaList.indexOf("%s"), profitLoseInformation);
+        for (int i = 0; i < agendaList.size(); i++) {
+            agendaList.set(i,agendaList.get(i).replace("%s", String.valueOf(i+1)));
+        }
+        return agendaList;
+    }
+
+    private String getProfitLoseInformation(FinancialStatementProtocol protocolInfo) {
+        BigDecimal profitLoseAmount = protocolInfo.getProfitOrLoss().getProfitOrLossValue();
+        if(profitLoseAmount.compareTo(new BigDecimal("0")) > 0){
+            return ProtocolPattern.agendaProfit;
+        } else if (profitLoseAmount.compareTo(new BigDecimal("0")) < 0) {
+            return ProtocolPattern.agendaLose;
+        } else{
+            return ProtocolPattern.agendaNoProfitAndNoLose;
+        }
     }
 
     private Chunk getProtocolValidationFormula(FinancialStatementProtocol financialStatementInformation, Company company) {

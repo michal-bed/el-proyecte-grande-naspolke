@@ -17,7 +17,7 @@ export class FinancialStatementProtocol {
     listPresentsCompanyPartners = [];
     chairperson;
     recorder;
-    agenda;
+    agendaResolution;
     profitOrLoss;
     financialStatementResolution;
     boardMembersApproval;
@@ -28,19 +28,21 @@ export class FinancialStatementProtocol {
         this.protocolNumber = data.protocolNumber;
         this.meetingPlaceInHeadquarters = data.meetingPlaceInHeadquarters;
         this.meetingPlace = data.meetingPlace;
-        this.address = new Address({
-            streetName: data.streetName,
-            streetNumber: data.streetNumber,
-            localNumber: data.localNumber,
-            city: data.city,
-            zipCode: data.zipCode
-        })
+        if (!this.meetingPlaceInHeadquarters) {
+            this.address = new Address({
+                streetName: data.streetName,
+                streetNumber: data.streetNumber,
+                localNumber: data.localNumber,
+                city: data.city,
+                zipCode: data.zipCode
+            })
+        }
         this.formalConvening = data.formalConvening;
         this.listPresentIndividualPartners = this.setPresentPartners(data, company.partners.individualPartners, "individual");
         this.listPresentsCompanyPartners = this.setPresentPartners(data, company.partners.partnerCompanies, "company");
         this.chairperson = new ResolutionElection(data, "chairperson","wyboru Przewodniczącego Zgromadzenia", "secret");
         this.recorder = new ResolutionElection(data, "recorder", "wyboru Protokolanta", "secret");
-        this.agenda = new ResolutionAgenda(data, "public", "agenda", "agenda");
+        this.agendaResolution = new ResolutionAgenda(data, "public", "przyjęcia porządku obrad", "agenda");
         this.profitOrLoss = new ResolutionProfitLoss(data, "public", "ProfitLoss", "amountProfitOrLoss");
         this.financialStatementResolution = new ResolutionFinancialStatement(data, "public", "financial statement", "financialStatement");
         this.boardMembersApproval = this.ApprovalResolutions(data, company.boardMembers, "board");

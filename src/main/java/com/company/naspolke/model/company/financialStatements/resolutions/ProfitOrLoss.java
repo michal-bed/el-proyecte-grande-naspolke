@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @Entity
@@ -23,12 +24,12 @@ public class ProfitOrLoss implements VotingInterface{
     private int votesFor;
     private int votesAgainst;
     private int votesAbstentions;
-    private BigInteger profitOrLossValue;
+    private BigDecimal profitOrLossValue;
     private String coverageOfLossOrProfitAllocation;
     private String coverageOfLossOrProfitAllocationDifferentWay;
 
     @Builder
-    public ProfitOrLoss(String votingType, String resolutionTitle, boolean unanimously, int votesFor, int votesAgainst, int votesAbstentions, BigInteger profitOrLossValue, String coverageOfLossOrProfitAllocation, String coverageOfLossOrProfitAllocationDifferentWay) {
+    public ProfitOrLoss(String votingType, String resolutionTitle, boolean unanimously, int votesFor, int votesAgainst, int votesAbstentions, BigDecimal profitOrLossValue, String coverageOfLossOrProfitAllocation, String coverageOfLossOrProfitAllocationDifferentWay) {
         this.votingType = votingType;
         this.resolutionTitle = resolutionTitle;
         this.unanimously = unanimously;

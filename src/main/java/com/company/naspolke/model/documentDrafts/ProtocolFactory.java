@@ -1,11 +1,9 @@
 package com.company.naspolke.model.documentDrafts;
 
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
+import com.lowagie.text.*;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,11 +12,11 @@ import static com.company.naspolke.model.documentDrafts.FontStyleGenerator.setFo
 @Component
 class ProtocolFactory {
 
-    Font headerFont = setFontStyle(FontStyles.PROTOCOL_HEADER);
-    Font regularTextFont = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
-    Font resolutionHeaderFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_HEADER);
-    Font planeTextBoldFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT_BOLD);
-    Font resolutionTextFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT);
+    private final Font headerFont = setFontStyle(FontStyles.PROTOCOL_HEADER);
+    private final Font regularTextFont = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
+    private final Font resolutionHeaderFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_HEADER);
+    private final Font planeTextBoldFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT_BOLD);
+    private final Font resolutionTextFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT);
 
     public Paragraph getProtocolHeader(String headerText){
         Paragraph protocolHeader = new Paragraph(headerText, headerFont);
@@ -56,6 +54,7 @@ class ProtocolFactory {
         return List.of(resolutionTitleParagraph, resolutionTextParagraph, resolutionVotingParagraph);
     }
 
+
     public Chunk getBoldChunkOfText(String text){
         return new Chunk(text, planeTextBoldFont);
     }
@@ -71,19 +70,46 @@ class ProtocolFactory {
         paragraph.setSpacingAfter(10);
         return paragraph;
     }
+    public List<Paragraph> getNumberedListInResolution(List<String> listItems){
+        List<Paragraph> numberedParagraphs = new ArrayList<>();
+        for (String item: listItems) {
+            Paragraph paragraph = new Paragraph(item, resolutionTextFont);
+            paragraph.setMultipliedLeading(1.5f);
+            paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
+            paragraph.setIndentationLeft(30);
+            paragraph.setIndentationRight(25);
+            numberedParagraphs.add(paragraph);
+        }
+        return numberedParagraphs;
+    }
+//    public com.lowagie.text.List getNumberedList(List<String> points){
+//        com.lowagie.text.List list = new com.lowagie.text.List(true);
+//        list.setIndentationLeft(30);
+//        list.setAlignindent(true);
+//        list.setAutoindent(true);
+//        for (String point: points) {
+//            ListItem itemList = new ListItem(point);
+//            itemList.setFont(resolutionTextFont);
+//            list.add(itemList);
+//        }
+//        return list;
+//    }
 
 
-    private Paragraph getResolutionVotingParagraph(String resolutionText) {
+    public Paragraph getResolutionVotingParagraph(String resolutionText) {
         Paragraph resolutionVotingParagraph = new Paragraph(resolutionText, regularTextFont);
         resolutionVotingParagraph.setMultipliedLeading(1.5f);
         resolutionVotingParagraph.setAlignment(Element.ALIGN_JUSTIFIED);
         resolutionVotingParagraph.setSpacingAfter(10);
+        resolutionVotingParagraph.setSpacingBefore(10);
         return resolutionVotingParagraph;
     }
 
-    private Paragraph getResolutionTextParagraph(String resolutionText) {
+    public Paragraph getResolutionTextParagraph(String resolutionText) {
         Paragraph resolutionTextParagraph = new Paragraph(resolutionText, resolutionTextFont);
-        resolutionTextParagraph.setSpacingAfter(10);
+        return formatResolutionPartTextParagraph(resolutionTextParagraph);
+    }
+    private Paragraph formatResolutionPartTextParagraph(Paragraph resolutionTextParagraph) {
         resolutionTextParagraph.setAlignment(Element.ALIGN_JUSTIFIED);
         resolutionTextParagraph.setIndentationLeft(25);
         resolutionTextParagraph.setIndentationRight(25);
@@ -91,7 +117,7 @@ class ProtocolFactory {
         return resolutionTextParagraph;
     }
 
-    private Paragraph getResolutionTitleParagraph(String resolutionTitle) {
+    public Paragraph getResolutionTitleParagraph(String resolutionTitle) {
         Paragraph resolutionTitleParagraph = new Paragraph(resolutionTitle, resolutionHeaderFont);
         resolutionTitleParagraph.setAlignment(Element.ALIGN_CENTER);
         resolutionTitleParagraph.setSpacingAfter(10f);
