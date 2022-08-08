@@ -4,6 +4,7 @@ import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
+import com.company.naspolke.model.company.financialStatements.resolutions.VotingInterface;
 import com.lowagie.text.Document;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
@@ -106,9 +107,31 @@ public class FinancialStatementProtocolGenerator {
         chairpersonResolutionText.setMultipliedLeading(1.5f);
         document.add(chairpersonResolutionText);
 
+
+        String resolutionVoting = getResolutionVoting(financialStatementInformation.getChairperson(), "tajnym");
+        Paragraph paragraph = new Paragraph(resolutionVoting, regularTextFont);
+        paragraph.setMultipliedLeading(1.5f);
+        paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
+        paragraph.setSpacingAfter(10);
+        document.add(paragraph);
         //close file
         document.close();
         resolutionCount = 1;
+    }
+
+    private String getResolutionVoting(VotingInterface voting, String votingType) {
+        if(voting.isUnanimously()){
+            return String.format(ProtocolPattern.ResolutionVotingUnanimously, votingType);
+        } else {
+            int votesSum = voting.getVotesFor() + voting.getVotesAgainst() + voting.getVotesAbstentions();
+            String votesAllForm = getWordProperForm("głos", votesSum);
+            String votesFormFor = getWordProperForm("głos", voting.getVotesFor());
+            String votesFormAgainst = getWordProperForm("głos", voting.getVotesAgainst());
+            String votesFormAbstentions = getWordProperForm("głos", voting.getVotesAbstentions());
+            String resolutionPassed = voting.getVotesFor()>voting.getVotesAgainst()? "" : "nie ";
+            return String.format(ProtocolPattern.ResolutionVotingNotUnanimously, votingType, votesSum, votesAllForm, voting.getVotesFor(),
+                    votesFormFor, voting.getVotesAgainst(), votesFormAgainst, voting.getVotesAbstentions(), votesFormAbstentions, resolutionPassed);
+        }
     }
 
     private String getMeetingOrganVotingResolutionText(FinancialStatementProtocol financialStatementInformation, Company company, String resolutionText) {
@@ -184,7 +207,7 @@ public class FinancialStatementProtocolGenerator {
             Paragraph paragraph = new Paragraph();
             counter++;
             String partnerName = getPartnerFullName(partner);
-            String sharesProperForm = getSharesProperForm(partner.getSharesCount());
+            String sharesProperForm = getWordProperForm("udział", partner.getSharesCount());
             String sharesInWords = changeDigitsIntoWords((long) partner.getSharesCount());
             float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
             String punctuationMark = checkForPunctuationMark(protocol, counter);
@@ -202,7 +225,7 @@ public class FinancialStatementProtocolGenerator {
             Paragraph paragraph = new Paragraph();
             String companyName = partner.getName();
             int sharesCount = partner.getSharesCount();
-            String sharesProperForm = getSharesProperForm(partner.getSharesCount());
+            String sharesProperForm = getWordProperForm("udział", partner.getSharesCount());
             String sharesCountInWords = changeDigitsIntoWords((long) partner.getSharesCount());
             float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
             String representation = setProperRepresentationName(partner).strip();
@@ -231,15 +254,15 @@ public class FinancialStatementProtocolGenerator {
         return firstName.concat(" ").concat(lastName);
     }
 
-    private String getSharesProperForm(int sharesCount) {
+    private String getWordProperForm(String word, int sharesCount) {
         if(sharesCount==1){
-            return "udział";
+            return word;
         } else if (sharesCount > 5 && sharesCount < 22) {
-            return "udziałów";
+            return word+"ów";
         } else if (sharesCount % 10 >= 2 & sharesCount % 10 < 5) {
-            return "udziały";
+            return word+"y";
         } else {
-            return "udziałów";
+            return word+"ów";
         }
     }
 

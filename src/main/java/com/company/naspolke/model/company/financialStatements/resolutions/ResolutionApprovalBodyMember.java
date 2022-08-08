@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ResolutionApprovalBodyMember {
+public class ResolutionApprovalBodyMember implements VotingInterface {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;

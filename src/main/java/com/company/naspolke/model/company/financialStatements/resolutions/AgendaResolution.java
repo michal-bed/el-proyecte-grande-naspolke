@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AgendaResolution {
+public class AgendaResolution implements VotingInterface{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;

@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ElectionResolution {
+public class ElectionResolution implements VotingInterface {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
