@@ -100,12 +100,12 @@ function CompanyMembers () {
     return (
         <Box style={boxStyle}>
             <CreateCard
-                name="Członkowie Rady Nadzorczej"
+                name="Zarząd"
                 selectedData="boardMembers"
                 headers={["Imię", "Drugie imię", "Nazwisko", "Drugie nazwisko", "Rola"]}
             />
             <CreateCard
-                name="Członkowie Zarządu"
+                name="Rada nadzorcza"
                 selectedData="boardOfDirectors"
                 headers={["Imię", "Drugie Imię", "Nazwisko", "Drugie Nazwisko"]}
             />

@@ -31,6 +31,7 @@ function App() {
                 <Route path="statute" element={<Presentation site="statute"/>}/>
                 <Route path="login" element={<SignIn />}/>
                 <Route path="logout" element={<Logout/>}/>
+                {/*<Route path="register" element={<RegistrationBasic/>}/>*/}
                 <Route path="register" element={<RegistrationBasic/>}/>
                 <Route path="verify/*" element={<VerifyRegistration/>}/>
 
