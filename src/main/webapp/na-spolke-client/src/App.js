@@ -18,6 +18,7 @@ import RequireAuth from "./componentsInUse/login/RequireAuth";
 import Unauthorized from "./componentsInUse/login/Unaurthorized";
 import PersistLogin from "./componentsInUse/login/PersistLogin";
 import Statute from "./componentsInUse/statute/Statute"
+import VerifyRegistration from "./componentsInUse/registration/VerifyRegistration";
 
 function App() {
     return (<ThemeProvider theme={theme}>
@@ -32,6 +33,7 @@ function App() {
                 <Route path="logout" element={<Logout/>}/>
                 {/*<Route path="register" element={<RegistrationBasic/>}/>*/}
                 <Route path="register" element={<RegistrationBasic/>}/>
+                <Route path="verify/*" element={<VerifyRegistration/>}/>
 
                 <Route path="unauthorized" element={<Unauthorized />} />
 

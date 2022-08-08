@@ -20,7 +20,7 @@ export default function Footer() {
                             <WhiteTextTypography>E-mail:</WhiteTextTypography>
                         </Box>
                         <Box>
-                            <WhiteTextTypography>naspolke@gmail.com</WhiteTextTypography>
+                            <WhiteTextTypography>naspolke.organizacja@gmail.com</WhiteTextTypography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={4}>

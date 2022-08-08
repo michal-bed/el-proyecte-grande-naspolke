@@ -1,5 +1,6 @@
 package com.company.naspolke.model.company;
 
+import com.company.naspolke.model.Event;
 import com.company.naspolke.model.aggregate.CompanyUserRole;
 import com.company.naspolke.model.company.companyBodies.BoardMember;
 import com.company.naspolke.model.company.companyBodies.BoardOfDirector;
@@ -14,10 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 @Data
@@ -51,6 +49,8 @@ public class Company {
     private Partners partners;
     private boolean partnersRevealed;
     private boolean manySharesAllowed;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Event> eventsList;
     @JsonIgnore
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Column(name = "company_user_role")
@@ -133,5 +133,9 @@ public class Company {
 
     public void addCompanyUserRole(CompanyUserRole companyUserRole) {
         this.companyUserRole.add(companyUserRole);
+    }
+
+    public void addNewEvent(Event event) {
+        this.eventsList.add(event);
     }
 }

@@ -40,6 +40,9 @@ import Routes from "../../routes";
 
 // Images
 import index_photo3 from "../../assets/photos/index_photo3.jpg";
+import {useState} from "react";
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import {Button} from "@chakra-ui/react";
 
 
 function Presentation(props) {
@@ -59,7 +62,7 @@ function Presentation(props) {
             case "faq":
                 title = "Frequently Asked Questions"
                 titleDescription = "Zebraliśmy najczęściej pojawiające się pytania i " +
-                    "posatraliśmy się w jak najlepszy sposób na nie odpowiedzieć."
+                    "postaraliśmy się w jak najlepszy sposób na nie odpowiedzieć."
                 return(<FaqPage />)
             case "statute":
                 title = "Regulamin strony"
@@ -69,7 +72,6 @@ function Presentation(props) {
     }
 
     const component = setContent()
-
 
   return (
     <>

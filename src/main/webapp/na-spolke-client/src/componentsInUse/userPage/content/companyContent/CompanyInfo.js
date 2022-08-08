@@ -11,7 +11,7 @@ import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import {useEffect, useState} from "react";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import EventsCalendar from "../../../calendar/EventsCalendar";
-
+import Box from "@mui/material/Box";
 function CompanyInfo() {
 
     const [company, setCompany] = useState(null);
@@ -67,7 +67,6 @@ function CompanyInfo() {
     };
 
     const infoCardStyle = {
-        // height: "300px",
         minWidth: "460px",
         marginLeft: "3%",
         marginRight: "3%",
@@ -83,11 +82,10 @@ function CompanyInfo() {
         marginRight: "3%",
         textAlign: "center"
     };
+
     const calendar = {
         minWidth: "460px",
         minHeight: "285px",
-        marginLeft: "3%",
-        marginRight: "3%",
         textAlign: "center"
     };
 
@@ -272,8 +270,8 @@ function CompanyInfo() {
                                 gap: 3,
                                 gridTemplateRows: 'auto',
                                 gridTemplateAreas: `"header address"
-                                                    "info calendar"
-                                                    "members ."`,
+                                                    "info members"
+                                                    "calendar ."`,
                             }}>
                                 <Card style={infoCardStyle} sx={{gridArea: 'header'}}>
                                     <CardHeader
@@ -380,6 +378,24 @@ function CompanyInfo() {
                                         {generateIcons(rows.find(row => row.id === "postOffice"))}
                                     </TableRow>
                                 </Card>
+                {/*<Box>*/}
+                {/*    <Card style={memberCardStyle}>*/}
+                {/*        <Link to={"invite"}><Button style={buttonStyle}>Zaproś do Spółki</Button></Link>*/}
+                {/*        <Typography>*/}
+                {/*            Osoby zarejestrowane w spółce:*/}
+
+                {/*            <ul style={tableStyle}>*/}
+                {/*                <li>*/}
+                {/*                    do wypełnienia*/}
+                {/*                </li>*/}
+                {/*            </ul>*/}
+                {/*        </Typography>*/}
+                {/*    </Card><br/>*/}
+
+                {/*    <Box style={memberCardStyle}>*/}
+                {/*        <EventsCalendar />*/}
+                {/*    </Box>*/}
+                {/*</Box>*/}
 
                                 <Card style={infoCardStyle} sx={{gridArea: 'info'}}>
                                     <TableRow>
@@ -442,9 +458,9 @@ function CompanyInfo() {
                                         </ul>
                                     </Typography>
                                 </Card>
-                                <Card style={calendar} sx={{gridArea: 'calendar'}}>
+                                <Box style={calendar} sx={{gridArea: 'calendar'}}>
                                     <EventsCalendar />
-                                </Card>
+                                </Box>
                             </Grid>
                         {/*</Box>*/}
                         </div>

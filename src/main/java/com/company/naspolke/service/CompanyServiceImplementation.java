@@ -107,4 +107,8 @@ public class CompanyServiceImplementation implements CompanyService {
         companyRepository.updateAddressById(address, companyId);
     }
 
+    @Override
+    public void updateCompany(Company company) {
+        companyRepository.save(company);
+    }
 }

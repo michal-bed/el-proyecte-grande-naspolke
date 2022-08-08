@@ -38,6 +38,8 @@ public class AppUser {
     private boolean enabled;
     @Column(name = "token_expired")
     private boolean tokenExpired;
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Column(name = "user_messages")
     private List<Message> userMessages;

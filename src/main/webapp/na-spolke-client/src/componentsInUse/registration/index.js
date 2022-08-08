@@ -26,10 +26,19 @@ import Routes from "../../routes";
 // Images
 import bgImage from "../../assets/images/bg-sign-in-basic.jpeg"
 import axios from "../../api/axios";
-import {Box, CircularProgress, FormControlLabel, IconButton, InputAdornment, LinearProgress} from "@mui/material";
+import {
+    Box,
+    CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText,
+    DialogTitle,
+    FormControlLabel,
+    IconButton,
+    InputAdornment,
+    LinearProgress
+} from "@mui/material";
 import * as Yup from "yup";
 import {useFormik} from "formik";
 import {Visibility, VisibilityOff} from "@material-ui/icons";
+import {Button} from "@chakra-ui/react";
 
 
 function RegistrationBasic() {
@@ -52,7 +61,15 @@ function RegistrationBasic() {
     const errRef = useRef();
     const [errMsg, setErrMsg] = useState('');
 
+    const [verifyDialogIsOpen, setVerifyDialogIsOpen] = useState(false);
+
+    const handleClose = () => {
+        setVerifyDialogIsOpen(false);
+        navigate(from, { replace: true });
+    };
+
     const [isLoading, setIsLoading] = useState(false);
+
     useLayoutEffect(() => {
         let registrationForm = document.getElementById("new-user-register-form");
         if (isLoading) {
@@ -78,7 +95,8 @@ function RegistrationBasic() {
                 }
             );
             setIsLoading(false);
-            navigate(from, { replace: true });
+            setVerifyDialogIsOpen(true);
+
         } catch (err) {
             console.log(err)
             setIsLoading(false);
@@ -118,8 +136,6 @@ function RegistrationBasic() {
             .required("Musisz potwierdzić regulamin strony aby założyć konto")
             .oneOf([true], "Musisz potwierdzić regulamin strony aby założyć konto")
     })
-
-
 
     const formik = useFormik({
         initialValues: {
@@ -248,7 +264,6 @@ function RegistrationBasic() {
                                                                    checked={showPassword}
                                                                    onClick={() => {handleClickPassword()}}
                                                                >
-
                                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
                                                                </IconButton>
                                                            </InputAdornment>
@@ -353,6 +368,28 @@ function RegistrationBasic() {
           <MKBox width="100%" position="absolute" zIndex={2} bottom="1.625rem">
               <SimpleFooter />
           </MKBox>
+          {verifyDialogIsOpen &&
+              <Dialog
+                  open={verifyDialogIsOpen}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+              >
+                  <DialogTitle id="alert-dialog-title">
+                      {"Zweryfikuj swoje konto"}
+                  </DialogTitle>
+                  <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                          Wysłaliśmy do Ciebie maila z linkiem aktywacyjnym. Aby się zalogować, sprawdź
+                          pocztę i kliknij 𝙕𝙬𝙚𝙧𝙮𝙛𝙞𝙠𝙪𝙟 𝙨𝙬𝙤𝙟𝙚 𝙠𝙤𝙣𝙩𝙤. Zostaniesz automatycznie przeniesiony do naszego
+                          portalu.
+                      </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                      <MKButton onClick={handleClose} variant="gradient" color="info" fullWidth>Ok</MKButton>
+                  </DialogActions>
+              </Dialog>
+          }
       </>
   );
 }
