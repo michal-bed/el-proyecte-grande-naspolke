@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class FinancialStatementResolution {
+public class FinancialStatementResolution implements VotingInterface {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;

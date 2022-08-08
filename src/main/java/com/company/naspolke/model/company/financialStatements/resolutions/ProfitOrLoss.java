@@ -13,7 +13,7 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ProfitOrLoss {
+public class ProfitOrLoss implements VotingInterface{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;

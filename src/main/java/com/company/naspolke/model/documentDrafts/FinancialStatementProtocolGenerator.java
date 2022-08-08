@@ -11,6 +11,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.rythmengine.Rythm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
@@ -33,12 +34,18 @@ public class FinancialStatementProtocolGenerator {
 
     private Company company;
     FinancialStatementProtocol financialStatementInformation;
+    ProtocolFactory protocolFactory;
     int resolutionCount = 1;
+    @Autowired
+    public FinancialStatementProtocolGenerator(FinancialStatementProtocol financialStatementInformation, ProtocolFactory protocolFactory) {
+        this.financialStatementInformation = financialStatementInformation;
+        this.protocolFactory = protocolFactory;
+    }
 
-
-    public FinancialStatementProtocolGenerator(Company company, FinancialStatementProtocol financialStatementInformation) {
+    public FinancialStatementProtocolGenerator(Company company, FinancialStatementProtocol financialStatementInformation, ProtocolFactory protocolFactory) {
         this.company = company;
         this.financialStatementInformation = financialStatementInformation;
+        this.protocolFactory = protocolFactory;
     }
 
     public void generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation) throws IOException {
@@ -46,74 +53,37 @@ public class FinancialStatementProtocolGenerator {
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, new FileOutputStream("src/main/resources/drafts/financialStatements/pdfTest.pdf"));
         document.open();
-        Font headerFont = setFontStyle(FontStyles.PROTOCOL_HEADER);
-        Font regularTextFont = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
-        Font resolutionHeaderFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_HEADER);
-        Font planeTextBoldFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT_BOLD);
-        Font resolutionTextFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT);
 
         // Set protocol Header
         String header = generateProtocolText(company, financialStatementInformation);
-        Paragraph protocolHeader = new Paragraph(header, headerFont);
-        protocolHeader.setAlignment(Paragraph.ALIGN_CENTER);
-        protocolHeader.setSpacingBefore(20);
-        protocolHeader.setSpacingAfter(20);
+        Paragraph protocolHeader = protocolFactory.getProtocolHeader(header);
         document.add(protocolHeader);
 
         //Set meeting place
         String meetingPlaceText = setMeetingPlaceText(company, financialStatementInformation);
-        Paragraph meetingPlace = new Paragraph(meetingPlaceText, regularTextFont);
-        meetingPlace.setMultipliedLeading(1.5f);
-        meetingPlace.setAlignment(Element.ALIGN_JUSTIFIED);
-        meetingPlace.setSpacingAfter(10);
-
-        document.add(meetingPlace);
+        Paragraph meetingPlaceParagraph = protocolFactory.getPlaneProtocolText(meetingPlaceText);
+        document.add(meetingPlaceParagraph);
 
         //Set attendants list
-        List<Paragraph> attendantsListText = setAttendantsList(financialStatementInformation, planeTextBoldFont,regularTextFont);
+        List<Paragraph> attendantsListText = setAttendantsList(financialStatementInformation);
         for (Paragraph paragraph :attendantsListText) {
-            paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
-            //line spacing
-            paragraph.setMultipliedLeading(1.5f);
-            paragraph.setSpacingAfter(5);
-            paragraph.setIndentationLeft(20);
-            document.add(paragraph);
+            Paragraph listElement = protocolFactory.getAttendanceElementListOfShareholders(paragraph);
+            document.add(listElement);
         }
 
         //Set Chairperson text
         String chairpersonInfo = getChairmanInfo(financialStatementInformation);
-        Paragraph chairpersonText = new Paragraph(chairpersonInfo, regularTextFont);
-        chairpersonText.setAlignment(Element.ALIGN_JUSTIFIED);
-        chairpersonText.setMultipliedLeading(1.5f);
-        chairpersonText.setSpacingBefore(10);
-        chairpersonText.setSpacingAfter(10);
-        document.add(chairpersonText);
+        Paragraph chairpersonParagraph = protocolFactory.getPlainTextAfterList(chairpersonInfo);
+        document.add(chairpersonParagraph);
 
         //Set chairperson resolution header
         String resolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getChairperson().getResolutionTitle());
-        Paragraph chairpersonResolutionHeader = new Paragraph(resolutionTitle, resolutionHeaderFont);
-        chairpersonResolutionHeader.setAlignment(Element.ALIGN_CENTER);
-        chairpersonResolutionHeader.setSpacingAfter(10f);
-        chairpersonResolutionHeader.setMultipliedLeading(1.5f);
-        document.add(chairpersonResolutionHeader);
-
-        //Set chairperson resolution text
         String resolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation, company, ProtocolPattern.ResolutionChairpersonText);
-        Paragraph chairpersonResolutionText = new Paragraph(resolutionText, resolutionTextFont);
-        chairpersonResolutionText.setSpacingAfter(10);
-        chairpersonResolutionText.setAlignment(Element.ALIGN_JUSTIFIED);
-        chairpersonResolutionText.setIndentationLeft(25);
-        chairpersonResolutionText.setIndentationRight(25);
-        chairpersonResolutionText.setMultipliedLeading(1.5f);
-        document.add(chairpersonResolutionText);
-
-
         String resolutionVoting = getResolutionVoting(financialStatementInformation.getChairperson(), "tajnym");
-        Paragraph paragraph = new Paragraph(resolutionVoting, regularTextFont);
-        paragraph.setMultipliedLeading(1.5f);
-        paragraph.setAlignment(Element.ALIGN_JUSTIFIED);
-        paragraph.setSpacingAfter(10);
-        document.add(paragraph);
+        List<Paragraph> chairpersonResolutionParagraph = protocolFactory.getResolution(resolutionTitle, resolutionText, resolutionVoting);
+        chairpersonResolutionParagraph.forEach(document::add);
+
+
         //close file
         document.close();
         resolutionCount = 1;
@@ -200,11 +170,10 @@ public class FinancialStatementProtocolGenerator {
         return Rythm.render(text, definition);
     }
 
-    private List<Paragraph> setAttendantsList(FinancialStatementProtocol protocol, Font planeTextBold, Font planeText) {
+    private List<Paragraph> setAttendantsList(FinancialStatementProtocol protocol) {
         int counter = 0;
         List<Paragraph> personList= new java.util.ArrayList<>(List.of());
         for (NaturalPerson partner : protocol.getListPresentIndividualPartners()) {
-            Paragraph paragraph = new Paragraph();
             counter++;
             String partnerName = getPartnerFullName(partner);
             String sharesProperForm = getWordProperForm("udział", partner.getSharesCount());
@@ -212,17 +181,19 @@ public class FinancialStatementProtocolGenerator {
             float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
             String punctuationMark = checkForPunctuationMark(protocol, counter);
             String number = counter + ". ";
-            paragraph.add(number);
-            Chunk name = new Chunk(partnerName, planeTextBold);
-            paragraph.add(name);
-            Chunk restText = new Chunk(String.format( " posiadający %d %s (słownie: %s%2$s) o łacznej wartości nominalnej w wysokości %.2f zł%s\n",
-                    partner.getSharesCount(), sharesProperForm, sharesInWords, sharesValue, punctuationMark), planeText);
-            paragraph.add(restText);
+            String infoAboutPresentPartner = String.format( " posiadający %d %s (słownie: %s%2$s) o łacznej wartości nominalnej w wysokości %.2f zł%s\n",
+                    partner.getSharesCount(), sharesProperForm, sharesInWords, sharesValue, punctuationMark);
+
+            Chunk numberChunk = protocolFactory.getRegularChunkOfText(number);
+            Chunk nameOfThePresentPartner = protocolFactory.getBoldChunkOfText(partnerName);
+            Chunk infoAboutPresentPartnerWithoutName = protocolFactory.getRegularChunkOfText(infoAboutPresentPartner);
+
+            Paragraph paragraph = protocolFactory.getParagraphFromChunks(numberChunk, nameOfThePresentPartner, infoAboutPresentPartnerWithoutName);
+
             personList.add(paragraph);
         }
         for (JuridicalPerson partner:protocol.getListPresentsCompanyPartners()) {
             counter++;
-            Paragraph paragraph = new Paragraph();
             String companyName = partner.getName();
             int sharesCount = partner.getSharesCount();
             String sharesProperForm = getWordProperForm("udział", partner.getSharesCount());
@@ -231,12 +202,13 @@ public class FinancialStatementProtocolGenerator {
             String representation = setProperRepresentationName(partner).strip();
             String punctuationMark = checkForPunctuationMark(protocol, counter);
             String number = counter + ".";
-            paragraph.add(number);
-            Chunk name = new Chunk(companyName, planeTextBold);
-            paragraph.add(name);
-            Chunk restText = new Chunk(String.format(" posiadająca %d %s (słownie: %s%2$s) o łącznej wartości nominalnej w wysokości %.2f zł, którą reprezentuje %s%s\n",
-                    sharesCount,sharesProperForm, sharesCountInWords,sharesValue, representation, punctuationMark), planeText);
-            paragraph.add(restText);
+            String infoAboutPresentPartner = String.format(" posiadająca %d %s (słownie: %s%2$s) o łącznej wartości nominalnej w wysokości %.2f zł, którą reprezentuje %s%s\n",
+                    sharesCount,sharesProperForm, sharesCountInWords,sharesValue, representation, punctuationMark);
+
+            Chunk numberChunk = protocolFactory.getRegularChunkOfText(number);
+            Chunk presentCompanyName = protocolFactory.getBoldChunkOfText(companyName);
+            Chunk infoAboutPresentPartnerWithoutName = protocolFactory.getRegularChunkOfText(infoAboutPresentPartner);
+            Paragraph paragraph = protocolFactory.getParagraphFromChunks(numberChunk, presentCompanyName, infoAboutPresentPartnerWithoutName);
             personList.add(paragraph);
         }
         return personList;
