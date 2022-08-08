@@ -105,6 +105,8 @@ public class FinancialStatementProtocolGenerator {
         document.add(agendaResolutionVotingParagraph);
 
 
+
+
         //close file
         document.close();
         resolutionCount = 1;

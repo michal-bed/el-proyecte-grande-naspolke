@@ -82,19 +82,6 @@ class ProtocolFactory {
         }
         return numberedParagraphs;
     }
-//    public com.lowagie.text.List getNumberedList(List<String> points){
-//        com.lowagie.text.List list = new com.lowagie.text.List(true);
-//        list.setIndentationLeft(30);
-//        list.setAlignindent(true);
-//        list.setAutoindent(true);
-//        for (String point: points) {
-//            ListItem itemList = new ListItem(point);
-//            itemList.setFont(resolutionTextFont);
-//            list.add(itemList);
-//        }
-//        return list;
-//    }
-
 
     public Paragraph getResolutionVotingParagraph(String resolutionText) {
         Paragraph resolutionVotingParagraph = new Paragraph(resolutionText, regularTextFont);

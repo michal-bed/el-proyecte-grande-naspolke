@@ -38,6 +38,7 @@ class ProtocolPattern {
     static String agendaPointsConstant = "%s. otwarcie Zwyczajnego Zgromadzenia;\n" +
             "%s. wybór Przewodniczącego Zgromadzenia i Protokolanta;\n" +
             "%s. stwierdzenie prawidłowości zwołania Zgromadzenia;\n" +
+            "%s. przyjęcie porządku obrad;\n" +
             "%s. podjęcie uchwały w przedmiocie rozpatrzenia i zatwierdzenie sprawozdania finansowego Spółki oraz sprawozdania Zarządu;\n" +
             "%s\n" +
             "%s. podjęcie uchwały w przedmiocie udzielenia absolutorium organom spółki;\n" +
