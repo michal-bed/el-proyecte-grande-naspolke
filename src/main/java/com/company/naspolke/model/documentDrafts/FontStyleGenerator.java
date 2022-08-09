@@ -18,6 +18,7 @@ class FontStyleGenerator {
             case PROTOCOL_HEADER -> font.setSize(15);
             case PROTOCOL_PLANE_TEXT, PROTOCOL_RESOLUTION_TEXT, PROTOCOL_TEXT_BOLD, PROTOCOL_RESOLUTION_TEXT_BOLD -> font.setSize(12);
             case PROTOCOL_RESOLUTION_HEADER -> font.setSize(13);
+            case PROTOCOL_APPENDIX_INFO -> font.setSize(10);
         }
         return font;
     }

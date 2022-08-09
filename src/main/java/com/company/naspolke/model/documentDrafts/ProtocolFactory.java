@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.company.naspolke.model.documentDrafts.FontStyleGenerator.setFontStyle;
+import static com.company.naspolke.model.documentDrafts.ProtocolPattern.placeForSign;
 
 @Component
 class ProtocolFactory {
@@ -16,6 +17,7 @@ class ProtocolFactory {
     private final Font regularTextFont = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
     private final Font resolutionHeaderFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_HEADER);
     private final Font planeTextBoldFont = setFontStyle(FontStyles.PROTOCOL_TEXT_BOLD);
+    private final Font textBoldAppendixFont = setFontStyle(FontStyles.PROTOCOL_APPENDIX_INFO);
     private final Font resolutionTextFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT);
     private final Font resolutionTextBoldFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT_BOLD);
 
@@ -35,6 +37,13 @@ class ProtocolFactory {
         return regularParagraph;
     }
 
+    public Paragraph getAppendixInfo(String text){
+        Paragraph paragraph = new Paragraph(text, planeTextBoldFont);
+        paragraph.setAlignment(Element.ALIGN_LEFT);
+        paragraph.setMultipliedLeading(1.2f);
+        paragraph.setSpacingAfter(20);
+        return paragraph;
+    }
     public Paragraph getAttendanceElementListOfShareholders(Paragraph listElement){
         listElement.setAlignment(Element.ALIGN_JUSTIFIED);
         //line spacing
@@ -124,4 +133,12 @@ class ProtocolFactory {
         return resolutionTitleParagraph;
     }
 
+
+    public Paragraph getPlaceForPartnersSign(){
+        Paragraph paragraph = new Paragraph(placeForSign);
+        paragraph.setAlignment(Element.ALIGN_CENTER);
+        paragraph.setSpacingBefore(40);
+        paragraph.setSpacingAfter(10);
+        return paragraph;
+    }
 }

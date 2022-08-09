@@ -16,7 +16,7 @@ public class WordFormsHandler {
             "profa.", "profa", "gena", "gena." , "dra", "dra.", "płka", "płka.", "ppłka.", "ppłka", "mjra", "mjra.", "marsz", "marsz.", "plac", "ul.", "pl.", "os.", "al.");
     public static String getMonthInWord(int number) {
         switch (number) {
-            case 1 -> { return "styczenia"; }
+            case 1 -> { return "stycznia"; }
             case 2 -> { return "lutego"; }
             case 3 -> { return "marca"; }
             case 4 -> { return "kwietnia"; }

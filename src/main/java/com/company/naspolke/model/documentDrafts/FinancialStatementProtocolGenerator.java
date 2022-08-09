@@ -56,7 +56,7 @@ public class FinancialStatementProtocolGenerator {
         document.add(meetingPlaceParagraph);
 
         //Set attendants list
-        List<Paragraph> attendantsListText = setAttendantsList(financialStatementInformation);
+        List<Paragraph> attendantsListText = setAttendantsList(financialStatementInformation, true, company);
         for (Paragraph paragraph :attendantsListText) {
             Paragraph listElement = protocolFactory.getAttendanceElementListOfShareholders(paragraph);
             document.add(listElement);
@@ -131,13 +131,41 @@ public class FinancialStatementProtocolGenerator {
         approvalResolutions.forEach(document::add);
         List<Paragraph> approvalResolutionsDirectors = getApprovalResolutionTitle(financialStatementInformation, "directors", company);
         approvalResolutionsDirectors.forEach(document::add);
+
         //conclusions of the meeting
         Paragraph conclusions = protocolFactory.getPlaneProtocolText(conclusionsOfTheMeeting);
         document.add(conclusions);
 
+        document.newPage();
+        //appendix
+        String appendix = getAppendixText(company, financialStatementInformation);
+        Paragraph appendixParagraph = protocolFactory.getAppendixInfo(appendix);
+        document.add(appendixParagraph);
+
+        Paragraph appendixAttendanceHeaderParagraph = protocolFactory.getProtocolHeader("LISTA OBECNOŚCI");
+        document.add(appendixAttendanceHeaderParagraph);
+        Paragraph appendixAttendanceIntroParagraph = protocolFactory.getPlaneProtocolText(appendixAttendanceListIntro);
+        document.add(appendixAttendanceIntroParagraph);
+
+        List<Paragraph> attendantsEndListText = setAttendantsList(financialStatementInformation, false, company);
+        for (Paragraph paragraph: attendantsEndListText) {
+            Paragraph signPlace = protocolFactory.getPlaceForPartnersSign();
+            document.add(signPlace);
+            document.add(paragraph);
+        }
+
         //close file
         document.close();
         resolutionCount = 1;
+    }
+
+    private String getAppendixText(Company company, FinancialStatementProtocol protocolData) {
+        LocalDate meetingDate = protocolData.getDateOfTheShareholdersMeeting();
+        String protocolNumber = String.format(protocolNumberPattern, protocolData.getProtocolNumber(),
+                meetingDate.getDayOfMonth(), meetingDate.getMonthValue(), meetingDate.getYear());
+        String companyName = company.getCompanyName();
+        String companyCity = placeConjugated(company.getAddress().getCity());
+        return String.format(appendixInfo,protocolNumber, companyName, companyCity);
     }
 
     private List<Paragraph> getApprovalResolutionTitle(FinancialStatementProtocol financialStatementInformation, String bodyType, Company company) {
@@ -211,7 +239,7 @@ public class FinancialStatementProtocolGenerator {
     private String checkForVotingExclusion(FinancialStatementProtocol financialStatementInformation, String name, String lastname) {
         boolean isExcluded = isPartnerExcluded(financialStatementInformation, name, lastname);
         if(isExcluded){
-            return String.format(exclusionFromVoting, correctLetterCases(name.concat(" ").concat(lastname)));
+            return String.format(exclusionFromVoting, correctLetterCases(name.concat(" ").concat(lastname)).trim());
         }
         return "";
     }
@@ -472,8 +500,17 @@ public class FinancialStatementProtocolGenerator {
         return Rythm.render(text, definition);
     }
 
-    private List<Paragraph> setAttendantsList(FinancialStatementProtocol protocol) {
+    private List<Paragraph> setAttendantsList(FinancialStatementProtocol protocol, boolean getPresentPartners, Company company) {
         int counter = 0;
+        Set<NaturalPerson> naturalPartners;
+        Set<JuridicalPerson> juridicalPartners;
+        if (getPresentPartners){
+            naturalPartners = protocol.getListPresentIndividualPartners();
+            juridicalPartners = protocol.getListPresentsCompanyPartners();
+        } else {
+            naturalPartners = company.getPartners().getIndividualPartners();
+            juridicalPartners = company.getPartners().getPartnerCompanies();
+        }
         List<Paragraph> personList= new java.util.ArrayList<>(List.of());
         for (NaturalPerson partner : protocol.getListPresentIndividualPartners()) {
             counter++;
@@ -483,7 +520,7 @@ public class FinancialStatementProtocolGenerator {
             float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
             String punctuationMark = checkForPunctuationMark(protocol, counter);
             String number = counter + ". ";
-            String infoAboutPresentPartner = String.format( " posiadający %d %s (słownie: %s%2$s) o łacznej wartości nominalnej w wysokości %.2f zł%s\n",
+            String infoAboutPresentPartner = String.format( " posiadający %d %s (słownie: %s%2$s) i tyle samo głosów o łacznej wartości nominalnej w wysokości %.2f zł%s\n",
                     partner.getSharesCount(), sharesProperForm, sharesInWords, sharesValue, punctuationMark);
 
             Chunk numberChunk = protocolFactory.getRegularChunkOfText(number);
@@ -504,7 +541,7 @@ public class FinancialStatementProtocolGenerator {
             String representation = setProperRepresentationName(partner).strip();
             String punctuationMark = checkForPunctuationMark(protocol, counter);
             String number = counter + ".";
-            String infoAboutPresentPartner = String.format(" posiadająca %d %s (słownie: %s%2$s) o łącznej wartości nominalnej w wysokości %.2f zł, którą reprezentuje %s%s\n",
+            String infoAboutPresentPartner = String.format(" posiadająca %d %s (słownie: %s%2$s) i tyle samo głosów o łącznej wartości nominalnej w wysokości %.2f zł, którą reprezentuje %s%s\n",
                     sharesCount,sharesProperForm, sharesCountInWords,sharesValue, representation, punctuationMark);
 
             Chunk numberChunk = protocolFactory.getRegularChunkOfText(number);

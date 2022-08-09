@@ -76,4 +76,13 @@ class ProtocolPattern {
     static String exclusionFromVoting = "Zgodnie z art. 244 k.s.h. z głosowania nad uchwałą został wyłączony wspólnik %s.";
     static String conclusionsOfTheMeeting = "Wobec braku wolnych wniosków i wyczerpania porządku obrad, przewodniczący " +
             "zamknął obrady Zwyczajnego Zgromadzenia Wspólników Spółki.";
+
+    static String appendixInfo = "Załącznik nr 1 do protokołu %s \n" +
+            "Zwyczajnego Zgromadzenia Wspólników spółki\n" +
+            "pod firmą %s\n" +
+            "z siedzibą %s\n";
+
+    static String protocolNumberPattern = "%s/%s/%s/%s";
+    static String appendixAttendanceListIntro = "Na Zwyczajnym Zgromadzeniu Wspólników stawili się:";
+    static String placeForSign = "......................................................................................................";
 }
