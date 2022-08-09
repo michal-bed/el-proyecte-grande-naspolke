@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 import static com.company.naspolke.model.documentDrafts.ChangeDigitsIntoWords.changeDigitsIntoWords;
 
@@ -101,6 +102,7 @@ public class FinancialStatementProtocolGenerator {
         Paragraph agendaResolutionIntroduction = protocolFactory.getResolutionTextParagraph(String.format(ProtocolPattern.agendaIntroduction, "Zwyczajne"));
         List<Paragraph> agendaResolutionList = protocolFactory.getNumberedListInResolution(agenda);
         Paragraph agendaResolutionVotingParagraph = protocolFactory.getResolutionVotingParagraph(agendaVoting);
+
         document.add(agendaResolutionTitleParagraph);
         document.add(agendaResolutionIntroduction);
         agendaResolutionList.forEach(document::add);
@@ -116,13 +118,42 @@ public class FinancialStatementProtocolGenerator {
                 financialStatementResolutionText, financialStatementResolutionVoting);
         financialStatementResolutionParagraph.forEach(document::add);
 
+        //Set amount profit or lose resolution
+        String profitOrLoseTitlePart = getProfitLoseInfo(financialStatementInformation);
+        String profitOrLoseTitle = getResolutionTitle(company, financialStatementInformation, profitOrLoseTitlePart);
 
+        String profitOrLoseText = getProfitLoseResolutionText(company, financialStatementInformation);
+        String profitOrLoseVoting = getResolutionVoting(financialStatementInformation.getProfitOrLoss(),"jawnym");
 
+        List<Paragraph> profitOrLoseParagraphs = protocolFactory.getResolution(profitOrLoseTitle, profitOrLoseText, profitOrLoseVoting);
+        profitOrLoseParagraphs.forEach(document::add);
 
 
         //close file
         document.close();
         resolutionCount = 1;
+    }
+
+    private String getProfitLoseResolutionText(Company company, FinancialStatementProtocol financialStatementInformation) {
+        String resolutionTextBeginning = getOfficialApprovalText(company);
+        String profitOrLoseInfo = getProfitLoseInfo(financialStatementInformation);
+        String profitOrLoseText = getAmountProfitOrLoseText(financialStatementInformation.getProfitOrLoss().getProfitOrLossValue(),
+                "zysk zostanie przeznaczony","strata zostanie pokryta","");
+        String coverageOfLossOrProfitAllocation = financialStatementInformation.getProfitOrLoss().getCoverageOfLossOrProfitAllocation();
+        if (Objects.equals(coverageOfLossOrProfitAllocation, "inne...")){
+            coverageOfLossOrProfitAllocation = financialStatementInformation.getProfitOrLoss().getCoverageOfLossOrProfitAllocationDifferentWay();
+        }
+//        else if (Objects.equals(coverageOfLossOrProfitAllocation, "na kapitał zapasowy oraz na pokrycie starty z lat przeszłych")) {
+//            coverageOfLossOrProfitAllocation = profitAllocation;
+//        }
+        return String.format(amountProfitLoseText, resolutionTextBeginning, profitOrLoseInfo, profitOrLoseText, coverageOfLossOrProfitAllocation);
+    }
+
+    private String getProfitLoseInfo(FinancialStatementProtocol financialStatementInformation) {
+        String profitLoseText = getAmountProfitOrLoseText(financialStatementInformation.getProfitOrLoss().getProfitOrLossValue(),
+                "podziału zysku", "pokrycia straty", "");
+        String period = getReportingPeriod(financialStatementInformation);
+        return String.format(amountProfitLoseTitle, profitLoseText, period);
     }
 
     private String getFinancialStatementResolutionText(Company company, FinancialStatementProtocol userInformation) {
@@ -131,25 +162,26 @@ public class FinancialStatementProtocolGenerator {
         String reportingPeriod = getReportingPeriod(userInformation);
         String endPeriod = getPeriod(resolutionInfo.getEndReportingPeriod());
         String sumOfAssetsAndLiabilities = String.valueOf(resolutionInfo.getSumOfAssetsAndLiabilities());
-        String amountProfitOrLoss = getAmountProfitOrLoseText(userInformation.getProfitOrLoss().getProfitOrLossValue());
+        String amountProfitOrLoss = getAmountProfitOrLoseText(userInformation.getProfitOrLoss().getProfitOrLossValue(),
+                "zysk w wysokości ","stratę w wysokości ","sumę ");
         String amountProfitOrLossValue = String.valueOf(userInformation.getProfitOrLoss().getProfitOrLossValue());
         return String.format(financialStatementResolution, officialApproval,reportingPeriod, endPeriod, sumOfAssetsAndLiabilities,
                 amountProfitOrLoss, amountProfitOrLossValue);
     }
 
-    private String getAmountProfitOrLoseText(BigDecimal value) {
+    private String getAmountProfitOrLoseText(BigDecimal value, String profitText, String LoseText, String zeroText) {
         if(value.compareTo(new BigDecimal("0")) > 0) {
-            return "zysk w wysokości ";
+            return profitText;
         } else if (value.compareTo(new BigDecimal("0")) < 0) {
-            return "stratę w wysokości ";
+            return LoseText;
         } else {
-            return "sumę ";
+            return zeroText;
         }
     }
 
     private String getOfficialApprovalText(Company company) {
         String companyHeadQuarter = WordFormsHandler.placeConjugated(company.getAddress().getCity());
-        return String.format(financialStatementResolutionApprovalPhrase, company.getCompanyName(), companyHeadQuarter);
+        return String.format(startingResolutionText, company.getCompanyName(), companyHeadQuarter);
     }
 
     private String getFinancialStatementTitle(FinancialStatementProtocol financialStatementInformation) {

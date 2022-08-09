@@ -5,10 +5,10 @@ import {Field} from "formik";
 import {Voting} from "../voting/Voting";
 
 export function AmountProfitOrLoss({values, valueName, resolutionHeader, handleChange}) {
-    let coverageOfLossPossibility = ["Z zysków lat przyszłych", "inne..."]
-    let profitAllocation = ["Na kapitał zapasowy", "pokrycie straty z lat przeszłych",
-        "Na kapitał zapasowy oraz na pokrycie starty z lat przeszłych",
-        "wypłata dywidendy", "inne..."]
+    let coverageOfLossPossibility = ["z zysków lat przyszłych", "inne..."]
+    let profitAllocation = ["na kapitał zapasowy", "na pokrycie straty z lat przeszłych",
+        "na kapitał zapasowy oraz na pokrycie starty z lat przeszłych",
+        "na wypłatę dywidendy", "inne..."]
 
     return <div>
         <p>{resolutionHeader}</p>
@@ -23,7 +23,7 @@ export function AmountProfitOrLoss({values, valueName, resolutionHeader, handleC
         {values.amountProfitOrLoss !== 0 && <div>
             <FormControl sx={{m: 1, minWidth: 120}}>
                 <InputLabel
-                    id="demo-simple-select-helper-label">{values.amountProfitOrLoss > 0 ? "Przeznaczenie zysku" : "Sposób pokrycia straty"}</InputLabel>
+                    id="demo-simple-select-helper-label">{values.amountProfitOrLoss > 0 ? "Zysk zostanie przeznaczony" : "Strata zostanie pokryta"}</InputLabel>
                 <Select
                     name={"coverageOfLossOrProfitAllocation"}
                     value={values.coverageOfLossOrProfitAllocation}

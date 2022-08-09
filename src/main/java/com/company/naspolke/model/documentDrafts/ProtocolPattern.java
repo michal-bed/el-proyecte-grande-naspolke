@@ -49,16 +49,22 @@ class ProtocolPattern {
     static String agendaNoProfitAndNoLose = "";
     static String agendaIntroduction = "%s Zgromadzenie Wspólników spółki postanawia przyjąć następujący porządek obrad:\n";
 
-    static String financialStatementResolution ="1. %s sprawozdanie finansowe Spółki za okres od  %s,  zawierające:\n" +
+    static String financialStatementResolution ="1. %s sprawozdanie finansowe Spółki za okres od  %s, zatwierdza sprawozdanie zawierające:\n" +
             "a) wprowadzenie do sprawozdania finansowego;\n" +
             "b) bilans sporządzony na dzień %s, który wykazuje po stronie aktywów i pasywów kwotę %s zł.;\n" +
             "c) rachunek zysków i strat za okres od %2$s wariant porównawczy wykazujący %s%s zł.;\n" +
             "d) dodatkowe informacje i wyjaśnienia.\n" +
-            "2. %1$s Zarządu z działalności jednostki w okresie od %2$s\n" +
+            "2. %1$s zatwierdza sprawozdanie Zarządu z działalności jednostki w okresie od %2$s\n" +
             "3. Uchwała wchodzi w życie z dniem jej podjęcia.\n";
 
     static String financialStatementResolutionTitle = "rozpatrzenia i zatwierdzenia sprawozdania finansowego Spółki oraz sprawozdania Zarządu za okres od %s";
-    static String financialStatementResolutionApprovalPhrase = "Niniejszym Zwyczajne Zgromadzenie Wspólników spółki pod firmą: %s z siedzibą %s zatwierdza sprawozdanie";
+    static String startingResolutionText = "Niniejszym Zwyczajne Zgromadzenie Wspólników spółki pod firmą: %s z siedzibą %s";
     static String reportingPeriodPattern = "dnia %s r. do dnia %sr.";
 
+    static String amountProfitLoseTitle = "%s za okres od %s";
+    static String amountProfitLoseText = "1. %s podejmuje uchwałę co do sposobu %s i postanawia, że %s %s.\n" +
+            "2. Uchwała wchodzi w życie z dniem jej podjęcia.\n";
+    static String profitAllocation = "z uwagi na to, że osiągnięty zysk jest większy niż pozostała strata z lat przeszłych" +
+            " zysk zostanie przeznaczony w części na pokrycie całej pozostałej straty, natomiast nadwyżka " +
+            "zostanie przeznaczona na kapitał zapasowy";
 }
