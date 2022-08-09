@@ -67,4 +67,13 @@ class ProtocolPattern {
     static String profitAllocation = "z uwagi na to, że osiągnięty zysk jest większy niż pozostała strata z lat przeszłych" +
             " zysk zostanie przeznaczony w części na pokrycie całej pozostałej straty, natomiast nadwyżka " +
             "zostanie przeznaczona na kapitał zapasowy";
+
+    static String approvalResolutionHeader = "udzielenia absolutorium %s z wykonywania przez %s obowiązków za okres od dnia %s";
+    static String approvalResolutionText1 = "Z uwagi na to, że %s ";
+    static String approvalResolutionText2 = "w okresie od %s %s funkcję %s niniejszym Zwyczajne Zgromadzenie Wspólników, udziela %s absolutorium z " +
+            "pełnionych przez %s obowiązków w Spółce";
+
+    static String exclusionFromVoting = "Zgodnie z art. 244 k.s.h. z głosowania nad uchwałą został wyłączony wspólnik %s.";
+    static String conclusionsOfTheMeeting = "Wobec braku wolnych wniosków i wyczerpania porządku obrad, przewodniczący " +
+            "zamknął obrady Zwyczajnego Zgromadzenia Wspólników Spółki.";
 }

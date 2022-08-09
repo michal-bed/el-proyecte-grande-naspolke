@@ -12,20 +12,12 @@ class FontStyleGenerator {
         if(!FontFactory.isRegistered(fontStyles.getFontType())) {
             FontFactory.registerDirectory("src/main/resources/drafts/fonts/natoSans/");
         }
-//        FontFactory.register("src/main/resources/drafts/fonts/natoSans/"+fontStyles.getFontType());
-//        FontFactory.register("src/main/resources/drafts/fonts/natoSans/NotoSans-Bold.ttf", "NatoSans-Bold");
         Font font = FontFactory.getFont(fontStyles.getFontType(), BaseFont.IDENTITY_H);
 
         switch (fontStyles){
-            case PROTOCOL_HEADER -> {
-                font.setSize(15);
-            }
-            case PROTOCOL_PLANE_TEXT, PROTOCOL_RESOLUTION_TEXT, PROTOCOL_RESOLUTION_TEXT_BOLD -> font.setSize(12);
-            case PROTOCOL_RESOLUTION_HEADER -> {
-                font.setSize(13);
-//                font.setFamily("NatoSans-Bold");
-//                System.out.println(font.isBold());
-            }
+            case PROTOCOL_HEADER -> font.setSize(15);
+            case PROTOCOL_PLANE_TEXT, PROTOCOL_RESOLUTION_TEXT, PROTOCOL_TEXT_BOLD, PROTOCOL_RESOLUTION_TEXT_BOLD -> font.setSize(12);
+            case PROTOCOL_RESOLUTION_HEADER -> font.setSize(13);
         }
         return font;
     }

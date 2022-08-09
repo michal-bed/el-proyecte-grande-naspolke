@@ -3,7 +3,6 @@ package com.company.naspolke.model.documentDrafts;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -13,7 +12,8 @@ public enum FontStyles {
     PROTOCOL_PLANE_TEXT("NotoSans-Regular.ttf"),
     PROTOCOL_RESOLUTION_HEADER("NotoSans-Bold.ttf"),
     PROTOCOL_RESOLUTION_TEXT("NotoSans-Italic.ttf"),
-    PROTOCOL_RESOLUTION_TEXT_BOLD("NotoSans-Bold.ttf");
+    PROTOCOL_TEXT_BOLD("NotoSans-Bold.ttf"),
+    PROTOCOL_RESOLUTION_TEXT_BOLD("NotoSans-BoldItalic.ttf");
 
     private String fontType;
 }

@@ -6,6 +6,7 @@ import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.company.naspolke.model.company.financialStatements.resolutions.ElectionResolution;
 import com.company.naspolke.model.company.financialStatements.resolutions.FinancialStatementResolution;
+import com.company.naspolke.model.company.financialStatements.resolutions.ResolutionApprovalBodyMember;
 import com.company.naspolke.model.company.financialStatements.resolutions.VotingInterface;
 import com.lowagie.text.Document;
 import com.lowagie.text.*;
@@ -20,10 +21,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 import static com.company.naspolke.model.documentDrafts.ChangeDigitsIntoWords.changeDigitsIntoWords;
 
@@ -32,7 +31,6 @@ import static com.company.naspolke.model.documentDrafts.WordFormsHandler.*;
 
 @Component
 public class FinancialStatementProtocolGenerator {
-    Company company;
     private final ProtocolFactory protocolFactory;
     int resolutionCount = 1;
     char chairpersonGender ='m';
@@ -86,7 +84,7 @@ public class FinancialStatementProtocolGenerator {
         //Set protocolAttendanceInfo
         Chunk protocolAttendanceInfo = getAttendanceInfo("Zwyczajnego");
         Chunk protocolValidationFormula = getProtocolValidationFormula(financialStatementInformation, company);
-        Paragraph protocolAttendanceAndValidation = protocolFactory.getParagraphFromChunks(protocolAttendanceInfo, protocolValidationFormula);
+        Paragraph protocolAttendanceAndValidation = protocolFactory.getParagraphRegularFromChunks(protocolAttendanceInfo, protocolValidationFormula);
         document.add(protocolAttendanceAndValidation);
 
         //Set information about agenda
@@ -128,11 +126,123 @@ public class FinancialStatementProtocolGenerator {
         List<Paragraph> profitOrLoseParagraphs = protocolFactory.getResolution(profitOrLoseTitle, profitOrLoseText, profitOrLoseVoting);
         profitOrLoseParagraphs.forEach(document::add);
 
+        //Set approval resolution
+        List<Paragraph> approvalResolutions = getApprovalResolutionTitle(financialStatementInformation, "board", company);
+        approvalResolutions.forEach(document::add);
+        List<Paragraph> approvalResolutionsDirectors = getApprovalResolutionTitle(financialStatementInformation, "directors", company);
+        approvalResolutionsDirectors.forEach(document::add);
+        //conclusions of the meeting
+        Paragraph conclusions = protocolFactory.getPlaneProtocolText(conclusionsOfTheMeeting);
+        document.add(conclusions);
 
         //close file
         document.close();
         resolutionCount = 1;
     }
+
+    private List<Paragraph> getApprovalResolutionTitle(FinancialStatementProtocol financialStatementInformation, String bodyType, Company company) {
+        List<Paragraph> paragraphList = new ArrayList<>(List.of());
+        Set<ResolutionApprovalBodyMember> boardMemberList= financialStatementInformation.getBoardMembersApproval();
+        List<ResolutionApprovalBodyMember> boardMembers;
+        if(bodyType=="board") {
+            boardMembers = boardMemberList.stream().toList();
+        } else {
+            boardMembers = financialStatementInformation.getDirectorsMembersApproval().stream().toList();
+        }
+
+        for (ResolutionApprovalBodyMember resolution: boardMembers){
+            String periodOfOffice = getPeriodOfOffice(financialStatementInformation, resolution);
+            String function = "";
+            String personalPronoun = "";
+            String functionProperForm = "";
+            String name, nameII, lastname, lastnameII, gender, personalPronounII;
+            if (bodyType.equals("board")){
+                function = Objects.equals(resolution.getBoardMember().getFunction(), "PREZES ZARZĄDU") ? "Prezesowi Zarządu" :
+                        "Członkowi Zarządu";
+                functionProperForm = Objects.equals(resolution.getBoardMember().getFunction(), "PREZES ZARZĄDU") ? "Prezesa Zarządu" :
+                        "Członka Zarządu";
+                personalPronoun = resolution.getBoardMember().getGender()=='m'?"niego" : "nią";
+                personalPronounII = resolution.getBoardMember().getGender()=='m'?"mu" : "jej";
+                name = resolution.getBoardMember().getFirstName();
+                nameII = resolution.getBoardMember().getSecondName()!=null ? resolution.getBoardMember().getSecondName():"";
+                lastname = resolution.getBoardMember().getLastNameI();
+                lastnameII = resolution.getBoardMember().getLastNameII()!=null ? resolution.getBoardMember().getLastNameII():"";
+                gender = resolution.getBoardMember().getGender()=='m'?"Pan" :"Pani";
+            } else {
+                function = "Członkowi Rady Nadzorczej";
+                functionProperForm = "Członka Rady Nadzorczej";
+                personalPronoun = resolution.getDirector().getGender()=='m'?"niego" : "nią";
+                personalPronounII = resolution.getDirector().getGender()=='m'?"mu" : "jej";
+                name = resolution.getDirector().getFirstName();
+                nameII = resolution.getDirector().getSecondName()!=null ? resolution.getDirector().getSecondName():"";
+                lastname = resolution.getDirector().getLastNameI();
+                lastnameII = resolution.getDirector().getLastNameII()!=null ? resolution.getDirector().getLastNameII():"";
+                gender = resolution.getDirector().getGender()=='m'?"Pan" :"Pani";
+            }
+            String properWordForm = gender.equals("Pan")? "pełnił " : "pełniła";
+
+            String title = String.format(approvalResolutionHeader, function, personalPronoun, periodOfOffice);
+            String resolutionHeader = getResolutionTitle(company, financialStatementInformation, title);
+            Paragraph resolutionHeaderParagraph = protocolFactory.getResolutionTitleParagraph(resolutionHeader);
+            paragraphList.add(resolutionHeaderParagraph);
+
+            String text1 = String.format(approvalResolutionText1, gender);
+            String nameAndSurname = getPartnerFullName(name, nameII, lastname,lastnameII);
+            String text2 = String.format(approvalResolutionText2, periodOfOffice, properWordForm, functionProperForm,
+                    personalPronounII, personalPronoun);
+            Chunk resolutionTextPart1 = protocolFactory.getResolutionRegularChunkOfText(text1);
+            Chunk resolutionTextPart2 = protocolFactory.getResolutionBoldChunkOfText(nameAndSurname);
+            Chunk resolutionTextPart3 = protocolFactory.getResolutionRegularChunkOfText(text2);
+            Paragraph resolutionText = protocolFactory.getParagraphResolutionFromChunks(resolutionTextPart1, resolutionTextPart2, resolutionTextPart3);
+            paragraphList.add(resolutionText);
+
+            String voting = getResolutionVoting(resolution, "tajnym");
+            String exclusion = checkForVotingExclusion(financialStatementInformation, name, lastname);
+            if(!Objects.equals(exclusion, "")) {
+                paragraphList.add(protocolFactory.getPlainTextAfterList(exclusion));
+            }
+            Paragraph votingParagraph = protocolFactory.getResolutionVotingParagraph(voting);
+            paragraphList.add(votingParagraph);
+
+        }
+        return paragraphList;
+    }
+
+    private String checkForVotingExclusion(FinancialStatementProtocol financialStatementInformation, String name, String lastname) {
+        boolean isExcluded = isPartnerExcluded(financialStatementInformation, name, lastname);
+        if(isExcluded){
+            return String.format(exclusionFromVoting, correctLetterCases(name.concat(" ").concat(lastname)));
+        }
+        return "";
+    }
+
+    private boolean isPartnerExcluded(FinancialStatementProtocol financialStatementInformation,String name, String lastname) {
+        boolean companyPartnerPresent = financialStatementInformation.getListPresentsCompanyPartners().stream()
+                .anyMatch(person -> person.getRepresentativeFirstname().equals(name) && person.getRepresentativeLastname().equals(lastname));
+        if(!companyPartnerPresent){
+            return financialStatementInformation.getListPresentIndividualPartners().stream()
+                    .anyMatch(naturalPerson -> naturalPerson.getFirstName().equals(name) && naturalPerson.getLastNameI().equals(lastname));
+        }
+        return true;
+    }
+
+
+    private String getPartnerFullName(String name,String nameII,String lastname,String lastnameII) {
+            String fullName = name.concat(" ").concat(nameII)
+                    .concat(" ").concat(lastname).concat(" ").concat(lastnameII)
+                    .concat(" ");
+            return correctLetterCases(fullName);
+    }
+
+    private String getPeriodOfOffice(FinancialStatementProtocol financialStatementInformation, ResolutionApprovalBodyMember resolution) {
+        if (resolution.isWholeReportingPeriod()) {
+            return getWholePeriod(financialStatementInformation.getFinancialStatementResolution().getBeginningReportingPeriod(),
+                    financialStatementInformation.getFinancialStatementResolution().getEndReportingPeriod());
+        } else {
+            return getWholePeriod(resolution.getBeginningOfReportingPeriod(), resolution.getEndOfReportingPeriod());
+        }
+    }
+
 
     private String getProfitLoseResolutionText(Company company, FinancialStatementProtocol financialStatementInformation) {
         String resolutionTextBeginning = getOfficialApprovalText(company);
@@ -152,19 +262,21 @@ public class FinancialStatementProtocolGenerator {
     private String getProfitLoseInfo(FinancialStatementProtocol financialStatementInformation) {
         String profitLoseText = getAmountProfitOrLoseText(financialStatementInformation.getProfitOrLoss().getProfitOrLossValue(),
                 "podziału zysku", "pokrycia straty", "");
-        String period = getReportingPeriod(financialStatementInformation);
+        String period = getWholePeriod(financialStatementInformation.getFinancialStatementResolution().getBeginningReportingPeriod(),
+                financialStatementInformation.getFinancialStatementResolution().getEndReportingPeriod());
         return String.format(amountProfitLoseTitle, profitLoseText, period);
     }
 
-    private String getFinancialStatementResolutionText(Company company, FinancialStatementProtocol userInformation) {
-        FinancialStatementResolution resolutionInfo = userInformation.getFinancialStatementResolution();
+    private String getFinancialStatementResolutionText(Company company, FinancialStatementProtocol financialStatementInformation) {
+        FinancialStatementResolution resolutionInfo = financialStatementInformation.getFinancialStatementResolution();
         String officialApproval = getOfficialApprovalText(company);
-        String reportingPeriod = getReportingPeriod(userInformation);
+        String reportingPeriod = getWholePeriod(financialStatementInformation.getFinancialStatementResolution().getBeginningReportingPeriod(),
+                financialStatementInformation.getFinancialStatementResolution().getEndReportingPeriod());
         String endPeriod = getPeriod(resolutionInfo.getEndReportingPeriod());
         String sumOfAssetsAndLiabilities = String.valueOf(resolutionInfo.getSumOfAssetsAndLiabilities());
-        String amountProfitOrLoss = getAmountProfitOrLoseText(userInformation.getProfitOrLoss().getProfitOrLossValue(),
+        String amountProfitOrLoss = getAmountProfitOrLoseText(financialStatementInformation.getProfitOrLoss().getProfitOrLossValue(),
                 "zysk w wysokości ","stratę w wysokości ","sumę ");
-        String amountProfitOrLossValue = String.valueOf(userInformation.getProfitOrLoss().getProfitOrLossValue());
+        String amountProfitOrLossValue = String.valueOf(financialStatementInformation.getProfitOrLoss().getProfitOrLossValue());
         return String.format(financialStatementResolution, officialApproval,reportingPeriod, endPeriod, sumOfAssetsAndLiabilities,
                 amountProfitOrLoss, amountProfitOrLossValue);
     }
@@ -185,14 +297,13 @@ public class FinancialStatementProtocolGenerator {
     }
 
     private String getFinancialStatementTitle(FinancialStatementProtocol financialStatementInformation) {
-        String reportingPeriod = getReportingPeriod(financialStatementInformation);
+        String reportingPeriod = getWholePeriod(financialStatementInformation.getFinancialStatementResolution().getBeginningReportingPeriod(),
+                financialStatementInformation.getFinancialStatementResolution().getEndReportingPeriod());
         return String.format(financialStatementResolutionTitle,reportingPeriod);
     }
 
-    private String getReportingPeriod(FinancialStatementProtocol financialStatementInformation) {
-        LocalDate beginningDate = financialStatementInformation.getFinancialStatementResolution().getBeginningReportingPeriod();
+    private String getWholePeriod(LocalDate beginningDate, LocalDate endDate) {
         String beginningPeriod = getPeriod(beginningDate);
-        LocalDate endDate = financialStatementInformation.getFinancialStatementResolution().getEndReportingPeriod();
         String endPeriod = getPeriod(endDate);
         return String.format(ProtocolPattern.reportingPeriodPattern, beginningPeriod, endPeriod);
     }
@@ -379,7 +490,7 @@ public class FinancialStatementProtocolGenerator {
             Chunk nameOfThePresentPartner = protocolFactory.getBoldChunkOfText(partnerName);
             Chunk infoAboutPresentPartnerWithoutName = protocolFactory.getRegularChunkOfText(infoAboutPresentPartner);
 
-            Paragraph paragraph = protocolFactory.getParagraphFromChunks(numberChunk, nameOfThePresentPartner, infoAboutPresentPartnerWithoutName);
+            Paragraph paragraph = protocolFactory.getParagraphRegularFromChunks(numberChunk, nameOfThePresentPartner, infoAboutPresentPartnerWithoutName);
 
             personList.add(paragraph);
         }
@@ -399,7 +510,7 @@ public class FinancialStatementProtocolGenerator {
             Chunk numberChunk = protocolFactory.getRegularChunkOfText(number);
             Chunk presentCompanyName = protocolFactory.getBoldChunkOfText(companyName);
             Chunk infoAboutPresentPartnerWithoutName = protocolFactory.getRegularChunkOfText(infoAboutPresentPartner);
-            Paragraph paragraph = protocolFactory.getParagraphFromChunks(numberChunk, presentCompanyName, infoAboutPresentPartnerWithoutName);
+            Paragraph paragraph = protocolFactory.getParagraphRegularFromChunks(numberChunk, presentCompanyName, infoAboutPresentPartnerWithoutName);
             personList.add(paragraph);
         }
         return personList;

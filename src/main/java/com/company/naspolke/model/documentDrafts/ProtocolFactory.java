@@ -15,8 +15,9 @@ class ProtocolFactory {
     private final Font headerFont = setFontStyle(FontStyles.PROTOCOL_HEADER);
     private final Font regularTextFont = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);
     private final Font resolutionHeaderFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_HEADER);
-    private final Font planeTextBoldFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT_BOLD);
+    private final Font planeTextBoldFont = setFontStyle(FontStyles.PROTOCOL_TEXT_BOLD);
     private final Font resolutionTextFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT);
+    private final Font resolutionTextBoldFont = setFontStyle(FontStyles.PROTOCOL_RESOLUTION_TEXT_BOLD);
 
     public Paragraph getProtocolHeader(String headerText){
         Paragraph protocolHeader = new Paragraph(headerText, headerFont);
@@ -58,11 +59,22 @@ class ProtocolFactory {
     public Chunk getBoldChunkOfText(String text){
         return new Chunk(text, planeTextBoldFont);
     }
+    public Chunk getResolutionBoldChunkOfText(String text){
+        return new Chunk(text, resolutionTextBoldFont);
+    }
+    public Chunk getResolutionRegularChunkOfText(String text){
+        return new Chunk(text, resolutionTextFont);
+    }
     public Chunk getRegularChunkOfText(String text){
         return new Chunk(text, regularTextFont);
     }
+    public Paragraph getParagraphResolutionFromChunks(Chunk... chunks){
+        Paragraph paragraph = new Paragraph();
+        paragraph.addAll(Arrays.asList(chunks));
+        return formatResolutionTextParagraph(paragraph);
 
-    public Paragraph getParagraphFromChunks(Chunk... chunks){
+    }
+    public Paragraph getParagraphRegularFromChunks(Chunk... chunks){
         Paragraph paragraph = new Paragraph();
         paragraph.addAll(Arrays.asList(chunks));
         paragraph.setMultipliedLeading(1.5f);
@@ -94,9 +106,9 @@ class ProtocolFactory {
 
     public Paragraph getResolutionTextParagraph(String resolutionText) {
         Paragraph resolutionTextParagraph = new Paragraph(resolutionText, resolutionTextFont);
-        return formatResolutionPartTextParagraph(resolutionTextParagraph);
+        return formatResolutionTextParagraph(resolutionTextParagraph);
     }
-    private Paragraph formatResolutionPartTextParagraph(Paragraph resolutionTextParagraph) {
+    private Paragraph formatResolutionTextParagraph(Paragraph resolutionTextParagraph) {
         resolutionTextParagraph.setAlignment(Element.ALIGN_JUSTIFIED);
         resolutionTextParagraph.setIndentationLeft(25);
         resolutionTextParagraph.setIndentationRight(25);
