@@ -49,8 +49,16 @@ class ProtocolPattern {
     static String agendaNoProfitAndNoLose = "";
     static String agendaIntroduction = "%s Zgromadzenie Wspólników spółki postanawia przyjąć następujący porządek obrad:\n";
 
-    //typZgromadzenia, formalneZwołanie, reprezentowani są wszyscy wspólnicy, łączna liczba udziałów,  słownie,
-    // forma udziały, ogólna liczba udziałów, słownie, forma udziały
-//    static String chairpersonResolutionTitle = "wyboru Przewodniczącego Zgromadzenia";
-//    static String recorderResolutionTitle = "wyboru Protokolanta";
+    static String financialStatementResolution ="1. %s sprawozdanie finansowe Spółki za okres od  %s,  zawierające:\n" +
+            "a) wprowadzenie do sprawozdania finansowego;\n" +
+            "b) bilans sporządzony na dzień %s, który wykazuje po stronie aktywów i pasywów kwotę %s zł.;\n" +
+            "c) rachunek zysków i strat za okres od %2$s wariant porównawczy wykazujący %s%s zł.;\n" +
+            "d) dodatkowe informacje i wyjaśnienia.\n" +
+            "2. %1$s Zarządu z działalności jednostki w okresie od %2$s\n" +
+            "3. Uchwała wchodzi w życie z dniem jej podjęcia.\n";
+
+    static String financialStatementResolutionTitle = "rozpatrzenia i zatwierdzenia sprawozdania finansowego Spółki oraz sprawozdania Zarządu za okres od %s";
+    static String financialStatementResolutionApprovalPhrase = "Niniejszym Zwyczajne Zgromadzenie Wspólników spółki pod firmą: %s z siedzibą %s zatwierdza sprawozdanie";
+    static String reportingPeriodPattern = "dnia %s r. do dnia %sr.";
+
 }

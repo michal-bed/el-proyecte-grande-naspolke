@@ -5,6 +5,7 @@ import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson
 import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.company.naspolke.model.company.financialStatements.resolutions.ElectionResolution;
+import com.company.naspolke.model.company.financialStatements.resolutions.FinancialStatementResolution;
 import com.company.naspolke.model.company.financialStatements.resolutions.VotingInterface;
 import com.lowagie.text.Document;
 import com.lowagie.text.*;
@@ -18,12 +19,14 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import static com.company.naspolke.model.documentDrafts.ChangeDigitsIntoWords.changeDigitsIntoWords;
 
+import static com.company.naspolke.model.documentDrafts.ProtocolPattern.*;
 import static com.company.naspolke.model.documentDrafts.WordFormsHandler.*;
 
 @Component
@@ -98,11 +101,21 @@ public class FinancialStatementProtocolGenerator {
         Paragraph agendaResolutionIntroduction = protocolFactory.getResolutionTextParagraph(String.format(ProtocolPattern.agendaIntroduction, "Zwyczajne"));
         List<Paragraph> agendaResolutionList = protocolFactory.getNumberedListInResolution(agenda);
         Paragraph agendaResolutionVotingParagraph = protocolFactory.getResolutionVotingParagraph(agendaVoting);
-
         document.add(agendaResolutionTitleParagraph);
         document.add(agendaResolutionIntroduction);
         agendaResolutionList.forEach(document::add);
         document.add(agendaResolutionVotingParagraph);
+
+
+        //Set financial statement resolution
+        String financialStatementTitle = getFinancialStatementTitle(financialStatementInformation);
+        String financialStatementResolutionTitle = getResolutionTitle(company,financialStatementInformation, financialStatementTitle);
+        String financialStatementResolutionText = getFinancialStatementResolutionText(company, financialStatementInformation);
+        String financialStatementResolutionVoting = getResolutionVoting(financialStatementInformation.getFinancialStatementResolution(), "jawnym");
+        List<Paragraph> financialStatementResolutionParagraph = protocolFactory.getResolution(financialStatementResolutionTitle,
+                financialStatementResolutionText, financialStatementResolutionVoting);
+        financialStatementResolutionParagraph.forEach(document::add);
+
 
 
 
@@ -110,6 +123,52 @@ public class FinancialStatementProtocolGenerator {
         //close file
         document.close();
         resolutionCount = 1;
+    }
+
+    private String getFinancialStatementResolutionText(Company company, FinancialStatementProtocol userInformation) {
+        FinancialStatementResolution resolutionInfo = userInformation.getFinancialStatementResolution();
+        String officialApproval = getOfficialApprovalText(company);
+        String reportingPeriod = getReportingPeriod(userInformation);
+        String endPeriod = getPeriod(resolutionInfo.getEndReportingPeriod());
+        String sumOfAssetsAndLiabilities = String.valueOf(resolutionInfo.getSumOfAssetsAndLiabilities());
+        String amountProfitOrLoss = getAmountProfitOrLoseText(userInformation.getProfitOrLoss().getProfitOrLossValue());
+        String amountProfitOrLossValue = String.valueOf(userInformation.getProfitOrLoss().getProfitOrLossValue());
+        return String.format(financialStatementResolution, officialApproval,reportingPeriod, endPeriod, sumOfAssetsAndLiabilities,
+                amountProfitOrLoss, amountProfitOrLossValue);
+    }
+
+    private String getAmountProfitOrLoseText(BigDecimal value) {
+        if(value.compareTo(new BigDecimal("0")) > 0) {
+            return "zysk w wysokości ";
+        } else if (value.compareTo(new BigDecimal("0")) < 0) {
+            return "stratę w wysokości ";
+        } else {
+            return "sumę ";
+        }
+    }
+
+    private String getOfficialApprovalText(Company company) {
+        String companyHeadQuarter = WordFormsHandler.placeConjugated(company.getAddress().getCity());
+        return String.format(financialStatementResolutionApprovalPhrase, company.getCompanyName(), companyHeadQuarter);
+    }
+
+    private String getFinancialStatementTitle(FinancialStatementProtocol financialStatementInformation) {
+        String reportingPeriod = getReportingPeriod(financialStatementInformation);
+        return String.format(financialStatementResolutionTitle,reportingPeriod);
+    }
+
+    private String getReportingPeriod(FinancialStatementProtocol financialStatementInformation) {
+        LocalDate beginningDate = financialStatementInformation.getFinancialStatementResolution().getBeginningReportingPeriod();
+        String beginningPeriod = getPeriod(beginningDate);
+        LocalDate endDate = financialStatementInformation.getFinancialStatementResolution().getEndReportingPeriod();
+        String endPeriod = getPeriod(endDate);
+        return String.format(ProtocolPattern.reportingPeriodPattern, beginningPeriod, endPeriod);
+    }
+    private String getPeriod(LocalDate date){
+        String day = String.valueOf(date.getDayOfMonth());
+        String monthInWords = getMonthInWord(date.getMonthValue());
+        String year =  String.valueOf(date.getYear());
+        return day.concat(" ").concat(monthInWords).concat(" ").concat(year);
     }
 
     private List<String> getAgendaResolutionText(FinancialStatementProtocol financialStatementInformation) {
