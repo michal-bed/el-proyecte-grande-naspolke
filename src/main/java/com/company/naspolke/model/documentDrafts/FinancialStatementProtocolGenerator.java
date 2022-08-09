@@ -154,9 +154,25 @@ public class FinancialStatementProtocolGenerator {
             document.add(paragraph);
         }
 
+//        Paragraph recorderAndChairpersonSignPlace = protocolFactory.recorderAndChairpersonSign();
+//        document.add(recorderAndChairpersonSignPlace);
+        String recorderName = getMeetingOrganPersonName(financialStatementInformation.getRecorder());
+        String chairpersonName = getMeetingOrganPersonName(financialStatementInformation.getChairperson());
+
+        Table signTable = protocolFactory.getSignTable(recorderName, chairpersonName);
+        document.add(signTable);
+
         //close file
         document.close();
         resolutionCount = 1;
+    }
+
+    private String getMeetingOrganPersonName(ElectionResolution resolution) {
+        if(resolution.getIndividual()!=null){
+            return getPartnerFullName(resolution.getIndividual());
+        }else {
+            return getPartnerFullName(resolution.getCompany());
+        }
     }
 
     private String getAppendixText(Company company, FinancialStatementProtocol protocolData) {
@@ -172,7 +188,7 @@ public class FinancialStatementProtocolGenerator {
         List<Paragraph> paragraphList = new ArrayList<>(List.of());
         Set<ResolutionApprovalBodyMember> boardMemberList= financialStatementInformation.getBoardMembersApproval();
         List<ResolutionApprovalBodyMember> boardMembers;
-        if(bodyType=="board") {
+        if(Objects.equals(bodyType, "board")) {
             boardMembers = boardMemberList.stream().toList();
         } else {
             boardMembers = financialStatementInformation.getDirectorsMembersApproval().stream().toList();
@@ -640,9 +656,5 @@ public class FinancialStatementProtocolGenerator {
         return String.format("%s/%s/%s/%s", number, day,month,year);
     }
 //TODO zamienić na String.format z array
-//Uchwała nr %s \n" +
-//            "%s  Zgromadzenia Wspólników %s %s\n" +
-//            "z dnia %s \n" +
-//            "w sprawie %s\n";
 
 }

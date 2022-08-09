@@ -85,4 +85,6 @@ class ProtocolPattern {
     static String protocolNumberPattern = "%s/%s/%s/%s";
     static String appendixAttendanceListIntro = "Na Zwyczajnym Zgromadzeniu Wspólników stawili się:";
     static String placeForSign = "......................................................................................................";
+    static String recorderAndChairpersonSign ="..............................                                     ...............................\n"+
+            "Przewodniczący                                       Protokolant";
 }

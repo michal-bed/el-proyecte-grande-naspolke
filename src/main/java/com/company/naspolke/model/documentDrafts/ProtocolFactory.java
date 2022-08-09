@@ -1,14 +1,18 @@
 package com.company.naspolke.model.documentDrafts;
 
 import com.lowagie.text.*;
+import com.lowagie.text.alignment.HorizontalAlignment;
+import com.lowagie.text.alignment.VerticalAlignment;
 import org.springframework.stereotype.Component;
 
+import javax.swing.border.Border;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.company.naspolke.model.documentDrafts.FontStyleGenerator.setFontStyle;
 import static com.company.naspolke.model.documentDrafts.ProtocolPattern.placeForSign;
+import static com.company.naspolke.model.documentDrafts.ProtocolPattern.recorderAndChairpersonSign;
 
 @Component
 class ProtocolFactory {
@@ -38,7 +42,7 @@ class ProtocolFactory {
     }
 
     public Paragraph getAppendixInfo(String text){
-        Paragraph paragraph = new Paragraph(text, planeTextBoldFont);
+        Paragraph paragraph = new Paragraph(text, textBoldAppendixFont);
         paragraph.setAlignment(Element.ALIGN_LEFT);
         paragraph.setMultipliedLeading(1.2f);
         paragraph.setSpacingAfter(20);
@@ -140,5 +144,40 @@ class ProtocolFactory {
         paragraph.setSpacingBefore(40);
         paragraph.setSpacingAfter(10);
         return paragraph;
+    }
+
+    public Paragraph recorderAndChairpersonSign(){
+        Paragraph paragraph = new Paragraph(recorderAndChairpersonSign, regularTextFont);
+        paragraph.setAlignment(Element.ALIGN_CENTER);
+        return paragraph;
+    }
+
+    public Table getSignTable(String recorder, String chairperson){
+        float[] pointColumnWidths = {150F, 150F};
+        Table table = new Table(2, 3);
+        table.setWidths(pointColumnWidths);
+        table.setBorder(0);
+        Cell cell1 = getCell("..........................");
+        Cell cell2 = getCell("..........................");
+        Cell cell3 = getCell(recorder);
+        Cell cell4 = getCell(chairperson);
+        Cell cell5 = getCell("Przewodniczący");
+        Cell cell6 = getCell("Protokolant");
+
+        table.addCell(cell1, 0,0);
+        table.addCell(cell2, 0,1);
+        table.addCell(cell3, 1,0);
+        table.addCell(cell4, 1,1);
+        table.addCell(cell5, 2,0);
+        table.addCell(cell6, 2,1);
+        return table;
+    }
+    private Cell getCell(String content){
+        Chunk chunk = new Chunk(content, regularTextFont);
+        Cell cell = new Cell(chunk);
+        cell.setBorder(Rectangle.NO_BORDER);
+        cell.setVerticalAlignment(VerticalAlignment.CENTER);
+        cell.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        return cell;
     }
 }
