@@ -3,6 +3,8 @@ import {Field, useField, useFormikContext} from "formik";
 import {useEffect} from "react";
 import TextField from "@mui/material/TextField";
 import {FormControlLabel, Radio} from "@mui/material";
+import {Box} from "@chakra-ui/react";
+import Typography from "@mui/material/Typography";
 
 
 export function MeetingPlace({values, handleChange}) {
@@ -14,8 +16,11 @@ export function MeetingPlace({values, handleChange}) {
         )
     }
 
-    return <Card>
+    return <Box>
         <div>
+            <Typography sx={{fontSize: 14, marginBottom:2}}>
+                Miejsce odbycia zgromadzenia
+            </Typography>
             <MyRadio name="meetingPlaceInHeadquarters"
                      type="radio"
                      value={"true"}
@@ -64,5 +69,5 @@ export function MeetingPlace({values, handleChange}) {
                 /></div>
             </Card>
         }
-    </Card>
+    </Box>
 }

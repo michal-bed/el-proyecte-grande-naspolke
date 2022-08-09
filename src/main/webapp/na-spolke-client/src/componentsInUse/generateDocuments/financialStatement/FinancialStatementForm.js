@@ -1,5 +1,5 @@
 import {Field, Form, Formik, useField, useFormikContext} from "formik";
-import {Box } from "@mui/material";
+import {Box, CardContent} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import {validationSchema} from "./formUtils/FinancialStatementFormLogic";
 import {FinancialStatementProtocol} from "../../../classes/financialStatementProtocol/FinancialStatementProtocol";
@@ -17,6 +17,8 @@ import {MeetingAgenda} from "./agenda/MeetingAgenda";
 import {FinancialStatementInfo} from "./financialStatementInfo/FinancialStatementInfo";
 import {ApprovalBodyMemberSection} from "./approvalBodyMember/ApprovalBodyMemberSection";
 import {SetupInitialFormValues} from "./formUtils/SetupInitialFormValues";
+import styles from "./FinancialStatementForm.module.css"
+import Typography from "@mui/material/Typography";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
 
@@ -53,26 +55,36 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                 }}>
             {({values, isSubmitting, handleChange, handleBlur, handleSubmit, setFieldValue}) => (
                 <Form>
+                    <Box>
+                        <div>Generowanie Protokołu zatwierdzajacego sprawozdanie finansowe</div>
+                        <Card>
+                            <CardContent>
+                                <Typography sx={{ fontSize: 14, marginBottom:2 }} color="text.secondary" gutterBottom>
+                                    Data i miejsce odbycia Zgromadzenia Wspólników
+                                </Typography>
 
-                    <MyTextField
-                        name="protocolNumber"
-                        type="number"
-                        as={TextField}
-                    />
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            label="Data posiedzenia"
-                            name="meetingDate"
-                            value={values.meetingDate}
-                            inputFormat="dd/MM/yyyy"
-                            onChange={(value => setFieldValue("meetingDate", value))}
-                            renderInput={(params) => (
-                                <TextField {...params} helperText={params?.inputProps?.placeholder}/>
-                            )}
-                        />
-                    </LocalizationProvider>
+                                <MyTextField
+                                name="protocolNumber"
+                                type="number"
+                                label="Numer protokołu"
+                                as={TextField}
+                            />
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DatePicker
+                                        label="Data posiedzenia"
+                                        name="meetingDate"
+                                        value={values.meetingDate}
+                                        inputFormat="dd/MM/yyyy"
+                                        onChange={(value => setFieldValue("meetingDate", value))}
+                                        renderInput={(params) => (
+                                            <TextField {...params} helperText={params?.inputProps?.placeholder}/>
+                                        )}
+                                    />
+                                </LocalizationProvider>
 
-                    <MeetingPlace values={values} handleChange={handleChange}/>
+                                <MeetingPlace values={values} handleChange={handleChange}/>
+                            </CardContent>
+                        </Card>
 
                     <AttendanceList values={values} company={company} setFieldValue={setFieldValue}/>
 
@@ -105,6 +117,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                                company={company} />
 
                     <Button type="submit" disabled={isSubmitting}> Zapisz</Button>
+                    </Box>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
                 </Form>
             )}
