@@ -17,7 +17,7 @@ export function AttendanceList({company, values, setFieldValue}) {
 
             {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map((partner) => (
                 <PartnersAttendanceList values={values} partner={partner} type={"individual"}
-                                        setFieldValue={setFieldValue}/>))}
+                                        setFieldValue={setFieldValue} />))}
 
             {company.partners.partnerCompanies.length > 0 && company.partners.partnerCompanies.map((partner) => (
                 <PartnersAttendanceList values={values} partner={partner} type={"company"}

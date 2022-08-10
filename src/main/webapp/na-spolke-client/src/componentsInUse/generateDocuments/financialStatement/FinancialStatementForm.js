@@ -1,7 +1,7 @@
 import {Field, Form, Formik, useField, useFormikContext} from "formik";
 import {Box, CardContent} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import {validationSchema} from "./formUtils/FinancialStatementFormLogic";
+import {checkIfAnyoneIsPresent, validationSchema} from "./formUtils/FinancialStatementFormLogic";
 import {FinancialStatementProtocol} from "../../../classes/financialStatementProtocol/FinancialStatementProtocol";
 import {saveFinancialStatement} from "../../../api/axiosPosts";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
@@ -22,7 +22,7 @@ import Typography from "@mui/material/Typography";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
 
-    const {initialValues, individualPartners, partnerCompanies} = SetupInitialFormValues(company)
+    const {initialValues} = SetupInitialFormValues(company)
 
     const MyTextField = ({placeholder, ...props}) => {
         const [field, meta] = useField(props);
@@ -56,8 +56,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
             {({values, isSubmitting, handleChange, handleBlur, handleSubmit, setFieldValue}) => (
                 <Form>
                     <Box>
-
-                        <Box sx={{marginBottom:'2%'}} alignContent={"center"}><Typography sx={{ fontSize: 35, marginBottom: 2 }} color="text.secondary" gutterBottom align={"center"}>
+                        <Box sx={{marginBottom:'2%'}} alignContent={"center"}>
+                            <Typography sx={{ fontSize: 35, marginBottom: 2 }} color="text.secondary" gutterBottom align={"center"}>
                             Generowanie Protokołu zatwierdzajacego sprawozdanie finansowe
                         </Typography></Box>
                         <Card sx={{minWidth: 275, width: '39%', height: '100%', margin: "auto", marginBottom:'2%',
@@ -100,7 +100,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                             margin: "auto",
                             // width: '80%'
                         }}>
-                            <AttendanceList values={values} company={company} setFieldValue={setFieldValue}/>
+                            <AttendanceList values={values} company={company} setFieldValue={setFieldValue} />
 
                             <Card sx={{
                                 minWidth: 275, width: '80%', height: '100%', marginBottom: '2%',margin:'auto',
@@ -138,8 +138,9 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                     <ApprovalBodyMemberSection values={values} handleChange={handleChange} setFieldValue={setFieldValue}
                                                company={company} />
                     </Box >
-                        <Box sx={{minWidth: 275, width: '20%', marginBottom: '2%', margin:'auto'}} ><Button Button variant="contained" type="submit"
-                                     disabled={isSubmitting}> <Typography color="common.white" >Wygeneruj dokument</Typography></Button></Box>
+                        <Box sx={{minWidth: 275, width: '20%', marginBottom: '2%', margin:'auto'}} >
+                            <Button Button variant="contained" type="submit"
+                                     disabled={isSubmitting || !values.someoneIsPresent}> <Typography color="common.white" >Wygeneruj dokument</Typography></Button></Box>
                     </Box>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
                 </Form>

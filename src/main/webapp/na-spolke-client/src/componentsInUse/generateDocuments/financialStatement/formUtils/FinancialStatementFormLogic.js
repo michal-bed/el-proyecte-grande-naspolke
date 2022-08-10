@@ -27,3 +27,4 @@ export const validationSchema = yup.object().shape({
         .min(6, "prawidłowy format kodu pocztowego to xx-xxx")
         .max(6, "prawidłowy format kodu pocztowego to xx-xxx")),
 })
+

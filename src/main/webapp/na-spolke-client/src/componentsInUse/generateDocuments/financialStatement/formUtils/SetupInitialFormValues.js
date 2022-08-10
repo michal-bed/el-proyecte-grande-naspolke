@@ -1,6 +1,6 @@
 
 export function SetupInitialFormValues(company) {
-
+    let someoneIsPresent = true;
     let individualPartners = [];
     let partnerCompanies = [];
     let initialValues = {
@@ -25,6 +25,7 @@ export function SetupInitialFormValues(company) {
         amountProfitOrLossUnanimously: true,
         sumOfAssetsAndLiabilities: 0,
         financialStatementUnanimously: true,
+        someoneIsPresent:true
     };
     if (company.partners.individualPartners !== null && individualPartners.length === 0) {
         for (let i = 0; i < company.partners.individualPartners.length; i++) {
@@ -61,5 +62,5 @@ export function SetupInitialFormValues(company) {
             initialValues[`director${company.boardOfDirectors[i].boardOfDirectorId}Unanimously`] = true;
         }
     }
-    return {initialValues, individualPartners, partnerCompanies}
+    return {initialValues, individualPartners, partnerCompanies, someoneIsPresent}
 }
