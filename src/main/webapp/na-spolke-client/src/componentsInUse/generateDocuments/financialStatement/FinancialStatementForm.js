@@ -116,7 +116,8 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                                         switchFalseText={"Bez formalnego zwołania"}
                                                         title={"Tryb zwołania Zgromadzenie Wspólników"}
                                                         name={"formalConvening"}
-                                                        setFieldValue={setFieldValue}/></Card>
+                                                        setFieldValue={setFieldValue}
+                                                        company={company}/></Card>
                                     <MeetingOrganElection values={values} company={company} type={"chairperson"}
                                                           setFieldValue={setFieldValue}
                                                           headerText={"Wybór Przewodniczącego"}

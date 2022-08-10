@@ -3,6 +3,7 @@ import {Stack, Switch} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {styled} from "@mui/material/styles";
 import {Box} from "@chakra-ui/react";
+import {SwitchComponentLogic} from "./SwitchComponentLogic";
 
 export const AntSwitch = styled(Switch)(({theme}) => ({
     width: 28,
@@ -46,7 +47,7 @@ export const AntSwitch = styled(Switch)(({theme}) => ({
     },
 }));
 
-export function SwitchComponent({values, switchTrueText, switchFalseText, name, setFieldValue, title, spacing=3}) {
+export function SwitchComponent({values, switchTrueText, switchFalseText, name, setFieldValue, title, spacing=3, company}) {
 
     return<Box className={styles[`Absent`]} sx={{marginLeft: '1%'}}>
         <Typography sx={{fontSize: 26, marginTop: '4%'}} color="text.secondary" gutterBottom
@@ -58,9 +59,24 @@ export function SwitchComponent({values, switchTrueText, switchFalseText, name, 
                            value={values[name]}
                            checked={values[name]}
                            onChange={(event) => {
-                               setFieldValue(name,
-                                   values[name] ? values[name] = false : values[name] = true);
-                           }}
+                               setFieldValue(name, values[name]? values[name] = false : values[name] = true);
+                               SwitchComponentLogic(values, company, event);
+                               // if(event.target.name === "formalConvening" && event.target.value === "true" && company!==undefined){
+                               //     if(company.partners.individualPartners!==undefined) {
+                               //         for (let i in company.partners.individualPartners) {
+                               //              console.log(company.partners.individualPartners[i].id)
+                               //              values[`individual${company.partners.individualPartners[i].id}IsPresent`] = true;
+                               //         }
+                               //     }
+                               //     if(company.partners.partnerCompanies!==undefined){
+                               //         for (let i in company.partners.partnerCompanies) {
+                               //             values[`company${company.partners.partnerCompanies[i].id}IsPresent`] = true;
+                               //         }
+                               //     }
+                               //     }
+
+                               }
+                           }
                 />
                 <Typography>{switchTrueText}</Typography>
             </Stack>

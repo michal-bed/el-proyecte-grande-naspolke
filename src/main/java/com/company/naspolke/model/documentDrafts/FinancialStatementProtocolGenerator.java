@@ -296,9 +296,6 @@ public class FinancialStatementProtocolGenerator {
         if (Objects.equals(coverageOfLossOrProfitAllocation, "inne...")){
             coverageOfLossOrProfitAllocation = financialStatementInformation.getProfitOrLoss().getCoverageOfLossOrProfitAllocationDifferentWay();
         }
-//        else if (Objects.equals(coverageOfLossOrProfitAllocation, "na kapitał zapasowy oraz na pokrycie starty z lat przeszłych")) {
-//            coverageOfLossOrProfitAllocation = profitAllocation;
-//        }
         return String.format(amountProfitLoseText, resolutionTextBeginning, profitOrLoseInfo, profitOrLoseText, coverageOfLossOrProfitAllocation);
     }
 
@@ -325,13 +322,14 @@ public class FinancialStatementProtocolGenerator {
     }
 
     private String getAmountProfitOrLoseText(BigDecimal value, String profitText, String LoseText, String zeroText) {
-        if(value.compareTo(new BigDecimal("0")) > 0) {
-            return profitText;
-        } else if (value.compareTo(new BigDecimal("0")) < 0) {
-            return LoseText;
-        } else {
-            return zeroText;
+        if (value!=null) {
+            if(value.compareTo(new BigDecimal("0")) > 0) {
+                return profitText;
+            } else if (value.compareTo(new BigDecimal("0")) < 0) {
+                return LoseText;
+            }
         }
+        return zeroText;
     }
 
     private String getOfficialApprovalText(Company company) {
@@ -368,14 +366,15 @@ public class FinancialStatementProtocolGenerator {
     }
 
     private String getProfitLoseInformation(FinancialStatementProtocol protocolInfo) {
-        BigDecimal profitLoseAmount = protocolInfo.getProfitOrLoss().getProfitOrLossValue();
-        if(profitLoseAmount.compareTo(new BigDecimal("0")) > 0){
-            return ProtocolPattern.agendaProfit;
-        } else if (profitLoseAmount.compareTo(new BigDecimal("0")) < 0) {
-            return ProtocolPattern.agendaLose;
-        } else{
-            return ProtocolPattern.agendaNoProfitAndNoLose;
+            BigDecimal profitLoseAmount = protocolInfo.getProfitOrLoss().getProfitOrLossValue();
+        if (profitLoseAmount!=null) {
+            if(profitLoseAmount.compareTo(new BigDecimal("0")) > 0){
+                return ProtocolPattern.agendaProfit;
+            } else if (profitLoseAmount.compareTo(new BigDecimal("0")) < 0) {
+                return ProtocolPattern.agendaLose;
+            }
         }
+        return ProtocolPattern.agendaNoProfitAndNoLose;
     }
 
     private Chunk getProtocolValidationFormula(FinancialStatementProtocol financialStatementInformation, Company company) {

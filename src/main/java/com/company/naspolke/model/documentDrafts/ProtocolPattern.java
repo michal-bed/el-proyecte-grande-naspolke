@@ -50,10 +50,10 @@ class ProtocolPattern {
     static String agendaIntroduction = "%s Zgromadzenie Wspólników spółki postanawia przyjąć następujący porządek obrad:\n";
 
     static String financialStatementResolution ="1. %s sprawozdanie finansowe Spółki za okres od  %s, zatwierdza sprawozdanie zawierające:\n" +
-            "a) wprowadzenie do sprawozdania finansowego;\n" +
-            "b) bilans sporządzony na dzień %s, który wykazuje po stronie aktywów i pasywów kwotę %s zł.;\n" +
-            "c) rachunek zysków i strat za okres od %2$s wariant porównawczy wykazujący %s%s zł.;\n" +
-            "d) dodatkowe informacje i wyjaśnienia.\n" +
+            "   a) wprowadzenie do sprawozdania finansowego;\n" +
+            "   b) bilans sporządzony na dzień %s, który wykazuje po stronie aktywów i            pasywów kwotę %s zł.;\n" +
+            "   c) rachunek zysków i strat za okres od %2$s        wariant porównawczy wykazujący %s%s zł.;\n" +
+            "   d) dodatkowe informacje i wyjaśnienia.\n" +
             "2. %1$s zatwierdza sprawozdanie Zarządu z działalności jednostki w okresie od %2$s\n" +
             "3. Uchwała wchodzi w życie z dniem jej podjęcia.\n";
 
