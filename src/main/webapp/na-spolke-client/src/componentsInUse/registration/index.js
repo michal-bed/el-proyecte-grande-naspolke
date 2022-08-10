@@ -296,7 +296,7 @@ function RegistrationBasic() {
                                                        )
                                                    }}/>
                                       </MKBox>
-                                      <MKBox mb={2}>
+                                      <MKBox>
                                           <FormControlLabel
                                           control={
                                               <Switch
@@ -310,15 +310,17 @@ function RegistrationBasic() {
                                                       formik.handleChange(e)
                                                       handleClickAgreed()
                                                   }}
-                                                  sx={{cursor: "pointer",
+                                                  sx={{pb: "2.5em",
+                                                      cursor: "pointer",
                                                       userSelect: "none",
-                                                      ml: -1,
                                                       }}
                                               />}
-                                          label={<MKTypography
-                                              sx={{fontSize: "1em"}}
+                                          label={<MKBox sx={{width: "12em"}}>
+                                              <MKTypography
+                                              sx={{fontSize: "1em", lineHeight:"2em"}}
                                               variant="overline">
                                               Przeczytałem i akceptuje <MKTypography
+                                              sx={{fontSize: "1em"}}
                                               component={Link}
                                               target="_blank"
                                               to="/statute"
@@ -326,11 +328,13 @@ function RegistrationBasic() {
                                               color="info"
                                               fontWeight="medium"
                                               textGradient
+                                              labelPlacement="end"
                                           >
                                               regulamin strony
                                           </MKTypography>
-                                          </MKTypography>}
-                                          labelPlacement="end"
+                                          </MKTypography>
+                                          </MKBox>}
+
 
                                       />
                                           <MKTypography color="error" variant="caption"> {formik.touched.agreed && formik.errors.agreed}</MKTypography>
