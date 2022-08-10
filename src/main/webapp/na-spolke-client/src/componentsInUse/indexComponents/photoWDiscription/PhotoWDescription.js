@@ -1,8 +1,8 @@
 import React from "react";
 
 import SectionTitle from "../sectionTitle/SectionTitle";
-import BasicImgBox from "../basicImgBox/BasicImgBox";
-import BasicTextBox from "../basicTextBox/BasicTextBox";
+import BasicImgBox from "../../basicImgBox/BasicImgBox";
+import BasicTextBox from "../../basicTextBox/BasicTextBox";
 import Box from "@mui/material/Box"
 import {PhotoWDescriptionStyle} from "./PhotoWDiscriptionStyle";
 

@@ -26,8 +26,8 @@ import Collapse from "@mui/material/Collapse";
 import MuiLink from "@mui/material/Link";
 
 // Material Kit 2 React components
-import MKBox from "../../mkFiles/components/MKBox";
-import MKTypography from "../../mkFiles/components/MKTypography";
+import MKBox from "../../../mkFiles/components/MKBox";
+import MKTypography from "../../../mkFiles/components/MKTypography";
 
 // Material Kit 2 React example components
 import DefaultNavbarDropdown from "./DefaultNavbarDropdown";

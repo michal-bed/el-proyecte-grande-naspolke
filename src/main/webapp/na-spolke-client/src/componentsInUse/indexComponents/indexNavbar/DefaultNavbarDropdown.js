@@ -8,8 +8,8 @@ import Collapse from "@mui/material/Collapse";
 import Icon from "@mui/material/Icon";
 
 // Material Kit 2 React components
-import MKBox from "../../mkFiles/components/MKBox";
-import MKTypography from "../../mkFiles/components/MKTypography";
+import MKBox from "../../../mkFiles/components/MKBox";
+import MKTypography from "../../../mkFiles/components/MKTypography";
 
 function DefaultNavbarDropdown({
   name,

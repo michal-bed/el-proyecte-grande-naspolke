@@ -4,7 +4,7 @@ import SignIn from "./componentsInUse/login/index";
 import RegistrationBasic from "./componentsInUse/registration/index"
 import Layout from './componentsInUse/Layout';
 import Logout from './componentsInUse/Logout';
-import Presentation from "./componentsInUse/pageWithKit"
+import Presentation from "./componentsInUse/indexComponents/indexPageWithKit"
 import {Route, Routes} from "react-router-dom";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import theme from "./assets/theme";
@@ -17,7 +17,7 @@ import RequestForMembership from "./componentsInUse/requestToCompany/RequestForM
 import RequireAuth from "./componentsInUse/login/RequireAuth";
 import Unauthorized from "./componentsInUse/login/Unaurthorized";
 import PersistLogin from "./componentsInUse/login/PersistLogin";
-import Statute from "./componentsInUse/statute/Statute"
+import Statute from "./componentsInUse/indexComponents/statute/Statute"
 import VerifyRegistration from "./componentsInUse/registration/VerifyRegistration";
 
 function App() {

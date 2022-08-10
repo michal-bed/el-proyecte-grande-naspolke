@@ -4,9 +4,9 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 
 // Material Kit 2 React components
-import MKBox from "../../mkFiles/components/MKBox";
-import MKTypography from "../../mkFiles/components/MKTypography";
-import MKSocialButton from "../../mkFiles/components/MKSocialButton";
+import MKBox from "../../../mkFiles/components/MKBox";
+import MKTypography from "../../../mkFiles/components/MKTypography";
+import MKSocialButton from "../../../mkFiles/components/MKSocialButton";
 
 // Material Kit 2 React examples
 import DefaultNavbar from "../indexNavbar/WorkingNavbar";
@@ -18,10 +18,10 @@ import Footer from "../footer/Footer";
 import Statute from "../statute/Statute"
 
 // Routes
-import Routes from "../../routes";
+import Routes from "../../../routes";
 
 // Images
-import index_photo3 from "../../assets/photos/index_photo3.jpg";
+import index_photo3 from "../../../assets/photos/index_photo3.jpg";
 
 
 function Presentation(props) {

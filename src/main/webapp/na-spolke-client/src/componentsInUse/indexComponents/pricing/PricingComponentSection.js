@@ -4,7 +4,7 @@ import {ExpandLess, ExpandMore} from "@mui/icons-material";
 import Collapse from "@mui/material/Collapse";
 import PricingComponent from "./PricingComponent"
 import KitComponentSection from "../kitComponentSection/KitComponentSection";
-import index_photo5 from "../../assets/photos/index_photo5.jpg";
+import index_photo5 from "../../../assets/photos/index_photo5.jpg";
 
 function PricingComponentSection(props){
 

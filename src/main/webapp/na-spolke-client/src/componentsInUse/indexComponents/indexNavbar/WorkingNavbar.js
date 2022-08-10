@@ -16,16 +16,16 @@ import Divider from "@mui/material/Divider";
 import MuiLink from "@mui/material/Link";
 
 // Material Kit 2 React components
-import MKBox from "../../mkFiles/components/MKBox";
-import MKTypography from "../../mkFiles/components/MKTypography";
-import MKButton from "../../mkFiles/components/MKButton";
+import MKBox from "../../../mkFiles/components/MKBox";
+import MKTypography from "../../../mkFiles/components/MKTypography";
+import MKButton from "../../../mkFiles/components/MKButton";
 
 // Material Kit 2 React example components
 import DefaultNavbarDropdown from "./DefaultNavbarDropdown";
 import DefaultNavbarMobile from "./DefaultNavbarMobile";
 
 // Material Kit 2 React base styles
-import breakpoints from "../../assets/theme/base/breakpoints";
+import breakpoints from "../../../assets/theme/base/breakpoints";
 
 function DefaultNavbar({ brand, routes, transparent, light, action, sticky, relative, center }) {
   const [dropdown, setDropdown] = useState("");

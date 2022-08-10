@@ -6,11 +6,11 @@ import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
 
 // Material Kit 2 React components
-import MKBox from "../../mkFiles/components/MKBox";
-import MKTypography from "../../mkFiles/components/MKTypography";
+import MKBox from "../../../mkFiles/components/MKBox";
+import MKTypography from "../../../mkFiles/components/MKTypography";
 
 // Material Kit 2 React base styles
-import typography from "../../assets/theme/base/typography";
+import typography from "../../../assets/theme/base/typography";
 
 function SimpleFooter({ company, links, light }) {
     const { href, name } = company;
