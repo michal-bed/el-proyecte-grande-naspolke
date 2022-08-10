@@ -3,15 +3,19 @@ import {FormHelperText, InputLabel, MenuItem, Select} from "@mui/material";
 import {Checkbox} from "@material-ui/core";
 import Card from "@mui/material/Card";
 import {Voting} from "../voting/Voting";
+import Typography from "@mui/material/Typography";
 
 
 export function MeetingOrganElection({values, company, setFieldValue, headerText, type, handleChange, helperText}) {
 
-    return <Card>
-        <p>{headerText}:</p>
+    return <Card sx={{minWidth: 275, width: '100%', height: '100%', marginBottom:'2%',
+        ':hover': { boxShadow: 20,}}}>
+        <Typography sx={{ fontSize: 26, marginBottom: 2 }} color="text.secondary" gutterBottom align={"center"}>
+            {headerText}:
+        </Typography>
         <div>
             <FormControl sx={{m: 1, minWidth: 120}}>
-                <InputLabel id="demo-simple-select-helper-label">{headerText}</InputLabel>
+                <InputLabel id="demo-simple-select-helper-label">{helperText}</InputLabel>
                 <Select
                     name={type}
                     value={values[type]}
@@ -25,7 +29,7 @@ export function MeetingOrganElection({values, company, setFieldValue, headerText
                         <MenuItem key={`selectCompanyPartner${partner.id}`}
                                   value={`c${JSON.stringify(partner)}`}>{partner.representativeFirstname + " " + partner.representativeLastname}</MenuItem>))}
                 </Select>
-                <FormHelperText>{helperText}</FormHelperText>
+                {/*<FormHelperText>{helperText}</FormHelperText>*/}
             </FormControl>
             <Voting handleChange={handleChange} values={values} votingMatter={type}
                     votingTitle={`Głosowanie w sprawie wyboru ${type==="recorder"? "Protokolanta" : "Przewodniczącego Zgromadzenia"}`}/>

@@ -89,26 +89,28 @@ export default function FinancialStatementForm({company, companyIdMac}) {
 
                     <AttendanceList values={values} company={company} setFieldValue={setFieldValue}/>
 
-                    <Card>
-                        <SwitchComponent values={values}
-                                         switchTrueText={"Formalne zwołanie"}
-                                         switchFalseText={"Bez formalnego zwołania (wszyscy wspólnicy muszą być obecni)"}
-                                         title={"Tryb zwołania Zgromadzenie Wspólników"}
-                                         name={"formalConvening"}
-                                         setFieldValue={setFieldValue}/>
-                    </Card>
+                        <Card sx={{minWidth: 275, width: '39%', height: '100%', marginBottom:'2%',
+                            ':hover': { boxShadow: 20,}}}>
+                            <CardContent>
+                                <Card sx={{minWidth: 275, width: '100%', height: '100%', marginBottom:'2%',
+                                    ':hover': { boxShadow: 20,}}} ><SwitchComponent values={values}
+                                                       switchTrueText={"Formalne zwołanie"}
+                                                       switchFalseText={"Bez formalnego zwołania"}
+                                                       title={"Tryb zwołania Zgromadzenie Wspólników"}
+                                                       name={"formalConvening"}
+                                                       setFieldValue={setFieldValue}/></Card>
+                                <MeetingOrganElection values={values} company={company} type={"chairperson"}
+                                                      setFieldValue={setFieldValue}
+                                                      headerText={"Wybór Przewodniczącego"}
+                                                      helperText={"Wybierz przewodniczącego spośród obecnych osób"}
+                                                      handleChange={handleChange}/>
 
-                    <MeetingOrganElection values={values} company={company} type={"chairperson"}
-                                          setFieldValue={setFieldValue}
-                                          headerText={"Wybór Przewodniczącego"}
-                                          helperText={"Wybierz przewodniczącego"}
-                                          handleChange={handleChange}/>
-
-                    <MeetingOrganElection values={values} company={company} type={"recorder"}
-                                          setFieldValue={setFieldValue}
-                                          headerText={"Wybór Protokolanta"}
-                                          helperText={"Wybierz protokolanta"}
-                                          handleChange={handleChange}/>
+                                <MeetingOrganElection values={values} company={company} type={"recorder"}
+                                                      setFieldValue={setFieldValue}
+                                                      headerText={"Wybór Protokolanta"}
+                                                      helperText={"Wybierz protokolanta"}
+                                                      handleChange={handleChange}/></CardContent>
+                        </Card>
 
                     <MeetingAgenda values={values} handleChange={handleChange}/>
 
