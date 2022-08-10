@@ -3,6 +3,7 @@ package com.company.naspolke.controller;
 import com.company.naspolke.config.util.JwtUtil;
 import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.Role;
+import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.types.RoleType;
 import com.company.naspolke.service.AppUserService;
@@ -104,5 +105,44 @@ public class CompanyController {
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company");
         }
+    }
+
+    @PatchMapping(value = "/update-company-address")
+    public void updateAddressInCompany(@RequestBody ObjectNode objectNode) {
+        UUID companyId = UUID.fromString(objectNode.get("companyId").asText());
+        Address companyAddress = companyService.getCompanyByCompanyId(companyId).get().getAddress();
+        var streetName = objectNode.get("streetName");
+        if (streetName != null)
+        {
+            companyAddress.setStreetName(streetName.asText());
+
+        }
+        var streetNumber = objectNode.get("streetNumber");
+        if (streetNumber != null)
+        {
+            companyAddress.setStreetNumber(streetNumber.asText());
+        }
+        var localNumber = objectNode.get("localNumber");
+        if (localNumber != null)
+        {
+            companyAddress.setLocalNumber(localNumber.asText());
+        }
+        var city = objectNode.get("city");
+        if (city != null)
+        {
+            companyAddress.setCity(city.asText());
+        }
+        var zipCode = objectNode.get("zipCode");
+        if (zipCode != null)
+        {
+            companyAddress.setZipCode(zipCode.asText());
+        }
+        var postOffice = objectNode.get("postOffice");
+        if (postOffice != null)
+        {
+            companyAddress.setPostOffice(postOffice.asText());
+        }
+
+        companyService.updateAddressById(companyAddress, companyId);
     }
 }

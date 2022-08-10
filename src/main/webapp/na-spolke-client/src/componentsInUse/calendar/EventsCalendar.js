@@ -129,6 +129,7 @@ function EventsCalendar() {
     const highlightEventOnCalendar = () => {
         let monthAndYearClassElement = document.getElementsByClassName('MuiPickersCalendarHeader-transitionContainer');
         let monthAndYear = monthAndYearClassElement[0].firstElementChild.innerHTML;
+        monthAndYearClassElement[0].style.height = "50px"; // dopisane przez MB, bo ucinało nazwę miesiąca
         let daysInMonthClassElement = document.getElementsByClassName('MuiPickersDay-day');
 
         for (let x = 0; x < events.length; x++) {

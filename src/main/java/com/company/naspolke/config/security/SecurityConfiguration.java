@@ -59,6 +59,12 @@ public class SecurityConfiguration {
                 .mvcMatchers("/refresh").permitAll()
                 .mvcMatchers("/registration").permitAll()
                 .mvcMatchers("/send-request-for-membership/**").permitAll()
+                .mvcMatchers("/update-company-address").authenticated()
+                .mvcMatchers("/companies/search/updateCompanyName").authenticated()
+                .mvcMatchers("/companies/search/updateShareCapital").authenticated()
+                .mvcMatchers("/companies/search/updateBoardOfDirectorsTerm").authenticated()
+                .mvcMatchers("/companies/search/updateBoardMembersTerm").authenticated()
+                .mvcMatchers("/companies/search/updateShareValue").authenticated()
 
                 // .anyRequest().denyAll()
                  .anyRequest().permitAll();
