@@ -1,10 +1,10 @@
 import './App.css';
 
-import SignIn from "./componentsInUse/login/index";
+import SignInBasic from "./componentsInUse/login/index";
 import RegistrationBasic from "./componentsInUse/registration/index"
 import Layout from './componentsInUse/Layout';
 import Logout from './componentsInUse/Logout';
-import Presentation from "./componentsInUse/pageWithKit"
+import Presentation from "./componentsInUse/indexComponents/indexPageWithKit"
 import {Route, Routes} from "react-router-dom";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import theme from "./assets/theme";
@@ -17,7 +17,7 @@ import RequestForMembership from "./componentsInUse/requestToCompany/RequestForM
 import RequireAuth from "./componentsInUse/login/RequireAuth";
 import Unauthorized from "./componentsInUse/login/Unaurthorized";
 import PersistLogin from "./componentsInUse/login/PersistLogin";
-import Statute from "./componentsInUse/statute/Statute"
+import Statute from "./componentsInUse/indexComponents/statute/Statute"
 import VerifyRegistration from "./componentsInUse/registration/VerifyRegistration";
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
                 <Route path="/" element={<Presentation site="index"/> }/>
                 <Route path="faq" element={<Presentation site="faq"/>}/>
                 <Route path="statute" element={<Presentation site="statute"/>}/>
-                <Route path="login" element={<SignIn />}/>
+                <Route path="login" element={<SignInBasic />}/>
                 <Route path="logout" element={<Logout/>}/>
                 {/*<Route path="register" element={<RegistrationBasic/>}/>*/}
                 <Route path="register" element={<RegistrationBasic/>}/>

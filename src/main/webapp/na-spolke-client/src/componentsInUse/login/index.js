@@ -24,8 +24,10 @@ import bgImage from "../../assets/images/bg-sign-in-basic.jpeg"
 
 // React page layout routes
 import Routes from "../../routes";
-import SimpleFooter from "../footer/SimpleFooter";
-import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
+
+//Project components
+import SimpleFooter from "../indexComponents/footer/SimpleFooter";
+import DefaultNavbar from "../indexComponents/indexNavbar/WorkingNavbar";
 
 
 function SignInBasic() {
@@ -123,7 +125,7 @@ function SignInBasic() {
         onSubmit: (values, actions) => {
         customHandleSubmit(values).then(() =>  {
             actions.setSubmitting(false);
-        }).catch(console.log);
+        })
     }
     })
 

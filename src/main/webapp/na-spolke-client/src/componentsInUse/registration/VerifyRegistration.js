@@ -5,8 +5,8 @@ import Grid from "@mui/material/Grid";
 import MKBox from "../../mkFiles/components/MKBox";
 import MKTypography from "../../mkFiles/components/MKTypography";
 import MKButton from "../../mkFiles/components/MKButton";
-import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
-import SimpleFooter from "../footer/SimpleFooter";
+import DefaultNavbar from "../indexComponents/indexNavbar/WorkingNavbar";
+import SimpleFooter from "../indexComponents/footer/SimpleFooter";
 import Routes from "../../routes";
 import bgImage from "../../assets/images/bg-sign-in-basic.jpeg"
 import {Box, CircularProgress, Typography} from "@mui/material";
