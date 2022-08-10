@@ -204,8 +204,13 @@ public class MonoStringToCompanyAdapter {
         String sharesInfo = JsonPath.read(document, path + ".posiadaneUdzialy");
         String[] shares = sharesInfo.split("UDZIAŁÓW O ŁĄCZNEJ WARTOŚCI");
         Integer shareCount = Integer.valueOf(shares[0].trim().replaceAll("[^\\d]",""));
-        String sharesValueString = shares[1].replaceAll("[^\\d,]","").replaceAll("\\s+","");
-        sharesValueString = sharesValueString.substring(0, sharesValueString.length()-2);
+        String sharesValueString="";
+        if(shares[1].contains(",")) {
+            sharesValueString = shares[1].replaceAll("[^\\d,]", "").replaceAll("\\s+", "");
+            sharesValueString = sharesValueString.substring(0, sharesValueString.length() - 2);
+        } else {
+            sharesValueString = shares[1].replaceAll("[^\\d]", "").replaceAll("\\s+", "");
+        }
         BigDecimal sharesValueBigDecimal = BigDecimal.valueOf(Double.parseDouble(sharesValueString.replaceAll("[^\\d]", ".")));
         return SharePackage.builder()
                 .shareCount(shareCount)
