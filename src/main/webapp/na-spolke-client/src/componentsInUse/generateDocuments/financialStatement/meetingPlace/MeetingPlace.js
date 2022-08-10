@@ -2,33 +2,27 @@ import Card from "@mui/material/Card";
 import {Field, useField, useFormikContext} from "formik";
 import {useEffect} from "react";
 import TextField from "@mui/material/TextField";
-import {FormControlLabel, Radio} from "@mui/material";
-import {Box} from "@chakra-ui/react";
+import {FormControlLabel, Radio, RadioGroup} from "@mui/material";
+import {Box, FormControl, FormLabel} from "@chakra-ui/react";
 import Typography from "@mui/material/Typography";
 
 
 export function MeetingPlace({values, handleChange}) {
 
-    const MyRadio = ({label, ...props}) => {
-        const [field] = useField(props);
-        return (
-            <FormControlLabel {...field} control={<Radio/>} label={label}/>
-        )
-    }
 
     return <Box>
         <div>
-            <Typography sx={{fontSize: 14, marginBottom:2}}>
-                Miejsce odbycia zgromadzenia
-            </Typography>
-            <MyRadio name="meetingPlaceInHeadquarters"
-                     type="radio"
-                     value={"true"}
-                     label="w siedzibie spółki"/>
-            <MyRadio name="meetingPlaceInHeadquarters"
-                     type="radio"
-                     value={"false"}
-                     label="w innym miejscu"/>
+            <FormControl>
+                <FormLabel id="demo-controlled-radio-buttons-group" sx={{fontSize: 14, marginBottom:2}} >Miejsce odbycia zgromadzenia</FormLabel>
+                <RadioGroup
+                    aria-labelledby="demo-controlled-radio-buttons-group"
+                    name="meetingPlaceInHeadquarters"
+                    value={values.meetingPlaceInHeadquarters}
+                    onChange={handleChange}>
+                    <FormControlLabel value="true" control={<Radio />} label="w siedzibie spółki" />
+                    <FormControlLabel value="false" control={<Radio />} label="w innym miejscu" />
+                </RadioGroup>
+            </FormControl>
         </div>
         {values.meetingPlaceInHeadquarters !== "true" &&
             <Card>
@@ -38,7 +32,7 @@ export function MeetingPlace({values, handleChange}) {
                     value={values.meetingPlace}
                     placeholder="Kancelarii Notarialnej Ireny Kamińskiej"
                     as={TextField}/>
-            <div>
+            <Box sx={{ marginTop:'5', marginBottom:'5'}}>
                 <Field
                     label="ulica"
                     value={values.streetName}
@@ -55,6 +49,8 @@ export function MeetingPlace({values, handleChange}) {
                     value={values.localNumber}
                     as={TextField}
                 />
+            </Box>
+            <Box>
                 <Field
                     label="miasto"
                     name="city"
@@ -66,7 +62,7 @@ export function MeetingPlace({values, handleChange}) {
                     placeholder="xx-xxx"
                     value={values.zipCode}
                     as={TextField}
-                /></div>
+                /></Box>
             </Card>
         }
     </Box>

@@ -56,10 +56,11 @@ export default function FinancialStatementForm({company, companyIdMac}) {
             {({values, isSubmitting, handleChange, handleBlur, handleSubmit, setFieldValue}) => (
                 <Form>
                     <Box>
-                        <div>Generowanie Protokołu zatwierdzajacego sprawozdanie finansowe</div>
-                        <Card>
+                        <Box sx={{marginBottom:'2%'}} alignContent={"center"}>Generowanie Protokołu zatwierdzajacego sprawozdanie finansowe</Box>
+                        <Card sx={{minWidth: 275, width: '39%', height: '100%', margin: "auto", marginBottom:'2%',
+                            ':hover': { boxShadow: 20,}}}>
                             <CardContent>
-                                <Typography sx={{ fontSize: 14, marginBottom:2 }} color="text.secondary" gutterBottom>
+                                <Typography sx={{ fontSize: 26, marginBottom: 2 }} color="text.secondary" gutterBottom align={"center"}>
                                     Data i miejsce odbycia Zgromadzenia Wspólników
                                 </Typography>
 
