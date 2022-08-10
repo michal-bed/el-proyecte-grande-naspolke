@@ -1,6 +1,6 @@
 import './App.css';
 
-import SignIn from "./componentsInUse/login/index";
+import SignInBasic from "./componentsInUse/login/index";
 import RegistrationBasic from "./componentsInUse/registration/index"
 import Layout from './componentsInUse/Layout';
 import Logout from './componentsInUse/Logout';
@@ -29,7 +29,7 @@ function App() {
                 <Route path="/" element={<Presentation site="index"/> }/>
                 <Route path="faq" element={<Presentation site="faq"/>}/>
                 <Route path="statute" element={<Presentation site="statute"/>}/>
-                <Route path="login" element={<SignIn />}/>
+                <Route path="login" element={<SignInBasic />}/>
                 <Route path="logout" element={<Logout/>}/>
                 {/*<Route path="register" element={<RegistrationBasic/>}/>*/}
                 <Route path="register" element={<RegistrationBasic/>}/>
