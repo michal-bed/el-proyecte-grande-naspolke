@@ -1,4 +1,4 @@
-export const BasicImgBoxSyle ={
+export const BasicImgBoxStyle ={
 
     img: {
         width: "18em",

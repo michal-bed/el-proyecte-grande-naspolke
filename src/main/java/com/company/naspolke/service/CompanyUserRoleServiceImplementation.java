@@ -131,6 +131,11 @@ public class CompanyUserRoleServiceImplementation implements CompanyUserRoleServ
     }
 
     @Override
+    public List<Company> findCompaniesByUserId(UUID userId) {
+        return companyUserRoleRepository.findCompaniesByUserId(userId);
+    }
+
+    @Override
     public List<CompanyUserRole> getAllAppUserByCompanyAndByRole(UUID companyId, int role) {
         return companyUserRoleRepository.findAppUserByCompanyAndByRole(companyId, role);
     }

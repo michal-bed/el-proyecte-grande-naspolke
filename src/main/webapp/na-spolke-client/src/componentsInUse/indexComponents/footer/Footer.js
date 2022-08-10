@@ -20,23 +20,23 @@ export default function Footer() {
                             <WhiteTextTypography>E-mail:</WhiteTextTypography>
                         </Box>
                         <Box>
-                            <WhiteTextTypography>naspolke@gmail.com</WhiteTextTypography>
+                            <WhiteTextTypography>naspolke.organizacja@gmail.com</WhiteTextTypography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <Box borderBottom={1}><WhiteTextTypography>Informacje</WhiteTextTypography></Box>
                         <Box>
-                            <Link href="/#o_nas" color="inherit">
+                            <Link href="/Users/micha/Documents/java_projects/el-proyecte-grande-sprint-2-java-kuba-bogacki/src/main/webapp/na-spolke-client/public#o_nas" color="inherit">
                                 <WhiteTextTypography>O nas</WhiteTextTypography>
                             </Link>
                         </Box>
                         <Box>
-                            <Link href="/#uslugi">
+                            <Link href="/Users/micha/Documents/java_projects/el-proyecte-grande-sprint-2-java-kuba-bogacki/src/main/webapp/na-spolke-client/public#uslugi">
                                 <WhiteTextTypography>Usługi</WhiteTextTypography>
                             </Link>
                         </Box>
                         <Box>
-                            <Link href="/#cennik">
+                            <Link href="/Users/micha/Documents/java_projects/el-proyecte-grande-sprint-2-java-kuba-bogacki/src/main/webapp/na-spolke-client/public#cennik">
                                 <WhiteTextTypography>Cennik</WhiteTextTypography>
                             </Link>
                         </Box>

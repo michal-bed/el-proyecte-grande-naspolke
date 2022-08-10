@@ -2,6 +2,7 @@ package com.company.naspolke.repository;
 
 import com.company.naspolke.model.aggregate.CompanyUserRole;
 import com.company.naspolke.model.aggregate.CompanyUserRoleId;
+import com.company.naspolke.model.company.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,10 @@ public interface CompanyUserRoleRepository extends JpaRepository<CompanyUserRole
 
     @Query("SELECT a FROM CompanyUserRole a WHERE a.primaryKey.company.companyId = ?1 AND a.primaryKey.role.roleId = ?2")
     List<CompanyUserRole> findAppUserByCompanyAndByRole(UUID companyId, int role);
+
+
+
+    //SELECT c from company c join company_user_role on company_user_role.company_id = c.company_id
+    @Query(value = "SELECT c FROM Company c JOIN CompanyUserRole s ON c.companyId = s.primaryKey.company.companyId WHERE s.primaryKey.appUser.userId = ?1")
+    List<Company> findCompaniesByUserId(UUID userId);
 }

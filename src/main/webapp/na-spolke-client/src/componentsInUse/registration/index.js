@@ -1,4 +1,7 @@
-import {useRef, useState} from "react";
+import {useLayoutEffect, useRef, useState} from "react";
+import * as Yup from "yup";
+import {useFormik} from "formik";
+import axios from "../../api/axios";
 
 // react-router-dom components
 import {Link, useLocation, useNavigate} from "react-router-dom";
@@ -7,8 +10,16 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
+import {
+    CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText,
+    DialogTitle,
+    FormControlLabel,
+    IconButton,
+    InputAdornment,
+} from "@mui/material";
 
 // @mui icons
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 // Material Kit 2 React components
 import MKBox from "../../mkFiles/components/MKBox";
@@ -17,19 +28,16 @@ import MKInput from "../../mkFiles/components/MKInput";
 import MKButton from "../../mkFiles/components/MKButton";
 
 // Material Kit 2 React example components
-import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
-import SimpleFooter from "../footer/SimpleFooter";
+import DefaultNavbar from "../indexComponents/indexNavbar/WorkingNavbar";
+import SimpleFooter from "../indexComponents/footer/SimpleFooter";
 
 // Material Kit 2 React page layout routes
 import Routes from "../../routes";
 
 // Images
 import bgImage from "../../assets/images/bg-sign-in-basic.jpeg"
-import axios from "../../api/axios";
-import {FormControlLabel, IconButton, InputAdornment} from "@mui/material";
-import * as Yup from "yup";
-import {useFormik} from "formik";
-import {Visibility, VisibilityOff} from "@material-ui/icons";
+
+
 
 
 function RegistrationBasic() {
@@ -52,10 +60,29 @@ function RegistrationBasic() {
     const errRef = useRef();
     const [errMsg, setErrMsg] = useState('');
 
+    const [verifyDialogIsOpen, setVerifyDialogIsOpen] = useState(false);
+
+    const handleClose = () => {
+        setVerifyDialogIsOpen(false);
+        navigate(from, { replace: true });
+    };
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    useLayoutEffect(() => {
+        let registrationForm = document.getElementById("new-user-register-form");
+        if (isLoading) {
+            registrationForm.style.opacity = "0.5";
+        }
+        if (!isLoading) {
+            registrationForm.style.opacity = "1";
+        }
+    }, [isLoading]);
 
     const customHandleSubmit = async (values) => {
-
+        setIsLoading(true);
         try {
+
             let userData = { userName: values.name, userSurname: values.surname, userEmail: values.email, userPassword: values.password, statute: values.agreed };
             console.log(userData)
 
@@ -66,14 +93,14 @@ function RegistrationBasic() {
                     withCredentials: true
                 }
             );
+            setIsLoading(false);
+            setVerifyDialogIsOpen(true);
 
-            navigate(from, { replace: true });
         } catch (err) {
             console.log(err)
-
+            setIsLoading(false);
             if (!err?.response) {
                 setErrMsg('Brak odpowiedzi serwera');
-
             } else if (err.response?.status === 401) {
                 setErrMsg('Brak dostępu');
             } else if (err.response?.status === 400) {
@@ -108,8 +135,6 @@ function RegistrationBasic() {
             .required("Musisz potwierdzić regulamin strony aby założyć konto")
             .oneOf([true], "Musisz potwierdzić regulamin strony aby założyć konto")
     })
-
-
 
     const formik = useFormik({
         initialValues: {
@@ -177,7 +202,7 @@ function RegistrationBasic() {
                                   {errMsg}
                               </MKTypography>
 
-                              <MKBox >
+                              <MKBox id="new-user-register-form">
                                   <form onSubmit={formik.handleSubmit}>
                                       <MKBox mb={2}>
                                           <MKInput
@@ -238,7 +263,6 @@ function RegistrationBasic() {
                                                                    checked={showPassword}
                                                                    onClick={() => {handleClickPassword()}}
                                                                >
-
                                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
                                                                </IconButton>
                                                            </InputAdornment>
@@ -272,7 +296,7 @@ function RegistrationBasic() {
                                                        )
                                                    }}/>
                                       </MKBox>
-                                      <MKBox mb={2}>
+                                      <MKBox>
                                           <FormControlLabel
                                           control={
                                               <Switch
@@ -286,15 +310,17 @@ function RegistrationBasic() {
                                                       formik.handleChange(e)
                                                       handleClickAgreed()
                                                   }}
-                                                  sx={{cursor: "pointer",
+                                                  sx={{pb: "2.5em",
+                                                      cursor: "pointer",
                                                       userSelect: "none",
-                                                      ml: -1,
                                                       }}
                                               />}
-                                          label={<MKTypography
-                                              sx={{fontSize: "1em"}}
+                                          label={<MKBox sx={{width: "12em"}}>
+                                              <MKTypography
+                                              sx={{fontSize: "1em", lineHeight:"2em"}}
                                               variant="overline">
                                               Przeczytałem i akceptuje <MKTypography
+                                              sx={{fontSize: "1em"}}
                                               component={Link}
                                               target="_blank"
                                               to="/statute"
@@ -302,20 +328,24 @@ function RegistrationBasic() {
                                               color="info"
                                               fontWeight="medium"
                                               textGradient
+                                              labelPlacement="end"
                                           >
                                               regulamin strony
                                           </MKTypography>
-                                          </MKTypography>}
-                                          labelPlacement="end"
+                                          </MKTypography>
+                                          </MKBox>}
+
 
                                       />
                                           <MKTypography color="error" variant="caption"> {formik.touched.agreed && formik.errors.agreed}</MKTypography>
                                       </MKBox>
+                                      {isLoading ?
+                                            <CircularProgress style={{ position: 'absolute', top: '45%', left: '45%'}} color="black"/> :
                                       <MKBox mt={4} mb={1}>
-                                          <MKButton type="submit" variant="gradient" color="info" fullWidth>
+                                          <MKButton type="submit" variant="gradient" color="info" fullWidth disabled={isLoading}>
                                               Zarejestruj się
                                           </MKButton>
-                                      </MKBox>
+                                      </MKBox>}
                                       <MKBox mt={3} mb={1} textAlign="center">
                                           <MKTypography variant="button" color="text">
                                               Masz konto?{" "}
@@ -341,6 +371,28 @@ function RegistrationBasic() {
           <MKBox width="100%" position="absolute" zIndex={2} bottom="1.625rem">
               <SimpleFooter />
           </MKBox>
+          {verifyDialogIsOpen &&
+              <Dialog
+                  open={verifyDialogIsOpen}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+              >
+                  <DialogTitle id="alert-dialog-title">
+                      {"Zweryfikuj swoje konto"}
+                  </DialogTitle>
+                  <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                          Wysłaliśmy do Ciebie maila z linkiem aktywacyjnym. Aby się zalogować, sprawdź
+                          pocztę i kliknij 𝙕𝙬𝙚𝙧𝙮𝙛𝙞𝙠𝙪𝙟 𝙨𝙬𝙤𝙟𝙚 𝙠𝙤𝙣𝙩𝙤. Zostaniesz automatycznie przeniesiony do naszego
+                          portalu.
+                      </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                      <MKButton onClick={handleClose} variant="gradient" color="info" fullWidth>Ok</MKButton>
+                  </DialogActions>
+              </Dialog>
+          }
       </>
   );
 }

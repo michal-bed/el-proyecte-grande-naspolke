@@ -29,6 +29,7 @@ public class Message {
     private boolean membershipRequest;
     private boolean membershipInvitation;
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private AppUser appUser;
 
     @Temporal(TemporalType.DATE)

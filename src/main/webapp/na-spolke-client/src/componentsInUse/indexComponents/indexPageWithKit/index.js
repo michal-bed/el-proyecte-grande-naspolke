@@ -1,45 +1,27 @@
-/*
-=========================================================
-* Material Kit 2 React - v2.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-kit-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 // @mui material components
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 
 // Material Kit 2 React components
-import MKBox from "../../mkFiles/components/MKBox";
-import MKTypography from "../../mkFiles/components/MKTypography";
-import MKSocialButton from "../../mkFiles/components/MKSocialButton";
+import MKBox from "../../../mkFiles/components/MKBox";
+import MKTypography from "../../../mkFiles/components/MKTypography";
+import MKSocialButton from "../../../mkFiles/components/MKSocialButton";
 
 // Material Kit 2 React examples
-import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
+import DefaultNavbar from "../indexNavbar/WorkingNavbar";
 
 
 import MainPage from "../mainPage/mainPage";
 import FaqPage from "../faqPage/FaqPage";
 import Footer from "../footer/Footer";
 import Statute from "../statute/Statute"
-// Presentation page components
-
 
 // Routes
-import Routes from "../../routes";
-
+import Routes from "../../../routes";
 
 // Images
-import index_photo3 from "../../assets/photos/index_photo3.jpg";
+import index_photo3 from "../../../assets/photos/index_photo3.jpg";
 
 
 function Presentation(props) {
@@ -59,7 +41,7 @@ function Presentation(props) {
             case "faq":
                 title = "Frequently Asked Questions"
                 titleDescription = "Zebraliśmy najczęściej pojawiające się pytania i " +
-                    "posatraliśmy się w jak najlepszy sposób na nie odpowiedzieć."
+                    "postaraliśmy się w jak najlepszy sposób na nie odpowiedzieć."
                 return(<FaqPage />)
             case "statute":
                 title = "Regulamin strony"
@@ -70,12 +52,12 @@ function Presentation(props) {
 
     const component = setContent()
 
-
   return (
     <>
+        <MKBox>
       <DefaultNavbar
         routes={route}
-        fixed
+        sticky
       />
       <MKBox
         minHeight="75vh"
@@ -130,6 +112,7 @@ function Presentation(props) {
 
       </Card>
         <Footer/>
+        </MKBox>
     </>
   );
 }

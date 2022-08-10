@@ -1,7 +1,6 @@
 package com.company.naspolke.service;
 
 import com.company.naspolke.model.AppUser;
-import com.company.naspolke.model.Message;
 import com.company.naspolke.model.Role;
 import com.company.naspolke.model.aggregate.CompanyUserRole;
 import com.company.naspolke.model.company.Company;
@@ -10,11 +9,14 @@ import com.company.naspolke.repository.AppUserRepository;
 import com.company.naspolke.repository.CompanyRepository;
 import com.company.naspolke.repository.CompanyUserRoleRepository;
 import com.company.naspolke.repository.RoleRepository;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.Collections;
 import java.util.Optional;
@@ -39,13 +41,28 @@ public class AppUserServiceImplementation implements AppUserService {
     }
 
     @Override
-    public void registerUser(AppUser appUser) {
-        appUser.setEnabled(true);
+    public void registerUser(AppUser appUser) throws UnsupportedEncodingException, MessagingException {
+        String randomCode = RandomString.make(64);
+        appUser.setVerificationCode(randomCode);
+        appUser.setEnabled(false);
         appUser.setTokenExpired(false);
         appUser.setApplicationRoles(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
         appUser.setCompanyUserRole(Set.of());
 
         appUserRepository.save(appUser);
+    }
+
+    @Override
+    public Optional<AppUser> findAppUserByVerificationCode(String verificationCode) {
+        return appUserRepository.findByVerificationCode(verificationCode);
+    }
+
+    @Override
+    public void verifyRegisterUser(AppUser appUser) {
+        appUser.setVerificationCode(null);
+        appUser.setEnabled(true);
+        appUserRepository.save(appUser);
+
     }
 
     @Override

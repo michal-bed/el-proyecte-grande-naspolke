@@ -2,10 +2,10 @@
 import { SectionComponentStyle } from "../sectionComponent/SectionComponentStyle";
 import { Box, Grid, Divider } from "@mui/material";
 
-import index_photo1 from "../../assets/photos/index_photo1.jpg"
-import index_photo2 from "../../assets/photos/index_photo2.jpg"
-import index_photo4 from "../../assets/photos/index_photo4.jpg"
-import index_photo5 from "../../assets/photos/index_photo5.jpg"
+import index_photo1 from "../../../assets/photos/index_photo1.jpg"
+import index_photo2 from "../../../assets/photos/index_photo2.jpg"
+import index_photo4 from "../../../assets/photos/index_photo4.jpg"
+import index_photo5 from "../../../assets/photos/index_photo5.jpg"
 
 import KitComponentSection from "../kitComponentSection/KitComponentSection"
 import SectionTitle from "../sectionTitle/SectionTitle";

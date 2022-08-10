@@ -1,4 +1,4 @@
-import MKBox from "../../mkFiles/components/MKBox";
+import MKBox from "../../../mkFiles/components/MKBox";
 
 
 function Statute () {
@@ -72,7 +72,7 @@ function Statute () {
                     <li>W celu zapewnienia bezpieczeństwa Usługodawcy, Usługobiorcy oraz innych Usługobiorców
                         korzystających z Serwisu, wszyscy Usługobiorcy korzystający z Serwisu powinni stosować się do
                         ogólnie przyjętych <a
-                            href="https://nety.pl/cyberbezpieczenstwo/zasady-ogolne-korzystania-z-sieci-internet/">zasad
+                            href="src/componentsInUse/indexComponents/statute/Statute">zasad
                             bezpieczeństwa w sieci</a>,
                     </li>
                     <li>Zabrania się działań wykonywanych osobiście przez Usługobiorców lub przy użyciu oprorgamowania:
@@ -207,7 +207,7 @@ function Statute () {
                         </ul>
                     </li>
                     <li>W przypadku kontaktu Usługobiorcy z Usługodawcą, dane osobowe Usługobiorców będa przetwarzane
-                        zgodnie z &quot;<a href="https://naspolke.com/polityka-prywatnosci/">Polityką
+                        zgodnie z &quot;<a href="src/componentsInUse/indexComponents/statute/Statute">Polityką
                             Prywatności</a>&quot;, stanowiącą integralną część Regulaminu.
                     </li>
                 </ul>
@@ -217,8 +217,8 @@ function Statute () {
                     Użytkownikach.</p><p>W celu prawidłowego świadczenia usług, Serwis wykorzystuje i zapisuje niektóre
                     anonimowe informacje o Usługobiorcy w plikach cookies.</p><p>Zakres, cele, sposób oraz zasady
                     przetwarzania danych dostępne są w załącznikach do Regulaminu: &#8222;<a
-                        href="https://naspolke.com/obowiazek-informacyjny-rodo/">Obowiązek informacyjny
-                        RODO</a>&#8221; oraz w &#8222;<a href="https://naspolke.com/polityka-prywatnosci/">Polityce
+                        href="src/componentsInUse/indexComponents/statute/Statute">Obowiązek informacyjny
+                        RODO</a>&#8221; oraz w &#8222;<a href="src/componentsInUse/indexComponents/statute/Statute">Polityce
                         prywatności</a>&#8222;, stanowiących integralną część Regulaminu.</p>
                 <ul>
                     <li><em>Dane zbierane podczas rejestracji:</em><br/>Nazwa użytkownika, imię i nazwisko, adres e-mail
