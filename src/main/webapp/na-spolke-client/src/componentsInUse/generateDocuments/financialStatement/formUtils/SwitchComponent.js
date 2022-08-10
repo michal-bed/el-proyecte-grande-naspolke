@@ -53,7 +53,6 @@ export function SwitchComponent({values, switchTrueText, switchFalseText, name, 
         values.someoneIsPresent=false;
         for (const item in values) {
             if (item.includes("IsPresent")) {
-                console.log(values[item])
                 if (values[item] === true) {
                     values.someoneIsPresent = true;
                 }
@@ -71,8 +70,8 @@ export function SwitchComponent({values, switchTrueText, switchFalseText, name, 
                            value={values[name]}
                            checked={values[name]}
                            onChange={(event) => {
-                               SwitchComponentLogic(values, company, event);
                                setFieldValue(name, values[name]? values[name] = false : values[name] = true);
+                               SwitchComponentLogic(values, company, event);
                                checkIsSomeoneIsPresent();
                            }
                            }

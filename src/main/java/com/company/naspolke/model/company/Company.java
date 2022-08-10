@@ -120,8 +120,10 @@ public class Company {
                 shareValue = sharesValues.divide(sharesCount);
             }
         }
-        assert shareValue != null;
-        shareValue = shareValue.setScale(2, RoundingMode.CEILING);
+//        assert shareValue != null;
+        if (shareValue!=null) {
+            shareValue = shareValue.setScale(2, RoundingMode.CEILING);
+        }
         return shareValue;
     }
 

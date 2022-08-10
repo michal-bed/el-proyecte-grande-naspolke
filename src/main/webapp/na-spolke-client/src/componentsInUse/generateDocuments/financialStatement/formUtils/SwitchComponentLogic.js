@@ -14,8 +14,7 @@ export function SwitchComponentLogic(values, company, event) {
             }
         }
     }
-
-    if(event.target.name.includes("IsPresent") && event.target.value === "false"){
+    if(event.target.name.includes("IsPresent") && event.target.value === "true"){
         console.log("formal1 " + values.formalConvening);
         values.formalConvening = true;
         console.log("formal2 " + values.formalConvening);

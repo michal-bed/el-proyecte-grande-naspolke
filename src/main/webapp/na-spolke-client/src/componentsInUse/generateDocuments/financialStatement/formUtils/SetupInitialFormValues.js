@@ -27,7 +27,7 @@ export function SetupInitialFormValues(company) {
         financialStatementUnanimously: true,
         someoneIsPresent:true
     };
-    if (company.partners.individualPartners !== null && individualPartners.length === 0) {
+    if (company.partners.individualPartners !== undefined && individualPartners.length === 0) {
         for (let i = 0; i < company.partners.individualPartners.length; i++) {
             individualPartners.push({"id": company.partners.individualPartners[i].id, isPresent: true})
             initialValues[`individual${individualPartners[i].id}IsPresent`] = true;

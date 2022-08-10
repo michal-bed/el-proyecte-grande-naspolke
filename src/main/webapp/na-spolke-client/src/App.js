@@ -34,6 +34,7 @@ function App() {
                 <Route path="register" element={<RegistrationBasic/>}/>
                 <Route path="verify/*" element={<VerifyRegistration/>}/>
 
+                        <Route path="generate/financial-statements" element={<FinancialStatement />} />
                 <Route path="unauthorized" element={<Unauthorized />} />
 
                 {/* we want to protect these routes */}
@@ -44,7 +45,6 @@ function App() {
                         <Route path="change-role" element={<ChangeRole/>}/>
                         <Route path="add-company" element={<AddCompany/>}/>
                         <Route path="userpanel/*" element={<Cockpit/>}/>
-                        <Route path="generate/financial-statements" element={<FinancialStatement />} />
                     </Route>
                 </Route>
             </Route>
