@@ -59,22 +59,8 @@ export function SwitchComponent({values, switchTrueText, switchFalseText, name, 
                            value={values[name]}
                            checked={values[name]}
                            onChange={(event) => {
-                               setFieldValue(name, values[name]? values[name] = false : values[name] = true);
                                SwitchComponentLogic(values, company, event);
-                               // if(event.target.name === "formalConvening" && event.target.value === "true" && company!==undefined){
-                               //     if(company.partners.individualPartners!==undefined) {
-                               //         for (let i in company.partners.individualPartners) {
-                               //              console.log(company.partners.individualPartners[i].id)
-                               //              values[`individual${company.partners.individualPartners[i].id}IsPresent`] = true;
-                               //         }
-                               //     }
-                               //     if(company.partners.partnerCompanies!==undefined){
-                               //         for (let i in company.partners.partnerCompanies) {
-                               //             values[`company${company.partners.partnerCompanies[i].id}IsPresent`] = true;
-                               //         }
-                               //     }
-                               //     }
-
+                               setFieldValue(name, values[name]? values[name] = false : values[name] = true);
                                }
                            }
                 />
