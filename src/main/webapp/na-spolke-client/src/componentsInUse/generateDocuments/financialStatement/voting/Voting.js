@@ -1,11 +1,15 @@
 import {Checkbox} from "@material-ui/core";
 import {VotingNoUnanimously} from "./VotingNoUnanimously";
 import {FormControlLabel, FormGroup} from "@mui/material";
+import {Box} from "@chakra-ui/react";
+import Typography from "@mui/material/Typography";
 
 export function Voting({votingMatter, values, handleChange, votingTitle}) {
 
-    return <div>
-        <p>{votingTitle}</p>
+    return <Box >
+        <Typography sx={{ fontSize: 20, marginTop:'4%' }} color="text.secondary" gutterBottom>
+            {votingTitle}:
+        </Typography>
         <div>
             <FormGroup>
                 <FormControlLabel control={<Checkbox defaultChecked
@@ -14,14 +18,9 @@ export function Voting({votingMatter, values, handleChange, votingTitle}) {
                                                      color="secondary"/>}
                                   label="jednomyślne"
                                   labelPlacement="start"/></FormGroup>
-            {/*<Checkbox aria-label={"jednogłośnie"}*/}
-            {/*          name={`${votingMatter}Unanimously`}*/}
-            {/*          defaultChecked*/}
-            {/*          value={values[`${votingMatter}Unanimously`]} onChange={handleChange}*/}
-            {/*          color="secondary"/>*/}
         </div>
         {values[`${votingMatter}Unanimously`] === false &&
             <VotingNoUnanimously votingType={votingMatter} values={values}/> }
-    </div>
+    </Box>
 
 }

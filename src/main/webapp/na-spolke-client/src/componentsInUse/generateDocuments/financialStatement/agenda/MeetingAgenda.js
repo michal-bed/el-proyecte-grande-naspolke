@@ -1,10 +1,16 @@
 import Card from "@mui/material/Card";
 import {Voting} from "../voting/Voting";
+import {Box} from "@chakra-ui/react";
+import Typography from "@mui/material/Typography";
 
 
 export function MeetingAgenda({values, handleChange}) {
-    return  <Card>
-        <div><p>Porządek obrad:</p>
+    return  <Card sx={{minWidth: 275, width: '80%', height: '100%', marginBottom:'2%', margin:'auto',
+        ':hover': { boxShadow: 20,}}}>
+        <Box sx={{minWidth: 275, width: '90%', height: '100%', marginBottom:'2%', margin:'auto'}}>
+            <Typography sx={{ fontSize: 26, marginBottom: "8%", marginTop:'4%' }} color="text.secondary" gutterBottom align={"center"}>
+                Porządek obrad:
+            </Typography>
             <ol>
                 <li>otwarcie Zwyczajnego Zgromadzenia;</li>
                 <li>wybór Przewodniczącego Zgromadzenia i Protokolanta;</li>
@@ -20,6 +26,6 @@ export function MeetingAgenda({values, handleChange}) {
             </ol>
             <Voting values={values} handleChange={handleChange} votingMatter={"agenda"}
                     votingTitle={"Głosowanie nad przyjęciem porządku obrad"}/>
-        </div>
+        </Box>
     </Card>
 }

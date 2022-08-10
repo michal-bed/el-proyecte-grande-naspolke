@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 
 export function MeetingOrganElection({values, company, setFieldValue, headerText, type, handleChange, helperText}) {
 
-    return <Card sx={{minWidth: 275, width: '100%', height: '100%', marginBottom:'2%',
+    return <Card sx={{minWidth: 275, width: '100%', marginBottom:'2%',
         ':hover': { boxShadow: 20,}}}>
         <Typography sx={{ fontSize: 26, marginBottom: 2 }} color="text.secondary" gutterBottom align={"center"}>
             {headerText}:

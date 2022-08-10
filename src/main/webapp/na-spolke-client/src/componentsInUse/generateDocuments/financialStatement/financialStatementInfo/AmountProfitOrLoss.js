@@ -3,6 +3,7 @@ import {FormControl} from "@chakra-ui/react";
 import {InputLabel, MenuItem, Select} from "@mui/material";
 import {Field} from "formik";
 import {Voting} from "../voting/Voting";
+import Card from "@mui/material/Card";
 
 export function AmountProfitOrLoss({values, valueName, resolutionHeader, handleChange}) {
     let coverageOfLossPossibility = ["z zysków lat przyszłych", "inne..."]
@@ -10,7 +11,8 @@ export function AmountProfitOrLoss({values, valueName, resolutionHeader, handleC
         "na kapitał zapasowy oraz na pokrycie starty z lat przeszłych",
         "na wypłatę dywidendy", "inne..."]
 
-    return <div>
+    return <Card sx={{minWidth: 275, width: '96%', marginBottom:'2%', marginLeft:'2%', marginRight:'2%',
+        ':hover': { boxShadow: 20,}}}>
         <p>{resolutionHeader}</p>
         <Field
             name={"amountProfitOrLoss"}
@@ -53,5 +55,5 @@ export function AmountProfitOrLoss({values, valueName, resolutionHeader, handleC
             }
         </div>
         }
-    </div>
+    </Card>
 }

@@ -33,7 +33,6 @@ import static com.company.naspolke.model.documentDrafts.WordFormsHandler.*;
 public class FinancialStatementProtocolGenerator {
     private final ProtocolFactory protocolFactory;
     int resolutionCount = 1;
-    char chairpersonGender ='m';
 
     public FinancialStatementProtocolGenerator(ProtocolFactory protocolFactory) {
         this.protocolFactory = protocolFactory;

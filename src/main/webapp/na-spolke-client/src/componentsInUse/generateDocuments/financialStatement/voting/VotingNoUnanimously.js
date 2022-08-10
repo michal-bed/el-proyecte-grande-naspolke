@@ -1,10 +1,16 @@
 import TextField from "@mui/material/TextField";
 import {Field} from "formik";
+import {Box} from "@mui/material";
+import Typography from "@mui/material/Typography";
 
 
 export function VotingNoUnanimously({votingType: votingMatter, values}) {
-    return <div><p>Oddane głosy:</p>
-        <Field
+    return <Box>
+        <Typography sx={{ fontSize: 15}} color="text.secondary" gutterBottom>
+            Oddane głosy:
+        </Typography>
+
+        <Box sx={{marginBottom:'2%'}}><Field
             key={`${votingMatter}For`}
             name={`${votingMatter}VotingFor`}
             type="number"
@@ -25,5 +31,5 @@ export function VotingNoUnanimously({votingType: votingMatter, values}) {
             value={values[`${votingMatter}VotingAbstentions`]}
             label="głosów wstrzymujących się:"
             as={TextField}
-        /></div>
+        /></Box></Box>
 }

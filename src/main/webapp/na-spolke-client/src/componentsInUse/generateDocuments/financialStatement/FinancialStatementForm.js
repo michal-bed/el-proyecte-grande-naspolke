@@ -8,7 +8,7 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 import {DatePicker} from "@mui/x-date-pickers";
 import Card from "@mui/material/Card";
-import {Button} from "@material-ui/core";
+import Button from '@mui/material/Button';
 import {MeetingPlace} from "./meetingPlace/MeetingPlace";
 import {SwitchComponent} from "./formUtils/SwitchComponent";
 import {AttendanceList} from "./attendance/AttendanceList";
@@ -56,7 +56,10 @@ export default function FinancialStatementForm({company, companyIdMac}) {
             {({values, isSubmitting, handleChange, handleBlur, handleSubmit, setFieldValue}) => (
                 <Form>
                     <Box>
-                        <Box sx={{marginBottom:'2%'}} alignContent={"center"}>Generowanie Protokołu zatwierdzajacego sprawozdanie finansowe</Box>
+
+                        <Box sx={{marginBottom:'2%'}} alignContent={"center"}><Typography sx={{ fontSize: 35, marginBottom: 2 }} color="text.secondary" gutterBottom align={"center"}>
+                            Generowanie Protokołu zatwierdzajacego sprawozdanie finansowe
+                        </Typography></Box>
                         <Card sx={{minWidth: 275, width: '39%', height: '100%', margin: "auto", marginBottom:'2%',
                             ':hover': { boxShadow: 20,}}}>
                             <CardContent>
@@ -87,39 +90,55 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                             </CardContent>
                         </Card>
 
-                    <AttendanceList values={values} company={company} setFieldValue={setFieldValue}/>
+                        <Box sx={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(2, 1fr)",
+                            gap: 1,
+                            gridTemplateRows: "auto",
+                            gridTemplateAreas: `"main1 main2 "
+                                            "main3 main4 "`,
+                            margin: "auto",
+                            // width: '80%'
+                        }}>
+                            <AttendanceList values={values} company={company} setFieldValue={setFieldValue}/>
 
-                        <Card sx={{minWidth: 275, width: '39%', height: '100%', marginBottom:'2%',
-                            ':hover': { boxShadow: 20,}}}>
-                            <CardContent>
-                                <Card sx={{minWidth: 275, width: '100%', height: '100%', marginBottom:'2%',
-                                    ':hover': { boxShadow: 20,}}} ><SwitchComponent values={values}
-                                                       switchTrueText={"Formalne zwołanie"}
-                                                       switchFalseText={"Bez formalnego zwołania"}
-                                                       title={"Tryb zwołania Zgromadzenie Wspólników"}
-                                                       name={"formalConvening"}
-                                                       setFieldValue={setFieldValue}/></Card>
-                                <MeetingOrganElection values={values} company={company} type={"chairperson"}
-                                                      setFieldValue={setFieldValue}
-                                                      headerText={"Wybór Przewodniczącego"}
-                                                      helperText={"Wybierz przewodniczącego spośród obecnych osób"}
-                                                      handleChange={handleChange}/>
+                            <Card sx={{
+                                minWidth: 275, width: '80%', height: '100%', marginBottom: '2%',margin:'auto',
+                                borderColor: 'text.primary',
+                                ':hover': {boxShadow: 20,}
+                            }}>
+                                <CardContent>
+                                    <Card sx={{
+                                        minWidth: 275, width: '100%', marginBottom: '2%',
+                                        ':hover': {boxShadow: 20},
+                                    }}><SwitchComponent values={values}
+                                                        switchTrueText={"Formalne zwołanie"}
+                                                        switchFalseText={"Bez formalnego zwołania"}
+                                                        title={"Tryb zwołania Zgromadzenie Wspólników"}
+                                                        name={"formalConvening"}
+                                                        setFieldValue={setFieldValue}/></Card>
+                                    <MeetingOrganElection values={values} company={company} type={"chairperson"}
+                                                          setFieldValue={setFieldValue}
+                                                          headerText={"Wybór Przewodniczącego"}
+                                                          helperText={"Wybierz przewodniczącego spośród obecnych osób"}
+                                                          handleChange={handleChange}/>
 
-                                <MeetingOrganElection values={values} company={company} type={"recorder"}
-                                                      setFieldValue={setFieldValue}
-                                                      headerText={"Wybór Protokolanta"}
-                                                      helperText={"Wybierz protokolanta"}
-                                                      handleChange={handleChange}/></CardContent>
-                        </Card>
+                                    <MeetingOrganElection values={values} company={company} type={"recorder"}
+                                                          setFieldValue={setFieldValue}
+                                                          headerText={"Wybór Protokolanta"}
+                                                          helperText={"Wybierz protokolanta spośród obecnych osób\n"}
+                                                          handleChange={handleChange}/></CardContent>
+                            </Card>
 
-                    <MeetingAgenda values={values} handleChange={handleChange}/>
+                        <MeetingAgenda values={values} handleChange={handleChange}/>
 
                     <FinancialStatementInfo setFieldValue={setFieldValue} values={values} handleChange={handleChange}/>
 
                     <ApprovalBodyMemberSection values={values} handleChange={handleChange} setFieldValue={setFieldValue}
                                                company={company} />
-
-                    <Button type="submit" disabled={isSubmitting}> Zapisz</Button>
+                    </Box >
+                        <Box sx={{minWidth: 275, width: '20%', marginBottom: '2%', margin:'auto'}} ><Button Button variant="contained" type="submit"
+                                     disabled={isSubmitting}> <Typography color="common.white" >Wygeneruj dokument</Typography></Button></Box>
                     </Box>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
                 </Form>

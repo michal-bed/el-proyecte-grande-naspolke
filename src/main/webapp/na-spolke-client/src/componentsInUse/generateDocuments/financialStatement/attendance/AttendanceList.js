@@ -6,7 +6,7 @@ import {CardContent} from "@mui/material";
 
 export function AttendanceList({company, values, setFieldValue}) {
 
-    return <Card sx={{minWidth: 275, width: '39%', height: '100%', margin: "auto", marginBottom:'2%',
+    return <Card sx={{minWidth: 275, width: '80%', height: '100%', margin: "auto", marginBottom:'2%',
             ':hover': {
                 boxShadow: 20,}}}
     >

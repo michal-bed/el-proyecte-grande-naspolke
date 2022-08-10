@@ -48,7 +48,10 @@ export const AntSwitch = styled(Switch)(({theme}) => ({
 
 export function SwitchComponent({values, switchTrueText, switchFalseText, name, setFieldValue, title, spacing=3}) {
 
-    return<Box className={styles[`Absent`]}><p>{title}</p>
+    return<Box className={styles[`Absent`]} sx={{marginLeft: '1%'}}>
+        <Typography sx={{fontSize: 26, marginTop: '4%'}} color="text.secondary" gutterBottom
+                    align={"center"}>
+            {title}</Typography>
             <Stack direction="row" spacing={spacing} alignItems="center">
                 <Typography>{switchFalseText}</Typography>
                 <AntSwitch name={name}

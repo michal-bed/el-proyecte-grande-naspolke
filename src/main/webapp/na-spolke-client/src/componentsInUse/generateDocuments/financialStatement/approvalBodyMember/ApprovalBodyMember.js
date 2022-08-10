@@ -1,13 +1,15 @@
 import {FormControl} from "@chakra-ui/react";
-import {FormControlLabel} from "@mui/material";
+import {Box, FormControlLabel} from "@mui/material";
 import {Checkbox} from "@material-ui/core";
 import Card from "@mui/material/Card";
 import {DatePickerComponent} from "../formUtils/DatePickerComponent";
 import {Voting} from "../voting/Voting";
+import Typography from "@mui/material/Typography";
 
 export function ApprovalBodyMember({values, setFieldValue, member, handleChange, memberType}) {
 
-    return <Card>
+    return <Card sx={{minWidth: 275, width: '96%', marginBottom:'2%', marginLeft:'2%', marginRight:'2%',
+        ':hover': { boxShadow: 20,}}}>
 
         <FormControl>
             <p key={`displayed${memberType}Name${member.firstName}index`}>{member.firstName} {member.secondName} {member.lastNameI} {member.lastNameII}
@@ -25,16 +27,18 @@ export function ApprovalBodyMember({values, setFieldValue, member, handleChange,
         </FormControl>
 
         { values[`${memberType}WholeReportingPeriod`] === false &&
-            <div>
-                <div>Początek sprawowania funkcji w roku sprawozdawczym</div>
+            <Box sx={{marginLeft:'1%'}}>
+                <Typography sx={{fontSize: 20, marginTop: '2%', marginBottom:'2%'}} color="text.secondary" gutterBottom>
+                    Początek sprawowania funkcji w roku sprawozdawczym</Typography>
                 <DatePickerComponent setFieldValue={setFieldValue} values={values}
-                                     label={"Początek sprawowania funkcji w roku sprawozdawczym"}
+                                     label={"Początek sprawowania funkcji"}
                                      valuesName={`${memberType}Beginning`}/>
-                <div>Koniec sprawowania funkcji w roku sprawozdawczym</div>
+                <Typography sx={{fontSize: 20, marginTop: '2%', marginBottom:'2%'}} color="text.secondary" gutterBottom>
+                    Koniec sprawowania funkcji w roku sprawozdawczym</Typography>
                 <DatePickerComponent setFieldValue={setFieldValue} values={values}
-                                     label={"Koniec sprawowania funkcji w roku sprawozdawczym"}
+                                     label={"Koniec sprawowania funkcji"}
                                      valuesName={`${memberType}End`}/>
-                </div> }
+                </Box> }
         <Voting values={values} handleChange={handleChange} votingMatter={`${memberType}`}
                 votingTitle={"Głosowanie nad udzieleniem absolutorium"}/>
     </Card>
