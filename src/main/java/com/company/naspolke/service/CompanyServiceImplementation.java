@@ -61,7 +61,7 @@ public class CompanyServiceImplementation implements CompanyService {
         }
         return new ResponseEntity<>(company, headers, httpStatus);
     }
-
+//TODO przesnieść tworzenie responsu do controlerów
     @Override
     public boolean checkForDuplicate(String krsNumber) {
         Company a = companyRepository.findByKrsNumber(krsNumber);

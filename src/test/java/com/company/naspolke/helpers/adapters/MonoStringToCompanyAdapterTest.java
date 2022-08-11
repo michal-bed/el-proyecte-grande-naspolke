@@ -1,5 +1,6 @@
 package com.company.naspolke.helpers.adapters;
 
+import com.company.naspolke.model.company.Company;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

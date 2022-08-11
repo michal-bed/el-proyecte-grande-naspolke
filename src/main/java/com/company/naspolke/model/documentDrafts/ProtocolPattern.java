@@ -26,7 +26,7 @@ class ProtocolPattern {
 
     static String meetingValidationFormula = "Przewodniczący Zgromadzenia stwierdził, że Zgromadzenie odbywa się %s. Obecni " +
             "lub reprezentowani są wspólnicy którym przysługuje łącznie %s i tyle samo głosów, na ogólną liczbę %s " +
-            "i tyle samo głosów, co oznacza, że reprezentowany jest na nim %s łącznej ilości udziałów, nadto nikt z obecnych nie " +
+            "i tyle samo głosów, co oznacza, że reprezentowany jest na nim %s, nadto nikt z obecnych nie " +
             "zgłosił sprzeciwu dotyczącego odbycia Zgromadzenia, a zatem zgodnie z art. %s  Zgromadzenie zdolne jest " +
             "do podejmowania uchwał%s.\n";
 
