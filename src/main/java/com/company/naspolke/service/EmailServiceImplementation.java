@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
 @Service
@@ -43,16 +44,26 @@ public class EmailServiceImplementation implements EmailService {
         return mailSender;
     }
 
-    @Override
-    public void sendEmail(String user, String text, String topic) throws MailException, IOException, MessagingException {
+    public String fileFormatterAndReader(String text) throws IOException {
+
+        File fileDirectory = new File(text);
+        FileInputStream fileInputStream = new FileInputStream(fileDirectory);
+        Charset inputCharset = Charset.forName("ISO-8859-1");
+        BufferedReader in = new BufferedReader(new InputStreamReader(fileInputStream, inputCharset));
 
         String line;
         StringBuilder emailBody = new StringBuilder();
 
-        BufferedReader br = new BufferedReader(new FileReader(text));
-        while ((line = br.readLine()) != null) {
+        while ((line = in.readLine()) != null) {
             emailBody.append(line);
         }
+        return emailBody.toString();
+    }
+
+    @Override
+    public void sendEmail(String user, String text, String topic) throws MailException, IOException, MessagingException {
+
+        String emailBody = fileFormatterAndReader(text);
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -68,17 +79,8 @@ public class EmailServiceImplementation implements EmailService {
     @Override
     public void sendVerificationEmail(AppUser appUser) throws MessagingException, IOException {
 
-        String text = ".\\src\\main\\resources\\email\\verify-email.txt";
-
-        String line;
-        StringBuilder emailBody = new StringBuilder();
-
-        BufferedReader br = new BufferedReader(new FileReader(text));
-        while ((line = br.readLine()) != null) {
-            emailBody.append(line);
-        }
-
-        String content = emailBody.toString();
+        String textRoute = ".\\src\\main\\resources\\email\\verify-email.txt";
+        String content = fileFormatterAndReader(textRoute);
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);

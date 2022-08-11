@@ -6,6 +6,7 @@ import {Grid, TextField} from "@mui/material";
 import React, {useState} from "react";
 import Button from "@mui/material/Button";
 import ModalTop from "../../../modal/ModalTop";
+import RequestForMembership from "../../../requestToCompany/RequestForMembership";
 
 function CompanyInvitePage () {
 
@@ -103,26 +104,53 @@ function CompanyInvitePage () {
 
     return(
         <>
-            <Card style={titleCardStyle}>
-                <Typography variant="h2" align="center">
-                    {company['companyName']}<br />
-                </Typography>
+            <Card style={{ height: '10vh' }}>
+                <Box sx={{ mx: "auto", width: 400 }}>
+                    <Typography
+                        variant="h3" component="div"
+                        style={{ textAlign: 'center' }}>Zaproś do spółki</Typography><br/>
+                </Box>
+            </Card><br/>
+            <Card style={{ height: 300 }}>
+                <Box sx={{ mx: "auto", width: 400 }}>
+                    <Typography variant="h3" component="div"><hr/>
+                        <h2 style={{ textAlign: 'center' }}>Wpisz e-mail użytkownika:</h2><hr/>
+                        <form onSubmit={handleSubmit}>
+                            <Grid style={gridStyle}>
+                                <TextField id="outlined-search" label="Adres e-mail" type="search"
+                                           className="form-input" value={emailAddress} required={true}
+                                           style={{ alignItems: 'center' }}
+                                           onChange={(e) => setEmailAddress(e.target.value)}/>
+                                <Button type="submit">Wyślij zaproszenie</Button>
+                            </Grid>
+                        </form><hr/>
+                    </Typography>
+                </Box>
             </Card>
-            <Box style={gridStyle}>
-                <Card style={infoCardStyle}><hr/>
-                    <h2 style={inputStyle}>Zaproś do spółki:</h2><hr/>
-                    <form style={formStyle} onSubmit={handleSubmit}>
-                        <Grid style={{display: "flex"}}>
-                            <TextField id="outlined-search" label="Adres e-mail" type="search"
-                                className="form-input" value={emailAddress} required={true}
-                                onChange={(e) => setEmailAddress(e.target.value)}/>
-                            <Button type="submit">Wyślij zaproszenie</Button>
-                        </Grid>
-                    </form><hr/>
-                </Card>
-            </Box>
             {successInvitationInfo && <ModalTop info={successfullyInvitationMessage}/>}
             {failedInvitationInfo && <ModalTop info={failedInvitationMessage}/>}
+
+            {/*<Card style={titleCardStyle}>*/}
+            {/*<Card style={{ height: '10vh' }}>*/}
+            {/*    <Typography variant="h2" align="center">*/}
+            {/*        <Typography variant="h3" component="div">Zaproś do spółki</Typography><br/>*/}
+            {/*    </Typography>*/}
+            {/*</Card><br/>*/}
+            {/*<Card style={{ height: '30vh' }}>*/}
+            {/*    <Box sx={{ mx: "auto", height: '40vh' }}><hr/>*/}
+            {/*        <h2 style={{ textAlign: 'center' }}>Wpisz e-mail użytkownika:</h2><hr/>*/}
+            {/*        <form onSubmit={handleSubmit}>*/}
+            {/*            <Grid style={{display: "flex", alignContent: 'center'}}>*/}
+            {/*                <TextField id="outlined-search" label="Adres e-mail" type="search"*/}
+            {/*                    className="form-input" value={emailAddress} required={true}*/}
+            {/*                    onChange={(e) => setEmailAddress(e.target.value)}/>*/}
+            {/*                <Button type="submit">Wyślij zaproszenie</Button>*/}
+            {/*            </Grid>*/}
+            {/*        </form><hr/>*/}
+            {/*    </Box>*/}
+            {/*</Card>*/}
+            {/*{successInvitationInfo && <ModalTop info={successfullyInvitationMessage}/>}*/}
+            {/*{failedInvitationInfo && <ModalTop info={failedInvitationMessage}/>}*/}
         </>
     )
 }

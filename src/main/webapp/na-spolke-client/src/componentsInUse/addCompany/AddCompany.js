@@ -3,9 +3,11 @@ import KrsUserInput from "./krsInput/KrsUserInput";
 import CompanyForm from "./companyForm/CompanyForm";
 import {ModalErrorMessage} from "./companyForm/ModalFormKrsInputError";
 import {Company} from "../../classes/company/Company";
-import {Box} from "@mui/material";
+import {Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import CompanyContextProvider from "./companyForm/CompanyContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import {Card, Typography} from "@material-ui/core";
+import MKButton from "../../mkFiles/components/MKButton";
 import {useLocation, useNavigate} from "react-router-dom";
 
 
@@ -15,6 +17,9 @@ const AddCompany = () => {
 
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
     const [hideKrsInput, setHideKrsInput] = useState("block")
+    const [companyFound, setCompanyFound] = useState(false);
+    const [verifyDialogIsOpen, setVerifyDialogIsOpen] = useState(false);
+    const [addCompanyInfo, setAddCompanyInfo] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/userpanel";
@@ -24,6 +29,15 @@ const AddCompany = () => {
       setCompanyDataForm(<div/>);
     }
 
+    const handleClose = () => {
+        setVerifyDialogIsOpen(false);
+        navigate(from, { replace:true });
+    }
+
+    const handleOpen = (addingData) => {
+        setAddCompanyInfo(addingData);
+        setVerifyDialogIsOpen(true);
+    }
 
     const addCompanyForm = (data, companyName="") => {
         console.log(data, companyName)
@@ -57,6 +71,7 @@ const AddCompany = () => {
                                                   message={"Ta spółka została już dodana. Sprawdź Twoje repozytorium"}
                                                   closeAndDisplay={closeAndDisplay}/>)
         } else {
+            setCompanyFound(true);
               const company = checkForCompanyData(data.data)
             setHideKrsInput("none")
               setCompanyDataForm(
@@ -71,15 +86,16 @@ const AddCompany = () => {
         axiosPrivate.post("/add-company/", data)
             .then((response) => {
                 if (response.status === 201) {
-                    alert(`Spółka ${response.data} została pomyślnie dodana`)
-                    setTimeout(()=> {
-                        navigate(from, { replace:true })
-                    }, 1000)
+                    handleOpen(`Spółka ${response.data} została pomyślnie dodana`);
                 }
             })
             .catch((error) => {
                 console.log(error)
+
                 alert(`Wystąpił błąd. Spółka nie została dodana. Spróbuj ponownie później.`)
+
+                // handleOpen(`Wystąpił błąd. spółka nie została dodana. Spróbuj ponownie później.`);
+
             })
     }
 
@@ -96,12 +112,49 @@ const AddCompany = () => {
             return null;
         }
     }
-    return <div>
-        <Box style={{display: hideKrsInput}}>
-            <KrsUserInput addCompanyData={addCompanyForm}/>
-        </Box>
-        {companyDataForm}
-    </div>
+    return (
+        <div>
+            <Card style={{ height: '10vh' }}>
+                <Box sx={{ mx: "auto", width: 400, textAlign: 'center' }}>
+                    <Typography variant="h3" component="div">Dodaj spółkę</Typography>
+                </Box>
+            </Card><br/>
+            {companyFound ?
+            <Card style={{ height: '210vh' }}><br/>
+                <Box sx={{ mx: "auto" }}>
+                    {companyDataForm}
+                </Box>
+            </Card> :
+            <Card style={{ height: '30vh' }}>
+                <Box sx={{ mx: "auto", width: 500 }}>
+                    <Box style={{display: hideKrsInput, justifyContent:'center', alignItems:'center', height: '300vh'}}>
+                        <KrsUserInput addCompanyData={addCompanyForm}/>
+                    </Box>
+                </Box>
+            </Card>
+            }
+            {verifyDialogIsOpen &&
+                <Dialog
+                    open={verifyDialogIsOpen}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title" style={{ textAlign: 'center' }}>
+                        {"Użytkowniku"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {addCompanyInfo}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <MKButton onClick={handleClose} variant="gradient" color="info" fullWidth>Ok</MKButton>
+                    </DialogActions>
+                </Dialog>
+            }
+        </div>
+    )
 }
 
 export default AddCompany;

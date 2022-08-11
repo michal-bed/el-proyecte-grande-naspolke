@@ -151,4 +151,31 @@ public class CompanyController {
 
         companyService.updateAddressById(companyAddress, companyId);
     }
+
+    @PutMapping(value = "/edit-member/{memberId}/{selectedData}/{keys}/{fieldToChange}")
+    public void updateBoardMemberOrDirectorInfo(@PathVariable String fieldToChange, @PathVariable String keys,
+                                                @PathVariable String memberId, @PathVariable String selectedData) {
+        if (fieldToChange != null && selectedData != null && memberId != null && keys != null) {
+            switch (selectedData) {
+                case "boardMembers" -> companyService.updateBoardMember(keys, fieldToChange, Long.valueOf(memberId));
+                case "boardOfDirectors" -> companyService.updateDirectorMember(keys, fieldToChange, Long.valueOf(memberId));
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company");
+        }
+    }
+
+    @PostMapping(value = "/edit-partner/{companyPartnerId}/{selectedData}/{keys}/{fieldToChange}")
+    public void updateJuridicalOrNaturalPersonInfo(@PathVariable String fieldToChange, @PathVariable String keys,
+                @PathVariable String companyPartnerId, @PathVariable String selectedData, @RequestBody ObjectNode objectNode) {
+        System.out.println(objectNode.elements());
+        if (fieldToChange != null && selectedData != null && companyPartnerId != null && keys != null) {
+            switch (selectedData) {
+                case "individualPartners" -> companyService.updateIndividualPartner(keys, fieldToChange, Long.valueOf(companyPartnerId));
+                case "partnerCompanies" -> companyService.updateCompanyPartner(keys, fieldToChange, Long.valueOf(companyPartnerId));
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company");
+        }
+    }
 }
