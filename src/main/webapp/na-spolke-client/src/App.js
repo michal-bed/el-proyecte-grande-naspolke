@@ -19,6 +19,7 @@ import PersistLogin from "./componentsInUse/login/PersistLogin";
 import FinancialStatement from "./componentsInUse/generateDocuments/financialStatement/FinancialStatement";
 
 import VerifyRegistration from "./componentsInUse/registration/VerifyRegistration";
+import PdfView from "./componentsInUse/generateDocuments/displayPdfDocument/PdfView";
 
 function App() {
     return (<ThemeProvider theme={theme}>
@@ -33,6 +34,7 @@ function App() {
                 <Route path="logout" element={<Logout/>}/>
                 <Route path="register" element={<RegistrationBasic/>}/>
                 <Route path="verify/*" element={<VerifyRegistration/>}/>
+                <Route path="pdf" element={<PdfView/>}/>
 
                 <Route path="unauthorized" element={<Unauthorized />} />
 
