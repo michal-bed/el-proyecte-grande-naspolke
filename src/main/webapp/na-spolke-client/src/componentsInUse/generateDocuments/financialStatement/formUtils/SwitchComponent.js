@@ -52,15 +52,14 @@ export function SwitchComponent({values, switchTrueText, switchFalseText, name, 
     function checkIsSomeoneIsPresent() {
         values.someoneIsPresent=false;
         for (const item in values) {
-            if (item.includes("IsPresent")) {
-                if (values[item] === true) {
-                    values.someoneIsPresent = true;
+            if (item.includes("IsPresent") && values[item] === true) {
+                values.someoneIsPresent = true;
                 }
             }
         }
-    }
 
-    return<Box className={styles[`Absent`]} sx={{marginLeft: '1%'}}>
+
+    return<Box  sx={{marginLeft: '1%', width:'100%'}}>
         <Typography sx={{fontSize: 26, marginTop: '4%'}} color="text.secondary" gutterBottom
                     align={"center"}>
             {title}</Typography>
@@ -69,11 +68,11 @@ export function SwitchComponent({values, switchTrueText, switchFalseText, name, 
                 <AntSwitch name={name}
                            value={values[name]}
                            checked={values[name]}
-                           onChange={(event) => {
+                           onChange={event => {
                                setFieldValue(name, values[name]? values[name] = false : values[name] = true);
                                SwitchComponentLogic(values, company, event);
                                checkIsSomeoneIsPresent();
-                           }
+                                }
                            }
                 />
                 <Typography>{switchTrueText}</Typography>
