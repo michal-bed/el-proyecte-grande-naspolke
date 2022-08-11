@@ -4,9 +4,14 @@ import {Link, matchPath, useLocation, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import { Typography, Box } from "@material-ui/core";
-
-
-
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import FaxIcon from '@mui/icons-material/Fax';
+import KeyboardHideIcon from '@mui/icons-material/KeyboardHide';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
+import ArticleIcon from '@mui/icons-material/Article';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
 
 export default function Sidebar () {
 
@@ -32,20 +37,20 @@ export default function Sidebar () {
         if (companyId != null) {
             return (
                 <>
-                    <MenuItem icon={<DraftsIcon/>}>
-                        Twoja Spółka <Link to={"/userpanel/company/" + companyId}/>
+                    <MenuItem icon={<FaxIcon fontSize="large"/>}>
+                        <h6>Twoja Spółka</h6> <Link to={"/userpanel/company/" + companyId}/>
                     </MenuItem>
-                    <MenuItem icon={<DraftsIcon/>}>
-                        Ludzie Spółki <Link to={"/userpanel/company/" + companyId + "/members"}/>
+                    <MenuItem icon={<PeopleAltIcon fontSize="large"/>}>
+                        <h6>Ludzie Spółki</h6> <Link to={"/userpanel/company/" + companyId + "/members"}/>
                     </MenuItem>
-                    <MenuItem icon={<DraftsIcon/>}>
-                        Zaproś do Spółki <Link to={"/userpanel/company/" + companyId + "/invite"}/>
+                    <MenuItem icon={<InsertInvitationIcon fontSize="large"/>}>
+                        <h6>Zaproś do Spółki</h6> <Link to={"/userpanel/company/" + companyId + "/invite"}/>
                     </MenuItem>
-                    <MenuItem icon={<DraftsIcon/>}>
-                        Wygeneruj Dokument <Link to={"/userpanel/company/" + companyId + "/generate"}/>
+                    <MenuItem icon={<ArticleIcon fontSize="large"/>}>
+                        <h6>Wygeneruj PDF</h6> <Link to={"/userpanel/company/" + companyId + "/generate"}/>
                     </MenuItem>
-                    <MenuItem icon={<DraftsIcon/>}>
-                        {companyId} <Link to={"/userpanel/company/" + companyId}/>
+                    <MenuItem icon={<FingerprintIcon fontSize="large"/>}>
+                        <h6>{companyId}</h6> <Link to={"/userpanel/company/" + companyId}/>
                     </MenuItem>
                 </>
             );
@@ -70,16 +75,16 @@ export default function Sidebar () {
             <SidebarContent>
                 <Menu iconShape="circle">
 
-                    <MenuItem icon={<DraftsIcon/>}>
-                        Wybór Spółki <Link to={"/userpanel"}/>
+                    <MenuItem icon={<ApartmentIcon fontSize="large"/>}>
+                        <h6>Wybór Spółki</h6> <Link to={"/userpanel"}/>
                     </MenuItem>
 
-                    <MenuItem icon={<DraftsIcon/>}>
-                        Dołącz do Spółki <Link to={"/userpanel/join"}/>
+                    <MenuItem icon={<KeyboardHideIcon fontSize="large"/>}>
+                        <h6>Dołącz do Spółki</h6> <Link to={"/userpanel/join"}/>
                     </MenuItem>
 
-                    <MenuItem icon={<DraftsIcon/>}>
-                        Dodaj Spółkę <Link to={"/userpanel/add"}/>
+                    <MenuItem icon={<AddBusinessIcon fontSize="large"/>}>
+                        <h6>Dodaj Spółkę</h6> <Link to={"/userpanel/add"}/>
                     </MenuItem>
 
                     <hr />
