@@ -142,7 +142,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                             <Button Button variant="contained" type="submit"
                                      disabled={isSubmitting || !values.someoneIsPresent}> <Typography color="common.white" >Wygeneruj dokument</Typography></Button></Box>
                     </Box>
-                    <pre>{JSON.stringify(values, null, 2)}</pre>
+                    {/*<pre>{JSON.stringify(values, null, 2)}</pre>*/}
                 </Form>
             )}
         </Formik>

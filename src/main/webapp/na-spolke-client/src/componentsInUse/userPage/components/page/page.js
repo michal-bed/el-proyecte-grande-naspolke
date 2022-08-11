@@ -18,6 +18,7 @@ import GenerateDocument from "../../content/companyContent/generateDocument/Gene
 import RequestJoin from "../../content/companyContent/joinable/RequestJoin";
 import AddCompany from "../../../addCompany/AddCompany";
 import RequestForMembership from "../../../requestToCompany/RequestForMembership";
+import FinancialStatement from "../../../generateDocuments/financialStatement/FinancialStatement";
 
 
 
@@ -41,7 +42,7 @@ function Page ({classes}) {
                         {/*<Route path="success" element={<Subpage component={<InviteSuccess/>}/>}/>*/}
                         {/*<Route path="fail" element={<Subpage component={<InviteFail/>}/>}/>*/}
                     {/*</Route>*/}
-                    <Route path="generate" element={<Subpage component={<GenerateDocument/>}/>}/>
+                    <Route path="generate" element={<Subpage component={<FinancialStatement/>}/>}/>
                 </Route>
             </Routes>
         </Box>

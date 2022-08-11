@@ -34,12 +34,12 @@ function App() {
                 <Route path="register" element={<RegistrationBasic/>}/>
                 <Route path="verify/*" element={<VerifyRegistration/>}/>
 
-                        <Route path="generate/financial-statements" element={<FinancialStatement />} />
                 <Route path="unauthorized" element={<Unauthorized />} />
 
                 {/* we want to protect these routes */}
                 <Route element={<PersistLogin/>}>
                     <Route element={<RequireAuth allowedRoles={["ROLE_USER"]}/>}>
+                        <Route path="generate/*" element={<FinancialStatement />} />
                         <Route path="add-member" element={<AddMember/>}/>
                         <Route path="delete-member" element={<DeleteMember/>}/>
                         <Route path="change-role" element={<ChangeRole/>}/>

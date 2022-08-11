@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class MonoStringToCompanyAdapter {
@@ -24,8 +23,6 @@ public class MonoStringToCompanyAdapter {
 //TODO usunąć importów z *
     private final String SWLEX = MocksData.SWLEX;
     private final String EASYSOLAR = MocksData.EASYSOLAR;
-    @Value("cokolwiek")
-    private String cokolwiek;
 
     public Company getCompany(String apiResponse) {
         boolean isValid = checkForProperCompanyLegalForm(apiResponse);
@@ -204,13 +201,7 @@ public class MonoStringToCompanyAdapter {
         String sharesInfo = JsonPath.read(document, path + ".posiadaneUdzialy");
         String[] shares = sharesInfo.split("UDZIAŁÓW O ŁĄCZNEJ WARTOŚCI");
         Integer shareCount = Integer.valueOf(shares[0].trim().replaceAll("[^\\d]",""));
-        String sharesValueString="";
-        if(shares[1].contains(",")) {
-            sharesValueString = shares[1].replaceAll("[^\\d,]", "").replaceAll("\\s+", "");
-            sharesValueString = sharesValueString.substring(0, sharesValueString.length() - 2);
-        } else {
-            sharesValueString = shares[1].replaceAll("[^\\d]", "").replaceAll("\\s+", "");
-        }
+        String sharesValueString = getSharesValueFromApiData(shares[1]);
         BigDecimal sharesValueBigDecimal = BigDecimal.valueOf(Double.parseDouble(sharesValueString.replaceAll("[^\\d]", ".")));
         return SharePackage.builder()
                 .shareCount(shareCount)
@@ -218,8 +209,19 @@ public class MonoStringToCompanyAdapter {
                 .build();
     }
 
+    String getSharesValueFromApiData(String shares) {
+        String sharesValueString;
+        if(shares.contains(",")) {
+            sharesValueString = shares.replaceAll("[^\\d]", "").replaceAll("\\s+", "");
+            sharesValueString = sharesValueString.substring(0, sharesValueString.length() - 2);
+        } else {
+            sharesValueString = shares.replaceAll("[^\\d]", "").replaceAll("\\s+", "");
+        }
+        return sharesValueString;
+    }
 
-    private Address getCompanyAddressFromApi(Object document) {
+
+    Address getCompanyAddressFromApi(Object document) {
         String addressPath = "$.odpis.dane.dzial1.siedzibaIAdres.adres";
 
         String city = JsonPath.read(document, addressPath+".miejscowosc");
