@@ -9,20 +9,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CompanyService {
-    Optional<Company> getCompanyByKrsNumber(Long krsNumber);
-
+    Optional<Company> getCompanyByKrsNumber(String krsNumber);
     Optional<Company> getCompanyByCompanyId(UUID companyId);
-
-    //    ResponseEntity<Company> getCompanyData(String krsNumber);
     ResponseEntity<Company> getCompanyDtoFromKrsApi(String krsNumber);
-
-    boolean checkForDuplicate(Long krsNumber);
-
     Company saveCompany(Company company);
-
+    boolean checkForDuplicate(String krsNumber);
     ResponseEntity<String> buildSaveResponse(Company company);
-
     List<Company> findAll();
+    Company getCompanyById(UUID uuid);
 
     void updateAddressById(Address address, UUID companyId);
 

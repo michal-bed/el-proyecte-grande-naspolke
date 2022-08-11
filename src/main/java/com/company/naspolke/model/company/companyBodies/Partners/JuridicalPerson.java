@@ -22,12 +22,19 @@ public class JuridicalPerson implements SharePossesing {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
+    private String representativeFirstname;
+    private String representativeLastname;
+    private char representativeGender;
 
     @Builder
-    public JuridicalPerson(String name, BigDecimal sharesValue, Integer sharesCount, Address address) {
+    public JuridicalPerson(Long id, String name, BigDecimal sharesValue, Integer sharesCount, Address address, String representativeFirstname, String representativeLastname, char representativeGender) {
+        this.id = id;
         this.name = name;
         this.sharesValue = sharesValue;
         this.sharesCount = sharesCount;
         this.address = address;
+        this.representativeFirstname = representativeFirstname;
+        this.representativeLastname = representativeLastname;
+        this.representativeGender = representativeGender;
     }
 }

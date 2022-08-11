@@ -77,10 +77,10 @@ public class AppUserServiceImplementation implements AppUserService {
     }
 
     @Override
-    public List<AppUser> getCompanyOwners(Long krsNumber) {
+    public List<AppUser> getCompanyOwners(String krsNumber) {
         List<AppUser> companyOwners = new ArrayList<>();
         Optional<Role> role = Optional.ofNullable(roleRepository.findRoleByRoleType(RoleType.OWNER));
-        Optional<Company> company = Optional.ofNullable(companyRepository.findByKrsNumber(Long.valueOf(krsNumber)));
+        Optional<Company> company = Optional.ofNullable(companyRepository.findByKrsNumber(krsNumber));
         if (role.isPresent() && company.isPresent()) {
             List<CompanyUserRole> companyOwnersIds = companyUserRoleRepository.findAppUserByCompanyAndByRole(
                     company.get().getCompanyId(), role.get().getRoleId());

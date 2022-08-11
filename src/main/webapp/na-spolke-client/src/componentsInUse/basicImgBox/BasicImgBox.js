@@ -1,11 +1,11 @@
 import React from "react";
-import { BasicImgBoxSyle } from "./BasicImgBoxStyle"
+import { BasicImgBoxStyle } from "./BasicImgBoxStyle"
 function BasicImgBox(props){
 
-    let boxPosition = (props.position === "positionL") ? BasicImgBoxSyle.imgBoxR : BasicImgBoxSyle.imgBoxL
+    let boxPosition = (props.position === "positionL") ? BasicImgBoxStyle.imgBoxR : BasicImgBoxStyle.imgBoxL
 
     return <div sx={boxPosition}>
-        <img sx={BasicImgBoxSyle.img} src={BasicImgBoxSyle.imagePath}></img>
+        <img sx={BasicImgBoxStyle.img} src={props.imagePath}></img>
     </div>
 }
 

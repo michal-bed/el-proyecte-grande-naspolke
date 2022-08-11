@@ -7,7 +7,7 @@ import com.company.naspolke.model.company.Company;
 import java.util.UUID;
 
 public interface MessageService {
-    Message saveAndReturnNewMessage(Long krsNumber, String emailSender, String messageBody,
+    Message saveAndReturnNewMessage(String krsNumber, String emailSender, String messageBody,
                                     boolean membershipRequest, boolean membershipInvitation);
     void deleteMessageByMessageId(UUID messageId);
     void changeMessageStatus(UUID messageId, boolean hasRead);

@@ -1,4 +1,7 @@
 import {useLayoutEffect, useRef, useState} from "react";
+import * as Yup from "yup";
+import {useFormik} from "formik";
+import axios from "../../api/axios";
 
 // react-router-dom components
 import {Link, useLocation, useNavigate} from "react-router-dom";
@@ -7,8 +10,16 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
+import {
+    CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText,
+    DialogTitle,
+    FormControlLabel,
+    IconButton,
+    InputAdornment,
+} from "@mui/material";
 
 // @mui icons
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 // Material Kit 2 React components
 import MKBox from "../../mkFiles/components/MKBox";
@@ -17,28 +28,16 @@ import MKInput from "../../mkFiles/components/MKInput";
 import MKButton from "../../mkFiles/components/MKButton";
 
 // Material Kit 2 React example components
-import DefaultNavbar from "../../mkFiles/pageComponents/DefaultNavbar";
-import SimpleFooter from "../footer/SimpleFooter";
+import DefaultNavbar from "../indexComponents/indexNavbar/WorkingNavbar";
+import SimpleFooter from "../indexComponents/footer/SimpleFooter";
 
 // Material Kit 2 React page layout routes
 import Routes from "../../routes";
 
 // Images
 import bgImage from "../../assets/images/bg-sign-in-basic.jpeg"
-import axios from "../../api/axios";
-import {
-    Box,
-    CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText,
-    DialogTitle,
-    FormControlLabel,
-    IconButton,
-    InputAdornment,
-    LinearProgress
-} from "@mui/material";
-import * as Yup from "yup";
-import {useFormik} from "formik";
-import {Visibility, VisibilityOff} from "@material-ui/icons";
-import {Button} from "@chakra-ui/react";
+
+
 
 
 function RegistrationBasic() {
@@ -297,7 +296,7 @@ function RegistrationBasic() {
                                                        )
                                                    }}/>
                                       </MKBox>
-                                      <MKBox mb={2}>
+                                      <MKBox>
                                           <FormControlLabel
                                           control={
                                               <Switch
@@ -311,15 +310,17 @@ function RegistrationBasic() {
                                                       formik.handleChange(e)
                                                       handleClickAgreed()
                                                   }}
-                                                  sx={{cursor: "pointer",
+                                                  sx={{pb: "2.5em",
+                                                      cursor: "pointer",
                                                       userSelect: "none",
-                                                      ml: -1,
                                                       }}
                                               />}
-                                          label={<MKTypography
-                                              sx={{fontSize: "1em"}}
+                                          label={<MKBox sx={{width: "12em"}}>
+                                              <MKTypography
+                                              sx={{fontSize: "1em", lineHeight:"2em"}}
                                               variant="overline">
                                               Przeczytałem i akceptuje <MKTypography
+                                              sx={{fontSize: "1em"}}
                                               component={Link}
                                               target="_blank"
                                               to="/statute"
@@ -327,11 +328,13 @@ function RegistrationBasic() {
                                               color="info"
                                               fontWeight="medium"
                                               textGradient
+                                              labelPlacement="end"
                                           >
                                               regulamin strony
                                           </MKTypography>
-                                          </MKTypography>}
-                                          labelPlacement="end"
+                                          </MKTypography>
+                                          </MKBox>}
+
 
                                       />
                                           <MKTypography color="error" variant="caption"> {formik.touched.agreed && formik.errors.agreed}</MKTypography>

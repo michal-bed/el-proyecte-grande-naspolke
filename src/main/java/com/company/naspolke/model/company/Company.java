@@ -7,12 +7,14 @@ import com.company.naspolke.model.company.companyBodies.BoardOfDirector;
 import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.Partners;
+import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -29,7 +31,7 @@ public class Company {
     @Column(name = "company_id")
     private UUID companyId;
     private String companyName;
-    private Long krsNumber;
+    private String krsNumber;
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "address_id")
     private Address address;
@@ -55,10 +57,13 @@ public class Company {
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Column(name = "company_user_role")
     private Set<CompanyUserRole> companyUserRole = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<FinancialStatementProtocol> financialStatementProtocols;
+
 
     @Builder
     public Company(String companyName,
-                   Long krsNumber,
+                   String krsNumber,
                    Address address,
                    String nip,
                    String regon,
@@ -80,10 +85,12 @@ public class Company {
         this.boardOfDirectors = boardOfDirectors;
         this.boardOfDirectorsTerm = boardOfDirectorsTerm;
         this.partners = partners;
-        this.partnersRevealed = checkIfAllPartnersAreRevealed();
         this.manySharesAllowed = manySharesAllowed;
-        this.shareValue = checkForShareValue();
-        this.sharesCount = checkForShareCount();
+        if(partners!= null) {
+            this.partnersRevealed = checkIfAllPartnersAreRevealed();
+            this.shareValue = checkForShareValue();
+            this.sharesCount = checkForShareCount();
+        }
     }
 
     private Integer checkForShareCount() {
@@ -113,26 +120,55 @@ public class Company {
                 shareValue = sharesValues.divide(sharesCount);
             }
         }
-        assert shareValue != null;
-        shareValue = shareValue.setScale(2, RoundingMode.CEILING);
+//        assert shareValue != null;
+        if (shareValue!=null) {
+            shareValue = shareValue.setScale(2, RoundingMode.CEILING);
+        }
         return shareValue;
+    }
+
+    public void addFinancialStatement(FinancialStatementProtocol financialStatement){
+        this.financialStatementProtocols.add(financialStatement);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Company company = (Company) o;
-        return companyId != null && Objects.equals(companyId, company.companyId);
+        if (!(o instanceof Company company)) return false;
+        return com.google.common.base.Objects.equal(getCompanyId(), company.getCompanyId()) &&
+                com.google.common.base.Objects.equal(getKrsNumber(), company.getKrsNumber());
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return com.google.common.base.Objects.hashCode(getCompanyId(), getKrsNumber());
     }
+
 
     public void addCompanyUserRole(CompanyUserRole companyUserRole) {
         this.companyUserRole.add(companyUserRole);
+    }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "companyId=" + companyId +
+                ", companyName='" + companyName + '\'' +
+                ", krsNumber='" + krsNumber + '\'' +
+                ", address=" + address +
+                ", nip='" + nip + '\'' +
+                ", regon='" + regon + '\'' +
+                ", shareCapital=" + shareCapital +
+                ", shareValue=" + shareValue +
+                ", sharesCount=" + sharesCount +
+                ", boardMembers=" + boardMembers +
+                ", boardOfDirectors=" + boardOfDirectors +
+                ", partners=" + partners +
+                ", partnersRevealed=" + partnersRevealed +
+                ", manySharesAllowed=" + manySharesAllowed +
+                ", companyUserRole=" + companyUserRole +
+                ", financialStatementProtocols=" + financialStatementProtocols +
+                '}';
     }
 
     public void addNewEvent(Event event) {

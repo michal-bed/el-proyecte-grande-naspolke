@@ -659,24 +659,6 @@ function CompanyInfo() {
                                         {generateIcons(rows?.find(row => row?.id === "postOffice"))}
                                     </TableRow>
                                 </Card>
-                {/*<Box>*/}
-                {/*    <Card style={memberCardStyle}>*/}
-                {/*        <Link to={"invite"}><Button style={buttonStyle}>Zaproś do Spółki</Button></Link>*/}
-                {/*        <Typography>*/}
-                {/*            Osoby zarejestrowane w spółce:*/}
-
-                {/*            <ul style={tableStyle}>*/}
-                {/*                <li>*/}
-                {/*                    do wypełnienia*/}
-                {/*                </li>*/}
-                {/*            </ul>*/}
-                {/*        </Typography>*/}
-                {/*    </Card><br/>*/}
-
-                {/*    <Box style={memberCardStyle}>*/}
-                {/*        <EventsCalendar />*/}
-                {/*    </Box>*/}
-                {/*</Box>*/}
 
                                 <Card style={infoCardStyle} sx={{gridArea: 'info'}}>
                                     <TableRow>
@@ -748,8 +730,6 @@ function CompanyInfo() {
                 </TableBody>
             </Table>
     </TableContainer>
-    {/*</Box>*/}
-    {/*</div>*/}
 </>)
 }
 

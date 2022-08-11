@@ -49,9 +49,9 @@ public class MessageController {
                                                  @RequestBody ObjectNode objectNode) {
         UUID loggedUserId = jwtUtil.getUserId(request);
         Optional<AppUser> user = appUserService.findUserByUserId(loggedUserId);
-        Message message = messageService.saveAndReturnNewMessage(Long.valueOf(krsNumber),
+        Message message = messageService.saveAndReturnNewMessage(krsNumber,
                 user.get().getUserEmail(), objectNode.get("messageText").asText(), true, false);
-        List<AppUser> companyOwners = appUserService.getCompanyOwners(Long.valueOf(krsNumber));
+        List<AppUser> companyOwners = appUserService.getCompanyOwners(krsNumber);
         if (companyOwners.size() > 0) {
             companyOwners.forEach(e -> e.addMessage(message));
             companyOwners.forEach(appUserService::updateAppUser);
@@ -72,13 +72,13 @@ public class MessageController {
 
     @PostMapping(value = "/send-decision-about-membership")
     public void sendOwnerMembershipDecision(HttpServletRequest request, @RequestBody ObjectNode objectNode) {
-        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("krsNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByKrsNumber(objectNode.get("krsNumber").asText());
         Optional<AppUser> appUser = appUserService.findUserByUserEmail(objectNode.get("emailSender").asText());
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.READER);
         UUID loggedUserId = jwtUtil.getUserId(request);
         Optional<AppUser> user = appUserService.findUserByUserId(loggedUserId);
         messageService.changeMessageStatus(UUID.fromString(objectNode.get("messageId").asText()), true);
-        List<AppUser> companyOwners = appUserService.getCompanyOwners(Long.valueOf(objectNode.get("krsNumber").asText()));
+        List<AppUser> companyOwners = appUserService.getCompanyOwners(objectNode.get("krsNumber").asText());
         for (AppUser _appUser : companyOwners) {
             _appUser.getUserMessages().stream()
                     .filter(e -> e.getMessageId().equals(UUID.fromString(objectNode.get("messageId").asText())))
@@ -133,7 +133,7 @@ public class MessageController {
     public void sendAnswerAboutInvitation(HttpServletRequest request, @RequestBody ObjectNode objectNode) {
         UUID loggedUserId = jwtUtil.getUserId(request);
         Optional<AppUser> loggedUser = appUserService.findUserByUserId(loggedUserId);
-        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(objectNode.get("krsNumber").asText()));
+        Optional<Company> company = companyService.getCompanyByKrsNumber(objectNode.get("krsNumber").asText());
         Optional<Role> role = roleService.findRoleByRoleType(RoleType.READER);
         Optional<AppUser> companyOwner = appUserService.findUserByUserEmail(objectNode.get("emailSender").asText());
         messageService.changeMessageStatus(UUID.fromString(objectNode.get("messageId").asText()), true);
