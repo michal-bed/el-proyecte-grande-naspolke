@@ -207,7 +207,7 @@ function RegistrationBasic() {
                                       <MKBox mb={2}>
                                           <MKInput
                                               type="text"
-                                              label="Imie"
+                                              label="Imię"
                                               fullWidth
                                               id="name"
                                               name="name"
@@ -233,7 +233,7 @@ function RegistrationBasic() {
                                       <MKBox mb={2}>
                                           <MKInput
                                               type="email"
-                                              label="Email"
+                                              label="E-mail"
                                               fullWidth
                                               id="email"
                                               name="email"

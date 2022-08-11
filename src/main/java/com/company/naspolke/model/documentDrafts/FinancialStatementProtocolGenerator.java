@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import static com.company.naspolke.model.documentDrafts.ChangeDigitsIntoWords.changeDigitsIntoWords;
 
@@ -550,6 +551,7 @@ public class FinancialStatementProtocolGenerator {
                 personList.add(paragraph);
             }
         }
+
         if(protocol.getListPresentsCompanyPartners()!=null) {
             for (JuridicalPerson partner : protocol.getListPresentsCompanyPartners()) {
                 counter++;

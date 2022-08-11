@@ -20,6 +20,7 @@ const AddCompany = () => {
     const [companyFound, setCompanyFound] = useState(false);
     const [verifyDialogIsOpen, setVerifyDialogIsOpen] = useState(false);
     const [addCompanyInfo, setAddCompanyInfo] = useState("");
+    const [toNavigate, setToNavigate] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/userpanel";
@@ -31,12 +32,15 @@ const AddCompany = () => {
 
     const handleClose = () => {
         setVerifyDialogIsOpen(false);
-        navigate(from, { replace:true });
+        if (toNavigate) {
+            navigate(from, {replace: true});
+        }
     }
 
-    const handleOpen = (addingData) => {
+    const handleOpen = (addingData, ifNavigate) => {
         setAddCompanyInfo(addingData);
         setVerifyDialogIsOpen(true);
+        setToNavigate(ifNavigate);
     }
 
     const addCompanyForm = (data, companyName="") => {
@@ -86,12 +90,16 @@ const AddCompany = () => {
         axiosPrivate.post("/add-company/", data)
             .then((response) => {
                 if (response.status === 201) {
-                    handleOpen(`Spółka ${response.data} została pomyślnie dodana`);
+                    handleOpen(`Spółka ${response.data} została pomyślnie dodana`, true);
                 }
             })
             .catch((error) => {
                 console.log(error)
-                handleOpen(`Wystąpił błąd.. spółka nie została dodana. Spróbuj ponownie później.`);
+
+                // alert(`Wystąpił błąd. Spółka nie została dodana. Spróbuj ponownie później.`)
+
+                handleOpen(`Wystąpił błąd. Spółka nie została dodana. Spróbuj ponownie później.`, false);
+
             })
     }
 
@@ -116,12 +124,12 @@ const AddCompany = () => {
                 </Box>
             </Card><br/>
             {companyFound ?
-            <Card style={{ height: '210vh' }}><br/>
+            <Card><br/>
                 <Box sx={{ mx: "auto" }}>
                     {companyDataForm}
                 </Box>
             </Card> :
-            <Card style={{ height: '30vh' }}>
+            <Card style={{ height: '15rem' }}>
                 <Box sx={{ mx: "auto", width: 500 }}>
                     <Box style={{display: hideKrsInput, justifyContent:'center', alignItems:'center', height: '300vh'}}>
                         <KrsUserInput addCompanyData={addCompanyForm}/>
