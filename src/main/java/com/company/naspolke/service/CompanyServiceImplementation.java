@@ -101,7 +101,7 @@ public class CompanyServiceImplementation implements CompanyService {
 
     @Override
     public Company getCompanyById(UUID uuid) {
-       Optional<Company> company = companyRepository.findById(uuid);
+       Optional<Company> company = Optional.ofNullable(companyRepository.findByCompanyId(uuid));
         System.out.println(company);
         return company.orElse(null);
     }

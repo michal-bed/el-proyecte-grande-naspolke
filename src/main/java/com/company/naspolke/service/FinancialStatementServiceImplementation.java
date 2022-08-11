@@ -30,7 +30,7 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
 
     @Override
     public FinancialStatementProtocol saveFinancialStatement(FinancialStatementProtocol financialStatementsProtocol, UUID companyId){
-        Optional<Company> companyOptional = companyRepository.findById(companyId);
+        Optional<Company> companyOptional = Optional.ofNullable(companyRepository.findByCompanyId(companyId));
         if (companyOptional.isPresent()) {
             Company company = companyOptional.get();
             company.addFinancialStatement(financialStatementsProtocol);

@@ -13,15 +13,10 @@ export default function FinancialStatement() {
     const [company, setCompany] = useState(new Company())
     let {companyId} = useParams();
     useEffect(() => {
-        // getCompanyById(companyId)
-        //     .then(res => {
-        //         setCompany(res.data)})
     if (!!!company.krsNumber) {
         getCompanyFromDb(companyId, setCompany)
-        console.log()
     }
     }, [company])
-console.log(company)
 
     return <div>
         {company.krsNumber!==null && <FinancialStatementForm company={company} companyIdMac={companyId}/>}
