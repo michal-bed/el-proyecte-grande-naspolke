@@ -1,7 +1,19 @@
 import {Link, useParams} from "react-router-dom";
 import {getCompanyById} from "../../handlers/CompanyDataHandler";
-import {CardHeader, IconButton, Table, TableBody, TableCell, TableContainer, TableRow, Grid} from "@mui/material";
-import {Card, Typography, Button, Paper,} from "@material-ui/core";
+import {
+    CardHeader,
+    createTheme,
+    Grid,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    TextField,
+    ThemeProvider
+} from "@mui/material";
+import {Button, Card, Paper, Typography,} from "@material-ui/core";
 
 import Input from "@material-ui/core/Input";
 // Icons
@@ -12,6 +24,10 @@ import {useEffect, useState} from "react";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import EventsCalendar from "../../../calendar/EventsCalendar";
 import Box from "@mui/material/Box";
+import validateAddress from "../../../addCompany/companyForm/formComponents/baseInfo/addressCard/ValidationAddress";
+import validateBaseInfo from "../../../addCompany/companyForm/formComponents/baseInfo/ValidateBaseInfo";
+
+let dontChangePrevious = false;
 function CompanyInfo() {
 
     const [company, setCompany] = useState(null);
@@ -57,6 +73,16 @@ function CompanyInfo() {
         }
     }, [company])
 
+    const setValidationInputName = (row) =>
+    {
+        if (row?.id !== "companyName" && row != null) {
+            const result = row.id + "Input";
+            console.log(result);
+            return result;
+        }
+        console.log(row?.id)
+        return row?.id;
+    }
 
     const titleCardStyle = {
         marginLeft: "10%",
@@ -76,8 +102,8 @@ function CompanyInfo() {
 
     const memberCardStyle = {
         minWidth: "460px",
-        height: "285px",
-        minHeight: "285px",
+        height: "376px",
+        minHeight: "300px",
         marginLeft: "3%",
         marginRight: "3%",
         textAlign: "center"
@@ -110,27 +136,106 @@ function CompanyInfo() {
 
     const createData = (name, ...rest) => ({
         id: name,
-        [name]: company[name],
+        [name]: name === "boardMembersTerm" || name === "boardOfDirectorsTerm"
+            ? parseFloat(company[name]) : company[name],
         ...rest,
         isEditMode: false
     });
 
+    function getErrorInfo(name, validationInputName, row) {
+        let error = false;
+        let errorMsg = null;
+        if (name === "streetName" || name === "streetNumber" || name === "localNumber" ||
+            name === "city" || name === "zipCode" || name === "postOffice") {
+            error = validateAddress({[validationInputName]: row != null ? row[name] : null})
+                .hasOwnProperty(validationInputName)
+            errorMsg = validateAddress({[validationInputName]: row != null ? row[name] : null})[validationInputName]
+        }
+        else {
+            error = validateBaseInfo({[validationInputName]: row != null ? row[name] : null})
+                .hasOwnProperty(validationInputName)
+            errorMsg = validateBaseInfo({[validationInputName]: row != null ? row[name] : null})[validationInputName]
+        }
+        return {error, errorMsg};
+    }
+
     const customTableCell = ({row, name, onChange}) => {
+        const validationInputName = setValidationInputName(row);
+
+        // const errorInfo = getErrorInfo(name, validationInputName, row);
+
+        const theme = createTheme({
+            palette: {
+                text: {
+                    disabled: getErrorInfo(name, validationInputName, row).error ? '#d32f2f' : 'black'
+                },
+                border: {
+                    bottom: 'none'
+                }
+            },
+        });
         // const classes = useStyles();
-        const {isEditMode} = row;
+        if (row != null)
+            var {isEditMode} = row;
         return (
             <TableCell align="left"
                 // className={classes.tableCell}
             >
                 {isEditMode ? (
-                    <Input
-                        value={row[name]}
-                        name={name}
-                        onChange={e => onChange(e, row)}
-                        // className={classes.input}
-                    />
+                    // <Input
+                    //     value={row[name]}
+                    //     name={name}
+                    //     onChange={e => onChange(e, row)}
+                    //     // className={classes.input}
+                    // />
+                    <ThemeProvider theme={theme}>
+                        <TextField
+                            variant="standard"
+                            InputProps={{ inputProps: { style: { wordWrap: "break-word", color: getErrorInfo(name, validationInputName, row).error ? '#d32f2f' : 'black' }}}}
+                            name={name}
+                            value={row != null ? row[name] : ""}
+                            defaultValue={row != null ? row[name] : ""}
+                            onChange={e => onChange(e, row)}
+                            error = {getErrorInfo(name, validationInputName, row).error}
+                            helperText={getErrorInfo(name, validationInputName, row).errorMsg}
+                            disabled={false}
+                            multiline={true}
+                        />
+                   </ThemeProvider>
                 ) : (
-                    row[name]
+                    getErrorInfo(name, validationInputName, row).error ?
+                        (<ThemeProvider theme={theme}>
+                            <TextField
+                                variant="standard"
+                                disableUnderline={true}
+                                name={name}
+                                value={row != null ? row[name] : ""}
+                                defaultValue={row != null ? row[name] : ""}
+                                disabled={true}
+                                multiline={true}
+                                onChange={e => onChange(e, row)}
+                                error = {getErrorInfo(name, validationInputName, row).error}
+                                helperText={getErrorInfo(name, validationInputName, row).errorMsg}
+                                InputProps={{ inputProps: { style: { wordWrap: "break-word", color: getErrorInfo(name, validationInputName, row).error ? '#d32f2f' : 'black', border: 'none'}}}}
+                            />
+                        </ThemeProvider>)
+                    :
+                    (<ThemeProvider theme={theme}>
+                        <TextField
+                            variant="outlined"
+                            sx={{ "& .MuiOutlinedInput-notchedOutline": { border: "none" } }}
+                            disableUnderline={true}
+                            name={name}
+                            value={row != null ? row[name] : ""}
+                            defaultValue={row != null ? row[name] : ""}
+                            multiline={true}
+                            disabled={true}
+                            onChange={e => onChange(e, row)}
+                            error = {getErrorInfo(name, validationInputName, row).error}
+                            helperText={getErrorInfo(name, validationInputName, row).errorMsg}
+                            InputProps={{ inputProps: { style: { wordWrap: "break-word", color: getErrorInfo(name, validationInputName, row).error ? '#d32f2f' : 'black', border: 'none'}}}}
+                        />
+                    </ThemeProvider>)
                 )}
             </TableCell>
         );
@@ -139,7 +244,22 @@ function CompanyInfo() {
     const [previous, setPrevious] = useState({});
     const onDoneEditMode = id => {
         onToggleEditMode(id);
-        setPrevious(state => ({...state, [id]: rows.find(row => row.id === id)}));
+        setPrevious(state => ({...state, [id]:
+                ((id === "boardOfDirectorsTerm" || id === "boardMembersTerm" ||
+                        id === "shareValue" || id === "shareCapital")
+                    && rows.find(row => row.id === id)[id].toString().replace(/\s/g, '').length !== 0)
+                    ? {...(rows.find(row => row.id === id)), [id] : parseInt(rows.find(row => row.id === id)[id])}
+                    : (id === "boardOfDirectorsTerm" || id === "boardMembersTerm" ||
+                        id === "shareValue" || id === "shareCapital") &&
+                        getErrorInfo(id, setValidationInputName(id), rows.find(row => row.id === id)).error
+                        ?
+                        {...state[id]}
+                        :
+                        getErrorInfo(id, setValidationInputName(id), rows.find(row => row.id === id)).error
+                            ? {...state[id]}
+                            : {...(rows.find(row => row.id === id))}
+
+                        }));
         if (id === "streetName" || id === "streetNumber" || id === "localNumber"
             || id === "city" || id === "zipCode" || id === "postOffice") {
             axiosPrivate.patch("/update-company-address",
@@ -156,50 +276,176 @@ function CompanyInfo() {
                 .then(() => {
                     console.log("updated company name")
                 }).catch(console.log);
-        } else if (id === "shareCapital") {
+        } else if (id === "shareCapital" &&
+            !getErrorInfo(id, "shareCapitalInput",
+                rows.find(row => row.id === id)).error) {
+            const value = parseInt(rows.find(row => row.id === id)[id])
+            setRows(prev => prev.map(
+                row =>
+                {
+                    if (row.id === id)
+                    {
+                        return {...row, [id]: value};
+                    }
+                    return row;
+                }
+
+            ))
             axiosPrivate.get(`/companies/search/updateShareCapital?shareCapital=`
-                + `${rows.find(row => row.id === id)[id]}&companyId=${companyId}`)
+                + `${value}&companyId=${companyId}`)
                 .then(() => {
                     console.log("updated share capital")
                 }).catch(console.log);
-        } else if (id === "boardOfDirectorsTerm") {
+        } else if (id === "shareCapital" &&
+            getErrorInfo(id, "shareCapitalInput",
+                rows.find(row => row.id === id)).error) {
+            console.log("Nie zapisano. Błędny format")
+            onRevert(id)
+        } else if (id === "boardOfDirectorsTerm"
+            && !getErrorInfo(id, "boardOfDirectorsTermInput",
+                rows.find(row => row.id === id)).error) {
+            const value = parseInt(rows.find(row => row.id === id)[id])
+            setRows(prev => prev.map(
+                row =>
+                {
+                    if (row.id === id)
+                    {
+                        return {...row, [id]: value};
+                    }
+                    return row;
+                }
+
+            ))
             axiosPrivate.get(`/companies/search/updateBoardOfDirectorsTerm?boardOfDirectorsTerm=`
-                + `${rows.find(row => row.id === id)[id]}&companyId=${companyId}`)
+                + `${value}&companyId=${companyId}`)
                 .then(() => {
                     console.log("updated board of directors term")
                 }).catch(console.log);
-        } else if (id === "boardMembersTerm") {
+        }
+        else if (id === "boardOfDirectorsTerm" &&
+            getErrorInfo(id, "boardOfDirectorsTermInput",
+                rows.find(row => row.id === id)).error) {
+            console.log("Nie zapisano. Błędny format")
+            onRevert(id)
+        }
+        else if (id === "boardMembersTerm"
+            && !getErrorInfo(id, "boardMembersTermInput",
+                rows.find(row => row.id === id)).error) {
+            const value = parseInt(rows.find(row => row.id === id)[id])
+            setRows(prev => prev.map(
+                row =>
+                {
+                    if (row.id === id)
+                    {
+                        return {...row, [id]: value};
+                    }
+                    return row;
+                }
+
+            ))
             axiosPrivate.get(`/companies/search/updateBoardMembersTerm?boardMembersTerm=`
-                + `${rows.find(row => row.id === id)[id]}&companyId=${companyId}`)
+                + `${value}&companyId=${companyId}`)
                 .then(() => {
                     console.log("updated board members term")
                 }).catch(console.log);
-        } else if (id === "shareValue") {
+        }
+        else if (id === "boardMembersTerm" &&
+            getErrorInfo(id, "boardMembersTermInput",
+                rows.find(row => row.id === id)).error) {
+            console.log("Nie zapisano. Błędny format")
+            onRevert(id);
+        } else if (id === "shareValue" &&
+            !getErrorInfo(id, "shareValueInput",
+                rows.find(row => row.id === id)).error) {
+            const value = parseInt(rows.find(row => row.id === id)[id])
+            setRows(prev => prev.map(
+                row =>
+                {
+                    if (row.id === id)
+                    {
+                        return {...row, [id]: value};
+                    }
+                    return row;
+                }
+
+            ))
             axiosPrivate.get(`/companies/search/updateShareValue?shareValue=`
-                + `${rows.find(row => row.id === id)[id]}&companyId=${companyId}`)
+                + `${value}&companyId=${companyId}`)
                 .then(() => {
                     console.log("updated share value")
                 }).catch(console.log);
         }
+        else if (id === "shareValue" &&
+            getErrorInfo(id, "shareValueInput",
+                rows.find(row => row.id === id)).error) {
+            console.log("Nie zapisano. Błędny format")
+            onRevert(id)
+        }
         company[id] = rows.find(row => row.id === id)[id];
     }
     const onToggleEditMode = id => {
-        setRows(rows => {
-            return rows.map(row => {
-                if (row.id === id) {
-                    return {...row, isEditMode: !row.isEditMode};
-                }
-                return row;
+        if (rows != null) {
+            setRows(rows => {
+                return rows.map(row => {
+                    if (row?.id === id) {
+                        return {...row, isEditMode: !row.isEditMode};
+                    }
+                    return row;
+                });
             });
-        });
+        }
     };
 
-    const onChange = (e, row) => {
-        // console.log("onChange")
-        if (!previous[row.id]) {
-            setPrevious(state => ({...state, [row.id]: row}));
+    const onToggleEditMode2 = (id, newRows) => {
+            if (newRows != null) {
+                setRows(newRows.map(row => {
+                    if (row?.id === id) {
+                        console.log("Updated: " + JSON.stringify(row))
+                        console.log("Next: " + JSON.stringify(
+                            {...row, isEditMode: !row.isEditMode}))
+                        return {...row, isEditMode: !row.isEditMode};
+                    }
+                    return row;
+                }));
+            }
         }
-        const value = e.target.value;
+
+        // const changeInputValue = (id) =>
+        // {
+        //     // const input = document.querySelector(`textarea[name="${id}"]`)
+        //     // const newValue = previous[id][id];
+        //     // input.value = newValue
+        //     // setRows(rows => {
+        //     //     rows.map(row => {
+        //     //             if (row.id === id) {
+        //     //                 return {...row, [id]: newValue};
+        //     //             }
+        //     //             return row;
+        //     //         })})
+        //     dontChangePrevious = true;
+        // }
+    const onChange = (e, row) => {
+        console.log("onChange")
+        // !dontChangePrevious
+        if ( !previous[row.id]) {
+            setPrevious(state => ({...state,
+                [row.id]:
+                    (((row.id === "boardOfDirectorsTerm" || row.id === "boardMembersTerm" ||
+                      row.id === "shareValue" || row.id === "shareCapital")
+                        && row[row.id].toString().replace(/\s/g, '').length !== 0)
+                            ? {...row, [row.id] : parseInt(row[row.id])}
+                            : (id === "boardOfDirectorsTerm" || id === "boardMembersTerm" ||
+                                id === "shareValue" || id === "shareCapital") &&
+                            getErrorInfo(id, setValidationInputName(id), row).error
+                                ? {...state[id]}
+                                :
+                                getErrorInfo(id, setValidationInputName(id), row).error
+                                    ? {...state[id]}
+                                    : {...row}
+                    )
+            }));
+        }
+        let value = e.target.value;
         const name = e.target.name;
         const {id} = row;
         const newRows = rows.map(row => {
@@ -208,26 +454,61 @@ function CompanyInfo() {
             }
             return row;
         });
-        setRows(newRows);
+        if (!dontChangePrevious)
+        {
+            console.log(dontChangePrevious);
+            console.log("Set last state");
+            setRows(newRows);
+        }
+        else
+        {
+            // console.log("Set previous state")
+            // const previousRows = rows.map(row => {
+            //
+            //     return {...row, [name]: previous[id][name]};
+            //
+            // });
+            // setPrevious(previousRows)
+            // changeInputValue(id)
+            dontChangePrevious = false;
+        }
     };
 
     const onRevert = id => {
+        console.log("ONREVERT")
         const newRows = rows.map(row => {
-            if (row.id === id) {
-                return previous[id] ? previous[id] : row;
-            }
-            return row;
+            // while (previous[id] == null) {
+                if (row.id === id && previous[id] != null) {
+                    console.log("Previous state of " + id + ": " + previous[id][id])
+                    return previous[id] ? {...previous[id]} : {...row};
+                }
+                else if (previous[id] != null)
+                {
+                    return row;
+                }
+                else
+                    console.log("Couldn't find " + id)
+            // }
         });
-        setRows(newRows);
+        console.log("Set previous state")
+        // const previousRows = rows.map(row => {
+        //
+        //     return {...row, [id]: previous[id][id]};
+        //
+        // });
+        // setRows(previousRows)
+        // setRows(newRows);
+        // dontChangePrevious = true;
         setPrevious(state => {
             delete state[id];
             return state;
         });
-        onToggleEditMode(id);
+        onToggleEditMode2(id, newRows);
+        // changeInputValue(id);
     };
 
     const generateIcons = (row) => (
-        row.isEditMode ? (
+        row?.isEditMode ? (
             <>
                 <IconButton
                     aria-label="done"
@@ -283,10 +564,10 @@ function CompanyInfo() {
                                             Nazwa spółki:
                                         </TableCell>
                                         {customTableCell({
-                                            row: rows.find(row => row.id === "companyName"),
+                                            row: rows?.find(row => row?.id === "companyName"),
                                             name: "companyName", onChange
                                         })}
-                                        {generateIcons(rows.find(row => row.id === "companyName"))}
+                                        {generateIcons(rows?.find(row => row?.id === "companyName"))}
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>
@@ -319,40 +600,40 @@ function CompanyInfo() {
                                         Ulica:
                                     </TableCell>
                                     {customTableCell({
-                                        row: rows.find(row => row.id === "streetName"),
+                                        row: rows?.find(row => row?.id === "streetName"),
                                         name: "streetName", onChange
                                     })}
-                                    {generateIcons(rows.find(row => row.id === "streetName"))}
+                                    {generateIcons(rows?.find(row => row?.id === "streetName"))}
                                 </TableRow>
                                     <TableRow>
                                         <TableCell>
                                             Numer budynku:
                                         </TableCell>
                                         {customTableCell({
-                                            row: rows.find(row => row.id === "streetNumber"),
+                                            row: rows?.find(row => row?.id === "streetNumber"),
                                             name: "streetNumber", onChange
                                         })}
-                                        {generateIcons(rows.find(row => row.id === "streetNumber"))}
+                                        {generateIcons(rows?.find(row => row?.id === "streetNumber"))}
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>
                                             Numer lokalu:
                                         </TableCell>
                                         {customTableCell({
-                                            row: rows.find(row => row.id === "localNumber"),
+                                            row: rows?.find(row => row?.id === "localNumber"),
                                             name: "localNumber", onChange
                                         })}
-                                        {generateIcons(rows.find(row => row.id === "localNumber"))}
+                                        {generateIcons(rows?.find(row => row?.id === "localNumber"))}
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>
                                             Miejscowość:
                                         </TableCell>
                                         {customTableCell({
-                                            row: rows.find(row => row.id === "city"),
+                                            row: rows?.find(row => row?.id === "city"),
                                             name: "city", onChange
                                         })}
-                                        {generateIcons(rows.find(row => row.id === "city"))}
+                                        {generateIcons(rows?.find(row => row?.id === "city"))}
                                     </TableRow>
                                     <TableRow>
                                         <TableCell>
@@ -360,10 +641,10 @@ function CompanyInfo() {
                                         </TableCell>
 
                                         {customTableCell({
-                                            row: rows.find(row => row.id === "zipCode"),
+                                            row: rows?.find(row => row?.id === "zipCode"),
                                             name: "zipCode", onChange
                                         })}
-                                        {generateIcons(rows.find(row => row.id === "zipCode"))}
+                                        {generateIcons(rows?.find(row => row?.id === "zipCode"))}
                                     </TableRow>
 
                                     <TableRow>
@@ -372,10 +653,10 @@ function CompanyInfo() {
                                         </TableCell>
 
                                         {customTableCell({
-                                            row: rows.find(row => row.id === "postOffice"),
+                                            row: rows?.find(row => row?.id === "postOffice"),
                                             name: "postOffice", onChange
                                         })}
-                                        {generateIcons(rows.find(row => row.id === "postOffice"))}
+                                        {generateIcons(rows?.find(row => row?.id === "postOffice"))}
                                     </TableRow>
                                 </Card>
                 {/*<Box>*/}
@@ -404,46 +685,46 @@ function CompanyInfo() {
                                         </TableCell>
 
                                         {customTableCell({
-                                            row: rows.find(row => row.id === "shareCapital"),
+                                            row: rows?.find(row => row?.id === "shareCapital"),
                                             name: "shareCapital",
                                             onChange
                                         })}
-                                        {generateIcons(rows.find(row => row.id === "shareCapital"))}
+                                        {generateIcons(rows?.find(row => row?.id === "shareCapital"))}
                                     </TableRow>
-                                    {rows.find(row => row.id === "manySharesAllowed")["manySharesAllowed"] === true ?
+                                    {rows?.find(row => row?.id === "manySharesAllowed")["manySharesAllowed"] === true ?
                                         <TableRow>
                                             <TableCell>
                                                 Wartość udziału (PLN):
                                             </TableCell>
                                             {customTableCell({
-                                                row: rows.find(row => row.id === "shareValue"),
+                                                row: rows?.find(row => row?.id === "shareValue"),
                                                 name: "shareValue", onChange
                                             })}
-                                            {generateIcons(rows.find(row => row.id === "shareValue"))}
+                                            {generateIcons(rows?.find(row => row?.id === "shareValue"))}
                                         </TableRow>
                                         : null
                                     }
-                                    <TableRow>
-                                        <TableCell>
-                                            Kadencja rady nadzorczej (w latach):
-                                        </TableCell>
-
-                                        {customTableCell({
-                                            row: rows.find(row => row.id === "boardOfDirectorsTerm"),
-                                            name: "boardOfDirectorsTerm", onChange
-                                        })}
-                                        {generateIcons(rows.find(row => row.id === "boardOfDirectorsTerm"))}
-                                    </TableRow>
                                     <TableRow>
                                         <TableCell>
                                             Kadencja zarządu (w latach):
                                         </TableCell>
 
                                         {customTableCell({
-                                            row: rows.find(row => row.id === "boardMembersTerm"),
+                                            row: rows?.find(row => row?.id === "boardOfDirectorsTerm"),
+                                            name: "boardOfDirectorsTerm", onChange
+                                        })}
+                                        {generateIcons(rows?.find(row => row?.id === "boardOfDirectorsTerm"))}
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>
+                                            Kadencja rady nadzorczej (w latach):
+                                        </TableCell>
+
+                                        {customTableCell({
+                                            row: rows?.find(row => row?.id === "boardMembersTerm"),
                                             name: "boardMembersTerm", onChange
                                         })}
-                                        {generateIcons(rows.find(row => row.id === "boardMembersTerm"))}
+                                        {generateIcons(rows?.find(row => row?.id === "boardMembersTerm"))}
                                     </TableRow>
                                 </Card>
                                 <Card style={memberCardStyle} sx={{gridArea: 'members'}}>
