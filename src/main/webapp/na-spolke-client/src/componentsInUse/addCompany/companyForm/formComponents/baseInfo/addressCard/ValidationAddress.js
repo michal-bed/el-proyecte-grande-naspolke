@@ -4,7 +4,7 @@ export default function validateAddress(values){
     //street name validation
     if(!values.streetNameInput){
         errors.streetNameInput = "Wpisz ulicę"
-    } else if (/[^a-zA-ZżźćńłśąęóŻŹĆŃŁŚĄĘÓ.\s-]/.test(values.streetNameInput)){
+    } else if (/[^a-zA-Z0-9żźćńłśąęóŻŹĆŃŁŚĄĘÓ.\s-]/.test(values.streetNameInput)){
         errors.streetNameInput = "Nazwa ulicy posiada niedozwolone znaki"
     } else if (values.streetNameInput.length > 150){
         errors.streetNameInput = "Nazwa powinna składać się z maksymalnie 150 znaków"
@@ -20,7 +20,7 @@ export default function validateAddress(values){
     }
 
     //local number validation
-    if (!values.localNumberInpu){
+    if (!values.localNumberInput){
     } else if (/[^0-9a-zA-Z]/.test(values.localNumberInput)){
         errors.localNumberInput = "Numer lokalu posiada niedozwolone znaki"
     } else if (values.localNumberInput.length > 9){

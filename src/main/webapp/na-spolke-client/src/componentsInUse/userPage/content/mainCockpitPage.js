@@ -54,21 +54,12 @@ function MainCockpitPage () {
         return items;
     }
 
-    // function LoadCards () {
-    //     if (isLoading) {
-    //         return <Typography variant={"h4"}>Ładowanie...</Typography>;
-    //     } else {
-    //         return (
-    //             <View/>
-    //         );
-    //     }
-    // }
         return (
             <>
                 <Box>
-                    <Box>
-                        <Typography variant={'h1'} align="center">Wybór spółki</Typography>
-                    </Box>
+                    <Card style={{ height: '10vh' }}>
+                        <Typography variant={'h3'} align="center">Wybór spółki</Typography>
+                    </Card>
                     <Box sx={{p: 3}}>
                         <Grid container spacing={5} justifyContent="center">
                             <PlaceCompanyCards />
