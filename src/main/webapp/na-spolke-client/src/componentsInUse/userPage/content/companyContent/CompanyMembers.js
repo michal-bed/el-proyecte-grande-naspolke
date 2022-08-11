@@ -95,7 +95,8 @@ function CompanyMembers () {
         const items = [];
         const test = [];
         Object.keys(row).forEach(key => {
-            if (key !== "boardMemberId" && key !== "id" && key !== "boardOfDirectorId") {
+            if (key !== "boardMemberId" && key !== "id" && key !== "boardOfDirectorId" &&
+                key !== "representativeGender" && key !== "gender") {
                 test.push(key);
                 items.push(
                     <TableCell>
@@ -168,7 +169,8 @@ function CompanyMembers () {
                         <Box style={boxStyle}>
                             <CreateCard
                                 selectedData="individualPartners"
-                                headers={["Imię", "Drugie imię", "Nazwisko", "Drugie nazwisko", "Adres", "Łączna wartość akcji", "Ilość akcji"]}
+                                headers={["Imię", "Drugie imię", "Nazwisko", "Drugie nazwisko",
+                                    "Adres", "Łączna wartość akcji", "Ilość akcji"]}
                             />
                         </Box>
                     </Typography>
@@ -187,36 +189,14 @@ function CompanyMembers () {
                         <Box style={boxStyle}>
                             <CreateCard
                                 selectedData="partnerCompanies"
-                                headers={["Pełna nazwa", "Łączna wartość akcji", "Ilość akcji", "Adres"]}
+                                headers={["Pełna nazwa", "Łączna wartość akcji", "Ilość akcji",
+                                    "Adres", "Imię reprezentanta", "Nazwisko reprezentanta"]}
                             />
                         </Box>
                     </Typography>
                 </AccordionDetails>
             </Accordion>
         </div>
-
-        // <Box style={boxStyle}>
-        //     <CreateCard
-        //         name="Zarząd"
-        //         selectedData="boardMembers"
-        //         headers={["Imię", "Drugie imię", "Nazwisko", "Drugie nazwisko", "Rola"]}
-        //     />
-        //     <CreateCard
-        //         name="Rada nadzorcza"
-        //         selectedData="boardOfDirectors"
-        //         headers={["Imię", "Drugie Imię", "Nazwisko", "Drugie Nazwisko"]}
-        //     />
-        //     <CreateCard
-        //         name="Wspólnicy (Osoby)"
-        //         selectedData="individualPartners"
-        //         headers={["Imię", "Drugie imię", "Nazwisko", "Drugie nazwisko", "Adres", "Łączna wartość akcji", "Ilość akcji"]}
-        //     />
-        //     <CreateCard
-        //         name="Wspólnicy (Spółki)"
-        //         selectedData="partnerCompanies"
-        //         headers={["Pełna nazwa", "Łączna wartość akcji", "Ilość akcji", "Adres"]}
-        //     />
-        // </Box>
     )
 }
 
