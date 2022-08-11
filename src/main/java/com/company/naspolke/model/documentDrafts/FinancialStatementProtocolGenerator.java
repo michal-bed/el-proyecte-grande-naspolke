@@ -186,7 +186,7 @@ public class FinancialStatementProtocolGenerator {
 
     private List<Paragraph> getApprovalResolutionTitle(FinancialStatementProtocol financialStatementInformation, String bodyType, Company company) {
         List<Paragraph> paragraphList = new ArrayList<>(List.of());
-        Set<ResolutionApprovalBodyMember> boardMemberList= financialStatementInformation.getBoardMembersApproval();
+        Set<ResolutionApprovalBodyMember> boardMemberList = financialStatementInformation.getBoardMembersApproval();
         List<ResolutionApprovalBodyMember> boardMembers;
         if(Objects.equals(bodyType, "board")) {
             boardMembers = boardMemberList.stream().toList();
@@ -261,13 +261,16 @@ public class FinancialStatementProtocolGenerator {
     }
 
     private boolean isPartnerExcluded(FinancialStatementProtocol financialStatementInformation,String name, String lastname) {
-        boolean companyPartnerPresent = financialStatementInformation.getListPresentsCompanyPartners().stream()
-                .anyMatch(person -> person.getRepresentativeFirstname().equals(name) && person.getRepresentativeLastname().equals(lastname));
-        if(!companyPartnerPresent){
-            return financialStatementInformation.getListPresentIndividualPartners().stream()
-                    .anyMatch(naturalPerson -> naturalPerson.getFirstName().equals(name) && naturalPerson.getLastNameI().equals(lastname));
+        if(financialStatementInformation.getListPresentsCompanyPartners()!=null) {
+            boolean companyPartnerPresent = financialStatementInformation.getListPresentsCompanyPartners().stream()
+                    .anyMatch(person -> person.getRepresentativeFirstname().equals(name) && person.getRepresentativeLastname().equals(lastname));
+            if (!companyPartnerPresent && financialStatementInformation.getListPresentIndividualPartners()!=null) {
+                return financialStatementInformation.getListPresentIndividualPartners().stream()
+                        .anyMatch(naturalPerson -> naturalPerson.getFirstName().equals(name) && naturalPerson.getLastNameI().equals(lastname));
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
 
@@ -416,12 +419,12 @@ public class FinancialStatementProtocolGenerator {
     private long countSharesPresent(FinancialStatementProtocol protocol) {
         long companyPartnersSharesCount = 0;
         long individualPartnersSharesCount = 0;
-        if(protocol.getListPresentsCompanyPartners().size()>0) {
+        if(protocol.getListPresentsCompanyPartners()!=null) {
             companyPartnersSharesCount = protocol.getListPresentsCompanyPartners().stream()
                     .map(JuridicalPerson::getSharesCount)
                     .reduce(0, Integer::sum);
         }
-        if(protocol.getListPresentIndividualPartners().size()>0) {
+        if(protocol.getListPresentIndividualPartners()!=null) {
             individualPartnersSharesCount = protocol.getListPresentIndividualPartners().stream()
                     .map(NaturalPerson::getSharesCount)
                     .reduce(0, Integer::sum);
@@ -527,57 +530,61 @@ public class FinancialStatementProtocolGenerator {
             juridicalPartners = company.getPartners().getPartnerCompanies();
         }
         List<Paragraph> personList= new java.util.ArrayList<>(List.of());
-        for (NaturalPerson partner : protocol.getListPresentIndividualPartners()) {
-            counter++;
-            String partnerName = getPartnerFullName(partner);
-            String sharesProperForm = getWordCorrectForm("udział", partner.getSharesCount());
-            String sharesInWords = changeDigitsIntoWords((long) partner.getSharesCount());
-            float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
-            String punctuationMark = checkForPunctuationMark(protocol, counter);
-            String number = counter + ". ";
-            String infoAboutPresentPartner = String.format( " posiadający %d %s (słownie: %s%2$s) i tyle samo głosów o łacznej wartości nominalnej w wysokości %.2f zł%s\n",
-                    partner.getSharesCount(), sharesProperForm, sharesInWords, sharesValue, punctuationMark);
+        if (protocol.getListPresentIndividualPartners()!=null) {
+            for (NaturalPerson partner : protocol.getListPresentIndividualPartners()) {
+                counter++;
+                String partnerName = getPartnerFullName(partner);
+                String sharesProperForm = getWordCorrectForm("udział", partner.getSharesCount());
+                String sharesInWords = changeDigitsIntoWords((long) partner.getSharesCount());
+                float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
+                String punctuationMark = checkForPunctuationMark(protocol, counter);
+                String number = counter + ". ";
+                String infoAboutPresentPartner = String.format(" posiadający %d %s (słownie: %s%2$s) i tyle samo głosów o łacznej wartości nominalnej w wysokości %.2f zł%s\n",
+                        partner.getSharesCount(), sharesProperForm, sharesInWords, sharesValue, punctuationMark);
 
-            Chunk numberChunk = protocolFactory.getRegularChunkOfText(number);
-            Chunk nameOfThePresentPartner = protocolFactory.getBoldChunkOfText(partnerName);
-            Chunk infoAboutPresentPartnerWithoutName = protocolFactory.getRegularChunkOfText(infoAboutPresentPartner);
+                Chunk numberChunk = protocolFactory.getRegularChunkOfText(number);
+                Chunk nameOfThePresentPartner = protocolFactory.getBoldChunkOfText(partnerName);
+                Chunk infoAboutPresentPartnerWithoutName = protocolFactory.getRegularChunkOfText(infoAboutPresentPartner);
 
-            Paragraph paragraph = protocolFactory.getParagraphRegularFromChunks(numberChunk, nameOfThePresentPartner, infoAboutPresentPartnerWithoutName);
+                Paragraph paragraph = protocolFactory.getParagraphRegularFromChunks(numberChunk, nameOfThePresentPartner, infoAboutPresentPartnerWithoutName);
 
-            personList.add(paragraph);
+                personList.add(paragraph);
+            }
         }
-        for (JuridicalPerson partner:
-                protocol.getListPresentsCompanyPartners() == null ?
-                Collections.<JuridicalPerson>emptySet() :
-                        protocol.getListPresentsCompanyPartners()
-        ) {
-            counter++;
-            String companyName = partner.getName();
-            int sharesCount = partner.getSharesCount();
-            String sharesProperForm = getWordCorrectForm("udział", partner.getSharesCount());
-            String sharesCountInWords = changeDigitsIntoWords((long) partner.getSharesCount());
-            float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
-            String representation = setProperRepresentationName(partner).strip();
-            String punctuationMark = checkForPunctuationMark(protocol, counter);
-            String number = counter + ".";
-            String infoAboutPresentPartner = String.format(" posiadająca %d %s (słownie: %s%2$s) i tyle samo głosów o łącznej wartości nominalnej w wysokości %.2f zł, którą reprezentuje %s%s\n",
-                    sharesCount,sharesProperForm, sharesCountInWords,sharesValue, representation, punctuationMark);
 
-            Chunk numberChunk = protocolFactory.getRegularChunkOfText(number);
-            Chunk presentCompanyName = protocolFactory.getBoldChunkOfText(companyName);
-            Chunk infoAboutPresentPartnerWithoutName = protocolFactory.getRegularChunkOfText(infoAboutPresentPartner);
-            Paragraph paragraph = protocolFactory.getParagraphRegularFromChunks(numberChunk, presentCompanyName, infoAboutPresentPartnerWithoutName);
-            personList.add(paragraph);
+        if(protocol.getListPresentsCompanyPartners()!=null) {
+            for (JuridicalPerson partner : protocol.getListPresentsCompanyPartners()) {
+                counter++;
+                String companyName = partner.getName();
+                int sharesCount = partner.getSharesCount();
+                String sharesProperForm = getWordCorrectForm("udział", partner.getSharesCount());
+                String sharesCountInWords = changeDigitsIntoWords((long) partner.getSharesCount());
+                float sharesValue = Float.parseFloat(partner.getSharesValue().toString());
+                String representation = setProperRepresentationName(partner).strip();
+                String punctuationMark = checkForPunctuationMark(protocol, counter);
+                String number = counter + ".";
+                String infoAboutPresentPartner = String.format(" posiadająca %d %s (słownie: %s%2$s) i tyle samo głosów o łącznej wartości nominalnej w wysokości %.2f zł, którą reprezentuje %s%s\n",
+                        sharesCount, sharesProperForm, sharesCountInWords, sharesValue, representation, punctuationMark);
+
+                Chunk numberChunk = protocolFactory.getRegularChunkOfText(number);
+                Chunk presentCompanyName = protocolFactory.getBoldChunkOfText(companyName);
+                Chunk infoAboutPresentPartnerWithoutName = protocolFactory.getRegularChunkOfText(infoAboutPresentPartner);
+                Paragraph paragraph = protocolFactory.getParagraphRegularFromChunks(numberChunk, presentCompanyName, infoAboutPresentPartnerWithoutName);
+                personList.add(paragraph);
+            }
         }
         return personList;
     }
     private String checkForPunctuationMark(FinancialStatementProtocol protocol, int counter) {
-        int indListLength = protocol.getListPresentIndividualPartners().size();
-        AtomicInteger companyListLength = new AtomicInteger(0);
-        Optional.ofNullable(protocol.getListPresentsCompanyPartners())
-                .ifPresentOrElse(rep -> companyListLength.set(rep.size()),
-                                () -> companyListLength.set(0));
-        boolean isLastElementInList = counter == indListLength && companyListLength.get() == 0 || counter == indListLength + companyListLength.get();
+        int indListLength = 0;
+        if (protocol.getListPresentIndividualPartners() != null) {
+            indListLength = protocol.getListPresentIndividualPartners().size();
+        }
+        int companyListLength = 0;
+        if (protocol.getListPresentsCompanyPartners()!=null) {
+            companyListLength = protocol.getListPresentsCompanyPartners().size();
+        }
+        boolean isLastElementInList = counter == indListLength && companyListLength == 0 || counter == indListLength + companyListLength;
         return isLastElementInList ? ".": ";";
     }
 

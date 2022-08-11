@@ -14,13 +14,14 @@ export function MeetingOrganElection({values, company, setFieldValue, headerText
             {headerText}:
         </Typography>
         <div>
-            <FormControl sx={{m: 1, minWidth: 120}}>
+            <FormControl sx={{ m: 1,fontSize: 20}} >
                 <InputLabel id="demo-simple-select-helper-label">{helperText}</InputLabel>
                 <Select
                     name={type}
                     value={values[type]}
                     label={headerText}
                     onChange={handleChange}
+
                 >
                     {company.partners.individualPartners.length > 0 && company.partners.individualPartners.map(partner => (
                         <MenuItem key={`select${partner.id}`}
