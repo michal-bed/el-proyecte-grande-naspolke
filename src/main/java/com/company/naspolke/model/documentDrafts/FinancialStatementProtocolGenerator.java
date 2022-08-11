@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import static com.company.naspolke.model.documentDrafts.ChangeDigitsIntoWords.changeDigitsIntoWords;
 
@@ -545,7 +546,11 @@ public class FinancialStatementProtocolGenerator {
 
             personList.add(paragraph);
         }
-        for (JuridicalPerson partner:protocol.getListPresentsCompanyPartners()) {
+        for (JuridicalPerson partner:
+                protocol.getListPresentsCompanyPartners() == null ?
+                Collections.<JuridicalPerson>emptySet() :
+                        protocol.getListPresentsCompanyPartners()
+        ) {
             counter++;
             String companyName = partner.getName();
             int sharesCount = partner.getSharesCount();
@@ -568,8 +573,11 @@ public class FinancialStatementProtocolGenerator {
     }
     private String checkForPunctuationMark(FinancialStatementProtocol protocol, int counter) {
         int indListLength = protocol.getListPresentIndividualPartners().size();
-        int companyListLength = protocol.getListPresentsCompanyPartners().size();
-        boolean isLastElementInList = counter == indListLength && companyListLength == 0 || counter == indListLength + companyListLength;
+        AtomicInteger companyListLength = new AtomicInteger(0);
+        Optional.ofNullable(protocol.getListPresentsCompanyPartners())
+                .ifPresentOrElse(rep -> companyListLength.set(rep.size()),
+                                () -> companyListLength.set(0));
+        boolean isLastElementInList = counter == indListLength && companyListLength.get() == 0 || counter == indListLength + companyListLength.get();
         return isLastElementInList ? ".": ";";
     }
 

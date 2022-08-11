@@ -79,7 +79,7 @@ const AddCompany = () => {
             })
             .catch((error) => {
                 console.log(error)
-                alert(`Wystąpił błąd.. spółka nie została dodana. Spróbuj ponownie później.`)
+                alert(`Wystąpił błąd. Spółka nie została dodana. Spróbuj ponownie później.`)
             })
     }
 

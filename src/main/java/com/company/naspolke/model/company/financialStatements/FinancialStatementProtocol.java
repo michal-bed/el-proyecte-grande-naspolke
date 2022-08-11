@@ -7,11 +7,13 @@ import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.financialStatements.resolutions.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Set;
 
 @Data
@@ -83,5 +85,14 @@ public class FinancialStatementProtocol {
         this.boardMembersApproval = boardMembersApproval;
         this.directorsMembersApproval = directorsMembersApproval;
         this.company = company;
+    }
+
+
+    public Set<JuridicalPerson> getListPresentsCompanyPartners()
+    {
+        return listPresentsCompanyPartners == null ?
+                Collections.emptySet() :
+                listPresentsCompanyPartners;
+
     }
 }
