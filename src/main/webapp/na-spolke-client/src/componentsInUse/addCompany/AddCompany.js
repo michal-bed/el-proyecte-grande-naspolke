@@ -31,6 +31,7 @@ const AddCompany = () => {
 
     const handleClose = () => {
         setVerifyDialogIsOpen(false);
+        navigate(from, { replace:true });
     }
 
     const handleOpen = (addingData) => {
@@ -86,9 +87,6 @@ const AddCompany = () => {
             .then((response) => {
                 if (response.status === 201) {
                     handleOpen(`Spółka ${response.data} została pomyślnie dodana`);
-                    setTimeout(()=> {
-                        navigate(from, { replace:true })
-                    }, 1000)
                 }
             })
             .catch((error) => {
