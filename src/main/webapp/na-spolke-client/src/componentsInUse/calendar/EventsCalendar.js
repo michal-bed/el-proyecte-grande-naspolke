@@ -86,7 +86,6 @@ const monthFormatter = (month) => {
 }
 
 function EventsCalendar() {
-
     const successfullyEventSaveMessage = {
         title: "Dodano wydarzenie",
         text: "Twoje wydarzenie zostało pomyślnie dodane do kalendarza."
@@ -116,6 +115,7 @@ function EventsCalendar() {
     const theme = useTheme();
 
     useEffect(() => {
+        console.log("ok")
         getCompanyEvents();
         handleClose();
         highlightEventOnCalendar();
@@ -125,7 +125,7 @@ function EventsCalendar() {
         setSaveEvents(([]) => []);
         setOpen(false);
     };
-
+// let highlightEventOnCalendar = ()=>{};
     const highlightEventOnCalendar = () => {
         let monthAndYearClassElement = document.getElementsByClassName('MuiPickersCalendarHeader-transitionContainer');
         let monthAndYear = monthAndYearClassElement[0].firstElementChild.innerHTML;
@@ -147,6 +147,7 @@ function EventsCalendar() {
     }
 
     const getCompanyEvents = () => {
+        console.log("companyEvents")
         axiosPrivate.get(`/get-company-events/${companyId}`)
             .then((response) => {
                 if (response.status === 200) {
@@ -194,6 +195,7 @@ function EventsCalendar() {
     };
 
     const loadEventsOnCalendar = () => {
+        console.log(events)
         for (let i = 0; i < events.length; i++) {
             if (formattedDate === events[i].eventDate) {
                 setSaveEvents([...savedEvents, events[i]]);
@@ -202,7 +204,6 @@ function EventsCalendar() {
         }
         console.log(savedEvents);
     }
-
     return (
         <>
             <Accordion onClick={getCompanyEvents}>

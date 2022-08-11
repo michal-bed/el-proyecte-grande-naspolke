@@ -1,6 +1,6 @@
 package com.company.naspolke.helpers.adapters;
 
-import com.company.naspolke.helpers.adapters.mocks.KRSMock;
+import com.company.naspolke.helpers.adapters.mocks.MocksData;
 import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.companyBodies.*;
@@ -11,6 +11,7 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -19,43 +20,55 @@ import java.util.*;
 @Component
 public class MonoStringToCompanyAdapter {
 
-
-    private final String SWLEX = KRSMock.SWLEX;
-    private final String EASYSOLAR = KRSMock.EASYSOLAR;
-
+//TODO usunąć importów z *
+    private final String SWLEX = MocksData.SWLEX;
+    private final String EASYSOLAR = MocksData.EASYSOLAR;
 
     public Company getCompany(String apiResponse) {
+        boolean isValid = checkForProperCompanyLegalForm(apiResponse);
         String data = new String(apiResponse);
-//        String data = SWLEX;
-        String largerSharesInfo = "WIĘKSZĄ LICZBĘ UDZIAŁÓW";
-        Configuration conf = Configuration.defaultConfiguration()
-                .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(data);
-        String nip = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.nip");
-        String regon = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.regon");
-        Long krsNumber = Long.valueOf(JsonPath.read(document, "$.odpis.naglowekA.numerKRS"));
-        String companyName = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
-        BigDecimal shareCapital = getShareCapitalFromApi(document);
-        Partners partners = createCompanyPartners(document);
-        Address address = getCompanyAddressFromApi(document);
-        Set<BoardMember> boardMembers = getBoardMembersFromApi(document, conf);
-        Set<BoardOfDirector> boardOfDirectors = getBoardOfDirectorsFromApi(document, conf);
-        boolean largerAmountOfSharesAllowed = JsonPath.read(document, "$.odpis.dane.dzial1.pozostaleInformacje.informacjaOLiczbieUdzialow").equals(largerSharesInfo);
+        if (isValid) {
+//        String data = SWLEX;
+            String largerSharesInfo = "WIĘKSZĄ LICZBĘ UDZIAŁÓW";
+            Configuration conf = Configuration.defaultConfiguration()
+                    .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
+            String nip = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.nip");
+            String regon = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.regon");
+            String krsNumber = JsonPath.read(document, "$.odpis.naglowekA.numerKRS");
+            String companyName = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
+            BigDecimal shareCapital = getShareCapitalFromApi(document);
+            Partners partners = createCompanyPartners(document);
+            Address address = getCompanyAddressFromApi(document);
+            Set<BoardMember> boardMembers = getBoardMembersFromApi(document, conf);
+            Set<BoardOfDirector> boardOfDirectors = getBoardOfDirectorsFromApi(document, conf);
+            boolean largerAmountOfSharesAllowed = JsonPath.read(document, "$.odpis.dane.dzial1.pozostaleInformacje.informacjaOLiczbieUdzialow").equals(largerSharesInfo);
 
+            return Company.builder()
+                    .companyName(companyName)
+                    .krsNumber(krsNumber)
+                    .nip(nip)
+                    .regon(regon)
+                    .shareCapital(shareCapital)
+                    .address(address)
+                    .partners(partners)
+                    .boardMembers(boardMembers)
+                    .boardOfDirectors(boardOfDirectors)
+                    .manySharesAllowed(largerAmountOfSharesAllowed)
+                    .build();
+        }
+        String name = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
         return Company.builder()
-                .companyName(companyName)
-                .krsNumber(krsNumber)
-                .nip(nip)
-                .regon(regon)
-                .shareCapital(shareCapital)
-                .address(address)
-                .partners(partners)
-                .boardMembers(boardMembers)
-                .boardOfDirectors(boardOfDirectors)
-                .manySharesAllowed(largerAmountOfSharesAllowed)
+                .companyName(name)
                 .build();
     }
 
+    private boolean checkForProperCompanyLegalForm(String apiResponse) {
+        String path = "$.odpis.dane.dzial1.danePodmiotu.formaPrawna";
+        Object document = Configuration.defaultConfiguration().jsonProvider().parse(apiResponse);
+        return JsonPath.read(document, path).equals("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ");
+    }
+//TODO wywalić string do inego do properties
 
     private Set<BoardOfDirector> getBoardOfDirectorsFromApi(Object document, Configuration conf) {
         String path = "$.odpis.dane.dzial2.organNadzoru";
@@ -83,6 +96,20 @@ public class MonoStringToCompanyAdapter {
         net.minidev.json.JSONArray boardMembers = JsonPath.using(conf).parse(document).read(path);
         Set<BoardMember> boardMemberSet = new HashSet<>();
         if(boardMembers != null) {
+//            Set<BoardMember> boardMembersList = boardMembers.stream()
+//                    .map(person -> {
+//                        PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path + "[%s]"));
+//                        String abs = personNameAndSurname.getFirstName();
+//                        String function = JsonPath.read(document, String.format(path + "[%s].funkcjaWOrganie"));
+//                        return BoardMember.builder()
+//                                .firstName(abs)
+//                                .secondName(personNameAndSurname.getSecondName())
+//                                .lastNameI(personNameAndSurname.getLastNameI())
+//                                .lastNameII(personNameAndSurname.getLastNameII())
+//                                .function(function)
+//                                .build();
+//                    }).collect(Collectors.toSet());
+
             for (int i = 0; i < boardMembers.size(); i++) {
                 PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path + "[%s]", i));
                 String abs = personNameAndSurname.getFirstName();
@@ -99,7 +126,7 @@ public class MonoStringToCompanyAdapter {
         }
         return boardMemberSet;
     }
-
+//TODO częściej stream niż for
     private Partners createCompanyPartners(Object document) {
         net.minidev.json.JSONArray partners = JsonPath.read(document, "$.odpis.dane.dzial1.wspolnicySpzoo");
         Set<NaturalPerson> naturalPersonSet = new HashSet<>();
@@ -133,7 +160,7 @@ public class MonoStringToCompanyAdapter {
     private NaturalPerson getNaturalPersonPartner(Object document, String path) {
         PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, path);
         SharePackage sharePackage = getShareInfo(document, path);
-        return new NaturalPerson().builder()
+        return NaturalPerson.builder()
                 .firstName(personNameAndSurname.getFirstName())
                 .secondName(personNameAndSurname.getSecondName())
                 .lastNameI(personNameAndSurname.getLastNameI())
@@ -174,17 +201,27 @@ public class MonoStringToCompanyAdapter {
         String sharesInfo = JsonPath.read(document, path + ".posiadaneUdzialy");
         String[] shares = sharesInfo.split("UDZIAŁÓW O ŁĄCZNEJ WARTOŚCI");
         Integer shareCount = Integer.valueOf(shares[0].trim().replaceAll("[^\\d]",""));
-        String sharesValueString = shares[1].replaceAll("[^\\d,]","").replaceAll("\\s+","");
-        sharesValueString = sharesValueString.substring(0, sharesValueString.length()-2);
+        String sharesValueString = getSharesValueFromApiData(shares[1]);
         BigDecimal sharesValueBigDecimal = BigDecimal.valueOf(Double.parseDouble(sharesValueString.replaceAll("[^\\d]", ".")));
-        return new SharePackage().builder()
+        return SharePackage.builder()
                 .shareCount(shareCount)
                 .shareValue(sharesValueBigDecimal)
                 .build();
     }
 
+    String getSharesValueFromApiData(String shares) {
+        String sharesValueString;
+        if(shares.contains(",")) {
+            sharesValueString = shares.replaceAll("[^\\d]", "").replaceAll("\\s+", "");
+            sharesValueString = sharesValueString.substring(0, sharesValueString.length() - 2);
+        } else {
+            sharesValueString = shares.replaceAll("[^\\d]", "").replaceAll("\\s+", "");
+        }
+        return sharesValueString;
+    }
 
-    private Address getCompanyAddressFromApi(Object document) {
+
+    Address getCompanyAddressFromApi(Object document) {
         String addressPath = "$.odpis.dane.dzial1.siedzibaIAdres.adres";
 
         String city = JsonPath.read(document, addressPath+".miejscowosc");

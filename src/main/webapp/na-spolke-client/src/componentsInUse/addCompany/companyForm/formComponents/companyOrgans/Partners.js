@@ -1,10 +1,10 @@
 import styles from "./Partners.module.css";
 import {Button} from "@material-ui/core";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {useContext, useEffect, useReducer} from "react";
 import {populateList} from "../../../../../classes/company/Utils";
 import {IndividualPartner, PartnerCompany} from "../../../../../classes/persons/Partners";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TextField from '@mui/material/TextField';
 import validatePartners from "./ValidationCompanyOrgans";
 import {
@@ -15,8 +15,8 @@ import {
     FormControl,
     FormControlLabel,
     FormLabel,
-    Grid, Radio,
-    RadioGroup
+    Grid, InputLabel, MenuItem, Radio,
+    RadioGroup, Select
 } from "@mui/material";
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import {CompanyContext} from "../../CompanyContext";
@@ -230,6 +230,10 @@ const Partners = (props) => {
         dispatch(action)
     };
 
+    const handleChangeGenderValue = (event) =>{
+        console.log(event);
+    }
+
     const handleChangeShareValue = (event) => {
         const action = {
             actionType: actionType.SET_SHARE_VALUE,
@@ -372,6 +376,20 @@ const Partners = (props) => {
                 <div key={index}>
                     <Card sx={{minWidth: 275, width: "95%", margin: "auto", height: "100%"}}>
                         <Box className={styles["partner-separator"]}> Wspólnik {counter++}</Box>
+                        <Box sx={{ minWidth: 120}}>
+                                <InputLabel id={`gender${index}`}>Zwrot grzecznościowy</InputLabel>
+                                <Select
+                                    labelId="zwrot grzecznościowy"
+                                    name="gender"
+                                    id={partner.gender}
+                                    value={partner.gender}
+                                    label="gender"
+                                    onChange={(event)=> handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
+                                >
+                                    <MenuItem value={"m"}>Pan</MenuItem>
+                                    <MenuItem value={"f"}>Pani</MenuItem>
+                                </Select>
+                        </Box>
                         <CardContent sx={{
                             display: "grid",
                             gridTemplateColumns: "repeat(2, 1fr)",
@@ -417,7 +435,8 @@ const Partners = (props) => {
                                 error={validatePartners({secondName: partner.secondName}).hasOwnProperty("secondName")}
                                 helperText={validatePartners({secondName: partner.secondName}).secondName}
                                 onChange={event => handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
-                            /></Box>
+                            />
+                            </Box>
                             {partnerSharesInfo(index, partner, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}</CardContent>
                         <CardActions>
                             <div>
@@ -455,6 +474,40 @@ const Partners = (props) => {
                                 onChange={event => handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
                             /></Box>
                             {partnerSharesInfo(index, partner, actionType.DISPLAY_COMPANY_PARTNERS)}</CardContent>
+                        <Box sx={{ minWidth: 120}}>
+                            <InputLabel id={`gender${index}`}>Zwrot grzecznościowy</InputLabel>
+                            <Select
+                                labelId="zwrot grzecznościowy"
+                                name="representativeGender"
+                                id={partner.representativeGender}
+                                value={partner.representativeGender}
+                                label="gender"
+                                onChange={(event)=> handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
+                            >
+                                <MenuItem value={"m"}>Pan</MenuItem>
+                                <MenuItem value={"f"}>Pani</MenuItem>
+                            </Select>
+                        </Box>
+                        <Box sx={{gridArea: "name"}} className={styles["Box"]}><TextField
+                            fullWidth
+                            label="imię przedstawiciela *"
+                            name="representativeFirstname"
+                            variant="filled"
+                            value={partner.representativeFirstname}
+                            // error={validatePartners({representativeFirstname: partner.name}).hasOwnProperty("name")}
+                            // helperText={validatePartners({representativeFirstname: partner.name}).name}
+                            onChange={event => handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
+                        /></Box>
+                        <Box sx={{gridArea: "name"}} className={styles["Box"]}><TextField
+                            fullWidth
+                            label="nazwisko przedstawiciela *"
+                            name="representativeLastname"
+                            variant="filled"
+                            value={partner.representativeLastname}
+                            // error={validatePartners({representativeLastname: partner.representativeLastname}).hasOwnProperty("name")}
+                            // helperText={validatePartners({representativeLastname: partner.representativeLastname}).name}
+                            onChange={event => handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
+                        /></Box>
                         <div>
                             <Button variant="outlined" startIcon={<PersonRemoveIcon/>} onClick={() => {
                                 handlePartnersList(index, actionType.REMOVE_COMPANY_PARTNER, partner)

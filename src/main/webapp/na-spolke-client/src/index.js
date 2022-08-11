@@ -13,19 +13,7 @@ root.render(
             <BrowserRouter>
                 <AuthProvider>
                     <App />
-                    {/*<Routes>*/}
-                    {/*    <Route path="/*" element={<App />} />*/}
-                    {/*    <Route path="/login" element={<Login />} />*/}
-                    {/*    <Route path="/registration" element={<Registration />} />*/}
-                    {/*</Routes>*/}
                 </AuthProvider>
             </BrowserRouter>
         </React.StrictMode>
-
 );
-
-// root.render(
-//     <BrowserRouter>
-//         <App/>
-//     </BrowserRouter>
-// )

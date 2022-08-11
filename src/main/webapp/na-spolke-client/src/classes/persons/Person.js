@@ -1,13 +1,20 @@
 
 export class Person{
-    firstName;
-    secondName;
-    lastNameI;
-    lastNameII;
+    id = " ";
+    firstName = " ";
+    secondName = " ";
+    lastNameI = " ";
+    lastNameII = " ";
+    gender = "m";
     constructor(personData) {
-        this.firstName = personData.firstName;
-        this.secondName = personData.secondName;
-        this.lastNameI = personData.lastNameI;
-        this.lastNameII = personData.lastNameII;
+        if (personData) {
+            this.firstName = personData.firstName;
+            this.secondName = personData.secondName;
+            this.lastNameI = personData.lastNameI;
+            this.lastNameII = personData.lastNameII;
+            this.gender = personData.hasOwnProperty("gender")? personData.gender : "m";
+            this.id = personData.hasOwnProperty("id")? personData.id : null;
+
+        }
     }
 }

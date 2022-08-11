@@ -29,14 +29,13 @@ const CompanyForm = ({saveData})=>{
             saveData(companyData.state.company);
     }
 
-
     return<form className={styles["form"]}>
         <div className={styles["form-container"]}>
             <div className={styles["header"]}>
                 <h1>Dane podstawowe</h1>
             </div>
             <div className={styles["body"]}>
-                <BaseInfo pageType="baseInfo" />;
+                <BaseInfo pageType="baseInfo" />
                 {modalError}
             </div>
                 <FullWidthTabs company={companyData.state.company} saveCompanyData={handleSaveDataFromPartnerForm}/>

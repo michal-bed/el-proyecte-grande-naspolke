@@ -38,3 +38,8 @@ src/main/resources/application.properties
 src/main/webapp/na-spolke-client/.env
 
 /node_modules/
+/src/main/webapp/na-spolke-client/.env
+/src/main/resources/drafts/financialStatements/iTextHelloWorld.pdf
+/src/main/webapp/na-spolke-client/package-lock.json
+/src/main/resources/drafts/financialStatements/Test.docx
+/src/main/resources/drafts/financialStatements/pdfTest.pdf

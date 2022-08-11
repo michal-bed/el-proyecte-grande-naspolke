@@ -32,7 +32,6 @@ public class MyUserDetailsServiceImplementation implements MyUserDetailService {
         String login = "";
          Optional<AppUser> user = Optional.ofNullable(appUserRepository
          .findByUserId(UUID.fromString(uuid)));
-//        Optional<AppUser> user = Optional.ofNullable(appUserRepository.findByUserEmail(userEmail));
 
 
         if (user.isEmpty()) {

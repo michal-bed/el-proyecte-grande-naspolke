@@ -1,5 +1,6 @@
 package com.company.naspolke.controller;
 
+import com.company.naspolke.helpers.adapters.mocks.MocksData;
 import com.company.naspolke.config.util.JwtUtil;
 import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.Role;
@@ -99,12 +100,17 @@ public class CompanyController {
 
     @GetMapping(value = "/find-company-to-membership-request/{krsNumber}", produces = {"application/json"})
     public ResponseEntity<Company> getCompanyDetails(@PathVariable String krsNumber) {
-        Optional<Company> company = companyService.getCompanyByKrsNumber(Long.valueOf(krsNumber));
+        Optional<Company> company = companyService.getCompanyByKrsNumber(krsNumber);
         if (company.isPresent()) {
             return ResponseEntity.ok(company.get());
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company");
         }
+    }
+    @GetMapping(value = "/company/{id}")
+    public Company getCompanyById(@PathVariable String id) {
+        return companyService.getCompanyById(UUID.fromString(id));
+      //  return MocksData.getMockCompany();
     }
 
     @PatchMapping(value = "/update-company-address")

@@ -17,14 +17,17 @@ export class Partners {
 }
 
 export class IndividualPartner{
+    id = null;
     firstName = null;
     secondName = null;
     lastNameI = null;
     lastNameII = null;
     sharesCount = null;
     sharesValue = null;
+    gender = "m";
 
     constructor(partnerData) {
+        console.log(partnerData);
         if (partnerData) {
             this.firstName = partnerData.firstName;
             this.secondName = partnerData.secondName;
@@ -32,20 +35,31 @@ export class IndividualPartner{
             this.lastNameII = partnerData.lastNameII;
             this.sharesCount = partnerData.sharesCount;
             this.sharesValue = partnerData.sharesValue;
+            this.gender = partnerData.hasOwnProperty("gender")? partnerData.gender : "m";
+            this.id = partnerData.hasOwnProperty("id")? partnerData.id : null;
         }
     }
 }
 
 export class PartnerCompany {
+    id = null;
     name = null;
     sharesCount = null;
     sharesValue = null;
+    representativeFirstname = null;
+    representativeLastname = null;
+    representativeGender = null;
+
 
     constructor(partnerData) {
         if (partnerData) {
             this.name = partnerData.name;
             this.sharesCount = partnerData.sharesCount;
             this.sharesValue = partnerData.sharesValue;
+            this.representativeFirstname = partnerData.representativeFirstname;
+            this.representativeLastname = partnerData.representativeLastname;
+            this.representativeGender = partnerData.hasOwnProperty("representativeGender")?partnerData.representativeGender : "m";
+            this.id = partnerData.hasOwnProperty("id")?partnerData.id : null;
         }
     }
 }

@@ -25,7 +25,7 @@ public class MessageServiceImplementation implements MessageService {
     }
 
     @Override
-    public Message saveAndReturnNewMessage(Long krsNumber, String emailSender, String messageBody,
+    public Message saveAndReturnNewMessage(String krsNumber, String emailSender, String messageBody,
                                            boolean membershipRequest, boolean membershipInvitation) {
         Message newMessage = new Message();
         newMessage.setKrsNumber(krsNumber);

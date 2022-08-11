@@ -35,23 +35,35 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
-    public ResponseEntity<com.company.naspolke.model.company.Company> getCompanyDtoFromKrsApi(String krsNumber) {
+    public ResponseEntity<Company> getCompanyDtoFromKrsApi(String krsNumber) {
         String result = krsClient.webClient(krsNumber);
 //        String result = "404";
         HttpStatus httpStatus = HttpStatus.OK;
-        com.company.naspolke.model.company.Company company = null;
+        Company company = null;
         HttpHeaders headers = new HttpHeaders();
+        if(result==null){
+            return new ResponseEntity<>(HttpStatus.valueOf(404));
+        }
+        if (result.contains("<title>Przerwa techniczna</title>")) {
+            httpStatus = HttpStatus.valueOf(503);
+            return new ResponseEntity<>(null, headers, httpStatus);
+        }
 //        String resultApi;
         if (result.length() == 3) {
             httpStatus = HttpStatus.valueOf(Integer.parseInt(result));
         } else {
             company = monoStringToCompanyAdapter.getCompany(result);
+            if (!company.getCompanyName().contains("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ")){
+                httpStatus = HttpStatus.valueOf(422);
+                String companyName = company.getCompanyName();
+                headers.add("name", companyName);
+            }
         }
         return new ResponseEntity<>(company, headers, httpStatus);
     }
 
     @Override
-    public boolean checkForDuplicate(Long krsNumber) {
+    public boolean checkForDuplicate(String krsNumber) {
         Company a = companyRepository.findByKrsNumber(krsNumber);
         return companyRepository.findByKrsNumber(krsNumber)== null ;
     }
@@ -88,10 +100,16 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
-    public Optional<Company> getCompanyByKrsNumber(Long krsNumber) {
-        return Optional.ofNullable(companyRepository.findByKrsNumber(krsNumber));
+    public Company getCompanyById(UUID uuid) {
+       Optional<Company> company = Optional.ofNullable(companyRepository.findByCompanyId(uuid));
+        System.out.println(company);
+        return company.orElse(null);
     }
 
+    @Override
+    public Optional<Company> getCompanyByKrsNumber(String krsNumber) {
+        return Optional.ofNullable(companyRepository.findByKrsNumber(krsNumber));
+    }
     @Override
     public Optional<Company> getCompanyByCompanyId(UUID companyId) {
         return Optional.ofNullable(companyRepository.findByCompanyId(companyId));

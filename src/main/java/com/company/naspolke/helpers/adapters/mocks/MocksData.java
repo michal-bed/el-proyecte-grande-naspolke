@@ -1,7 +1,13 @@
 package com.company.naspolke.helpers.adapters.mocks;
 
-public class KRSMock {
+import com.company.naspolke.helpers.adapters.MonoStringToCompanyAdapter;
+import com.company.naspolke.model.company.Company;
 
+import java.util.UUID;
+
+public class MocksData {
+
+    public static MonoStringToCompanyAdapter adapter = new MonoStringToCompanyAdapter();
     public static String SWLEX = "{\n" +
             "    \"odpis\": {\n" +
             "        \"rodzaj\": \"Aktualny\",\n" +
@@ -648,4 +654,11 @@ public class KRSMock {
             "        }\n" +
             "    }\n" +
             "}";
+
+    public static Company getMockCompany(){
+        Company dummyCompany =  adapter.getCompany(EASYSOLAR);
+        dummyCompany.setCompanyId(UUID.randomUUID());
+        return dummyCompany;
+    }
+
 }

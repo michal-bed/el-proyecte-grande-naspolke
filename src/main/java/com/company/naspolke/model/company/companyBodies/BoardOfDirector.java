@@ -22,12 +22,14 @@ public class BoardOfDirector {
     private String secondName;
     private String lastNameI;
     private String lastNameII;
+    private char gender;
 
     @Builder
-    public BoardOfDirector(String firstName, String secondName, String lastNameI, String lastNameII) {
+    public BoardOfDirector(String firstName, String secondName, String lastNameI, String lastNameII, char gender) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastNameI = lastNameI;
         this.lastNameII = lastNameII;
+        this.gender = gender;
     }
 }

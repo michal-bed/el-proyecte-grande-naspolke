@@ -6,6 +6,7 @@ import {Company} from "../../classes/company/Company";
 import {Box} from "@mui/material";
 import CompanyContextProvider from "./companyForm/CompanyContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import {useLocation, useNavigate} from "react-router-dom";
 
 
 const AddCompany = () => {
@@ -14,22 +15,41 @@ const AddCompany = () => {
 
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
     const [hideKrsInput, setHideKrsInput] = useState("block")
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/userpanel";
+
 
     const hideModal = () => {
       setCompanyDataForm(<div/>);
     }
 
 
-    const addCompanyForm = (data) => {
+    const addCompanyForm = (data, companyName="") => {
+        console.log(data, companyName)
         if (data === 404) {
             setCompanyDataForm(<ModalErrorMessage hide={hideModal}
                                                   messageTitle="Nie znaleziono.."
-                                                  message="Nie znaleziono firmy o podanym numerze KRS \n Sprawdź jego popranowność lub uzupełnij dane samodzielnie"
+                                                  message={"Nie znaleziono firmy o podanym numerze KRS. " +
+                                                      "Sprawdź jego popranowność lub uzupełnij dane samodzielnie"}
                                                   closeAndDisplay={closeAndDisplay}/>)
-        } else if (data.length === 3) {
+        } else if (data === 503) {
             setCompanyDataForm(<ModalErrorMessage hide={hideModal}
                                                   messageTitle={"Problem.."}
-                                                  message={"Wystąpił problem z połaczeniem \n Możesz spróbować później lub uzupełnic dane samodzielnie"}
+                                                  message={"Przepraszamy.. Z uwagi na przerwę techniczną nie można pobrać danych spółki. " +
+                                                      "Możesz spróbować później lub uzupełnić dane samodzielnie"}
+                                                  closeAndDisplay={closeAndDisplay}/>)
+        }  else if (data === 422) {
+            setCompanyDataForm(<ModalErrorMessage hide={hideModal}
+                                                  messageTitle={"Problem.."}
+                                                  message={`Przepraszamy "${companyName}" nie może zostać dodana.` +
+                                                      "Obecna wersja programu umożliwia prawidłową obsługę wyłącznie spółek z ograniczoną odpowiedzialnością." +
+                                                      "Możesz dodać inną spółke samodzielnie lub anulować"}
+                                                  closeAndDisplay={closeAndDisplay}/>)
+        }else if (data.length === 3) {
+            setCompanyDataForm(<ModalErrorMessage hide={hideModal}
+                                                  messageTitle={"Problem.."}
+                                                  message={"Wystąpił problem z połaczeniem. Możesz spróbować później lub uzupełnić dane samodzielnie"}
                                                   closeAndDisplay={closeAndDisplay}/>)
         } else if (data.data===null){
             setCompanyDataForm(<ModalErrorMessage hide={hideModal}
@@ -48,11 +68,13 @@ const AddCompany = () => {
       }
 
     function saveDataIntoDb(data){
-
         axiosPrivate.post("/add-company/", data)
             .then((response) => {
                 if (response.status === 201) {
                     alert(`Spółka ${response.data} została pomyślnie dodana`)
+                    setTimeout(()=> {
+                        navigate(from, { replace:true })
+                    }, 1000)
                 }
             })
             .catch((error) => {

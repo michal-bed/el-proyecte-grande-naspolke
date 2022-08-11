@@ -1,12 +1,17 @@
 package com.company.naspolke.model.company.companyBodies.Partners;
 
-
 import com.company.naspolke.model.company.Address;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.CascadeType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Entity
@@ -26,10 +31,11 @@ public class NaturalPerson implements SharePossesing {
     private Address address;
     private BigDecimal sharesValue;
     private Integer sharesCount;
-
+    private char gender;
 
     @Builder
-    public NaturalPerson(String firstName, String secondName, String lastNameI, String lastNameII, Address address, BigDecimal sharesValue, Integer sharesCount) {
+    public NaturalPerson(Long id, String firstName, String secondName, String lastNameI, String lastNameII, Address address, BigDecimal sharesValue, Integer sharesCount, char gender) {
+        this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastNameI = lastNameI;
@@ -37,5 +43,6 @@ public class NaturalPerson implements SharePossesing {
         this.address = address;
         this.sharesValue = sharesValue;
         this.sharesCount = sharesCount;
+        this.gender = gender;
     }
 }

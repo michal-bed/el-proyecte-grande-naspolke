@@ -49,22 +49,14 @@ const KrsUserInput = (props)=>{
         }).catch(error=>{
             setIsLoading(false);
             props.addCompanyData(error.response.status);
+            if(error.response.status===422){
+                props.addCompanyData(error.response.status, error.response.data.companyName);
+            } else {
+                props.addCompanyData(error.response.status);
+            }
         });
     }
 
-    // return (
-    //     <div id="input-krs-number" className={styles["krs-input-container"]}>
-    //         <form onSubmit={formSubmitHandler}>
-    //             <div><label>Podaj numer KRS spółki</label></div>
-    //             <TextField type="number"
-    //                    placeholder="0000123456"
-    //                    error={ValidationKrsUserInput(krsNumber).hasOwnProperty("krsNumber")}
-    //                    helperText={ValidationKrsUserInput(krsNumber).krsNumber}
-    //                    onChange={krsNumberHandler}/>
-    //             <button type="submit" >Pobierz dane spółki</button>
-    //         </form>
-    //     </div>
-    // )
     return (
         <Typography className="form-label-container">
             <div id="input-krs-number" className={styles["krs-input-container"]}>
