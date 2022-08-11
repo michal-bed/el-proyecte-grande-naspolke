@@ -28,6 +28,7 @@ const AddCompany = () => {
 
     const hideModal = () => {
       setCompanyDataForm(<div/>);
+        setCompanyFound(false);
     }
 
     const handleClose = () => {
@@ -44,7 +45,7 @@ const AddCompany = () => {
     }
 
     const addCompanyForm = (data, companyName="") => {
-        console.log(data, companyName)
+        setCompanyFound(true);
         if (data === 404) {
             setCompanyDataForm(<ModalErrorMessage hide={hideModal}
                                                   messageTitle="Nie znaleziono.."
@@ -58,6 +59,7 @@ const AddCompany = () => {
                                                       "Możesz spróbować później lub uzupełnić dane samodzielnie"}
                                                   closeAndDisplay={closeAndDisplay}/>)
         }  else if (data === 422) {
+            console.log("ok")
             setCompanyDataForm(<ModalErrorMessage hide={hideModal}
                                                   messageTitle={"Problem.."}
                                                   message={`Przepraszamy "${companyName}" nie może zostać dodana.` +
