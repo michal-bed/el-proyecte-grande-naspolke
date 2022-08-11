@@ -52,25 +52,12 @@ const KrsUserInput = (props)=>{
         });
     }
 
-    // return (
-    //     <div id="input-krs-number" className={styles["krs-input-container"]}>
-    //         <form onSubmit={formSubmitHandler}>
-    //             <div><label>Podaj numer KRS spółki</label></div>
-    //             <TextField type="number"
-    //                    placeholder="0000123456"
-    //                    error={ValidationKrsUserInput(krsNumber).hasOwnProperty("krsNumber")}
-    //                    helperText={ValidationKrsUserInput(krsNumber).krsNumber}
-    //                    onChange={krsNumberHandler}/>
-    //             <button type="submit" >Pobierz dane spółki</button>
-    //         </form>
-    //     </div>
-    // )
     return (
         <Typography className="form-label-container">
             <div id="input-krs-number" className={styles["krs-input-container"]}>
-                <form onSubmit={formSubmitHandler}>
-                    <h2>Podaj numer KRS spółki:</h2>
-                    <Grid style={{display: "flex"}}><hr/>
+                <form onSubmit={formSubmitHandler}><hr/>
+                    <h2 style={{ textAlign: 'center' }}>Podaj numer KRS spółki:</h2><hr/>
+                    <Grid style={{display: "flex", alignContent: 'center'}}><hr/>
                         <TextField type="number"
                                    label="Numer KRS"
                                    placeholder="0000123456"
@@ -81,7 +68,7 @@ const KrsUserInput = (props)=>{
                             <CircularProgress style={{position: 'absolute', top: '45%', left: '58%'}} color="black"/> :
                             <Button type="submit">Pobierz dane spółki</Button>
                         }
-                    </Grid>
+                    </Grid><hr/>
                 </form>
             </div>
         </Typography>

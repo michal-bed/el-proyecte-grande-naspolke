@@ -6,7 +6,7 @@ import {Box} from "@mui/material";
 function RequestJoin () {
     return (
         <>
-            <Card>
+            <Card style={{ height: '10vh' }}>
                 <Box sx={{ mx: "auto", width: 400 }}>
                     <Typography variant="h3" component="div">Dołącz do spółki</Typography>
                 </Box>

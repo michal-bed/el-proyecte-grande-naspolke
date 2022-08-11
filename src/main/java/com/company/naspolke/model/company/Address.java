@@ -1,6 +1,5 @@
 package com.company.naspolke.model.company;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -27,4 +27,12 @@ public interface CompanyService {
     void updateAddressById(Address address, UUID companyId);
 
     void updateCompany(Company company);
+
+    void updateBoardMember(String keys, String fieldToChange, Long memberId);
+
+    void updateDirectorMember(String keys, String fieldToChange, Long memberId);
+
+    void updateIndividualPartner(String keys, String fieldToChange, Long memberId);
+
+    void updateCompanyPartner(String keys, String fieldToChange, Long memberId);
 }

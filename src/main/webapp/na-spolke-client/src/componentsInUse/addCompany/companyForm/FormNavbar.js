@@ -110,7 +110,7 @@ export default function FullWidthTabs(props) {
                 <FormNavbar value={value} company={props.company} index={1} dir={theme.direction}/>
                 <FormNavbar value={value} company={props.company} index={2} dir={theme.direction}/>
             </SwipeableViews>
-            <Button onClick={saveCompany}>Zapisz</Button>
+            <Button variant="contained" disableElevation onClick={saveCompany}>Zapisz</Button>
         </Box>
     );
 }
