@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,21 +30,30 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
 
 
     @Override
-    public FinancialStatementProtocol saveFinancialStatement(FinancialStatementProtocol financialStatementsProtocol, UUID companyId){
+    public String saveFinancialStatement(FinancialStatementProtocol financialStatementsProtocol, UUID companyId){
         Optional<Company> companyOptional = Optional.ofNullable(companyRepository.findByCompanyId(companyId));
+        String filePath = "";
         if (companyOptional.isPresent()) {
             Company company = companyOptional.get();
-            company.addFinancialStatement(financialStatementsProtocol);
-//            companyRepository.save(company);
             try {
-//                FinancialStatementProtocol financialStatementsProtocol = JsonFinancialStatementProtocolToJavaClass.getProtocolFromFormData(financialStatementsProtocolData, company);
-                financialStatementProtocolGenerator.generatePdfDocument(company, financialStatementsProtocol);
+                filePath = getFinancialStatementProtocolPath(company,financialStatementsProtocol);
+                filePath = financialStatementProtocolGenerator.generatePdfDocument(company, financialStatementsProtocol, filePath);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return null;
+            financialStatementsProtocol.setFilePath(filePath);
+            company.addFinancialStatement(financialStatementsProtocol);
+            Company company1 = companyRepository.saveAndFlush(company);
+
         }
-        return null;
+        return filePath;
+    }
+
+    private String getFinancialStatementProtocolPath(Company company, FinancialStatementProtocol financialStatementsProtocol) {
+        String companyName = company.getCompanyName().substring(0,5);
+        String protocolNumber = String.valueOf(financialStatementsProtocol.getProtocolNumber());
+        String date = LocalDate.now().toString();
+        return "src/main/webapp/na-spolke-client/src/protocols/ZZW".concat(companyName).concat(protocolNumber).concat(date).concat(".pdf");
     }
 
 //    public FinancialStatementProtocolGenerator getNewestFinancialStatementInfo(UUID companyId){

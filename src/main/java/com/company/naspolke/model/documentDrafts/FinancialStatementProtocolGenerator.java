@@ -33,18 +33,19 @@ import static com.company.naspolke.model.documentDrafts.WordFormsHandler.*;
 @Component
 public class FinancialStatementProtocolGenerator {
     private final ProtocolFactory protocolFactory;
-    int resolutionCount = 1;
+//    int resolutionCount = 1;
 
     public FinancialStatementProtocolGenerator(ProtocolFactory protocolFactory) {
         this.protocolFactory = protocolFactory;
     }
 
-    public void generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation) throws IOException {
+    public String generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation, String path) throws IOException {
         //Create new pdf file
         Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, new FileOutputStream("src/main/webapp/na-spolke-client/src/protocols/pdfTest.pdf"));
+        PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
 
+        int resolutionCount = 1;
         // Set protocol Header
         String header = generateProtocolText(company, financialStatementInformation);
         Paragraph protocolHeader = protocolFactory.getProtocolHeader(header);
@@ -68,14 +69,14 @@ public class FinancialStatementProtocolGenerator {
         document.add(chairpersonParagraph);
 
         //Set chairperson resolution
-        String resolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getChairperson().getResolutionTitle());
+        String resolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getChairperson().getResolutionTitle(), resolutionCount);
         String resolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation.getChairperson(), company, ProtocolPattern.resolutionChairpersonText);
         String resolutionVoting = getResolutionVoting(financialStatementInformation.getChairperson(), "tajnym");
         List<Paragraph> chairpersonResolutionParagraph = protocolFactory.getResolution(resolutionTitle, resolutionText, resolutionVoting);
         chairpersonResolutionParagraph.forEach(document::add);
 
         //Set recorder resolution
-        String recorderResolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getRecorder().getResolutionTitle());
+        String recorderResolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getRecorder().getResolutionTitle(), resolutionCount);
         String recorderResolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation.getRecorder(), company, ProtocolPattern.resolutionRecorderText);
         String recorderResolutionVoting = getResolutionVoting(financialStatementInformation.getRecorder(), "tajnym");
         List<Paragraph> recorderResolutionParagraph = protocolFactory.getResolution(recorderResolutionTitle, recorderResolutionText, recorderResolutionVoting);
@@ -92,7 +93,7 @@ public class FinancialStatementProtocolGenerator {
         document.add(paragraphAboutAgenda);
 
         //Set agenda resolution
-        String agendaResolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getAgendaResolution().getResolutionTitle());
+        String agendaResolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getAgendaResolution().getResolutionTitle(), resolutionCount);
         List<String> agenda = getAgendaResolutionText(financialStatementInformation);
         String agendaVoting = getResolutionVoting(financialStatementInformation.getAgendaResolution(), "jawnym");
 
@@ -109,7 +110,7 @@ public class FinancialStatementProtocolGenerator {
 
         //Set financial statement resolution
         String financialStatementTitle = getFinancialStatementTitle(financialStatementInformation);
-        String financialStatementResolutionTitle = getResolutionTitle(company,financialStatementInformation, financialStatementTitle);
+        String financialStatementResolutionTitle = getResolutionTitle(company,financialStatementInformation, financialStatementTitle, resolutionCount);
         String financialStatementResolutionText = getFinancialStatementResolutionText(company, financialStatementInformation);
         String financialStatementResolutionVoting = getResolutionVoting(financialStatementInformation.getFinancialStatementResolution(), "jawnym");
         List<Paragraph> financialStatementResolutionParagraph = protocolFactory.getResolution(financialStatementResolutionTitle,
@@ -118,7 +119,7 @@ public class FinancialStatementProtocolGenerator {
 
         //Set amount profit or lose resolution
         String profitOrLoseTitlePart = getProfitLoseInfo(financialStatementInformation);
-        String profitOrLoseTitle = getResolutionTitle(company, financialStatementInformation, profitOrLoseTitlePart);
+        String profitOrLoseTitle = getResolutionTitle(company, financialStatementInformation, profitOrLoseTitlePart, resolutionCount);
 
         String profitOrLoseText = getProfitLoseResolutionText(company, financialStatementInformation);
         String profitOrLoseVoting = getResolutionVoting(financialStatementInformation.getProfitOrLoss(),"jawnym");
@@ -127,9 +128,9 @@ public class FinancialStatementProtocolGenerator {
         profitOrLoseParagraphs.forEach(document::add);
 
         //Set approval resolution
-        List<Paragraph> approvalResolutions = getApprovalResolutionTitle(financialStatementInformation, "board", company);
+        List<Paragraph> approvalResolutions = getApprovalResolutionTitle(financialStatementInformation, "board", company, resolutionCount);
         approvalResolutions.forEach(document::add);
-        List<Paragraph> approvalResolutionsDirectors = getApprovalResolutionTitle(financialStatementInformation, "directors", company);
+        List<Paragraph> approvalResolutionsDirectors = getApprovalResolutionTitle(financialStatementInformation, "directors", company, resolutionCount);
         approvalResolutionsDirectors.forEach(document::add);
 
         //conclusions of the meeting
@@ -164,7 +165,7 @@ public class FinancialStatementProtocolGenerator {
 
         //close file
         document.close();
-        resolutionCount = 1;
+        return path;
     }
 
     private String getMeetingOrganPersonName(ElectionResolution resolution) {
@@ -184,7 +185,7 @@ public class FinancialStatementProtocolGenerator {
         return String.format(appendixInfo,protocolNumber, companyName, companyCity);
     }
 
-    private List<Paragraph> getApprovalResolutionTitle(FinancialStatementProtocol financialStatementInformation, String bodyType, Company company) {
+    private List<Paragraph> getApprovalResolutionTitle(FinancialStatementProtocol financialStatementInformation, String bodyType, Company company, int resolutionCount) {
         List<Paragraph> paragraphList = new ArrayList<>(List.of());
         Set<ResolutionApprovalBodyMember> boardMemberList = financialStatementInformation.getBoardMembersApproval();
         List<ResolutionApprovalBodyMember> boardMembers;
@@ -226,7 +227,7 @@ public class FinancialStatementProtocolGenerator {
             String properWordForm = gender.equals("Pan")? "pełnił " : "pełniła";
 
             String title = String.format(approvalResolutionHeader, function, personalPronoun, periodOfOffice);
-            String resolutionHeader = getResolutionTitle(company, financialStatementInformation, title);
+            String resolutionHeader = getResolutionTitle(company, financialStatementInformation, title, resolutionCount);
             Paragraph resolutionHeaderParagraph = protocolFactory.getResolutionTitleParagraph(resolutionHeader);
             paragraphList.add(resolutionHeaderParagraph);
 
@@ -646,9 +647,9 @@ public class FinancialStatementProtocolGenerator {
                 statedForm, properPossessivePronoun, expressedForm);
     }
 
-    private String getResolutionTitle(Company company, FinancialStatementProtocol protocol, String title){
+    private String getResolutionTitle(Company company, FinancialStatementProtocol protocol, String title ,int resolutionCount){
         String minutesType = "Zwyczajnego";
-        String resolutionNumber = setResolutionNumber(protocol);
+        String resolutionNumber = setResolutionNumber(protocol, resolutionCount);
         String resolutionDate = setResolutionDate(protocol);
         return String.format(ProtocolPattern.resolutionPattern,resolutionNumber, minutesType, company.getCompanyName(), placeConjugated(company.getAddress().getCity()),  resolutionDate, title);
     }
@@ -660,7 +661,7 @@ public class FinancialStatementProtocolGenerator {
         return String.format("%s %s %s r.", day, monthInWord, year);
     }
 
-    private String setResolutionNumber(FinancialStatementProtocol protocol) {
+    private String setResolutionNumber(FinancialStatementProtocol protocol, int resolutionCount) {
         String number = String.valueOf(resolutionCount);
         resolutionCount++;
         String day = String.valueOf(protocol.getDateOfTheShareholdersMeeting().getDayOfMonth());

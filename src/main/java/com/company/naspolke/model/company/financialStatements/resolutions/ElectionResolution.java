@@ -14,9 +14,9 @@ public class ElectionResolution implements VotingInterface {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private NaturalPerson individual;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private JuridicalPerson company;
     private String votingType;
     private String resolutionTitle;

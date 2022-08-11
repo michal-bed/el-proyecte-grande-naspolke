@@ -29,36 +29,35 @@ public class FinancialStatementProtocol {
     private LocalDate dateOfTheShareholdersMeeting;
     private boolean meetingPlaceInHeadquarters;
     private String meetingPlace;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "address_address_id")
     private Address address;
     private int protocolNumber;
     private boolean formalConvening;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<NaturalPerson> listPresentIndividualPartners;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<JuridicalPerson> listPresentsCompanyPartners;
-    @ManyToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn
     private ElectionResolution chairperson;
-    @ManyToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn
     private ElectionResolution recorder;
-    @ManyToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn
     private AgendaResolution agendaResolution;
-    @ManyToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn
     private ProfitOrLoss profitOrLoss;
-    @ManyToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn
     private FinancialStatementResolution financialStatementResolution;
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     private Set<ResolutionApprovalBodyMember> boardMembersApproval;
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     private Set<ResolutionApprovalBodyMember> directorsMembersApproval;
-    @ManyToOne
-    private Company company;
+    private String filePath;
 
 
     @Builder
@@ -68,7 +67,7 @@ public class FinancialStatementProtocol {
                                       ElectionResolution chairperson, ElectionResolution recorder, AgendaResolution agendaResolution,
                                       ProfitOrLoss profitOrLoss, FinancialStatementResolution financialStatementResolution,
                                       Set<ResolutionApprovalBodyMember> boardMembersApproval, Set<ResolutionApprovalBodyMember> directorsMembersApproval,
-                                      Company company) {
+                                      String filePath) {
         this.dateOfTheShareholdersMeeting = dateOfTheShareholdersMeeting;
         this.meetingPlaceInHeadquarters = meetingPlaceInHeadquarters;
         this.meetingPlace = meetingPlace;
@@ -84,7 +83,7 @@ public class FinancialStatementProtocol {
         this.financialStatementResolution = financialStatementResolution;
         this.boardMembersApproval = boardMembersApproval;
         this.directorsMembersApproval = directorsMembersApproval;
-        this.company = company;
+        this.filePath = filePath;
     }
 
 

@@ -24,10 +24,10 @@ public class ResolutionApprovalBodyMember implements VotingInterface {
     private int votesAgainst;
     private int votesAbstentions;
     private String bodyType;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "board_member_board_member_id")
     private BoardMember boardMember;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "director_board_of_director_id")
     private BoardOfDirector director;
     private boolean wholeReportingPeriod;
