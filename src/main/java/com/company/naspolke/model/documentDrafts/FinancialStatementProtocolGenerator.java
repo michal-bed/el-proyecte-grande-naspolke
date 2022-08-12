@@ -42,7 +42,7 @@ public class FinancialStatementProtocolGenerator {
     public void generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation) throws IOException {
         //Create new pdf file
         Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, new FileOutputStream("src/main/resources/drafts/financialStatements/pdfTest.pdf"));
+        PdfWriter.getInstance(document, new FileOutputStream("src/main/webapp/na-spolke-client/src/protocols/pdfTest.pdf"));
         document.open();
 
         // Set protocol Header

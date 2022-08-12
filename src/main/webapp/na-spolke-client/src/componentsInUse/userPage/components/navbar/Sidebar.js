@@ -47,7 +47,7 @@ export default function Sidebar () {
                         <h6>Zaproś do Spółki</h6> <Link to={"/userpanel/company/" + companyId + "/invite"}/>
                     </MenuItem>
                     <MenuItem icon={<ArticleIcon fontSize="large"/>}>
-                        <h6>Wygeneruj PDF</h6> <Link to={"/userpanel/company/" + companyId + "/generate"}/>
+                        <h6>Wygeneruj Protokół ZZW</h6> <Link to={"/userpanel/company/" + companyId + "/generate"}/>
                     </MenuItem>
                     <MenuItem icon={<FingerprintIcon fontSize="large"/>}>
                         <h6>{companyId}</h6> <Link to={"/userpanel/company/" + companyId}/>
