@@ -42,8 +42,8 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
                 throw new RuntimeException(e);
             }
             financialStatementsProtocol.setFilePath(filePath);
-            company.addFinancialStatement(financialStatementsProtocol);
-            Company company1 = companyRepository.saveAndFlush(company);
+//            company.addFinancialStatement(financialStatementsProtocol);
+//            Company company1 = companyRepository.saveAndFlush(company);
 
         }
         return filePath;

@@ -6,6 +6,7 @@ import validatePartners from "./ValidationCompanyOrgans";
 import {Box, Card, CardContent, Grid, InputLabel, MenuItem, Select} from "@mui/material";
 import styles from "./MembersCompanyBodies.module.css";
 import {CompanyContext} from "../../CompanyContext";
+import Typography from "@mui/material/Typography";
 
 const MembersCompanyBodies = (props) => {
     const companyData = useContext(CompanyContext)
@@ -45,7 +46,7 @@ const MembersCompanyBodies = (props) => {
 
 
     function addCompanyBodyMember() {
-        let blankNewDirectorData = {firstName: "", secondName: null, lastNameI: "", lastNameII: null,};
+        let blankNewDirectorData = {gender: "m", firstName: "", secondName: undefined, lastNameI: "", lastNameII: undefined};
         switch (props.pageType) {
             case "board" : {
                 blankNewDirectorData.function = "CZŁONEK ZARZĄDU";
@@ -93,15 +94,20 @@ const MembersCompanyBodies = (props) => {
                 if ((Object.keys(errors).length > 3 && props.pageType === "board") || (Object.keys(errors).length > 4 && props.pageType === "directors"))
                     return true
             }
-        return false;
+            return false;
         }
         return true;
     }
 
 
     function handleBodyMemberList(index) {
-        let newMemberList = [...memberBody];
-        newMemberList.splice(index, 1);
+        console.log(memberBody);
+        console.log(index);
+        const newMemberList = memberBody.filter((x, i) => i !== index);
+        // console.log("deleting... ", newMemberList);
+        // let newMemberList = memberBody;
+        // newMemberList.splice(index, 1);
+        console.log(newMemberList);
         setMemberBody(newMemberList);
     }
 
@@ -115,7 +121,7 @@ const MembersCompanyBodies = (props) => {
             margin: 'auto'
         }}>
             {memberBody.map((member, index) => (
-                <div key={index}>
+                <div key={`main${index}${member.lastNameI}${member.firstName}`}>
                     <Card sx={{minWidth: 275, width: '95%', height: '100%', margin: "auto"}}>
                         <Box sx={{ minWidth: 120}}>
                             <InputLabel id={`gender${index}`}>Zwrot grzecznościowy</InputLabel>
@@ -182,7 +188,7 @@ const MembersCompanyBodies = (props) => {
 
                                 <div>
                                     <Button variant="outlined" startIcon={<PersonRemoveIcon/>}
-                                            onClick={() => handleBodyMemberList(index)}>Usuń</Button>
+                                            onClick={() => handleBodyMemberList(index)}><Typography sx={{fontSize:15}}>Usuń</Typography></Button>
                                 </div>
                             </Grid></CardContent></Card>
                 </div>

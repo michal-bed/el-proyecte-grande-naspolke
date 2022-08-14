@@ -17,12 +17,22 @@ import {MeetingAgenda} from "./agenda/MeetingAgenda";
 import {FinancialStatementInfo} from "./financialStatementInfo/FinancialStatementInfo";
 import {ApprovalBodyMemberSection} from "./approvalBodyMember/ApprovalBodyMemberSection";
 import {SetupInitialFormValues} from "./formUtils/SetupInitialFormValues";
-import styles from "./FinancialStatementForm.module.css"
 import Typography from "@mui/material/Typography";
+import {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 
 export default function FinancialStatementForm({company, companyIdMac}) {
+    const [pdfReady, setPdfReady] = useState(false)
+    const [pdfPathFile, setPdfPathFile] = useState("")
 
     const {initialValues} = SetupInitialFormValues(company)
+    const navigate = useNavigate();
+
+    const displayPdf = () => {
+        if (pdfReady === true && pdfPathFile !== "") {
+            navigate('/pdf', {state: {pathToDownland: pdfPathFile}});
+        }
+    }
 
     const MyTextField = ({placeholder, ...props}) => {
         const [field, meta] = useField(props);
@@ -40,39 +50,55 @@ export default function FinancialStatementForm({company, companyIdMac}) {
         );
     };
 
+
+    const checkForPdf=(isReady, pdfURL)=>{
+        setPdfPathFile(pdfURL);
+        setPdfReady(isReady);
+        console.log("gotowe")
+
+    }
+
+
     return <Box>
         <Formik initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={(data, {setSubmitting}) => {
-                    setSubmitting(true);
-                    const financialStatement = new FinancialStatementProtocol(data, company);
-                    if (data.meetingPlaceInHeadquarters === "true") {
-                        financialStatement.meetingPlace = "siedzibie spółki";
-                    }
-                    console.log(financialStatement)
-                    saveFinancialStatement(financialStatement, companyIdMac);
-                    setSubmitting(false)
-                }}>
+                 validationSchema={validationSchema}
+                 onSubmit={(data, {setSubmitting}) => {
+                     setSubmitting(true);
+                     const financialStatement = new FinancialStatementProtocol(data, company);
+                     if (data.meetingPlaceInHeadquarters === "true") {
+                         financialStatement.meetingPlace = "siedzibie spółki";
+                     }
+                     console.log(financialStatement)
+                     saveFinancialStatement(financialStatement, companyIdMac, checkForPdf);
+                     setSubmitting(false)
+
+                 }}>
+
+
             {({values, isSubmitting, handleChange, handleBlur, handleSubmit, setFieldValue}) => (
                 <Form>
                     <Box>
-                        <Box sx={{marginBottom:'2%'}} alignContent={"center"}>
-                            <Typography sx={{ fontSize: 35, marginBottom: 2 }} color="text.secondary" gutterBottom align={"center"}>
-                            Generowanie Protokołu zatwierdzajacego sprawozdanie finansowe
-                        </Typography></Box>
-                        <Card sx={{minWidth: 275, width: '39%', height: '100%', margin: "auto", marginBottom:'2%',
-                            ':hover': { boxShadow: 20,}}}>
+                        <Box sx={{marginBottom: '2%'}} alignContent={"center"}>
+                            <Typography sx={{fontSize: 35, marginBottom: 2}} color="text.secondary" gutterBottom
+                                        align={"center"}>
+                                Generowanie Protokołu zatwierdzajacego sprawozdanie finansowe
+                            </Typography></Box>
+                        <Card sx={{
+                            minWidth: 275, width: '39%', height: '100%', margin: "auto", marginBottom: '2%',
+                            ':hover': {boxShadow: 20,}
+                        }}>
                             <CardContent>
-                                <Typography sx={{ fontSize: 26, marginBottom: 2 }} color="text.secondary" gutterBottom align={"center"}>
+                                <Typography sx={{fontSize: 26, marginBottom: 2}} color="text.secondary" gutterBottom
+                                            align={"center"}>
                                     Data i miejsce odbycia Zgromadzenia Wspólników
                                 </Typography>
 
                                 <MyTextField
-                                name="protocolNumber"
-                                type="number"
-                                label="Numer protokołu"
-                                as={TextField}
-                            />
+                                    name="protocolNumber"
+                                    type="number"
+                                    label="Numer protokołu"
+                                    as={TextField}
+                                />
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DatePicker
                                         label="Data posiedzenia"
@@ -100,10 +126,10 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                             margin: "auto",
                             // width: '80%'
                         }}>
-                            <AttendanceList values={values} company={company} setFieldValue={setFieldValue} />
+                            <AttendanceList values={values} company={company} setFieldValue={setFieldValue}/>
 
                             <Card sx={{
-                                minWidth: 275, width: '80%', height: '100%', marginBottom: '2%',margin:'auto',
+                                minWidth: 275, width: '80%', height: '100%', marginBottom: '2%', margin: 'auto',
                                 borderColor: 'text.primary',
                                 ':hover': {boxShadow: 20,}
                             }}>
@@ -131,16 +157,22 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                                                           handleChange={handleChange}/></CardContent>
                             </Card>
 
-                        <MeetingAgenda values={values} handleChange={handleChange}/>
+                            <MeetingAgenda values={values} handleChange={handleChange}/>
 
-                    <FinancialStatementInfo setFieldValue={setFieldValue} values={values} handleChange={handleChange}/>
+                            <FinancialStatementInfo setFieldValue={setFieldValue} values={values}
+                                                    handleChange={handleChange}/>
 
-                    <ApprovalBodyMemberSection values={values} handleChange={handleChange} setFieldValue={setFieldValue}
-                                               company={company} />
-                    </Box >
-                        <Box sx={{minWidth: 275, width: '20%', marginBottom: '2%', margin:'auto'}} >
+                            <ApprovalBodyMemberSection values={values} handleChange={handleChange}
+                                                       setFieldValue={setFieldValue}
+                                                       company={company}/>
+                        </Box>
+                        <Box sx={{minWidth: 275, width: '50%', marginBottom: '2%', margin: 'auto'}}>
                             <Button Button variant="contained" type="submit"
-                                     disabled={isSubmitting || !values.someoneIsPresent}> <Typography color="common.white" >Wygeneruj dokument</Typography></Button></Box>
+                                    disabled={isSubmitting || !values.someoneIsPresent}> <Typography
+                                color="common.white">Wygeneruj dokument</Typography></Button>
+                        {pdfReady===true && <Link to={'/pdf'}><Button Button variant="contained" type="button"
+                                 disabled={!pdfReady}> <Typography
+                            color="common.white">Pobierz dokument</Typography></Button></Link>}</Box>
                     </Box>
                     {/*<pre>{JSON.stringify(values, null, 2)}</pre>*/}
                 </Form>

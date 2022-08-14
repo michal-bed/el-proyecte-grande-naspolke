@@ -58,8 +58,6 @@ export default function validateBaseInfo(values){
     // board members' term validation
     if(values.boardMembersTermInput == null ||
         (!values?.boardMembersTermInput?.toString().replace(/\s/g, '').length)){
-        console.log("VALUE")
-        console.log(values.boardMembersTermInput)
         errors.boardMembersTermInput = "Wpisz długość kadencji rady nadzorczej"
     } else if (!(/^\d+(\.\d+)?$/.test(values.boardMembersTermInput.toString().trim()))) {
         errors.boardMembersTermInput = "Błędny format danych"

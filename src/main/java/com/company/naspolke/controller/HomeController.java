@@ -42,19 +42,11 @@ public class HomeController {
         this.authenticationService = authenticationService;
     }
 
-//    @RequestMapping({ "/hello" })
-//    public String helloPage() {
-//        System.out.println(SecurityContextHolder.getContext().getAuthentication());
-//        return "Hello World";
-//    }
-
     @Transactional
     @PostMapping(value = "/auth")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
 
         UserDetails userDetails = authenticationService.authenticateAndGetUserDetails(authenticationRequest);
-//        System.out.println("!!!!!!!!!!email!!!!!!");
-//        System.out.println(user.get().getUserEmail());
         Optional<AppUser> user = appUserService.findUserByUserEmail(authenticationRequest.getUsername());
 
         final String accessToken = jwtTokenUtil.generateToken(userDetails, 1000 * 60 * 15);

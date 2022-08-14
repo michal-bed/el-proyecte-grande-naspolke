@@ -8,13 +8,17 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import {IconButton, Stack} from "@mui/material";
 import PrintIcon from '@mui/icons-material/Print';
 import SaveIcon from '@mui/icons-material/Save';
-
+import {useLocation} from "react-router-dom";
+import HomeIcon from '@mui/icons-material/Home';
+import Link from "@mui/material/Link";
 
 function PdfView() {
 
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
+    const location = useLocation()
 
+    console.log(location.state)
 
     function onDocumentLoadSuccess({numPages}){
         setNumPages(numPages);
@@ -43,8 +47,12 @@ function PdfView() {
     return (
         <div className="App">
             <header className="App-header">
-                <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-                    <Page pageNumber={pageNumber} />
+                <Link to={"/userpanel"}><IconButton href = {"/userpanel"} target = "_blank" color="primary" aria-label="add to shopping cart">
+                    <HomeIcon fontSize="large" />
+                </IconButton></Link>
+                <Document file={pdf}
+                          onLoadSuccess={onDocumentLoadSuccess}>
+                    <Page pageNumber={pageNumber}/>
                 </Document>
 
                 <Stack direction="row" spacing={1}>

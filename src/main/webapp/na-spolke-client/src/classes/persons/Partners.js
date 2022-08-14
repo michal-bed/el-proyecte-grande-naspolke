@@ -35,8 +35,8 @@ export class IndividualPartner{
             this.lastNameII = partnerData.lastNameII;
             this.sharesCount = partnerData.sharesCount;
             this.sharesValue = partnerData.sharesValue;
-            this.gender = partnerData.hasOwnProperty("gender")? partnerData.gender : "m";
-            this.id = partnerData.hasOwnProperty("id")? partnerData.id : null;
+            this.gender = partnerData.hasOwnProperty("gender") && partnerData.gender!=="\u0000"? partnerData.gender : "m";
+            this.id = partnerData.hasOwnProperty("id") && partnerData.id!=="\u0000"? partnerData.id : null;
         }
     }
 }
@@ -58,8 +58,8 @@ export class PartnerCompany {
             this.sharesValue = partnerData.sharesValue;
             this.representativeFirstname = partnerData.representativeFirstname;
             this.representativeLastname = partnerData.representativeLastname;
-            this.representativeGender = partnerData.hasOwnProperty("representativeGender")?partnerData.representativeGender : "m";
-            this.id = partnerData.hasOwnProperty("id")?partnerData.id : null;
+            this.representativeGender = partnerData.hasOwnProperty("representativeGender") && partnerData.representativeGender!=="\u0000"?partnerData.representativeGender : "m";
+            this.id = partnerData.hasOwnProperty("id") && partnerData.id!=="\u0000" ?partnerData.id : null;
         }
     }
 }

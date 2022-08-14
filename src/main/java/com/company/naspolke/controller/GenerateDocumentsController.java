@@ -9,11 +9,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -30,11 +31,11 @@ public class GenerateDocumentsController {
 
     @ResponseStatus
     @PostMapping("/save/financial/{companyId}")
-    public String saveFinancialStatement(@PathVariable("companyId") String companyId, @RequestBody FinancialStatementProtocol protocol ) {
-//        FinancialStatementProtocol protocol1 = protocol;
-        System.out.println(protocol);
-        System.out.println(protocol);
-        return financialStatementService.saveFinancialStatement(protocol, UUID.fromString(companyId));
-
+    public ResponseEntity<String> saveFinancialStatement(@PathVariable("companyId") String companyId, @RequestBody FinancialStatementProtocol protocol ) {
+        String path = financialStatementService.saveFinancialStatement(protocol, UUID.fromString(companyId));
+        if(!Objects.equals(path, "")){
+            return new ResponseEntity<String>(path,new HttpHeaders(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -11,7 +11,7 @@ export class BoardMember{
 
     constructor(memberData) {
         if (memberData) {
-            if(memberData.hasOwnProperty("id")){
+            if(memberData.hasOwnProperty("id") && memberData.id!=="\u0000"){
                 this.id = memberData.id;
             }
             this.firstName = memberData.firstName;
@@ -19,7 +19,7 @@ export class BoardMember{
             this.lastNameI = memberData.lastNameI;
             this.lastNameII = memberData.lastNameII;
             this.function = memberData.function;
-            this.gender = memberData.hasOwnProperty("gender")? memberData.gender : "m";
+            this.gender = memberData.hasOwnProperty("gender") && memberData.gender!=="\u0000"? memberData.gender : "m";
         }
     }
 }
