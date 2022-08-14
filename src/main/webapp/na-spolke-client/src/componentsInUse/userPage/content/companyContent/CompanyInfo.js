@@ -194,7 +194,7 @@ function CompanyInfo() {
                             InputProps={{ inputProps: { style: { wordWrap: "break-word", color: getErrorInfo(name, validationInputName, row).error ? '#d32f2f' : 'black' }}}}
                             name={name}
                             value={row != null ? row[name] : ""}
-                            defaultValue={row != null ? row[name] : ""}
+                            // defaultValue={row != null ? row[name] : ""}
                             onChange={e => onChange(e, row)}
                             error = {getErrorInfo(name, validationInputName, row).error}
                             helperText={getErrorInfo(name, validationInputName, row).errorMsg}
@@ -207,10 +207,10 @@ function CompanyInfo() {
                         (<ThemeProvider theme={theme}>
                             <TextField
                                 variant="standard"
-                                disableUnderline={true}
+                                // disableUnderline={true}
                                 name={name}
                                 value={row != null ? row[name] : ""}
-                                defaultValue={row != null ? row[name] : ""}
+                                // defaultValue={row != null ? row[name] : ""}
                                 disabled={true}
                                 multiline={true}
                                 onChange={e => onChange(e, row)}
@@ -224,10 +224,10 @@ function CompanyInfo() {
                         <TextField
                             variant="outlined"
                             sx={{ "& .MuiOutlinedInput-notchedOutline": { border: "none" } }}
-                            disableUnderline={true}
+                            // disableUnderline={true}
                             name={name}
                             value={row != null ? row[name] : ""}
-                            defaultValue={row != null ? row[name] : ""}
+                            // defaultValue={row != null ? row[name] : ""}
                             multiline={true}
                             disabled={true}
                             onChange={e => onChange(e, row)}
@@ -536,14 +536,14 @@ function CompanyInfo() {
         company != null && rows != null &&
         <>
         <Card style={titleCardStyle}>
-            <Typography variant="h4" align="center">
-                {company['companyName']}<br/>
+            <Typography variant="h4" align="center" sx={{fontWeight: 'bold'}}>
+                {company['companyName']}
             </Typography>
         </Card>
             <TableContainer component={Paper} style={tableStyle}>
                 <Table>
                         <TableBody>
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Box style={{ display: 'flex', justifyContent: 'center' }}>
                                 <Grid sx={{
                                 marginTop: "2%",
                                 display: 'grid',
@@ -726,7 +726,7 @@ function CompanyInfo() {
                                 </Box>
                             </Grid>
                         {/*</Box>*/}
-                        </div>
+                        </Box>
                 </TableBody>
             </Table>
     </TableContainer>

@@ -39,10 +39,10 @@ public class FinancialStatementProtocolGenerator {
         this.protocolFactory = protocolFactory;
     }
 
-    public String generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation, String path) throws IOException {
+    public String generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation, String fileName) throws IOException {
         //Create new pdf file
         Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, new FileOutputStream("src/main/webapp/na-spolke-client/src/protocols/pdfTest.pdf"));
+        PdfWriter.getInstance(document, new FileOutputStream("src/main/webapp/na-spolke-client/src/protocols/"+fileName));
         document.open();
 
 //        int resolutionCount = 1;
@@ -166,7 +166,7 @@ public class FinancialStatementProtocolGenerator {
         //close file
         document.close();
         resolutionCount = 1;
-        return path;
+        return fileName;
     }
 //TODO try finaly
     private String getMeetingOrganPersonName(ElectionResolution resolution) {

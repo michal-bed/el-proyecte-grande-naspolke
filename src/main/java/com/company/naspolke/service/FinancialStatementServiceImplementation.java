@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -52,8 +53,16 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
     private String getFinancialStatementProtocolPath(Company company, FinancialStatementProtocol financialStatementsProtocol) {
         String companyName = company.getCompanyName().substring(0,5);
         String protocolNumber = String.valueOf(financialStatementsProtocol.getProtocolNumber());
-        String date = LocalDate.now().toString();
-        return "src/main/webapp/na-spolke-client/src/protocols/ZZW".concat(companyName).concat(protocolNumber).concat(date).concat(".pdf");
+        String meetingDate = String.valueOf(financialStatementsProtocol.getDateOfTheShareholdersMeeting().toString().replace(":","-"));
+        String date = LocalDateTime.now().toString().replace(".","-").replace(":","");
+        return "ZZW-".concat(companyName)
+                .concat("-")
+                .concat(protocolNumber)
+                .concat("-")
+                .concat(meetingDate)
+                .concat("--")
+                .concat(date)
+                .concat(".pdf");
     }
 
 //    public FinancialStatementProtocolGenerator getNewestFinancialStatementInfo(UUID companyId){

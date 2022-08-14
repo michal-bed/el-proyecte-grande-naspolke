@@ -18,8 +18,6 @@ function PdfView() {
     const [pageNumber, setPageNumber] = useState(1);
     const location = useLocation()
 
-    console.log(location.state)
-
     function onDocumentLoadSuccess({numPages}){
         setNumPages(numPages);
         setPageNumber(1);
@@ -50,7 +48,7 @@ function PdfView() {
                 <Link to={"/userpanel"}><IconButton href = {"/userpanel"} target = "_blank" color="primary" aria-label="add to shopping cart">
                     <HomeIcon fontSize="large" />
                 </IconButton></Link>
-                <Document file={pdf}
+                <Document file={require(`./../../../protocols/${location.state.pathToDownland}`)}
                           onLoadSuccess={onDocumentLoadSuccess}>
                     <Page pageNumber={pageNumber}/>
                 </Document>
@@ -66,10 +64,10 @@ function PdfView() {
                     <IconButton disabled={pageNumber >= numPages} onClick={changePageNext} color="secondary" aria-label="add an alarm">
                         <ArrowForwardIosIcon fontSize="large" />
                     </IconButton>
-                    <IconButton disabled={pageNumber >= numPages} onClick={changePageEnd} color="primary" aria-label="add to shopping cart">
+                    <IconButton disabled={pageNumber >= numPages} onClick={changePageEnd} color="primary">
                         <LastPageIcon fontSize="large" />
                     </IconButton>
-                    <IconButton href = {pdf} target = "_blank" color="primary" aria-label="add to shopping cart">
+                    <IconButton href = {pdf} target = "_blank" color="primary">
                         <SaveIcon fontSize="large" />
                     </IconButton>
                 </Stack>

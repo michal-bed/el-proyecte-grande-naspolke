@@ -170,9 +170,16 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                             <Button Button variant="contained" type="submit"
                                     disabled={isSubmitting || !values.someoneIsPresent}> <Typography
                                 color="common.white">Wygeneruj dokument</Typography></Button>
-                        {pdfReady===true && <Link to={'/pdf'}><Button Button variant="contained" type="button"
-                                 disabled={!pdfReady}> <Typography
-                            color="common.white">Pobierz dokument</Typography></Button></Link>}</Box>
+                        {pdfReady===true &&
+                            // <Link to={'/pdf'}>
+                            <Button Button variant="contained" type="button"
+                                 disabled={!pdfReady} onClick={()=> {
+                                     console.log(pdfPathFile);
+                                 navigate("/pdf", {state: {pathToDownland: pdfPathFile}})}
+                            }> <Typography
+                            color="common.white">Pobierz dokument</Typography></Button>
+                        // </Link>
+                        }</Box>
                     </Box>
                     {/*<pre>{JSON.stringify(values, null, 2)}</pre>*/}
                 </Form>

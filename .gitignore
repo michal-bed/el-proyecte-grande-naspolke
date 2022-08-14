@@ -43,3 +43,4 @@ src/main/webapp/na-spolke-client/.env
 /src/main/webapp/na-spolke-client/package-lock.json
 /src/main/resources/drafts/financialStatements/Test.docx
 /src/main/resources/drafts/financialStatements/pdfTest.pdf
+/src/main/webapp/na-spolke-client/src/protocols/
