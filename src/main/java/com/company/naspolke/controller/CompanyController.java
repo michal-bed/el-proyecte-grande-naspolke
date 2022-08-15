@@ -1,6 +1,5 @@
 package com.company.naspolke.controller;
 
-import com.company.naspolke.helpers.adapters.mocks.MocksData;
 import com.company.naspolke.config.util.JwtUtil;
 import com.company.naspolke.model.AppUser;
 import com.company.naspolke.model.Role;

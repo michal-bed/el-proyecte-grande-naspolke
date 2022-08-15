@@ -9,6 +9,7 @@ import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.Partners;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
@@ -58,7 +59,6 @@ public class Company {
     private Set<CompanyUserRole> companyUserRole = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL)
     private Set<FinancialStatementProtocol> financialStatementProtocols;
-
 
     @Builder
     public Company(String companyName,
@@ -133,9 +133,26 @@ public class Company {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Company company)) return false;
-        return com.google.common.base.Objects.equal(getCompanyId(), company.getCompanyId()) &&
-                com.google.common.base.Objects.equal(getKrsNumber(), company.getKrsNumber());
+        if (!(o instanceof Company)) return false;
+        Company company = (Company) o;
+        return isPartnersRevealed() == company.isPartnersRevealed() && isManySharesAllowed() == company.isManySharesAllowed()
+                && Objects.equal(getCompanyId(), company.getCompanyId())
+                && Objects.equal(getCompanyName(), company.getCompanyName())
+                && Objects.equal(getKrsNumber(), company.getKrsNumber())
+                && Objects.equal(getAddress(), company.getAddress())
+                && Objects.equal(getNip(), company.getNip())
+                && Objects.equal(getRegon(), company.getRegon())
+                && Objects.equal(getShareCapital(), company.getShareCapital())
+                && Objects.equal(getShareValue(), company.getShareValue())
+                && Objects.equal(getSharesCount(), company.getSharesCount())
+                && Objects.equal(getBoardMembers(), company.getBoardMembers())
+                && Objects.equal(getBoardMembersTerm(), company.getBoardMembersTerm())
+                && Objects.equal(getBoardOfDirectors(), company.getBoardOfDirectors())
+                && Objects.equal(getBoardOfDirectorsTerm(), company.getBoardOfDirectorsTerm())
+                && Objects.equal(getPartners(), company.getPartners())
+                && Objects.equal(getEventsList(), company.getEventsList())
+                && Objects.equal(getCompanyUserRole(), company.getCompanyUserRole())
+                && Objects.equal(getFinancialStatementProtocols(), company.getFinancialStatementProtocols());
     }
 
     @Override
@@ -168,6 +185,15 @@ public class Company {
                 ", companyUserRole=" + companyUserRole +
                 ", financialStatementProtocols=" + financialStatementProtocols +
                 '}';
+    }
+
+    /**
+     * @return
+     * @throws CloneNotSupportedException
+     */
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public void addNewEvent(Event event) {

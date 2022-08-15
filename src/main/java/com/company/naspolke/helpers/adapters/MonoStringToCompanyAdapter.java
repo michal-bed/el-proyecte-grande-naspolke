@@ -1,28 +1,39 @@
 package com.company.naspolke.helpers.adapters;
 
-import com.company.naspolke.helpers.adapters.mocks.MocksData;
 import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
-import com.company.naspolke.model.company.companyBodies.*;
+import com.company.naspolke.model.company.companyBodies.BoardMember;
+import com.company.naspolke.model.company.companyBodies.BoardOfDirector;
 import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import com.company.naspolke.model.company.companyBodies.Partners.Partners;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 @Component
 public class MonoStringToCompanyAdapter {
+    private final CompanyPaths path;
 
 //TODO usunąć importów z *
-    private final String SWLEX = MocksData.SWLEX;
-    private final String EASYSOLAR = MocksData.EASYSOLAR;
+//    private final String SWLEX = MocksData.SWLEX;
+//    private final String EASYSOLAR = MocksData.EASYSOLAR;
+    @Autowired
+    public MonoStringToCompanyAdapter(CompanyPaths path) {
+        this.path = path;
+    }
 
     public Company getCompany(String apiResponse) {
         boolean isValid = checkForProperCompanyLegalForm(apiResponse);
@@ -30,19 +41,18 @@ public class MonoStringToCompanyAdapter {
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(data);
         if (isValid) {
 //        String data = SWLEX;
-            String largerSharesInfo = "WIĘKSZĄ LICZBĘ UDZIAŁÓW";
             Configuration conf = Configuration.defaultConfiguration()
                     .addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
-            String nip = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.nip");
-            String regon = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.identyfikatory.regon");
-            String krsNumber = JsonPath.read(document, "$.odpis.naglowekA.numerKRS");
-            String companyName = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
+            String nip = JsonPath.read(document, path.getNip());
+            String regon = JsonPath.read(document, path.getRegon());
+            String krsNumber = JsonPath.read(document, path.getKrsNumber());
+            String companyName = JsonPath.read(document, path.getCompanyName());
             BigDecimal shareCapital = getShareCapitalFromApi(document);
             Partners partners = createCompanyPartners(document);
             Address address = getCompanyAddressFromApi(document);
             Set<BoardMember> boardMembers = getBoardMembersFromApi(document, conf);
             Set<BoardOfDirector> boardOfDirectors = getBoardOfDirectorsFromApi(document, conf);
-            boolean largerAmountOfSharesAllowed = JsonPath.read(document, "$.odpis.dane.dzial1.pozostaleInformacje.informacjaOLiczbieUdzialow").equals(largerSharesInfo);
+            boolean largerAmountOfSharesAllowed = JsonPath.read(document, path.getMultipleSharesAllowed()).equals("WIĘKSZĄ LICZBĘ UDZIAŁÓW");
 
             return Company.builder()
                     .companyName(companyName)
@@ -57,27 +67,25 @@ public class MonoStringToCompanyAdapter {
                     .manySharesAllowed(largerAmountOfSharesAllowed)
                     .build();
         }
-        String name = JsonPath.read(document, "$.odpis.dane.dzial1.danePodmiotu.nazwa");
+        String name = JsonPath.read(document, path.getCompanyName());
         return Company.builder()
                 .companyName(name)
                 .build();
     }
 
     private boolean checkForProperCompanyLegalForm(String apiResponse) {
-        String path = "$.odpis.dane.dzial1.danePodmiotu.formaPrawna";
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(apiResponse);
-        return JsonPath.read(document, path).equals("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ");
+        return JsonPath.read(document, path.getLegalForm()).equals("SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ");
     }
 //TODO wywalić string do inego do properties
 
     private Set<BoardOfDirector> getBoardOfDirectorsFromApi(Object document, Configuration conf) {
-        String path = "$.odpis.dane.dzial2.organNadzoru";
-        net.minidev.json.JSONArray boardOfDirectors = JsonPath.using(conf).parse(document).read(path);
+        net.minidev.json.JSONArray boardOfDirectors = JsonPath.using(conf).parse(document).read(path.getDirectors());
         Set<BoardOfDirector> boardOfDirectorSet = new HashSet<>();
         if(boardOfDirectors != null){
-            net.minidev.json.JSONArray boardOfDirectorsList = JsonPath.using(conf).parse(document).read(path+"[0].sklad");
+            net.minidev.json.JSONArray boardOfDirectorsList = JsonPath.using(conf).parse(document).read(path.getDirectors()+"[0].sklad");
             for (int i = 0; i < boardOfDirectorsList.size(); i++) {
-                PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path + "[0].sklad[%s]", i));
+                PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path.getDirectors() + "[0].sklad[%s]", i));
                 BoardOfDirector boardOfDirector = BoardOfDirector.builder()
                         .firstName(personNameAndSurname.getFirstName())
                         .secondName(personNameAndSurname.getSecondName())
@@ -91,9 +99,9 @@ public class MonoStringToCompanyAdapter {
     }
 
     private Set<BoardMember> getBoardMembersFromApi(Object document, Configuration conf){
-        String path = "$.odpis.dane.dzial2.reprezentacja.sklad";
+//        String path = "$.odpis.dane.dzial2.reprezentacja.sklad";
 
-        net.minidev.json.JSONArray boardMembers = JsonPath.using(conf).parse(document).read(path);
+        net.minidev.json.JSONArray boardMembers = JsonPath.using(conf).parse(document).read(path.getBoardMembers());
         Set<BoardMember> boardMemberSet = new HashSet<>();
         if(boardMembers != null) {
 //            Set<BoardMember> boardMembersList = boardMembers.stream()
@@ -111,9 +119,9 @@ public class MonoStringToCompanyAdapter {
 //                    }).collect(Collectors.toSet());
 
             for (int i = 0; i < boardMembers.size(); i++) {
-                PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path + "[%s]", i));
+                PersonNameAndSurname personNameAndSurname = getBasicPersonalInfo(document, String.format(path.getBoardMembers() + "[%s]", i));
                 String abs = personNameAndSurname.getFirstName();
-                String function = JsonPath.read(document, String.format(path + "[%s].funkcjaWOrganie", i));
+                String function = JsonPath.read(document, String.format(path.getBoardMembers() + "[%s].funkcjaWOrganie", i));
                 BoardMember boardMember = BoardMember.builder()
                         .firstName(abs)
                         .secondName(personNameAndSurname.getSecondName())
@@ -128,16 +136,16 @@ public class MonoStringToCompanyAdapter {
     }
 //TODO częściej stream niż for
     private Partners createCompanyPartners(Object document) {
-        net.minidev.json.JSONArray partners = JsonPath.read(document, "$.odpis.dane.dzial1.wspolnicySpzoo");
+        net.minidev.json.JSONArray partners = JsonPath.read(document, path.getPartners());
         Set<NaturalPerson> naturalPersonSet = new HashSet<>();
         Set<JuridicalPerson> juridicalPersonSet = new HashSet<>();
         for (int i = 0; i < partners.size(); i++) {
             LinkedHashMap<Object, String> partner = (LinkedHashMap<Object, String>) partners.get(i);
             if (partner.containsKey("nazwisko")) {
-                NaturalPerson naturalPerson = getNaturalPersonPartner(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s]", i));
+                NaturalPerson naturalPerson = getNaturalPersonPartner(document, String.format(path.getPartners()+"[%s]", i));
                 naturalPersonSet.add(naturalPerson);
             } else {
-                JuridicalPerson juridicalPerson = getJuridicalPartner(document, String.format("$.odpis.dane.dzial1.wspolnicySpzoo[%s]", i));
+                JuridicalPerson juridicalPerson = getJuridicalPartner(document, String.format(path.getPartners()+"[%s]", i));
                 juridicalPersonSet.add(juridicalPerson);
             }
         }
@@ -192,7 +200,7 @@ public class MonoStringToCompanyAdapter {
     }
 
     private BigDecimal getShareCapitalFromApi(Object document) {
-        String shareCapitalsFromAPI = JsonPath.read(document, "$.odpis.dane.dzial1.kapital.wysokoscKapitaluZakladowego.wartosc");
+        String shareCapitalsFromAPI = JsonPath.read(document, path.getShareCapital());
         return BigDecimal.valueOf(Double.parseDouble(shareCapitalsFromAPI.replaceAll("[,]",".")));
     }
 
@@ -222,14 +230,12 @@ public class MonoStringToCompanyAdapter {
 
 
     Address getCompanyAddressFromApi(Object document) {
-        String addressPath = "$.odpis.dane.dzial1.siedzibaIAdres.adres";
-
-        String city = JsonPath.read(document, addressPath+".miejscowosc");
-        String zipCode = JsonPath.read(document, addressPath+".kodPocztowy");
-        String postOffice = JsonPath.read(document, addressPath+".poczta");
-        String streetName = JsonPath.read(document, addressPath+".ulica");
-        String streetNumber = JsonPath.read(document, addressPath+".nrDomu");
-        String localNumber = checkForOptionalData("nrLokalu", addressPath, document);
+        String city = JsonPath.read(document, path.getAddress()+".miejscowosc");
+        String zipCode = JsonPath.read(document, path.getAddress()+".kodPocztowy");
+        String postOffice = JsonPath.read(document, path.getAddress()+".poczta");
+        String streetName = JsonPath.read(document, path.getAddress()+".ulica");
+        String streetNumber = JsonPath.read(document, path.getAddress()+".nrDomu");
+        String localNumber = checkForOptionalData("nrLokalu", path.getAddress(), document);
         return Address.builder()
                 .streetName(streetName)
                 .streetNumber(streetNumber)
@@ -242,10 +248,10 @@ public class MonoStringToCompanyAdapter {
 }
 
 @Component
-@NoArgsConstructor
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 class PersonNameAndSurname {
     private String firstName;
     private String secondName;
@@ -256,8 +262,8 @@ class PersonNameAndSurname {
 @Builder
 @Component
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 class SharePackage {
     private BigDecimal shareValue;
     private Integer shareCount;

@@ -54,8 +54,6 @@ export default function FinancialStatementForm({company, companyIdMac}) {
     const checkForPdf=(isReady, pdfURL)=>{
         setPdfPathFile(pdfURL);
         setPdfReady(isReady);
-        console.log("gotowe")
-
     }
 
 
@@ -174,7 +172,6 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                             // <Link to={'/pdf'}>
                             <Button Button variant="contained" type="button"
                                  disabled={!pdfReady} onClick={()=> {
-                                     console.log(pdfPathFile);
                                  navigate("/pdf", {state: {pathToDownland: pdfPathFile}})}
                             }> <Typography
                             color="common.white">Pobierz dokument</Typography></Button>

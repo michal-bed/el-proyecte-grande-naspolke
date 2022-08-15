@@ -24,29 +24,7 @@ public class LogoutController {
 
     @RequestMapping({ "logout" })
     public ResponseEntity<?> handleLogout(@CookieValue(value = "jwt", defaultValue = "") String refreshToken) {
-
-//        System.out.println("JWTRef = " + refreshToken);
-//
-//        if (Objects.equals(refreshToken, "")){
-//            // 204 - NO CONTENT
-//            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//        }
-//
-//        RefreshToken userInfo = refreshTokenService.findByJwt(refreshToken);
-//        if (userInfo != null)
-//        {
-//            userInfo.setJwt("");
-//            refreshTokenService.saveToken(userInfo);
-//        }
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Set-Cookie","jwt=cleared;"  +
-//                " Max-Age=86400; Secure; HttpOnly; SameSite=None");
-//        return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(headers).build();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
-//        return "redirect:/";
-
-//        return new RedirectView("/");
     }
 }

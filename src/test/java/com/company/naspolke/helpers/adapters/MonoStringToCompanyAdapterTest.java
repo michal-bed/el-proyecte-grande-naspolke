@@ -17,7 +17,7 @@ class MonoStringToCompanyAdapterTest {
 
     @BeforeEach
     void setUpBeforeEach(){
-        companyAdapter = new MonoStringToCompanyAdapter();
+//        companyAdapter = new MonoStringToCompanyAdapter();
 
     }
     @Test
