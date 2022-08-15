@@ -61,11 +61,12 @@ export default function FullWidthTabs(props) {
     const FormTitles = ["Zarząd", "Rada Nadzorcza", "Wspólnicy"]
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
-    const { company, saveCompanyData } = props;
-    const [companyOrgans, setCompanyOrgans] = useState(company)
-    const [boardMembers, setBoardMembers] = useState(company===null ? null: company.boardMembers)
-    const [boardOfDirectors, setBoardOfDirectors] = useState(company===null ? null: company.boardOfDirectors)
-    const [partnersList, setPartnersList] = useState(company===null ? null: company.partners)
+    // const { company, saveCompanyData } = props;
+    // const [companyOrgans, setCompanyOrgans] = useState(company)
+    // const [boardMembers, setBoardMembers] = useState(company===null ? null: company.boardMembers)
+    // const [boardOfDirectors, setBoardOfDirectors] = useState(company===null ? null: company.boardOfDirectors)
+    // const [partnersList, setPartnersList] = useState(company===null ? null: company.partners)
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

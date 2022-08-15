@@ -385,9 +385,10 @@ const Partners = (props) => {
                                     value={partner.gender}
                                     label="gender"
                                     onChange={(event)=> handleChangeInput(index, event, actionType.DISPLAY_INDIVIDUAL_PARTNERS)}
+                                    style={{ fontSize: 18 }}
                                 >
-                                    <MenuItem value={"m"}>Pan</MenuItem>
-                                    <MenuItem value={"f"}>Pani</MenuItem>
+                                    <MenuItem style={{ fontSize: 18 }} value={"m"}>Pan</MenuItem>
+                                    <MenuItem style={{ fontSize: 18 }} value={"f"}>Pani</MenuItem>
                                 </Select>
                         </Box>
                         <CardContent sx={{
@@ -483,9 +484,10 @@ const Partners = (props) => {
                                 value={partner.representativeGender}
                                 label="gender"
                                 onChange={(event)=> handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
+                                style={{ fontSize: 18 }}
                             >
-                                <MenuItem value={"m"}>Pan</MenuItem>
-                                <MenuItem value={"f"}>Pani</MenuItem>
+                                <MenuItem style={{ fontSize: 18 }} value={"m"}>Pan</MenuItem>
+                                <MenuItem style={{ fontSize: 18 }} value={"f"}>Pani</MenuItem>
                             </Select>
                         </Box>
                         <Box sx={{gridArea: "name"}} className={styles["Box"]}><TextField

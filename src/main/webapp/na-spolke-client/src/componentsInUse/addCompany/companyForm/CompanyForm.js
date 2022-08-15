@@ -7,6 +7,8 @@ import Partners from "./formComponents/companyOrgans/Partners";
 import {ModalErrorFormComponent} from "./ModalErrorComponent";
 import FullWidthTabs from "./FormNavbar";
 import CompanyContextProvider, {CompanyContext} from "./CompanyContext";
+import Typography from "@mui/material/Typography";
+import {Box} from "@mui/material";
 
 const CompanyForm = ({saveData})=>{
     const companyData = useContext(CompanyContext);
@@ -30,19 +32,19 @@ const CompanyForm = ({saveData})=>{
     }
 
     return<form className={styles["form"]}>
-        <div className={styles["form-container"]}>
-            <div className={styles["header"]}>
-                <h1 style={{ textAlign: 'center' }}>Dane podstawowe</h1>
-            </div>
-            <div className={styles["body"]}>
+        <Box className={styles["form-container"]}>
+            <Box className={styles["header"]}>
+                <Typography style={{ textAlign: 'center', fontSize: 32 }}>Dane podstawowe</Typography>
+            </Box>
+            <Box className={styles["body"]}>
                 <BaseInfo pageType="baseInfo" />
                 {modalError}
-            </div>
+            </Box>
                 <FullWidthTabs company={companyData.state.company} saveCompanyData={handleSaveDataFromPartnerForm}/>
-            <div className={styles["footer"]}/>
-            <div className={styles["form-nav-bar"]}>
-            </div>
-        </div>
+            <Box className={styles["footer"]}/>
+            <Box className={styles["form-nav-bar"]}>
+            </Box>
+        </Box>
     </form>
 }
 

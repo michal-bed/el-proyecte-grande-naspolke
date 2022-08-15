@@ -1,5 +1,5 @@
 import {Box, Card, CardContent, Typography} from "@mui/material";
-import {TextField} from "@material-ui/core";
+import {TextField} from "@mui/material";
 import validateBaseInfo from "./ValidateBaseInfo";
 import * as PropTypes from "prop-types";
 import {useContext} from "react";
@@ -10,7 +10,7 @@ export default function CompanyIdentifiersCard(props) {
 
 
 
-    return <Card sx={{minWidth: 275, width: "95%", margin: "auto", height: "100%"}}>
+    return <Card sx={{minWidth: 275, width: "100%", margin: "auto", height: "100%"}}>
         <CardContent sx={{
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",

@@ -29,15 +29,15 @@ const MembersCompanyBodies = (props) => {
     }, [memberBody])
 
     if (memberBody === null || memberBody.length === 0) {
-        return <div>
-            <div className={styles["no-members-header"]}>Brak {props.pageType==="board"? "Zarządu" : "Rady Nadzorczej"}!</div>
+        return <Box>
+            <Box className={styles["no-members-header"]}><Typography>Brak {props.pageType === "board" ? "Zarządu" : "Rady Nadzorczej"}!</Typography></Box>
             <Card sx={{minWidth: 275, width: '30%', height: "35vh", margin: "auto"}} className={styles["add-member-container"]} onClick={addCompanyBodyMember}>
                 <CardContent>
-                    <PersonAddIcon className={styles["addPersonIcon"]}/>
-                    <div className={styles["no-members-helper-text"]}> Dodaj członka {props.pageType==="board"? "Zarządu" : "Rady Nadzorczej"} </div>
+                    <PersonAddIcon sx={{ fontSize: "large" }}/>
+                    <Box className={styles["no-members-helper-text"]}> Dodaj członka {props.pageType==="board"? "Zarządu" : "Rady Nadzorczej"} </Box>
                 </CardContent>
             </Card>
-        </div>
+        </Box>
     } else if (Object.keys(memberBody[0]).includes("function") && props.pageType === "directors") {
         setMemberBody(companyData.state.company.boardOfDirectors)
     } else if (!Object.keys(memberBody[0]).includes("function") && props.pageType === "board") {
@@ -101,13 +101,7 @@ const MembersCompanyBodies = (props) => {
 
 
     function handleBodyMemberList(index) {
-        console.log(memberBody);
-        console.log(index);
         const newMemberList = memberBody.filter((x, i) => i !== index);
-        // console.log("deleting... ", newMemberList);
-        // let newMemberList = memberBody;
-        // newMemberList.splice(index, 1);
-        console.log(newMemberList);
         setMemberBody(newMemberList);
     }
 
@@ -132,9 +126,11 @@ const MembersCompanyBodies = (props) => {
                                 value={member.gender}
                                 label="gender"
                                 onChange={(event)=> handleChangeInput(index, event)}
+                                style={{ fontSize: 18 }}
+                                gap={1}
                             >
-                                <MenuItem value={"m"}>Pan</MenuItem>
-                                <MenuItem value={"f"}>Pani</MenuItem>
+                                <MenuItem style={{ fontSize: 18 }} value={"m"}>Pan</MenuItem>
+                                <MenuItem style={{ fontSize: 18 }} value={"f"}>Pani</MenuItem>
                             </Select>
                         </Box>
                         <CardContent>
