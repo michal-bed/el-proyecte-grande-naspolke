@@ -374,7 +374,8 @@ const Partners = (props) => {
         </Card>
             {state.partners.individualPartners !== null && state.partners.individualPartners.map((partner, index) => (
                 <div key={index}>
-                    <Card sx={{minWidth: 275, width: "95%", margin: "auto", height: "100%"}}>
+                    <Card sx={{p:2, border: 2, borderColor: '#1565c0', minWidth: 275, width: "95%", margin: "auto", height: "100%", mb:2,
+                        ':hover': {boxShadow: 20} }}>
                         <Box className={styles["partner-separator"]}> Wspólnik {counter++}</Box>
                         <Box sx={{ minWidth: 120}}>
                                 <InputLabel id={`gender${index}`}>Zwrot grzecznościowy</InputLabel>
@@ -452,8 +453,9 @@ const Partners = (props) => {
             ))
             }
             {state.partners.partnerCompanies !== null && state.partners.partnerCompanies.map((partner, index) => (
-                <div key={index}>
-                    <Card sx={{minWidth: 275, width: "95%", margin: "auto", height: "100%"}}>
+                <Box key={`${index}${partner.name}main`}>
+                    <Card  sx={{p:2, border: 2, borderColor: '#1565c0', minWidth: 275, width: "95%", margin: "auto", height: "100%", mb:2,
+                        ':hover': {boxShadow: 20}}}>
                         <Box className={styles["partner-separator"]}>Wspólnik {counter++}</Box>
                         <CardContent sx={{
                             display: "grid",
@@ -518,7 +520,7 @@ const Partners = (props) => {
                                     onClick={() => handlePartnersList(index, actionType.DUPLICATE_COMPANY_PARTNER, partner)}>Powiel</Button>
                         </div>
                     </Card>
-                </div>
+                </Box>
             ))
             }
         <Card sx={{minWidth: 275, width: "95%", margin: "auto", height: "30vh"}}>
