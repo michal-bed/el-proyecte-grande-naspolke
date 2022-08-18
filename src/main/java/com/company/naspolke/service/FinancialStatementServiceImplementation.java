@@ -57,7 +57,7 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
     }
 
     private String getFinancialStatementProtocolPath(Company company, FinancialStatementProtocol financialStatementsProtocol) {
-        String companyName = company.getCompanyName().substring(0,5);
+        String companyName = company.getCompanyName().substring(0,5).replaceAll("\"", "");
         String protocolNumber = String.valueOf(financialStatementsProtocol.getProtocolNumber());
         String meetingDate = String.valueOf(financialStatementsProtocol.getDateOfTheShareholdersMeeting().toString().replace(":","-"));
         String date = LocalDateTime.now().toString().replace(".","-").replace(":","");
