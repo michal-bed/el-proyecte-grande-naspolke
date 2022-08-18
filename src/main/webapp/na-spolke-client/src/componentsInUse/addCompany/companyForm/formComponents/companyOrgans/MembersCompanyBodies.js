@@ -115,7 +115,7 @@ const MembersCompanyBodies = (props) => {
             margin: 'auto'
         }}>
             {memberBody.map((member, index) => (
-                <div key={`main${index}${member.lastNameI}${member.firstName}`}>
+                <Box>
                     <Card sx={{minWidth: 275, width: '95%', height: '100%', margin: "auto"}}>
                         <Box sx={{ minWidth: 120}}>
                             <InputLabel id={`gender${index}`}>Zwrot grzecznościowy</InputLabel>
@@ -144,15 +144,18 @@ const MembersCompanyBodies = (props) => {
                         "function function"`,
                             }}>
                                 <Box sx={{gridArea: 'lastNameI'}} className={styles["Box"]}><TextField
+                                    key={`lastNameI${index}`}
                                     label="Nazwisko"
                                     name="lastNameI"
                                     variant="filled"
                                     defaultValue={member.lastNameI}
+                                    value={member.lastNameI}
                                     error={validatePartners({lastNameI: member.lastNameI}).hasOwnProperty("lastNameI")}
                                     helperText={validatePartners({lastNameI: member.lastNameI}).lastNameI}
                                     onChange={event => handleChangeInput(index, event)}
                                 /></Box>
                                 <Box sx={{gridArea: 'lastNameII'}} className={styles["Box"]}><TextField
+                                    key={`lastNameII${index}`}
                                     label="Nazwisko (drugi człon)"
                                     name="lastNameII"
                                     variant="filled"
@@ -162,6 +165,7 @@ const MembersCompanyBodies = (props) => {
                                     onChange={event => handleChangeInput(index, event)}
                                 /></Box>
                                 <Box sx={{gridArea: 'firstName'}} className={styles["Box"]}><TextField
+                                    key={`firstName${index}`}
                                     label="Imię"
                                     name="firstName"
                                     variant="filled"
@@ -171,6 +175,7 @@ const MembersCompanyBodies = (props) => {
                                     onChange={event => handleChangeInput(index, event)}
                                 /></Box>
                                 <Box sx={{gridArea: 'secondName'}} className={styles["Box"]}><TextField
+                                    key={`secondName${index}`}
                                     label="Drugie imię"
                                     name="secondName"
                                     variant="filled"
@@ -187,7 +192,7 @@ const MembersCompanyBodies = (props) => {
                                             onClick={() => handleBodyMemberList(index)}><Typography sx={{fontSize:15}}>Usuń</Typography></Button>
                                 </div>
                             </Grid></CardContent></Card>
-                </div>
+                </Box>
             ))
             }
             <Card sx={{minWidth: 275, width: '95%', height: "35vh", margin: "auto"}} className={styles["add-member-container"]} onClick={addCompanyBodyMember}>

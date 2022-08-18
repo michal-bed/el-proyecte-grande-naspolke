@@ -4,6 +4,7 @@ import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.financialStatements.FinancialStatementProtocol;
 import com.company.naspolke.model.documentDrafts.FinancialStatementProtocolGenerator;
 import com.company.naspolke.repository.CompanyRepository;
+import com.lowagie.text.Document;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
             Company company = companyOptional.get();
             try {
                 filePath = getFinancialStatementProtocolPath(company,financialStatementsProtocol);
-                filePath = financialStatementProtocolGenerator.generatePdfDocument(company, financialStatementsProtocol, filePath);
+                Document document = financialStatementProtocolGenerator.generatePdfDocument(company, financialStatementsProtocol, filePath);
+                SaveDocument(document);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -48,6 +50,10 @@ public class FinancialStatementServiceImplementation implements FinancialStateme
 
         }
         return filePath;
+    }
+
+    private void SaveDocument(Document document) {
+
     }
 
     private String getFinancialStatementProtocolPath(Company company, FinancialStatementProtocol financialStatementsProtocol) {

@@ -207,7 +207,7 @@ public class MonoStringToCompanyAdapter {
 
     private SharePackage getShareInfo(Object document, String path) {
         String sharesInfo = JsonPath.read(document, path + ".posiadaneUdzialy");
-        String[] shares = sharesInfo.split("UDZIAŁÓW O ŁĄCZNEJ WARTOŚCI");
+        String[] shares = sharesInfo.split("O ŁĄCZNEJ");
         Integer shareCount = Integer.valueOf(shares[0].trim().replaceAll("[^\\d]",""));
         String sharesValueString = getSharesValueFromApiData(shares[1]);
         BigDecimal sharesValueBigDecimal = BigDecimal.valueOf(Double.parseDouble(sharesValueString.replaceAll("[^\\d]", ".")));

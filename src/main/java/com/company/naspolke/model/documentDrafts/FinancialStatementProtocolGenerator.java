@@ -39,134 +39,135 @@ public class FinancialStatementProtocolGenerator {
         this.protocolFactory = protocolFactory;
     }
 
-    public String generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation, String fileName) throws IOException {
+    @SuppressWarnings("finally")
+    public Document generatePdfDocument(Company company, FinancialStatementProtocol financialStatementInformation, String fileName) throws IOException {
         //Create new pdf file
-        Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, new FileOutputStream("src/main/webapp/na-spolke-client/src/protocols/"+fileName));
-        document.open();
+            Document document = new Document(PageSize.A4);
+            PdfWriter.getInstance(document, new FileOutputStream("src/main/webapp/na-spolke-client/src/protocols/"+fileName));
+            document.open();
 
 //        int resolutionCount = 1;
-        // Set protocol Header
-        String header = generateProtocolText(company, financialStatementInformation);
-        Paragraph protocolHeader = protocolFactory.getProtocolHeader(header);
-        document.add(protocolHeader);
+            // Set protocol Header
+            String header = generateProtocolText(company, financialStatementInformation);
+            Paragraph protocolHeader = protocolFactory.getProtocolHeader(header);
+            document.add(protocolHeader);
 
-        //Set meeting place
-        String meetingPlaceText = setMeetingPlaceText(company, financialStatementInformation);
-        Paragraph meetingPlaceParagraph = protocolFactory.getPlaneProtocolText(meetingPlaceText);
-        document.add(meetingPlaceParagraph);
+            //Set meeting place
+            String meetingPlaceText = setMeetingPlaceText(company, financialStatementInformation);
+            Paragraph meetingPlaceParagraph = protocolFactory.getPlaneProtocolText(meetingPlaceText);
+            document.add(meetingPlaceParagraph);
 
-        //Set attendants list
-        List<Paragraph> attendantsListText = setAttendantsList(financialStatementInformation, true, company);
-        for (Paragraph paragraph :attendantsListText) {
-            Paragraph listElement = protocolFactory.getAttendanceElementListOfShareholders(paragraph);
-            document.add(listElement);
-        }
+            //Set attendants list
+            List<Paragraph> attendantsListText = setAttendantsList(financialStatementInformation, true, company);
+            for (Paragraph paragraph :attendantsListText) {
+                Paragraph listElement = protocolFactory.getAttendanceElementListOfShareholders(paragraph);
+                document.add(listElement);
+            }
 
-        //Set Chairperson text
-        String chairpersonInfo = getChairmanInfo(financialStatementInformation);
-        Paragraph chairpersonParagraph = protocolFactory.getPlainTextAfterList(chairpersonInfo);
-        document.add(chairpersonParagraph);
+            //Set Chairperson text
+            String chairpersonInfo = getChairmanInfo(financialStatementInformation);
+            Paragraph chairpersonParagraph = protocolFactory.getPlainTextAfterList(chairpersonInfo);
+            document.add(chairpersonParagraph);
 
-        //Set chairperson resolution
-        String resolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getChairperson().getResolutionTitle());
-        String resolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation.getChairperson(), company, ProtocolPattern.resolutionChairpersonText);
-        String resolutionVoting = getResolutionVoting(financialStatementInformation.getChairperson(), "tajnym");
-        List<Paragraph> chairpersonResolutionParagraph = protocolFactory.getResolution(resolutionTitle, resolutionText, resolutionVoting);
-        chairpersonResolutionParagraph.forEach(document::add);
+            //Set chairperson resolution
+            String resolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getChairperson().getResolutionTitle());
+            String resolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation.getChairperson(), company, ProtocolPattern.resolutionChairpersonText);
+            String resolutionVoting = getResolutionVoting(financialStatementInformation.getChairperson(), "tajnym");
+            List<Paragraph> chairpersonResolutionParagraph = protocolFactory.getResolution(resolutionTitle, resolutionText, resolutionVoting);
+            chairpersonResolutionParagraph.forEach(document::add);
 
-        //Set recorder resolution
-        String recorderResolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getRecorder().getResolutionTitle());
-        String recorderResolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation.getRecorder(), company, ProtocolPattern.resolutionRecorderText);
-        String recorderResolutionVoting = getResolutionVoting(financialStatementInformation.getRecorder(), "tajnym");
-        List<Paragraph> recorderResolutionParagraph = protocolFactory.getResolution(recorderResolutionTitle, recorderResolutionText, recorderResolutionVoting);
-        recorderResolutionParagraph.forEach(document::add);
+            //Set recorder resolution
+            String recorderResolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getRecorder().getResolutionTitle());
+            String recorderResolutionText = getMeetingOrganVotingResolutionText(financialStatementInformation.getRecorder(), company, ProtocolPattern.resolutionRecorderText);
+            String recorderResolutionVoting = getResolutionVoting(financialStatementInformation.getRecorder(), "tajnym");
+            List<Paragraph> recorderResolutionParagraph = protocolFactory.getResolution(recorderResolutionTitle, recorderResolutionText, recorderResolutionVoting);
+            recorderResolutionParagraph.forEach(document::add);
 
-        //Set protocolAttendanceInfo
-        Chunk protocolAttendanceInfo = getAttendanceInfo("Zwyczajnego");
-        Chunk protocolValidationFormula = getProtocolValidationFormula(financialStatementInformation, company);
-        Paragraph protocolAttendanceAndValidation = protocolFactory.getParagraphRegularFromChunks(protocolAttendanceInfo, protocolValidationFormula);
-        document.add(protocolAttendanceAndValidation);
+            //Set protocolAttendanceInfo
+            Chunk protocolAttendanceInfo = getAttendanceInfo("Zwyczajnego");
+            Chunk protocolValidationFormula = getProtocolValidationFormula(financialStatementInformation, company);
+            Paragraph protocolAttendanceAndValidation = protocolFactory.getParagraphRegularFromChunks(protocolAttendanceInfo, protocolValidationFormula);
+            document.add(protocolAttendanceAndValidation);
 
-        //Set information about agenda
-        Paragraph paragraphAboutAgenda = protocolFactory.getPlaneProtocolText(ProtocolPattern.informationAboutAgenda);
-        document.add(paragraphAboutAgenda);
+            //Set information about agenda
+            Paragraph paragraphAboutAgenda = protocolFactory.getPlaneProtocolText(ProtocolPattern.informationAboutAgenda);
+            document.add(paragraphAboutAgenda);
 
-        //Set agenda resolution
-        String agendaResolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getAgendaResolution().getResolutionTitle());
-        List<String> agenda = getAgendaResolutionText(financialStatementInformation);
-        String agendaVoting = getResolutionVoting(financialStatementInformation.getAgendaResolution(), "jawnym");
+            //Set agenda resolution
+            String agendaResolutionTitle = getResolutionTitle(company, financialStatementInformation, financialStatementInformation.getAgendaResolution().getResolutionTitle());
+            List<String> agenda = getAgendaResolutionText(financialStatementInformation);
+            String agendaVoting = getResolutionVoting(financialStatementInformation.getAgendaResolution(), "jawnym");
 
-        Paragraph agendaResolutionTitleParagraph = protocolFactory.getResolutionTitleParagraph(agendaResolutionTitle);
-        Paragraph agendaResolutionIntroduction = protocolFactory.getResolutionTextParagraph(String.format(ProtocolPattern.agendaIntroduction, "Zwyczajne"));
-        List<Paragraph> agendaResolutionList = protocolFactory.getNumberedListInResolution(agenda);
-        Paragraph agendaResolutionVotingParagraph = protocolFactory.getResolutionVotingParagraph(agendaVoting);
+            Paragraph agendaResolutionTitleParagraph = protocolFactory.getResolutionTitleParagraph(agendaResolutionTitle);
+            Paragraph agendaResolutionIntroduction = protocolFactory.getResolutionTextParagraph(String.format(ProtocolPattern.agendaIntroduction, "Zwyczajne"));
+            List<Paragraph> agendaResolutionList = protocolFactory.getNumberedListInResolution(agenda);
+            Paragraph agendaResolutionVotingParagraph = protocolFactory.getResolutionVotingParagraph(agendaVoting);
 
-        document.add(agendaResolutionTitleParagraph);
-        document.add(agendaResolutionIntroduction);
-        agendaResolutionList.forEach(document::add);
-        document.add(agendaResolutionVotingParagraph);
+            document.add(agendaResolutionTitleParagraph);
+            document.add(agendaResolutionIntroduction);
+            agendaResolutionList.forEach(document::add);
+            document.add(agendaResolutionVotingParagraph);
 
 
-        //Set financial statement resolution
-        String financialStatementTitle = getFinancialStatementTitle(financialStatementInformation);
-        String financialStatementResolutionTitle = getResolutionTitle(company,financialStatementInformation, financialStatementTitle);
-        String financialStatementResolutionText = getFinancialStatementResolutionText(company, financialStatementInformation);
-        String financialStatementResolutionVoting = getResolutionVoting(financialStatementInformation.getFinancialStatementResolution(), "jawnym");
-        List<Paragraph> financialStatementResolutionParagraph = protocolFactory.getResolution(financialStatementResolutionTitle,
-                financialStatementResolutionText, financialStatementResolutionVoting);
-        financialStatementResolutionParagraph.forEach(document::add);
+            //Set financial statement resolution
+            String financialStatementTitle = getFinancialStatementTitle(financialStatementInformation);
+            String financialStatementResolutionTitle = getResolutionTitle(company,financialStatementInformation, financialStatementTitle);
+            String financialStatementResolutionText = getFinancialStatementResolutionText(company, financialStatementInformation);
+            String financialStatementResolutionVoting = getResolutionVoting(financialStatementInformation.getFinancialStatementResolution(), "jawnym");
+            List<Paragraph> financialStatementResolutionParagraph = protocolFactory.getResolution(financialStatementResolutionTitle,
+                    financialStatementResolutionText, financialStatementResolutionVoting);
+            financialStatementResolutionParagraph.forEach(document::add);
 
-        //Set amount profit or lose resolution
-        String profitOrLoseTitlePart = getProfitLoseInfo(financialStatementInformation);
-        String profitOrLoseTitle = getResolutionTitle(company, financialStatementInformation, profitOrLoseTitlePart);
+            //Set amount profit or lose resolution
+            String profitOrLoseTitlePart = getProfitLoseInfo(financialStatementInformation);
+            String profitOrLoseTitle = getResolutionTitle(company, financialStatementInformation, profitOrLoseTitlePart);
 
-        String profitOrLoseText = getProfitLoseResolutionText(company, financialStatementInformation);
-        String profitOrLoseVoting = getResolutionVoting(financialStatementInformation.getProfitOrLoss(),"jawnym");
+            String profitOrLoseText = getProfitLoseResolutionText(company, financialStatementInformation);
+            String profitOrLoseVoting = getResolutionVoting(financialStatementInformation.getProfitOrLoss(),"jawnym");
 
-        List<Paragraph> profitOrLoseParagraphs = protocolFactory.getResolution(profitOrLoseTitle, profitOrLoseText, profitOrLoseVoting);
-        profitOrLoseParagraphs.forEach(document::add);
+            List<Paragraph> profitOrLoseParagraphs = protocolFactory.getResolution(profitOrLoseTitle, profitOrLoseText, profitOrLoseVoting);
+            profitOrLoseParagraphs.forEach(document::add);
 
-        //Set approval resolution
-        List<Paragraph> approvalResolutions = getApprovalResolutionTitle(financialStatementInformation, "board", company);
-        approvalResolutions.forEach(document::add);
-        List<Paragraph> approvalResolutionsDirectors = getApprovalResolutionTitle(financialStatementInformation, "directors", company);
-        approvalResolutionsDirectors.forEach(document::add);
+            //Set approval resolution
+            List<Paragraph> approvalResolutions = getApprovalResolutionTitle(financialStatementInformation, "board", company);
+            approvalResolutions.forEach(document::add);
+            List<Paragraph> approvalResolutionsDirectors = getApprovalResolutionTitle(financialStatementInformation, "directors", company);
+            approvalResolutionsDirectors.forEach(document::add);
 
-        //conclusions of the meeting
-        Paragraph conclusions = protocolFactory.getPlaneProtocolText(conclusionsOfTheMeeting);
-        document.add(conclusions);
+            //conclusions of the meeting
+            Paragraph conclusions = protocolFactory.getPlaneProtocolText(conclusionsOfTheMeeting);
+            document.add(conclusions);
 
-        document.newPage();
-        //appendix
-        String appendix = getAppendixText(company, financialStatementInformation);
-        Paragraph appendixParagraph = protocolFactory.getAppendixInfo(appendix);
-        document.add(appendixParagraph);
+            document.newPage();
+            //appendix
+            String appendix = getAppendixText(company, financialStatementInformation);
+            Paragraph appendixParagraph = protocolFactory.getAppendixInfo(appendix);
+            document.add(appendixParagraph);
 
-        Paragraph appendixAttendanceHeaderParagraph = protocolFactory.getProtocolHeader("LISTA OBECNOŚCI");
-        document.add(appendixAttendanceHeaderParagraph);
-        Paragraph appendixAttendanceIntroParagraph = protocolFactory.getPlaneProtocolText(appendixAttendanceListIntro);
-        document.add(appendixAttendanceIntroParagraph);
+            Paragraph appendixAttendanceHeaderParagraph = protocolFactory.getProtocolHeader("LISTA OBECNOŚCI");
+            document.add(appendixAttendanceHeaderParagraph);
+            Paragraph appendixAttendanceIntroParagraph = protocolFactory.getPlaneProtocolText(appendixAttendanceListIntro);
+            document.add(appendixAttendanceIntroParagraph);
 
-        List<Paragraph> attendantsEndListText = setAttendantsList(financialStatementInformation, false, company);
-        for (Paragraph paragraph: attendantsEndListText) {
-            Paragraph signPlace = protocolFactory.getPlaceForPartnersSign();
-            document.add(signPlace);
-            document.add(paragraph);
-        }
+            List<Paragraph> attendantsEndListText = setAttendantsList(financialStatementInformation, false, company);
+            for (Paragraph paragraph: attendantsEndListText) {
+                Paragraph signPlace = protocolFactory.getPlaceForPartnersSign();
+                document.add(signPlace);
+                document.add(paragraph);
+            }
 
 //        Paragraph recorderAndChairpersonSignPlace = protocolFactory.recorderAndChairpersonSign();
 //        document.add(recorderAndChairpersonSignPlace);
-        String recorderName = getMeetingOrganPersonName(financialStatementInformation.getRecorder());
-        String chairpersonName = getMeetingOrganPersonName(financialStatementInformation.getChairperson());
+            String recorderName = getMeetingOrganPersonName(financialStatementInformation.getRecorder());
+            String chairpersonName = getMeetingOrganPersonName(financialStatementInformation.getChairperson());
 
-        Table signTable = protocolFactory.getSignTable(recorderName, chairpersonName);
-        document.add(signTable);
+            Table signTable = protocolFactory.getSignTable(recorderName, chairpersonName);
+            document.add(signTable);
+            document.close();
+            //close file
+            resolutionCount = 1;
+            return document;
 
-        //close file
-        document.close();
-        resolutionCount = 1;
-        return fileName;
     }
 //TODO try finaly
     private String getMeetingOrganPersonName(ElectionResolution resolution) {
