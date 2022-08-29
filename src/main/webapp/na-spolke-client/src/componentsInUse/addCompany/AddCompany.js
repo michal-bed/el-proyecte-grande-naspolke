@@ -116,12 +116,12 @@ const AddCompany = () => {
                 </Box>
             </Card><br/>
             {companyFound ?
-            <Card style={{ height: '210vh' }}><br/>
+            <Card><br/>
                 <Box sx={{ mx: "auto" }}>
                     {companyDataForm}
                 </Box>
             </Card> :
-            <Card style={{ height: '30vh' }}>
+            <Card style={{ height: '15rem' }}>
                 <Box sx={{ mx: "auto", width: 500 }}>
                     <Box style={{display: hideKrsInput, justifyContent:'center', alignItems:'center', height: '300vh'}}>
                         <KrsUserInput addCompanyData={addCompanyForm}/>

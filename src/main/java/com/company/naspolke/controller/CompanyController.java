@@ -161,21 +161,33 @@ public class CompanyController {
                 case "boardOfDirectors" -> companyService.updateDirectorMember(keys, fieldToChange, Long.valueOf(memberId));
             }
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't update member");
         }
     }
 
     @PostMapping(value = "/edit-partner/{companyPartnerId}/{selectedData}/{keys}/{fieldToChange}")
     public void updateJuridicalOrNaturalPersonInfo(@PathVariable String fieldToChange, @PathVariable String keys,
-                @PathVariable String companyPartnerId, @PathVariable String selectedData, @RequestBody ObjectNode objectNode) {
-        System.out.println(objectNode.elements());
-        if (fieldToChange != null && selectedData != null && companyPartnerId != null && keys != null) {
+                @PathVariable String companyPartnerId, @PathVariable String selectedData) {
+        if (fieldToChange != null && selectedData != null && companyPartnerId != null && keys != null && !keys.equals("address")) {
             switch (selectedData) {
                 case "individualPartners" -> companyService.updateIndividualPartner(keys, fieldToChange, Long.valueOf(companyPartnerId));
                 case "partnerCompanies" -> companyService.updateCompanyPartner(keys, fieldToChange, Long.valueOf(companyPartnerId));
             }
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't update partner");
+        }
+    }
+
+    @PostMapping(value = "/edit-partner/{companyPartnerId}/{selectedData}/{keys}")
+    public void updateJuridicalOrNaturalPersonAddress(@PathVariable String keys, @PathVariable String companyPartnerId,
+                @PathVariable String selectedData, @RequestBody ObjectNode objectNode) {
+        if (selectedData != null && companyPartnerId != null && keys != null && keys.equals("address")) {
+            switch (selectedData) {
+                case "individualPartners" -> companyService.updateIndividualPartnerAddress(objectNode, Long.valueOf(companyPartnerId));
+                case "partnerCompanies" -> companyService.updateCompanyPartnerAddress(objectNode, Long.valueOf(companyPartnerId));
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't update partner");
         }
     }
 }

@@ -5,13 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.CascadeType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -26,7 +20,7 @@ public class NaturalPerson implements SharePossesing {
     private String secondName;
     private String lastNameI;
     private String lastNameII;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
     private BigDecimal sharesValue;

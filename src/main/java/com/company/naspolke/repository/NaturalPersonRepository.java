@@ -1,5 +1,6 @@
 package com.company.naspolke.repository;
 
+import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.companyBodies.Partners.NaturalPerson;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,6 +12,8 @@ import java.math.BigDecimal;
 
 @Repository
 public interface NaturalPersonRepository extends JpaRepository<NaturalPerson, Long> {
+
+    NaturalPerson findNaturalPersonById(Long naturalPersonId);
 
     @Transactional
     @Modifying
@@ -41,4 +44,9 @@ public interface NaturalPersonRepository extends JpaRepository<NaturalPerson, Lo
     @Modifying
     @Query("UPDATE NaturalPerson np SET np.sharesValue = ?1 WHERE np.id = ?2")
     void updateNaturalPersonSharesValue(BigDecimal fieldToChange, Long memberId);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE NaturalPerson np SET np.address = ?1 WHERE np.id = ?2")
+    void updateNaturalPersonAddress(Address address, Long memberId);
 }

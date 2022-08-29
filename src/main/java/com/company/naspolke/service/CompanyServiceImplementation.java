@@ -4,8 +4,10 @@ import com.company.naspolke.helpers.adapters.MonoStringToCompanyAdapter;
 import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.company.companyBodies.BoardMember;
+import com.company.naspolke.model.company.companyBodies.Partners.JuridicalPerson;
 import com.company.naspolke.repository.*;
 import com.company.naspolke.webclient.krs.KrsClient;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +36,13 @@ public class CompanyServiceImplementation implements CompanyService {
     private final BoardOfDirectorRepository boardOfDirectorRepository;
     private final JuridicalPersonRepository juridicalPersonRepository;
     private final NaturalPersonRepository naturalPersonRepository;
+    private final AddressRepository addressRepository;
 
     @Autowired
     public CompanyServiceImplementation(CompanyRepository companyRepository, KrsClient krsClient,
             MonoStringToCompanyAdapter monoStringToCompanyAdapter, BoardMemberRepository boardMemberRepository,
             BoardOfDirectorRepository boardOfDirectorRepository, JuridicalPersonRepository juridicalPersonRepository,
-                                        NaturalPersonRepository naturalPersonRepository) {
+            NaturalPersonRepository naturalPersonRepository, AddressRepository addressRepository) {
         this.companyRepository = companyRepository;
         this.krsClient = krsClient;
         this.monoStringToCompanyAdapter = monoStringToCompanyAdapter;
@@ -47,6 +50,7 @@ public class CompanyServiceImplementation implements CompanyService {
         this.boardOfDirectorRepository = boardOfDirectorRepository;
         this.juridicalPersonRepository = juridicalPersonRepository;
         this.naturalPersonRepository = naturalPersonRepository;
+        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -184,6 +188,48 @@ public class CompanyServiceImplementation implements CompanyService {
             case "name" -> juridicalPersonRepository.updateJuridicalPersonName(fieldToChange, memberId);
             case "sharesCount" -> juridicalPersonRepository.updateJuridicalPersonSharesCount(Integer.parseInt(fieldToChange), memberId);
             case "sharesValue" -> juridicalPersonRepository.updateJuridicalPersonSharesValue(BigDecimal.valueOf(Long.parseLong(fieldToChange)), memberId);
+            case "representativeFirstname" -> juridicalPersonRepository.updateJuridicalRepresentativeFirstName(fieldToChange, memberId);
+            case "representativeLastname" -> juridicalPersonRepository.updateJuridicalRepresentativeLastName(fieldToChange, memberId);
         }
+    }
+
+    @Override
+    public void updateIndividualPartnerAddress(ObjectNode objectNode, Long companyPartnerId) {
+        Optional<Address> address = Optional.ofNullable(naturalPersonRepository.findNaturalPersonById(companyPartnerId).getAddress());
+        if (address.isEmpty()) {
+            Address newAddress = new Address();
+            newAddress = updateAddressFields(newAddress, objectNode);
+            addressRepository.save(newAddress);
+            naturalPersonRepository.updateNaturalPersonAddress(newAddress, companyPartnerId);
+        } else {
+            address = Optional.ofNullable(updateAddressFields(address.get(), objectNode));
+            addressRepository.save(address.get());
+            naturalPersonRepository.updateNaturalPersonAddress(address.get(), companyPartnerId);
+        }
+    }
+
+    @Override
+    public void updateCompanyPartnerAddress(ObjectNode objectNode, Long companyPartnerId) {
+        Optional<Address> address = Optional.ofNullable(juridicalPersonRepository.findJuridicalPersonById(companyPartnerId).getAddress());
+        if (address.isEmpty()) {
+            Address newAddress = new Address();
+            newAddress = updateAddressFields(newAddress, objectNode);
+            addressRepository.save(newAddress);
+            juridicalPersonRepository.updateJuridicalRepresentativeAddress(newAddress, companyPartnerId);
+        } else {
+            address = Optional.ofNullable(updateAddressFields(address.get(), objectNode));
+            addressRepository.save(address.get());
+            juridicalPersonRepository.updateJuridicalRepresentativeAddress(address.get(), companyPartnerId);
+        }
+    }
+
+    public Address updateAddressFields(Address address, ObjectNode objectNode) {
+        if (!objectNode.get("streetName").asText().equals("")) address.setCity(objectNode.get("streetName").asText());
+        if (!objectNode.get("streetNumber").asText().equals("")) address.setStreetNumber(objectNode.get("streetNumber").asText());
+        if (!objectNode.get("localNumber").asText().equals("")) address.setLocalNumber(objectNode.get("localNumber").asText());
+        if (!objectNode.get("city").asText().equals("")) address.setCity(objectNode.get("city").asText());
+        if (!objectNode.get("zipCode").asText().equals("")) address.setZipCode(objectNode.get("zipCode").asText());
+        if (!objectNode.get("postOffice").asText().equals("")) address.setPostOffice(objectNode.get("postOffice").asText());
+        return address;
     }
 }

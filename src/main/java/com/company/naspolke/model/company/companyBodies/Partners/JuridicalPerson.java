@@ -19,7 +19,7 @@ public class JuridicalPerson implements SharePossesing {
     private String name;
     private BigDecimal sharesValue;
     private Integer sharesCount;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
     private String representativeFirstname;

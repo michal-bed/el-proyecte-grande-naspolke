@@ -2,6 +2,7 @@ package com.company.naspolke.service;
 
 import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface CompanyService {
     void updateDirectorMember(String keys, String fieldToChange, Long memberId);
     void updateIndividualPartner(String keys, String fieldToChange, Long memberId);
     void updateCompanyPartner(String keys, String fieldToChange, Long memberId);
+    void updateIndividualPartnerAddress(ObjectNode objectNode, Long companyPartnerId);
+    void updateCompanyPartnerAddress(ObjectNode objectNode, Long companyPartnerId);
 }
