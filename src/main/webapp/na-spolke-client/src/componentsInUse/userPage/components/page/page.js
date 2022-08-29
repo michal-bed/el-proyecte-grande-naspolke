@@ -19,6 +19,7 @@ import RequestJoin from "../../content/companyContent/joinable/RequestJoin";
 import AddCompany from "../../../addCompany/AddCompany";
 import RequestForMembership from "../../../requestToCompany/RequestForMembership";
 import FinancialStatement from "../../../generateDocuments/financialStatement/FinancialStatement";
+import Archive from "../../content/archive/Archive";
 
 
 
@@ -43,6 +44,7 @@ function Page ({classes}) {
                         {/*<Route path="fail" element={<Subpage component={<InviteFail/>}/>}/>*/}
                     {/*</Route>*/}
                     <Route path="generate" element={<Subpage component={<FinancialStatement/>}/>}/>
+                    <Route path="archive" element={<Subpage component={<Archive/>}/>}/>
                 </Route>
             </Routes>
         </Box>
