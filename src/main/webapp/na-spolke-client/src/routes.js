@@ -15,7 +15,7 @@ function Routes(){
     const obj = auth[Object.keys(auth)[0]]
   console.log(obj)
     const objArr = Object.values(obj)
-    if (Object.values(obj).length === 0) {
+    if (auth.user === "nie wybrano" || auth.user === "") {
       userRoutes =
         {
           name: "Konto",
@@ -41,11 +41,12 @@ function Routes(){
           name: "Konto",
           collapse: [
             {
-              name : `Zalogowany jako: ${objArr[0]}`
+              name : `Zalogowany jako: ${auth.user}`,
+              textTransform: 'none'
             },
             {
               name: "Kokpit",
-              description: `Zalogowany jako ${objArr[0]}`,
+              description: `Zalogowany jako ${auth.user}`,
               route: "/userpanel",
               component: <Cockpit/>
             },

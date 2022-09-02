@@ -26,8 +26,8 @@ function App() {
         <CssBaseline/>
         <Routes>
             <Route path="/" element={<Layout/>}>
+
                 {/* public routes */}
-                <Route path="/" element={<Presentation site="index"/> }/>
                 <Route path="faq" element={<Presentation site="faq"/>}/>
                 <Route path="statute" element={<Presentation site="statute"/>}/>
                 <Route path="login" element={<SignInBasic />}/>
@@ -35,11 +35,13 @@ function App() {
                 <Route path="register" element={<RegistrationBasic/>}/>
                 <Route path="verify/*" element={<VerifyRegistration/>}/>
                 <Route path="pdf" element={<PdfView/>}/>
-
                 <Route path="unauthorized" element={<Unauthorized />} />
 
                 {/* we want to protect these routes */}
                 <Route element={<PersistLogin/>}>
+                    {/* public routes */}
+                    <Route path="/" element={<Presentation site="index"/> }/>
+                    {/* restricted access routes */}
                     <Route element={<RequireAuth allowedRoles={["ROLE_USER"]}/>}>
                         <Route path="generate/*" element={<FinancialStatement />} />
                         <Route path="add-member" element={<AddMember/>}/>
