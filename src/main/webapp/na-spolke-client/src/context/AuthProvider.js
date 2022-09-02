@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import AESDecrypt from "../util/AESDecrypt";
+import useRefreshToken from "../hooks/useRefreshToken";
 
 const AuthContext = createContext({});
 
@@ -10,16 +11,22 @@ export const AuthProvider = ({ children }) => {
                                             ? false
                                             : JSON.parse(localStorage.getItem("persist")));
     const [user, setUser] = useState(
-        (localStorage.getItem("user") === "undefined" ||
-            localStorage.getItem("user") == null)
+        (localStorage.getItem("user") === "undefined"
+            || localStorage.getItem("user") === ""
+            || localStorage.getItem("user") == null)
             ? "nie wybrano"
-            : AESDecrypt(localStorage.getItem("user"))
+            : (
+                auth.accessToken != null
+                && auth.accessToken !== "undefined"
+                && auth.accessToken !== ""
+                ? AESDecrypt(localStorage.getItem("user"))
+                : "nie wybrano")
     );
     const [currentCompany, setCurrentCompany] = useState(
-        (localStorage.getItem("currentCompany") === "undefined" ||
-        localStorage.getItem("currentCompany") == null)
+        (sessionStorage.getItem("currentCompany") === "undefined" ||
+        sessionStorage.getItem("currentCompany") == null)
         ? "nie wybrano"
-        : AESDecrypt(localStorage.getItem("currentCompany"))
+        : AESDecrypt(sessionStorage.getItem("currentCompany"))
     );
 
 

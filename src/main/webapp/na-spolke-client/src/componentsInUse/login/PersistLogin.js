@@ -2,11 +2,12 @@ import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useRefreshToken from '../../hooks/useRefreshToken';
 import useAuth from '../../hooks/useAuth';
+import AESDecrypt from "../../util/AESDecrypt";
 
 const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
     const refresh = useRefreshToken();
-    const { auth, persist } = useAuth();
+    const { auth, persist, setUser } = useAuth();
 
     useEffect(() => {
         let isMounted = true;
@@ -14,6 +15,16 @@ const PersistLogin = () => {
         const verifyRefreshToken = async () => {
             try {
                 await refresh();
+                setUser(
+                    (localStorage.getItem("user") === "undefined"
+                        || localStorage.getItem("user") === ""
+                        || localStorage.getItem("user") == null)
+                        ? "nie wybrano"
+                        : (auth.accessToken !== "undefined"
+                            && auth.accessToken !== ""
+                                ? AESDecrypt(localStorage.getItem("user"))
+                                : "nie wybrano")
+                );
             }
             catch (err) {
                 console.error(err);

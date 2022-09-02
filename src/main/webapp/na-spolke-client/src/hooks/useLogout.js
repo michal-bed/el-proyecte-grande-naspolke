@@ -3,11 +3,13 @@ import useAuth from "./useAuth";
 import {useNavigate} from "react-router-dom";
 
 const useLogout = () => {
-    const { setAuth } = useAuth();
+    const { setAuth, setUser } = useAuth();
     const navigate = useNavigate();
 
     const logout = async () => {
         setAuth({});
+        setUser("nie wybrano")
+        localStorage.setItem("user", null)
         try {
             const response = await axios('/logout', {
                 withCredentials: true,
