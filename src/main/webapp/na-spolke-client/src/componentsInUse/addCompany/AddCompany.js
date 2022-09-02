@@ -14,7 +14,6 @@ import {useLocation, useNavigate} from "react-router-dom";
 const AddCompany = () => {
 
     const axiosPrivate = useAxiosPrivate();
-
     const [companyDataForm, setCompanyDataForm] = useState(<div/>);
     const [hideKrsInput, setHideKrsInput] = useState("block")
     const [companyFound, setCompanyFound] = useState(false);

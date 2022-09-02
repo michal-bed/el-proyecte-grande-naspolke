@@ -1,5 +1,5 @@
-import {Link, useParams} from "react-router-dom";
-import {getCompanyById} from "../../handlers/CompanyDataHandler";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import {getCompanyById, getCompanyRole} from "../../handlers/CompanyDataHandler";
 import {
     CardHeader,
     createTheme,
@@ -32,7 +32,11 @@ function CompanyInfo() {
 
     const [company, setCompany] = useState(null);
     const [rows, setRows] = useState(null)
+    const [editable, setEditable] = useState(false)
     let {companyId} = useParams();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/userpanel";
     const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
@@ -42,6 +46,16 @@ function CompanyInfo() {
             });
             console.log("Initializing")
             console.log(company)
+            getCompanyRole(companyId).then(res =>
+            {
+                if (res.data === "") {
+                    navigate(from, {replace: true});
+                }
+                console.log(`Company Role: ${res.data}`);
+                setEditable(res.data === "OWNER" || res.data === "EDITOR");
+                console.log("Editable: " + (res.data === "OWNER" || res.data === "EDITOR" ? "true" : "false"))
+            })
+
         }
     }, [companyId])
 
@@ -525,6 +539,7 @@ function CompanyInfo() {
             </>
         ) : (
             <IconButton
+                disabled={!editable}
                 aria-label="edit"
                 onClick={() => onToggleEditMode(row.id)}
             >
