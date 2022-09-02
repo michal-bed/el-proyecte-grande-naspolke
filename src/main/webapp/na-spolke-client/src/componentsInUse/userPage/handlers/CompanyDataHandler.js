@@ -69,6 +69,10 @@ let companies =  [
         return axiosPrivate.get("/get-company-by-id/"+id)
     }
 
+    async function getCompanyRole(id) {
+        return axiosPrivate.post("/get-company-role", {companyId: id})
+    }
+
     function selectCompanyInfoById (id, info) {
         for (let i in companies) {
             if (JSON.parse(sessionStorage.getItem("companies"))[i]['companyId'] === id) {
@@ -78,4 +82,4 @@ let companies =  [
         return null;
     }
 
-export {getCompaniesFromDb, getCompanyById, selectCompanyInfoById};
+export {getCompaniesFromDb, getCompanyById, getCompanyRole, selectCompanyInfoById};

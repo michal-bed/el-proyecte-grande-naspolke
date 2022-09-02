@@ -7,6 +7,7 @@ import com.company.naspolke.model.Role;
 import com.company.naspolke.model.company.Address;
 import com.company.naspolke.model.company.Company;
 import com.company.naspolke.model.types.RoleType;
+import com.company.naspolke.repository.CompanyUserRoleRepository;
 import com.company.naspolke.service.AppUserService;
 import com.company.naspolke.service.CompanyService;
 import com.company.naspolke.service.CompanyUserRoleService;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,15 +35,18 @@ public class CompanyController {
     private JwtUtil jwtUtil;
     private RoleService roleService;
     private CompanyUserRoleService companyUserRoleService;
+    private CompanyUserRoleRepository companyUserRoleRepository;
 
     @Autowired
     public CompanyController(CompanyService companyService, AppUserService appUserService, JwtUtil jwtUtil,
-                             RoleService roleService, CompanyUserRoleService companyUserRoleService) {
+                             RoleService roleService, CompanyUserRoleService companyUserRoleService,
+                             CompanyUserRoleRepository companyUserRoleRepository) {
         this.companyService = companyService;
         this.appUserService = appUserService;
         this.jwtUtil = jwtUtil;
         this.roleService = roleService;
         this.companyUserRoleService = companyUserRoleService;
+        this.companyUserRoleRepository = companyUserRoleRepository;
     }
 
     @PostMapping(value = "/add-company")
@@ -114,9 +119,19 @@ public class CompanyController {
     }
 
     @PatchMapping(value = "/update-company-address")
-    public void updateAddressInCompany(@RequestBody ObjectNode objectNode) {
+    public void updateAddressInCompany(HttpServletRequest request, @RequestBody ObjectNode objectNode) {
         UUID companyId = UUID.fromString(objectNode.get("companyId").asText());
         Address companyAddress = companyService.getCompanyByCompanyId(companyId).get().getAddress();
+        var userId = jwtUtil.getUserId(request);
+        var companyRole = companyUserRoleRepository
+                .findByCompanyIdAndUserId(companyId, userId)
+                .getRole().getRoleType().getRoleType();
+
+        if (!(companyRole.equals("OWNER") || companyRole.equals("EDITOR")))
+        {
+            return;
+        }
+
         var streetName = objectNode.get("streetName");
         if (streetName != null)
         {
@@ -177,5 +192,15 @@ public class CompanyController {
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find company");
         }
+    }
+
+    @PostMapping(value = "/get-company-role")
+    public String getCompanyRole(HttpServletRequest request, @RequestBody ObjectNode objectNode) {
+        UUID companyId = UUID.fromString(objectNode.get("companyId").asText());
+        var userId = jwtUtil.getUserId(request);
+        var companyRole = companyUserRoleRepository.findByCompanyIdAndUserId(companyId, userId);
+        if (companyRole != null)
+            return companyRole.getRole().getRoleType().getRoleType();
+        else return null;
     }
 }
