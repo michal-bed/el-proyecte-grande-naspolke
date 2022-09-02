@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invitation</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .businessman-image {
+            background-image: url("https://i.pinimg.com/originals/b2/ee/c0/b2eec0780392815ef76b2b9db10f10f0.jpg");
+            background-color: #cccccc;
+            height: 500px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+            opacity: 0.9;
+        }
+        .businessman-text {
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+        }
+        footer {
+            text-align: center;
+            padding: 3px;
+            background-color: #A0A0A0;
+            color: whitesmoke;
+        }
+    </style>
+</head>
+<body>
+
+<div class="businessman-image">
+    <div class="businessman-text">
+        <br><h4 style="font-size:40px">Otrzymałeś zaproszenie do spółki o wyżej wymienionej nazwie.</h4>
+        <h4>Jeśli dołączysz do spółki będziesz miał możliwość przeglądania niektórych podstron spółki.</h4>
+        <h4>Chcąc uzyskać szerszy wachlarz przywilejów, musisz skontaktować się z właścicielem spółki</h4>
+        <h4>czyli z osobą, od której otrzymałeś zaproszenie. Jeżeli nazwa tej spółki jest Ci nieznana </h4>
+        <h4>to po prostu zigoruj tą wiadomość.</h4><br>
+        <h5>Dziękujemy,</h5>
+        <h5>Zespół <em>Na spółkę</em></h5>
+    </div>
+</div>
+
+<footer>
+    <h4>Zespół naspolke.com</h4>
+    <h5>E-mail: <a href="mailto:naspolke.organizacja@gmail.com">naspolke.organizacja@gmail.com</a></h5>
+</footer>
+
+</body>
+</html>

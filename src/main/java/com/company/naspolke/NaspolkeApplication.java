@@ -9,5 +9,4 @@ public class NaspolkeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NaspolkeApplication.class, args);
 	}
-
 }

@@ -1,0 +1,29 @@
+.form-container {
+    width: 70vw;
+    /*height: 70vh;*/
+    padding-bottom: 3vh;
+    /*background-color: darkgray;*/
+    margin: auto;
+    font-size: large;
+}
+
+.progressbar {
+    width: 400px;
+    height: 10px;
+    background-color: white;
+    margin: 15px auto;
+}
+
+.progressbar div {
+    width: 20%;
+    height: 100%;
+    background-color: rgb(98, 0, 255);
+}
+
+.form {
+    display: flex;
+}
+
+.form-nav-bar {
+    align-self: flex-end;
+}
