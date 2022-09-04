@@ -8,9 +8,9 @@ import java.util.List;
 
 @Component
 public class WordFormsHandler {
-    public static String PROTOCOL_HEADER = "src/main/resources/drafts/financialStatements/protocolHeader.txt";
     public static String MEETING_PLACE_IN_HEADQUARTERS = "src/main/resources/drafts/financialStatements/meetingPlaceInHeadquarters.txt";
     public static String MEETING_PLACE_NOT_IN_HEADQUARTERS = "src/main/resources/drafts/financialStatements/meetingPlaceNotInHeadquarters.txt";
+    static String[] vowels =   {"A", "E", "I", "O", "U", "Ó", "Y", "Ą", "Ę"};
 
     public static List<String> NO_UPPER_CASE = Arrays.asList("prof.", "prof", "gen", "gen." , "dr", "dr.", "płk", "płk.", "ppłk.", "ppłk", "mjr", "mjr." , "inż", "inż.", "ks", "ks.",
             "profa.", "profa", "gena", "gena." , "dra", "dra.", "płka", "płka.", "ppłka.", "ppłka", "mjra", "mjra.", "marsz", "marsz.", "plac", "ul.", "pl.", "os.", "al.");
@@ -31,7 +31,7 @@ public class WordFormsHandler {
         }
     }
     public static String placeConjugated(String place){
-        switch(place){
+        switch(place.toUpperCase()){
             case "WARSZAWA" -> {return "w Warszawie";}
             case "KRAKÓW" -> {return "w Krakowie";}
             case "ŁÓDŹ" -> {return "w Łodzi";}
@@ -145,5 +145,16 @@ public class WordFormsHandler {
         }
     }
 
+    static String setProperPreposition(String name){
+        String preposition = "";
+        if (name.length()>2 && name.substring(0, 1).equalsIgnoreCase("W") &&
+                !Arrays.asList(vowels).contains(name.substring(1, 2))){
+            preposition = "we ";
+        }
+        else {
+            preposition = "w ";
+        }
+        return preposition + correctLetterCases(name);
+    }
 
 }

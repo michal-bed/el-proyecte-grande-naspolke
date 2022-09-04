@@ -373,7 +373,7 @@ const Partners = (props) => {
             /></CardContent>
         </Card>
             {state.partners.individualPartners !== null && state.partners.individualPartners.map((partner, index) => (
-                <div key={index}>
+                <div>
                     <Card sx={{p:2, border: 2, borderColor: '#1565c0', minWidth: 275, width: "95%", margin: "auto", height: "100%", mb:2,
                         ':hover': {boxShadow: 20} }}>
                         <Box className={styles["partner-separator"]}> Wspólnik {counter++}</Box>
@@ -403,6 +403,7 @@ const Partners = (props) => {
                             margin: "0"
                         }}>
                             <Box sx={{gridArea: "lastNameI"}} className={styles["Box"]}><TextField
+                                key={`lastNameI${index}`}
                                 label="Nazwisko"
                                 name="lastNameI"
                                 variant="filled"
@@ -453,7 +454,7 @@ const Partners = (props) => {
             ))
             }
             {state.partners.partnerCompanies !== null && state.partners.partnerCompanies.map((partner, index) => (
-                <Box key={`${index}${partner.name}main`}>
+                <Box>
                     <Card  sx={{p:2, border: 2, borderColor: '#1565c0', minWidth: 275, width: "95%", margin: "auto", height: "100%", mb:2,
                         ':hover': {boxShadow: 20}}}>
                         <Box className={styles["partner-separator"]}>Wspólnik {counter++}</Box>
@@ -481,6 +482,7 @@ const Partners = (props) => {
                             <InputLabel id={`gender${index}`}>Zwrot grzecznościowy</InputLabel>
                             <Select
                                 labelId="zwrot grzecznościowy"
+                                key={`representativeGender${index}${partner.name}`}
                                 name="representativeGender"
                                 id={partner.representativeGender}
                                 value={partner.representativeGender}
@@ -493,6 +495,7 @@ const Partners = (props) => {
                             </Select>
                         </Box>
                         <Box sx={{gridArea: "name"}} className={styles["Box"]}><TextField
+                            key={`representativeFirstname${index}${partner.name}`}
                             fullWidth
                             label="imię przedstawiciela *"
                             name="representativeFirstname"
@@ -503,6 +506,7 @@ const Partners = (props) => {
                             onChange={event => handleChangeInput(index, event, actionType.DISPLAY_COMPANY_PARTNERS)}
                         /></Box>
                         <Box sx={{gridArea: "name"}} className={styles["Box"]}><TextField
+                            key={`representativeLastname${index}${partner.name}`}
                             fullWidth
                             label="nazwisko przedstawiciela *"
                             name="representativeLastname"

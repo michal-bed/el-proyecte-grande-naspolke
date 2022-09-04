@@ -8,7 +8,6 @@ import com.company.naspolke.model.company.financialStatements.resolutions.Electi
 import com.company.naspolke.model.company.financialStatements.resolutions.FinancialStatementResolution;
 import com.company.naspolke.model.company.financialStatements.resolutions.ResolutionApprovalBodyMember;
 import com.company.naspolke.model.company.financialStatements.resolutions.VotingInterface;
-import com.lowagie.text.Document;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
 import org.rythmengine.Rythm;
@@ -23,7 +22,6 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import static com.company.naspolke.model.documentDrafts.ChangeDigitsIntoWords.changeDigitsIntoWords;
 
@@ -33,10 +31,12 @@ import static com.company.naspolke.model.documentDrafts.WordFormsHandler.*;
 @Component
 public class FinancialStatementProtocolGenerator {
     private final ProtocolFactory protocolFactory;
+    private final DocumentTextBuilder textBuilder;
     private int resolutionCount = 1;
 
-    public FinancialStatementProtocolGenerator(ProtocolFactory protocolFactory) {
+    public FinancialStatementProtocolGenerator(ProtocolFactory protocolFactory, DocumentTextBuilder textBuilder) {
         this.protocolFactory = protocolFactory;
+        this.textBuilder = textBuilder;
     }
 
     @SuppressWarnings("finally")
@@ -47,17 +47,16 @@ public class FinancialStatementProtocolGenerator {
             document.open();
 
 //        int resolutionCount = 1;
-            // Set protocol Header
-            String header = generateProtocolText(company, financialStatementInformation);
-            Paragraph protocolHeader = protocolFactory.getProtocolHeader(header);
-            document.add(protocolHeader);
 
-            //Set meeting place
-            String meetingPlaceText = setMeetingPlaceText(company, financialStatementInformation);
-            Paragraph meetingPlaceParagraph = protocolFactory.getPlaneProtocolText(meetingPlaceText);
-            document.add(meetingPlaceParagraph);
+        // Set protocol Header
+        Paragraph protocolHeader = textBuilder.getProtocolHeader(company, financialStatementInformation);
+        document.add(protocolHeader);
 
-            //Set attendants list
+        //Set meeting place
+        Paragraph meetingPlace = textBuilder.getMeetingPlaceInfo(company, financialStatementInformation);
+        document.add(meetingPlace);
+
+        //Set attendants list
             List<Paragraph> attendantsListText = setAttendantsList(financialStatementInformation, true, company);
             for (Paragraph paragraph :attendantsListText) {
                 Paragraph listElement = protocolFactory.getAttendanceElementListOfShareholders(paragraph);
@@ -66,7 +65,7 @@ public class FinancialStatementProtocolGenerator {
 
             //Set Chairperson text
             String chairpersonInfo = getChairmanInfo(financialStatementInformation);
-            Paragraph chairpersonParagraph = protocolFactory.getPlainTextAfterList(chairpersonInfo);
+        Paragraph chairpersonParagraph = protocolFactory.getPlainTextAfterList(chairpersonInfo);
             document.add(chairpersonParagraph);
 
             //Set chairperson resolution
@@ -169,7 +168,19 @@ public class FinancialStatementProtocolGenerator {
             return document;
 
     }
-//TODO try finaly
+
+    private void setMeetingPlace(Company company, FinancialStatementProtocol financialStatementInformation, Document document) throws IOException {
+        String meetingPlaceText = setMeetingPlaceText(company, financialStatementInformation);
+        Paragraph meetingPlaceParagraph = protocolFactory.getPlaneProtocolText(meetingPlaceText);
+        document.add(meetingPlaceParagraph);
+    }
+
+    Paragraph getProtocolHeader(Company company, FinancialStatementProtocol financialStatementInformation) {
+        String header = generateProtocolText(company, financialStatementInformation);
+        return protocolFactory.getProtocolHeader(header);
+    }
+
+    //TODO try finaly
     private String getMeetingOrganPersonName(ElectionResolution resolution) {
         if(resolution.getIndividual()!=null){
             return getPartnerFullName(resolution.getIndividual());
@@ -199,9 +210,9 @@ public class FinancialStatementProtocolGenerator {
 
         for (ResolutionApprovalBodyMember resolution: boardMembers){
             String periodOfOffice = getPeriodOfOffice(financialStatementInformation, resolution);
-            String function = "";
-            String personalPronoun = "";
-            String functionProperForm = "";
+            String function;
+            String personalPronoun;
+            String functionProperForm;
             String name, nameII, lastname, lastnameII, gender, personalPronounII;
             if (bodyType.equals("board")){
                 function = Objects.equals(resolution.getBoardMember().getFunction(), "PREZES ZARZĄDU") ? "Prezesowi Zarządu" :
@@ -472,8 +483,21 @@ public class FinancialStatementProtocolGenerator {
     }
 
     private String generateProtocolText(Company company, FinancialStatementProtocol financialStatementsProtocol){
-        String text = getTextFromFile(WordFormsHandler.PROTOCOL_HEADER);
-        return fillTextTemplate(text, company, financialStatementsProtocol);
+//        String text = getTextFromFile(WordFormsHandler.PROTOCOL_HEADER);
+        return getProtocolHeaderPattern(company, financialStatementsProtocol);
+//        return fillTextTemplate(text, company, financialStatementsProtocol);
+    }
+
+    public String getProtocolHeaderPattern(Company company, FinancialStatementProtocol financialStatementsProtocol) {
+        String meetingType = "Zwyczajnego";
+        String companyName = company.getCompanyName();
+        String companyCity = WordFormsHandler.placeConjugated(company.getAddress().getCity());
+        String protocolDate = setResolutionDate(financialStatementsProtocol);
+        String protocolNumber = String.format(protocolNumberPattern, financialStatementsProtocol.getProtocolNumber(),
+                financialStatementsProtocol.getDateOfTheShareholdersMeeting().getDayOfMonth(),
+                financialStatementsProtocol.getDateOfTheShareholdersMeeting().getMonthValue(),
+                financialStatementsProtocol.getDateOfTheShareholdersMeeting().getYear());
+        return String.format(ProtocolPattern.resolutionHeaderText, protocolNumber, meetingType, companyName, companyCity, protocolDate);
     }
 
     private String setMeetingPlaceText(Company company, FinancialStatementProtocol financialStatementsProtocol) throws IOException {

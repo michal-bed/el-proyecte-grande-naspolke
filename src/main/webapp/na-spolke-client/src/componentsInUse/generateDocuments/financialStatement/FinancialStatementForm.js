@@ -62,7 +62,9 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                  validationSchema={validationSchema}
                  onSubmit={(data, {setSubmitting}) => {
                      setSubmitting(true);
+                     console.log(data)
                      const financialStatement = new FinancialStatementProtocol(data, company);
+                     console.log(financialStatement)
                      if (data.meetingPlaceInHeadquarters === "true") {
                          financialStatement.meetingPlace = "siedzibie spółki";
                      }
@@ -178,7 +180,7 @@ export default function FinancialStatementForm({company, companyIdMac}) {
                         // </Link>
                         }</Box>
                     </Box>
-                    {/*<pre>{JSON.stringify(values, null, 2)}</pre>*/}
+                    <pre>{JSON.stringify(values, null, 2)}</pre>
                 </Form>
             )}
         </Formik>

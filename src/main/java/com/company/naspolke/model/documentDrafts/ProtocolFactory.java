@@ -15,7 +15,7 @@ import static com.company.naspolke.model.documentDrafts.ProtocolPattern.placeFor
 import static com.company.naspolke.model.documentDrafts.ProtocolPattern.recorderAndChairpersonSign;
 
 @Component
-class ProtocolFactory {
+public class ProtocolFactory {
 
     private final Font headerFont = setFontStyle(FontStyles.PROTOCOL_HEADER);
     private final Font regularTextFont = setFontStyle(FontStyles.PROTOCOL_PLANE_TEXT);

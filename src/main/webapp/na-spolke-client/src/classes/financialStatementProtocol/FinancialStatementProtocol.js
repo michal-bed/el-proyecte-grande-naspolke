@@ -28,7 +28,7 @@ export class FinancialStatementProtocol {
         this.protocolNumber = data.protocolNumber;
         this.meetingPlaceInHeadquarters = data.meetingPlaceInHeadquarters;
         this.meetingPlace = data.meetingPlace;
-        if (!this.meetingPlaceInHeadquarters) {
+        if (data.meetingPlaceInHeadquarters==="false") {
             this.address = new Address({
                 streetName: data.streetName,
                 streetNumber: data.streetNumber,

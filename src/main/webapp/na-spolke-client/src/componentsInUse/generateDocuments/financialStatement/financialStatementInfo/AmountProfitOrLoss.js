@@ -52,7 +52,6 @@ export function AmountProfitOrLoss({values, valueName, resolutionHeader, handleC
                 <Voting values={values} handleChange={handleChange} votingMatter={"amountProfitOrLoss"}
                         votingTitle={values.amountProfitOrLoss > 0 ? "Głosowanie nad przeznaczeniem zysku" : "Głosowanie nad sposobem pokryciem straty"}/>
             </div>
-            }
         </div>
         }
     </Card>

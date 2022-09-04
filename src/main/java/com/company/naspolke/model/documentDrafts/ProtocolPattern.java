@@ -3,10 +3,17 @@ package com.company.naspolke.model.documentDrafts;
 import org.springframework.stereotype.Component;
 
 @Component
-class ProtocolPattern {
+public class ProtocolPattern {
 
+    static String resolutionHeaderText = """
+            Protokół nr %s
+            %s Zgromadzenia Wspólników spółki pod firmą
+            %s z siedzibą %s
+            z dnia %s
+            """;
     static String resolutionPattern = "Uchwała nr %s \n%s  Zgromadzenia Wspólników %s z siedzibą %s\nz dnia %s \nw sprawie %s\n";
-
+    String meetingPlace = "Dnia %s %s odbyło się Zwyczajne Zgromadzenie Wspólników spółki pod firmą %s z siedzibą %s.\n" +
+            "Na Zwyczajnym Zgromadzeniu Wspólników stawili się:";
     static String resolutionChairpersonText = "%s Zgromadzenie Wspólników pod firmą %s " +
             "z siedzibą %s postanawia, że zgromadzeniu przewodniczyć będzie %s %s.";
 

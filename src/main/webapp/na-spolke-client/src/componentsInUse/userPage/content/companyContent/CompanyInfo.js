@@ -714,11 +714,11 @@ function CompanyInfo() {
                                     <Typography>
                                         Osoby zarejestrowane w spółce:
 
-                                        <ul style={tableStyle}>
-                                            <li>
-                                                do wypełnienia
-                                            </li>
-                                        </ul>
+                                        {/*<ul style={tableStyle}>*/}
+                                        {/*    <li>*/}
+                                        {/*        do wypełnienia*/}
+                                        {/*    </li>*/}
+                                        {/*</ul>*/}
                                     </Typography>
                                 </Card>
                                 <Box style={calendar} sx={{gridArea: 'calendar'}}>
