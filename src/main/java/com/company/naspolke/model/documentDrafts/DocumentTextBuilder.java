@@ -7,6 +7,7 @@ import com.lowagie.text.Paragraph;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.company.naspolke.model.documentDrafts.ProtocolPattern.protocolNumberPattern;
 import static com.company.naspolke.model.documentDrafts.WordFormsHandler.*;
@@ -75,7 +76,7 @@ public class DocumentTextBuilder {
     }
 
     private String checkBuildingNumber(String localNumber) {
-        if(localNumber!=null){
+        if(!Objects.requireNonNull(localNumber).isBlank()){
             return "/"+localNumber;
         } else {
             return "";
