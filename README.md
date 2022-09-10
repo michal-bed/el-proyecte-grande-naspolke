@@ -47,7 +47,7 @@ Create `.env` file in React `na-spolke-client` folder and set your own `REACT_AP
 REACT_APP_AES_KEY=here_type_your_own_value_that_should_be_secret
 ```
 
-You will need to run React and SpringBoot apps independently. You can use built-in IDE configurations to achieve this. But it is also possible to run the app from command line. Here I will only describe how to install necessary dependencies from package.json and run the React app. For more info about running SpringBoot app from te IDE consult for instance [this article](https://www.geeksforgeeks.org/how-to-run-spring-boot-application/).
+You will need to run React and SpringBoot apps independently. You can use built-in IDE configurations to achieve this. But it is also possible to run the app from command line. Here I will only describe how to install necessary dependencies from package.json and run the React app. For more info about running SpringBoot app from the IDE consult for instance [this article](https://www.geeksforgeeks.org/how-to-run-spring-boot-application/).
 
 
 Open terminal from `na-spolke-client` directory and run
