@@ -27,8 +27,8 @@ import index_photo3 from "../../../assets/photos/index_photo3.jpg";
 function Presentation(props) {
     const route = Routes()
     let title = "Na Spółkę"
-    let titleDescription = "Ta aplikacja jest projektem końcowym studnetów\n" +
-                            " codecool."
+    let titleDescription = "Ta aplikacja jest projektem końcowym studentów\n" +
+                            " Codecool."
 
     const currentSite = props.site;
 
